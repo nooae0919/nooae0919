@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+
+	
+	<meta name="keywords" content="nooae,excel,python,system">
+
+	
+	<meta name="description" content="Nooae's blog，一个分享常用办公工具和技术的博客。">
+
+
+    <title>Nooae&#39;s Blog</title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<link rel="stylesheet" href="/css/gitment.css">
+
+    <link rel="stylesheet" type="text/css" href="//at.alicdn.com/t/font_859455_eaq7v6w8ktj.css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body>
+<header class="header">
+    <div class="header-inner">
+        <div class="header-title">
+
+        </div>
+        <nav class="header-nav">
+		
+
+            
+            <a href="/" class="header-nav-link" >
+                首页
+            </a>
+            
+
+            
+
+            
+            <a href="/tags" class="header-nav-link">
+                标签
+            </a>
+            
+
+            
+            <a href="/about/" class="header-nav-link">
+                关于
+            </a>
+            
+        </nav>
+    </div>
+</header>
+<header class="mobile-header">
+    <div class="mobile-nav">
+        <div class="mobile-nav-icon">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="mobile-nav-title">
+            <a href="/" class="mobile-nav-title-link">Nooae's Blog</a>
+        </div>
+
+    </div>
+    <nav class="mobile-menu">
+        <ul class="mobile-menu-list">
+            <li class="mobile-menu-item">
+                <i class="iconfont icon-home"></i>
+                <a href="/" class="mobile-nav-link">首页</a>
+            </li>
+
+            <li class="mobile-menu-item">
+                <i class="iconfont icon-tag"></i>
+                <a href="/tags" class="mobile-nav-link">标签</a>
+            </li>
+            <li class="mobile-menu-item">
+                <i class="iconfont icon-about"></i>
+                <a href="/about/" class="mobile-nav-link">关于</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<div class="main">
+    <div class="content-inner">
+        <div class="posts">
+    <article class="post-whole">
+        <div class="post-title">
+            <h2 class="title">视频剪辑</h2>
+            <div class="post-meta">
+                <span class="post-time">2024-05-11</span>
+                
+                <span class="post-visit"> 阅读次数：<span id="busuanzi_value_page_pv"></span></span>
+            </div>
+        </div>
+        <div class="post-toc" id="post-toc">
+    <strong class="post-toc-title">目录</strong>
+    
+    <div class="back-to-top" id="back-to-top">
+        <a href="javascript:void(0);">回到顶部</a>
+    </div>
+</div>
+        <div class="post-content">
+            <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">from moviepy.editor import *</span><br><span class="line"></span><br><span class="line"># 打开视频文件</span><br><span class="line">video = VideoFileClip(&#x27;dark.mp4&#x27;)</span><br><span class="line"></span><br><span class="line"># 剪辑视频</span><br><span class="line">video2 = video.subclip(0,1)</span><br><span class="line"></span><br><span class="line"># 添加文字、位置、显示时间</span><br><span class="line">text = (TextClip(&quot;WPS&quot;,fontsize =20,color =&quot;white&quot;,font =&quot;黑体&quot;)</span><br><span class="line">        .set_position(&#x27;center&#x27;)</span><br><span class="line">        .set_duration(0.5))</span><br><span class="line">        </span><br><span class="line"># 在视频上加载文本</span><br><span class="line">video_with_text = CompositeVideoClip([video2,text])</span><br><span class="line"></span><br><span class="line"># 保存为新文件</span><br><span class="line">video_with_text.write_videofile(&#x27;new_1.mp4&#x27;)</span><br></pre></td></tr></table></figure>
+        </div>
+        
+        <div class="post-tag">
+            
+            <a class="tag" href="/tags/python/" title="python">python</a>
+            
+        </div>
+        
+    </article>
+</div>
+<div class="paginator">
+    
+        
+            <a class="prev" href="/%E5%8F%96%E6%8C%87%E5%AE%9A%E7%AC%A6%E5%8F%B7%E5%90%8E%E5%AD%97%E7%AC%A6%E4%B8%B2/">
+                <i class="iconfont icon-prev"></i>
+                <span class="nav-default">提取指定符号后字符串</span>
+                <span class="nav-mobile">上一篇</span>
+            </a>
+        
+        
+            <a class="next" href="/%E5%B7%A5%E4%BD%9C%E8%96%84/">
+                <span class="nav-default">拆分工作薄</span>
+                <span class="nav-mobile">下一篇</span>
+                <i class="iconfont icon-next"></i>
+            </a>
+        
+    
+</div>
+<div id="comment-container"></div>
+    </div>
+</div>
+<footer class="footer-social">
+    
+
+    
+
+    
+
+    <div class="footer-copyright">
+        <p class="time-line">
+            &copy;
+            
+            
+            2005
+            &nbsp;<i class="iconfont icon-heart"></i>&nbsp;
+            <a target="_blank" href="https://github.com/iJinxin">Nooae</a>
+        </p>
+        <p class="theme-info">
+            Powered by <a target="_blank" href="https://hexo.io">Hexo</a>  |  Theme -
+            <a target="_blank" href="https://github.com/iJinxin/hexo-theme-sky">Sky</a>
+        </p>
+    </div>
+</footer>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<script src="/js/index.js"></script>
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+    
+
+</script>
+</html>

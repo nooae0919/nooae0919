@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+
+	
+	<meta name="keywords" content="nooae,excel,python,system">
+
+	
+	<meta name="description" content="Nooae's blog，一个分享常用办公工具和技术的博客。">
+
+
+    <title>Nooae&#39;s Blog</title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<link rel="stylesheet" href="/css/gitment.css">
+
+    <link rel="stylesheet" type="text/css" href="//at.alicdn.com/t/font_859455_eaq7v6w8ktj.css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body>
+<header class="header">
+    <div class="header-inner">
+        <div class="header-title">
+
+        </div>
+        <nav class="header-nav">
+		
+
+            
+            <a href="/" class="header-nav-link" >
+                首页
+            </a>
+            
+
+            
+
+            
+            <a href="/tags" class="header-nav-link">
+                标签
+            </a>
+            
+
+            
+            <a href="/about/" class="header-nav-link">
+                关于
+            </a>
+            
+        </nav>
+    </div>
+</header>
+<header class="mobile-header">
+    <div class="mobile-nav">
+        <div class="mobile-nav-icon">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="mobile-nav-title">
+            <a href="/" class="mobile-nav-title-link">Nooae's Blog</a>
+        </div>
+
+    </div>
+    <nav class="mobile-menu">
+        <ul class="mobile-menu-list">
+            <li class="mobile-menu-item">
+                <i class="iconfont icon-home"></i>
+                <a href="/" class="mobile-nav-link">首页</a>
+            </li>
+
+            <li class="mobile-menu-item">
+                <i class="iconfont icon-tag"></i>
+                <a href="/tags" class="mobile-nav-link">标签</a>
+            </li>
+            <li class="mobile-menu-item">
+                <i class="iconfont icon-about"></i>
+                <a href="/about/" class="mobile-nav-link">关于</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<div class="main">
+    <div class="content-inner">
+        <div class="posts">
+    
+        <article class="post-abstract">
+            <div class="post-title">
+                <h2><a class="post-title-link" href="/%E7%88%AC%E8%99%AB%E6%A0%87%E5%87%86%E6%A1%86%E6%9E%B6/">爬虫标准框架</a></h2>
+            </div>
+            <div class="post-meta">
+                <span class="post-time">2023-03-27</span>
+                
+            </div>
+            <div class="post-content">
+                
+                    <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">url=&quot;https://www.sogou.com/web?query=周杰伦&quot;</span><br><span class="line"></span><br><span class="line">headers=&#123; &quot;User-Agent&quot;:&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36 Edg/97.0.1072.55&quot; &#125;</span><br><span class="line">#以字典的形式设置请求头，处理反爬 resp=requests.get(url,headers=headers)</span><br><span class="line">print(resp)</span><br><span class="line">#结果：Response [200]</span><br><span class="line">print(resp.text)</span><br><span class="line">#拿到页面源代码</span><br><span class="line">resp.close()</span><br><span class="line">#关掉resp</span><br></pre></td></tr></table></figure>
+                
+            </div>
+        </article>
+    
+        <article class="post-abstract">
+            <div class="post-title">
+                <h2><a class="post-title-link" href="/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93%E5%AE%89%E8%A3%85%E5%91%BD%E4%BB%A4/">第三方库安装命令</a></h2>
+            </div>
+            <div class="post-meta">
+                <span class="post-time">2023-03-27</span>
+                
+            </div>
+            <div class="post-content">
+                
+                    <table>
+<thead>
+<tr>
+<th align="left">需求</th>
+<th align="left">命令</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">更新pip命令</td>
+<td align="left">python -m pip install –upgrade pip</td>
+</tr>
+<tr>
+<td align="left">下载pandas</td>
+<td align="left">pip install pandas</td>
+</tr>
+<tr>
+<td align="left">下载xlwt</td>
+<td align="left">pip install xlwt</td>
+</tr>
+<tr>
+<td align="left">下载xlrd</td>
+<td align="left">pip install xlrd</td>
+</tr>
+</tbody></table>
+
+                
+            </div>
+        </article>
+    
+        <article class="post-abstract">
+            <div class="post-title">
+                <h2><a class="post-title-link" href="/%E7%AD%9B%E9%80%89%E5%90%8E%E8%87%AA%E5%8A%A8%E6%8E%92%E5%88%97%E5%BA%8F%E5%8F%B7/">筛选后自动排列序号</a></h2>
+            </div>
+            <div class="post-meta">
+                <span class="post-time">2023-03-27</span>
+                
+            </div>
+            <div class="post-content">
+                
+                    <p>&#x3D;subtotal(3，B$2:B2)*1<br>“3”为函数序号<br>“B$2:B2”为序号数值</p>
+
+                
+            </div>
+        </article>
+    
+        <article class="post-abstract">
+            <div class="post-title">
+                <h2><a class="post-title-link" href="/%E7%AD%9B%E9%80%89%E6%B1%82%E5%92%8C/">筛选求和</a></h2>
+            </div>
+            <div class="post-meta">
+                <span class="post-time">2023-03-27</span>
+                
+            </div>
+            <div class="post-content">
+                
+                    <p>&#x3D;SUBTOTAL(9,C1:C10)<br>“9”为函数序号<br>“C1:C10”选择数值列</p>
+
+                
+            </div>
+        </article>
+    
+        <article class="post-abstract">
+            <div class="post-title">
+                <h2><a class="post-title-link" href="/%E7%88%AC%E5%8F%96%E5%85%B3%E9%94%AE%E5%AD%97%E5%86%99%E5%85%A5%E8%A1%A8%E6%A0%BC/">爬取关键字写入表格</a></h2>
+            </div>
+            <div class="post-meta">
+                <span class="post-time">2023-03-27</span>
+                
+            </div>
+            <div class="post-content">
+                
+                    <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">import re</span><br><span class="line">import xlwt</span><br><span class="line"></span><br><span class="line">headers = &#123;&#x27;User-Agent&#x27;:&quot;Mozilla/5.0 (X11; Linux x86_64; rv:45.0) Gecko/20100101 Firefox/45.0&quot;&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">book = xlwt.Workbook()</span><br><span class="line">sheet = book.add_sheet(&#x27;ke_tengxun&#x27;,cell_overwrite_ok=True)</span><br><span class="line"></span><br><span class="line">rownum = 1</span><br><span class="line">def get_info(url):</span><br><span class="line">    global rownum</span><br><span class="line">    res = requests.get(url,headers = headers)</span><br><span class="line">    pattern = re.compile(&#x27;.*?rel=&quot;nofollow&quot;.*?&gt;(.*?)&lt;&#x27;,re.S)</span><br><span class="line">    ke_chupin =re.findall(pattern,res.text)</span><br><span class="line">    pattern = re.compile(&#x27;</span><br><span class="line">.*?cors-name=&quot;course&quot;&gt;(.*?)&lt;&#x27;,re.S)</span><br><span class="line">    ke_name =re.findall(pattern,res.text)</span><br><span class="line">    pattern = re.compile(&#x27;</span><br><span class="line">.*?href=&quot;(.*?)&quot;.*?target&#x27;,re.S)</span><br><span class="line">    ke_href =re.findall(pattern,res.text)</span><br><span class="line">    print(ke_chupin)</span><br><span class="line">    print(len(ke_chupin))</span><br><span class="line">    print(ke_name)</span><br><span class="line">    print(len(ke_name))</span><br><span class="line">    print(ke_href)</span><br><span class="line">    print(len(ke_href))</span><br><span class="line"></span><br><span class="line">    head = [&#x27;课程&#x27;,&#x27;链接&#x27;,&#x27;出品人&#x27;]</span><br><span class="line">    for h in range(len(head)):</span><br><span class="line">        sheet.write(0,h,head[h])</span><br><span class="line">    for l in range(len(ke_name[:24])):</span><br><span class="line">        sheet.write(rownum,0,ke_name[l])</span><br><span class="line">        sheet.write(rownum,1,ke_href[l])</span><br><span class="line">        sheet.write(rownum,2,ke_chupin[l])</span><br><span class="line">        rownum += 1</span><br><span class="line"></span><br><span class="line">    book.save(&#x27;test.xls&#x27;)</span><br><span class="line"></span><br><span class="line">if __name__ == &#x27;__main__&#x27;:</span><br><span class="line">    for i in range(1,13):</span><br><span class="line">        urls = &#x27;https://ke.qq.com/course/list?mt=1001&amp;st=2002&amp;tt=3019&amp;page=&#123;&#125;&#x27;.format(i)</span><br><span class="line">        get_info(urls)</span><br></pre></td></tr></table></figure>
+                
+            </div>
+        </article>
+    
+        <article class="post-abstract">
+            <div class="post-title">
+                <h2><a class="post-title-link" href="/%E8%BF%94%E5%9B%9E%E5%B7%A6%E8%BE%B9%E4%B8%AD%E6%96%87%E6%96%87%E6%9C%AC/">返回左边中文文本</a></h2>
+            </div>
+            <div class="post-meta">
+                <span class="post-time">2023-03-27</span>
+                
+            </div>
+            <div class="post-content">
+                
+                    <p>&#x3D;LEFTB(A1,SEARCHB(“?”,A1)-1)<br>“A1”为所选单元格</p>
+
+                
+            </div>
+        </article>
+    
+        <article class="post-abstract">
+            <div class="post-title">
+                <h2><a class="post-title-link" href="/in%E7%BB%84%E5%90%88%E5%BF%AB%E6%8D%B7%E9%94%AE/">Win组合快捷键</a></h2>
+            </div>
+            <div class="post-meta">
+                <span class="post-time">2005-01-01</span>
+                
+            </div>
+            <div class="post-content">
+                
+                    <p>123</p>
+<table>
+<thead>
+<tr>
+<th align="left">快捷键</th>
+<th align="left">作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Win+E</td>
+<td align="left">打开我的电脑</td>
+</tr>
+<tr>
+<td align="left">Win+D</td>
+<td align="left">返回桌面</td>
+</tr>
+<tr>
+<td align="left">Win+L</td>
+<td align="left">锁定计算机</td>
+</tr>
+<tr>
+<td align="left">Win+R</td>
+<td align="left">开启运行对话框</td>
+</tr>
+<tr>
+<td align="left">Win+M</td>
+<td align="left">最小化所有窗口</td>
+</tr>
+<tr>
+<td align="left">Win+U</td>
+<td align="left">打开设置页面</td>
+</tr>
+<tr>
+<td align="left">Win+TAB</td>
+<td align="left">窗口切换</td>
+</tr>
+<tr>
+<td align="left">Win+Break</td>
+<td align="left">打开电脑配置窗口</td>
+</tr>
+<tr>
+<td align="left">Win+数字键</td>
+<td align="left">切换任务窗口</td>
+</tr>
+<tr>
+<td align="left">Win+方向键</td>
+<td align="left">应用分屏</td>
+</tr>
+</tbody></table>
+
+                
+            </div>
+        </article>
+    
+</div>
+<div class="paginator">
+    
+        
+        <a class="prev" href="/page/5/">
+            <i class="iconfont icon-prev"></i>
+            上一页
+        </a>
+        
+        
+    
+</div>
+
+    </div>
+</div>
+<footer class="footer-social">
+    
+
+    
+
+    
+
+    <div class="footer-copyright">
+        <p class="time-line">
+            &copy;
+            
+            
+            2005
+            &nbsp;<i class="iconfont icon-heart"></i>&nbsp;
+            <a target="_blank" href="https://github.com/iJinxin">Nooae</a>
+        </p>
+        <p class="theme-info">
+            Powered by <a target="_blank" href="https://hexo.io">Hexo</a>  |  Theme -
+            <a target="_blank" href="https://github.com/iJinxin/hexo-theme-sky">Sky</a>
+        </p>
+    </div>
+</footer>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<script src="/js/index.js"></script>
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+    
+
+</script>
+</html>

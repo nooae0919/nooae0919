@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+
+	
+	<meta name="keywords" content="nooae,excel,python,system">
+
+	
+	<meta name="description" content="Nooae's blog，一个分享常用办公工具和技术的博客。">
+
+
+    <title>Nooae&#39;s Blog</title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<link rel="stylesheet" href="/css/gitment.css">
+
+    <link rel="stylesheet" type="text/css" href="//at.alicdn.com/t/font_859455_eaq7v6w8ktj.css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body>
+<header class="header">
+    <div class="header-inner">
+        <div class="header-title">
+
+        </div>
+        <nav class="header-nav">
+		
+
+            
+            <a href="/" class="header-nav-link" >
+                首页
+            </a>
+            
+
+            
+
+            
+            <a href="/tags" class="header-nav-link">
+                标签
+            </a>
+            
+
+            
+            <a href="/about/" class="header-nav-link">
+                关于
+            </a>
+            
+        </nav>
+    </div>
+</header>
+<header class="mobile-header">
+    <div class="mobile-nav">
+        <div class="mobile-nav-icon">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="mobile-nav-title">
+            <a href="/" class="mobile-nav-title-link">Nooae's Blog</a>
+        </div>
+
+    </div>
+    <nav class="mobile-menu">
+        <ul class="mobile-menu-list">
+            <li class="mobile-menu-item">
+                <i class="iconfont icon-home"></i>
+                <a href="/" class="mobile-nav-link">首页</a>
+            </li>
+
+            <li class="mobile-menu-item">
+                <i class="iconfont icon-tag"></i>
+                <a href="/tags" class="mobile-nav-link">标签</a>
+            </li>
+            <li class="mobile-menu-item">
+                <i class="iconfont icon-about"></i>
+                <a href="/about/" class="mobile-nav-link">关于</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<div class="main">
+    <div class="content-inner">
+        <div class="posts">
+    <article class="post-whole">
+        <div class="post-title">
+            <h2 class="title">Excel函数公式大全</h2>
+            <div class="post-meta">
+                <span class="post-time">2023-03-27</span>
+                
+                <span class="post-visit"> 阅读次数：<span id="busuanzi_value_page_pv"></span></span>
+            </div>
+        </div>
+        <div class="post-toc" id="post-toc">
+    <strong class="post-toc-title">目录</strong>
+    
+    <div class="back-to-top" id="back-to-top">
+        <a href="javascript:void(0);">回到顶部</a>
+    </div>
+</div>
+        <div class="post-content">
+            <p>一、Excel中：逻辑函数，共有9个；<br>IF函数：&#x3D;IF(G2&gt;&#x3D;6000,”高薪”,”低薪”)<br>通过IF函数，判断条月薪是否大于6000；大于6000返回高薪，小于6000返回低薪；</p>
+<span id="more"></span>
+<p>IFS函数：&#x3D;IFS(G2&lt;6000,”员工”,G2&lt;10000,”经理”,G2&gt;&#x3D;10000,”老板”)<br>IFS函数，用于判断多个条件；判断月薪条件为：6000、8000、10000的员工，分别为：员工、经理、老板；</p>
+<p>IFERROR函数：&#x3D;IFERROR（E2&#x2F;F2，“-”）<br>因为被除数不能为0 ，当【销量】为0时会报错，我们可以使用IFERROR函数，将报错信息转换为横杠；</p>
+<p>二、Excel中：统计函数，共有103个；<br>SUM函数：&#x3D;SUM（G2：G9）<br>选中I2单元格，并在编辑栏输入函数公式：&#x3D;SUM（）；然后用鼠标选中G2：G9单元格区域，按回 车键结束确认，即可计算出所有员工的月薪总和；</p>
+<p>SUMIF函数：&#x3D;SUMIF（F：F，I2，G：G）<br>SUMIF为单条件求和函数，通过判断【学历】是否为本科，可以计算出【学历】为本科的员工总工 资；</p>
+<p>SUMIFS函数：&#x3D;SUMIFS(G2:G9,D2:D9,I3,G2:G9,”&gt;”&amp;K3)<br>SUMIFS为多条件求和函数；通过判断【性别】和【月薪】2个条件；计算出【性别】为：男性，【 月薪】大于6000的工资总和；</p>
+<p>三、Excel中：统计函数，共有30个；<br>TEXT函数：&#x3D;TEXT(C2,”aaaa”) TEXT函数中的代码：“aaaa”，可以将日期格式，轻松转换成星期格式；</p>
+<p>LEFT函数：&#x3D;LEFT(B2,1)<br>LEFT函数，用于截取文本中左侧的字符串，通过LEFT函数，可以返回：所有员工的姓氏；</p>
+<p>RIGHT函数：&#x3D;RIGHT(B2,1)；<br>RIGHT函数，用于截取文本中右侧的字符串，通过RIGHT函数，可以返回：所有员工的名字；</p>
+<p>四、Excel中：时间函数，共有25个；<br>YEAR函数：&#x3D;YEAR（C2）<br>YEAR函数，用于返回时间格式的年份，使用YEAR函数，可以批量返回：员工【出生日期】的年份 ；</p>
+<p>MONTH函数：&#x3D;MONTH（C2）<br>MONTH函数，用于返回时间格式的月份，使用MONTH函数，可以批量返回：员工【出生日期】的月 份；</p>
+<p>DAY函数：&#x3D;DAY（C2）<br>DAY函数，用于返回时间格式的日期，使用DAY函数，可以批量返回：员工【出生日期】的日期；</p>
+<p>五、Excel中：查找函数，共有18个；<br>ROW函数：&#x3D;ROW（B2）<br>ROW函数，用于返回单元格的行号；选中G2单元格，在编辑栏输入函数公式：&#x3D;ROW（）；然后输入 函数参数：用鼠标选中B2单元格，并按回车键结束确认，即可返回B2单元格的行号：2；</p>
+<p>COLUMN函数：&#x3D;COLUMN（B2）<br>COLUMN函数，用于返回单元格的列号；选中G2单元格，在编辑栏输入函数公式：&#x3D;COLUMN（）；然 后输入函数参数：用鼠标选中B2单元格，并按回车键结束确认，即可返回B2单元格的列号：2；</p>
+<p>VLOOKUP函数：&#x3D;VLOOKUP（H2，B：F，5，0）；<br>VLOOKUP函数，可以在表格区域内，查找指定内容；通过【姓名】列的：貂蝉，可以定位到相关【 学历】列的：高中；</p>
+<p>六、Excel中：信息函数，共有20个；<br>ISBLANK函数：&#x3D;ISBLANK（B4）；<br>ISBLANK函数，用于判断指定的单元格是否为空；如果【姓名】列为空，ISBLANK函数会返回： TRUE；否则会返回：FALSE；</p>
+<p>七、Excel中：WEB函数，共有3个；<br>ENCODEURL函数：&#x3D;ENCODEURL（A2）；<br>ENCODEURL函数，用于返回 URL 编码的字符串，替换为百分比符号 (%) 和十六进制数字形式；</p>
+<p>八、Excel中：三角函数，共有80个；<br>SIN函数：&#x3D;SIN（A2*PI（）&#x2F;180）；<br>SIN函数，即正弦函数，三角函数的一种；用于计算一个角度的正弦值；</p>
+<p>九、Excel中：财务函数，共有55个；<br>RATE函数：&#x3D;RATE（B1，-B2，B3）;<br>RATE为利率函数，假定借款10万元，约定每季度还款1.2万元，共计3年还清，使用RATE函数，可 以计算出年利率为：24.44%；</p>
+<p>十、Excel中：工程函数，共有52个；<br>BIN2DEC函数：&#x3D;BIN2DEC（A2）;<br>BIN2DEC函数，可以将二进制转换成十进制；利用BIN2DEC函数，可以将二进制10，100，1000；转 换成十进制：2，4，8；</p>
+<p>十一、Excel中：兼容函数，共有39个；<br>RANK函数：&#x3D;RANK（E2，$E$2，$E$9）;<br>RANK函数；用于返回指定单元格值的排名，我们选中F2：F9单元格区域，并输入RANK函数公式， 然后按Excel快捷键【Ctrl+Enter】，即可返回月薪排名；</p>
+<p>十二、Excel中：多维函数，共有5个；<br>SUMPRODUCT函数：&#x3D;SUMPRODUCT（A2：B4，C2：D4）;<br>利用SUMPRODUCT函数，可以计算出：A2：B4单元格区域，与C2：D4单元格区域的乘积总和；</p>
+<p>十三、Excel中：数据库函数，共有12个；<br>DSUM函数：&#x3D;DSUM（A1：E9，”销量”，G1：G2）;<br>我们先选中H2单元格，并在编辑栏输入函数公式：&#x3D;DSUM（）；然后输入函数第1个参数：用鼠标 选中A1：E9单元格区域；第2个参数：“销量”；第3个参数：用鼠标选中G1：G2单元格区域；最 后按回车键结束确认，即可计算出：魏国所有销售人员的销量；</p>
+
+        </div>
+        
+        <div class="post-tag">
+            
+            <a class="tag" href="/tags/excel/" title="excel">excel</a>
+            
+        </div>
+        
+    </article>
+</div>
+<div class="paginator">
+    
+        
+            <a class="prev" href="/OEE%E7%BB%84%E6%88%90/">
+                <i class="iconfont icon-prev"></i>
+                <span class="nav-default">OEE组成</span>
+                <span class="nav-mobile">上一篇</span>
+            </a>
+        
+        
+            <a class="next" href="/Excel%E5%BF%AB%E6%8D%B7%E9%94%AE/">
+                <span class="nav-default">Excel快捷键</span>
+                <span class="nav-mobile">下一篇</span>
+                <i class="iconfont icon-next"></i>
+            </a>
+        
+    
+</div>
+<div id="comment-container"></div>
+    </div>
+</div>
+<footer class="footer-social">
+    
+
+    
+
+    
+
+    <div class="footer-copyright">
+        <p class="time-line">
+            &copy;
+            
+            
+            2005
+            &nbsp;<i class="iconfont icon-heart"></i>&nbsp;
+            <a target="_blank" href="https://github.com/iJinxin">Nooae</a>
+        </p>
+        <p class="theme-info">
+            Powered by <a target="_blank" href="https://hexo.io">Hexo</a>  |  Theme -
+            <a target="_blank" href="https://github.com/iJinxin/hexo-theme-sky">Sky</a>
+        </p>
+    </div>
+</footer>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<script src="/js/index.js"></script>
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+    
+
+</script>
+</html>

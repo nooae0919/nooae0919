@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+
+	
+	<meta name="keywords" content="nooae,excel,python,system">
+
+	
+	<meta name="description" content="Nooae's blog，一个分享常用办公工具和技术的博客。">
+
+
+    <title>Nooae&#39;s Blog</title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<link rel="stylesheet" href="/css/gitment.css">
+
+    <link rel="stylesheet" type="text/css" href="//at.alicdn.com/t/font_859455_eaq7v6w8ktj.css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body>
+<header class="header">
+    <div class="header-inner">
+        <div class="header-title">
+
+        </div>
+        <nav class="header-nav">
+		
+
+            
+            <a href="/" class="header-nav-link" >
+                首页
+            </a>
+            
+
+            
+
+            
+            <a href="/tags" class="header-nav-link">
+                标签
+            </a>
+            
+
+            
+            <a href="/about/" class="header-nav-link">
+                关于
+            </a>
+            
+        </nav>
+    </div>
+</header>
+<header class="mobile-header">
+    <div class="mobile-nav">
+        <div class="mobile-nav-icon">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="mobile-nav-title">
+            <a href="/" class="mobile-nav-title-link">Nooae's Blog</a>
+        </div>
+
+    </div>
+    <nav class="mobile-menu">
+        <ul class="mobile-menu-list">
+            <li class="mobile-menu-item">
+                <i class="iconfont icon-home"></i>
+                <a href="/" class="mobile-nav-link">首页</a>
+            </li>
+
+            <li class="mobile-menu-item">
+                <i class="iconfont icon-tag"></i>
+                <a href="/tags" class="mobile-nav-link">标签</a>
+            </li>
+            <li class="mobile-menu-item">
+                <i class="iconfont icon-about"></i>
+                <a href="/about/" class="mobile-nav-link">关于</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<div class="main">
+    <div class="content-inner">
+        <div class="posts">
+    <article class="post-whole">
+        <div class="post-title">
+            <h2 class="title">在一个工作薄内复制多个工作表</h2>
+            <div class="post-meta">
+                <span class="post-time">2023-10-19</span>
+                
+                <span class="post-visit"> 阅读次数：<span id="busuanzi_value_page_pv"></span></span>
+            </div>
+        </div>
+        <div class="post-toc" id="post-toc">
+    <strong class="post-toc-title">目录</strong>
+    
+    <div class="back-to-top" id="back-to-top">
+        <a href="javascript:void(0);">回到顶部</a>
+    </div>
+</div>
+        <div class="post-content">
+            <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">import openpyxl</span><br><span class="line"></span><br><span class="line">print(&quot;注意：&quot;+&quot;\n&quot;</span><br><span class="line">&quot;1、此程序只支持XLSX格式文件；&quot;+&quot;\n&quot;</span><br><span class="line">&quot;2、程序运行前需调整好打印预览模式；&quot;+&quot;\n&quot;</span><br><span class="line">&quot;3、程序不会复制图片，运行完成后需手动复制图片。&quot;+&quot;\n&quot;)</span><br><span class="line"></span><br><span class="line">wb_name = input(&quot;请输入文件名称：&quot;)</span><br><span class="line">wb = openpyxl.load_workbook(f&#x27;&#123;wb_name&#125;.xlsx&#x27;)</span><br><span class="line">old_sheet = wb.worksheets[0]</span><br><span class="line">sheet_name = old_sheet.title</span><br><span class="line"></span><br><span class="line">num = int(input(&quot;请输入需要复制的数量：&quot;))</span><br><span class="line"></span><br><span class="line">for i in range(2,num+1):</span><br><span class="line">	new_sheet = wb.copy_worksheet(old_sheet)</span><br><span class="line">	new_sheet.title = sheet_name + str(i)</span><br><span class="line"></span><br><span class="line">print(&quot;已生成&quot;f&#x27;&#123;num&#125;&#x27;&quot;个sheet&quot;)    </span><br><span class="line">wb.save(f&#x27;&#123;wb_name&#125;.xlsx&#x27;)</span><br></pre></td></tr></table></figure>
+        </div>
+        
+        <div class="post-tag">
+            
+            <a class="tag" href="/tags/python/" title="python">python</a>
+            
+        </div>
+        
+    </article>
+</div>
+<div class="paginator">
+    
+        
+            <a class="prev" href="/Hexo%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">
+                <i class="iconfont icon-prev"></i>
+                <span class="nav-default">Hexo常用命令</span>
+                <span class="nav-mobile">上一篇</span>
+            </a>
+        
+        
+            <a class="next" href="/%E5%9C%A8%E5%8D%95%E5%85%83%E6%A0%BC%E4%B8%AD%E6%98%BE%E7%A4%BA%E5%BD%93%E5%89%8D%E5%B7%A5%E4%BD%9C%E8%A1%A8%E5%90%8D%E7%A7%B0/">
+                <span class="nav-default">在单元格中显示当前工作表名称</span>
+                <span class="nav-mobile">下一篇</span>
+                <i class="iconfont icon-next"></i>
+            </a>
+        
+    
+</div>
+<div id="comment-container"></div>
+    </div>
+</div>
+<footer class="footer-social">
+    
+
+    
+
+    
+
+    <div class="footer-copyright">
+        <p class="time-line">
+            &copy;
+            
+            
+            2005
+            &nbsp;<i class="iconfont icon-heart"></i>&nbsp;
+            <a target="_blank" href="https://github.com/iJinxin">Nooae</a>
+        </p>
+        <p class="theme-info">
+            Powered by <a target="_blank" href="https://hexo.io">Hexo</a>  |  Theme -
+            <a target="_blank" href="https://github.com/iJinxin/hexo-theme-sky">Sky</a>
+        </p>
+    </div>
+</footer>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<script src="/js/index.js"></script>
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+    
+
+</script>
+</html>
