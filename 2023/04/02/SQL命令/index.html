@@ -98,63 +98,14 @@
     </div>
 </div>
         <div class="post-content">
-            <p>SQL命令<span id="more"></span></p>
-<table>
-<thead>
-<tr>
-<th align="left">命令</th>
-<th align="left">解释</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">create database day1;</td>
-<td align="left">创建一个名为“day1”的数据库</td>
-</tr>
-<tr>
-<td align="left">use day1;</td>
-<td align="left">进去day1数据库</td>
-</tr>
-<tr>
-<td align="left">create table test(</td>
-<td align="left"></td>
-</tr>
-<tr>
-<td align="left">id varchar(20)  primary key ,</td>
-<td align="left"></td>
-</tr>
-<tr>
-<td align="left">name varchar(30),</td>
-<td align="left"></td>
-</tr>
-<tr>
-<td align="left">password varchar(30)</td>
-<td align="left"></td>
-</tr>
-<tr>
-<td align="left">);</td>
-<td align="left">创建一个名为“test”的数据表</td>
-</tr>
-<tr>
-<td align="left">insert into test(id,name,password) values(‘001’,’lisi’,’123456’);</td>
-<td align="left">向test表插入一行数据</td>
-</tr>
-<tr>
-<td align="left">select * from test;</td>
-<td align="left">查看创建的test表的数据</td>
-</tr>
-<tr>
-<td align="left">update test set password&#x3D;’xxxx’ where id&#x3D;’001’;</td>
-<td align="left">将id为001的密码改为xxxx</td>
-</tr>
-<tr>
-<td align="left">drop table test;</td>
-<td align="left">删除test表</td>
-</tr>
-<tr>
-<td align="left">drop database day1;</td>
-<td align="left">删除day1数据库</td>
-</tr>
-</tbody></table>
+            <p>#创建一个名为“day1”的数据库<br>create database day1;</p>
+<p>#进去day1数据库<br>use day1;</p>
+<p>#创建一个名为“test”的数据表<br>create table test(<br>id varchar(20)  primary key ,<br>name varchar(30),<br>password varchar(30)<br>);</p>
+<p>#向test表插入一行数据<br>insert into test(id,name,password) values(‘001’,’lisi’,’123456’);</p>
+<p>#查看创建的test表的数据<br>select * from test;</p>
+<p>#将id为001的密码改为xxxx<br>update test set password&#x3D;’xxxx’ where id&#x3D;’001’;</p>
+<p>#删除test表<br>drop table test;</p>
+<p>#删除day1数据库<br>drop database day1;</p>
 
         </div>
         
