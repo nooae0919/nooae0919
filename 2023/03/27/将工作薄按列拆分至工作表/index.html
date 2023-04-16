@@ -100,7 +100,10 @@
         <div class="post-content">
             <p>import pandas as pd</p>
 <p>data&#x3D;pd.read_excel(r”地址\汇总.xls”)<br>xlsx &#x3D; pd.ExcelWriter(r”地址\汇总-拆分完成.xlsx”)</p>
-<p>for i in data[“姓名”].unique():<br>    data[data[“姓名”]&#x3D;&#x3D;i].to_excel(xlsx,sheet_name&#x3D;i,index&#x3D;False)</p>
+<p>for i in data[“姓名”].unique():</p>
+<ul>
+<li>data[data[“姓名”]&#x3D;&#x3D;i].to_excel(xlsx,sheet_name&#x3D;i,index&#x3D;False)</li>
+</ul>
 <p>xlsx.close()</p>
 
         </div>

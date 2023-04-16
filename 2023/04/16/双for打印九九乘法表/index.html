@@ -83,9 +83,9 @@
         <div class="posts">
     <article class="post-whole">
         <div class="post-title">
-            <h2 class="title">Python爬取豆瓣电影排行榜</h2>
+            <h2 class="title">双for打印九九乘法表</h2>
             <div class="post-meta">
-                <span class="post-time">2023-03-27</span>
+                <span class="post-time">2023-04-16</span>
                 
                 <span class="post-visit"> 阅读次数：<span id="busuanzi_value_page_pv"></span></span>
             </div>
@@ -98,15 +98,13 @@
     </div>
 </div>
         <div class="post-content">
-            <p>import requests<br>import re</p>
-<p>#1-爬取数据<span id="more"></span><br>url &#x3D; ‘<a target="_blank" rel="noopener" href="https://movie.douban.com/chart">https://movie.douban.com/chart</a>‘<br>headers &#x3D; {‘User-Agent’:’Mozilla&#x2F;5.0 (Windows NT 6.1; WOW64) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;78.0.3904.108 Safari&#x2F;537.36’}<br>response &#x3D; requests.get(url,headers &#x3D; headers)<br>#print(response.text)<br>html_str &#x3D; response.text</p>
-<p>#2-解析数据<br>patten &#x3D; re.compile(‘&lt; a.*?nbg.*?title&#x3D;”(.*?)”&gt;’,re.S)<br>items &#x3D; re.findall(patten,html_str)<br>print(items)</p>
-<p>#3-存储数据<br>with open(‘douban.txt’,”w”,encoding&#x3D;’utf-8’) as f:</p>
+            <p>for i in range(1, 10):</p>
 <ul>
-<li>for item in items:<ul>
-<li>f.write(item+’\n’)</li>
+<li>for j in range(1, i + 1):<ul>
+<li>print(‘{}*{}&#x3D;{}’.format(i,j,i*j), end&#x3D;’\t’)</li>
 </ul>
 </li>
+<li>print()</li>
 </ul>
 
         </div>
@@ -122,15 +120,9 @@
 <div class="paginator">
     
         
-            <a class="prev" href="/2023/03/27/Python%E5%B8%B8%E7%94%A8%E5%8D%95%E8%AF%8D%E8%A1%A8/">
-                <i class="iconfont icon-prev"></i>
-                <span class="nav-default">Python常用单词表</span>
-                <span class="nav-mobile">上一篇</span>
-            </a>
         
-        
-            <a class="next" href="/2023/03/27/xlsxwriter%E6%96%B0%E5%BB%BAExcel%E8%A1%A8%E6%A0%BC/">
-                <span class="nav-default">xlsxwriter新建Excel表格</span>
+            <a class="next" href="/2023/04/05/PDF%E8%BD%AC%E5%9B%BE%E7%89%87/">
+                <span class="nav-default">PDF转图片</span>
                 <span class="nav-mobile">下一篇</span>
                 <i class="iconfont icon-next"></i>
             </a>

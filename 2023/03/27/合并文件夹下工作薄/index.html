@@ -101,7 +101,16 @@
             <p>import os<br>import pandas as pd</p>
 <p>path &#x3D; r’地址’<span id="more"></span><br>file_list &#x3D; []</p>
 <p>dfs &#x3D; []</p>
-<p>for root,dirs,files in os.walk(path):<br>    for file in files:<br>        file_path &#x3D; os.path.join(root, file)<br>        file_list.append(file_path)<br>        df &#x3D; pd.read_csv(file_path,encoding&#x3D;”gbk”)<br>        dfs.append(df)<br>df &#x3D; pd.concat(dfs)</p>
+<p>for root,dirs,files in os.walk(path):</p>
+<ul>
+<li>for file in files:<ul>
+<li>file_path &#x3D; os.path.join(root, file)</li>
+<li>file_list.append(file_path)</li>
+<li>df &#x3D; pd.read_csv(file_path,encoding&#x3D;”gbk”)</li>
+<li>dfs.append(df)<br>df &#x3D; pd.concat(dfs)</li>
+</ul>
+</li>
+</ul>
 <p>df.to_excel(r’地址\汇总.xls’, index&#x3D;False)</p>
 
         </div>

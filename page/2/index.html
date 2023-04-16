@@ -84,6 +84,27 @@
     
         <article class="post-abstract">
             <div class="post-title">
+                <h2><a class="post-title-link" href="/2023/03/27/Excel%E5%BF%AB%E6%8D%B7%E9%94%AE/">Excel快捷键</a></h2>
+            </div>
+            <div class="post-meta">
+                <span class="post-time">2023-03-27</span>
+                
+            </div>
+            <div class="post-content">
+                
+                    <p>在Excel中合理的使用快捷键会更好的提高工作效率</p>
+                    <div class="read-more">
+                        <a href="/2023/03/27/Excel%E5%BF%AB%E6%8D%B7%E9%94%AE/" class="read-more-link">
+                            阅读全文
+                            <i class="iconfont icon-readmore"></i>
+                        </a>
+                    </div>
+                
+            </div>
+        </article>
+    
+        <article class="post-abstract">
+            <div class="post-title">
                 <h2><a class="post-title-link" href="/2023/03/27/Python%E5%B8%B8%E7%94%A8%E5%8D%95%E8%AF%8D%E8%A1%A8/">Python常用单词表</a></h2>
             </div>
             <div class="post-meta">
@@ -136,7 +157,7 @@
             <div class="post-content">
                 
                     <p>import xlsxwriter</p>
-<h1 id="新建excel表"><a href="#新建excel表" class="headerlink" title="#新建excel表"></a>#新建excel表</h1><p>workbook &#x3D; xlsxwriter.Workbook(‘D:&#x2F;hello.xlsx’)</p>
+<p>#新建excel表<br>workbook &#x3D; xlsxwriter.Workbook(‘D:&#x2F;hello.xlsx’)</p>
                     <div class="read-more">
                         <a href="/2023/03/27/xlsxwriter%E6%96%B0%E5%BB%BAExcel%E8%A1%A8%E6%A0%BC/" class="read-more-link">
                             阅读全文
@@ -276,26 +297,18 @@
             </div>
             <div class="post-content">
                 
-                    <p>import pandas as pd<br>data &#x3D; pd.read_excel(r’地址\汇总.xls’,keep_default_na&#x3D;False)<br>unit_list &#x3D; list(data[‘姓名’].drop_duplicates())<br>for i in unit_list:<br>    data_new &#x3D; data[data[‘姓名’] &#x3D;&#x3D; i]<br>    if i &#x3D;&#x3D; ‘’:<br>        data_new.to_excel()<br>    else:<br>        data_new.to_excel(r”地址%s.xls” % (i),index&#x3D;False)</p>
-
-                
-            </div>
-        </article>
-    
-        <article class="post-abstract">
-            <div class="post-title">
-                <h2><a class="post-title-link" href="/2023/03/27/%E5%B0%86%E5%B7%A5%E4%BD%9C%E8%96%84%E6%8C%89%E5%88%97%E6%8B%86%E5%88%86%E8%87%B3%E5%B7%A5%E4%BD%9C%E8%A1%A8/">将工作薄按列拆分至工作表</a></h2>
-            </div>
-            <div class="post-meta">
-                <span class="post-time">2023-03-27</span>
-                
-            </div>
-            <div class="post-content">
-                
-                    <p>import pandas as pd</p>
-<p>data&#x3D;pd.read_excel(r”地址\汇总.xls”)<br>xlsx &#x3D; pd.ExcelWriter(r”地址\汇总-拆分完成.xlsx”)</p>
-<p>for i in data[“姓名”].unique():<br>    data[data[“姓名”]&#x3D;&#x3D;i].to_excel(xlsx,sheet_name&#x3D;i,index&#x3D;False)</p>
-<p>xlsx.close()</p>
+                    <p>import pandas as pd<br>data &#x3D; pd.read_excel(r’地址\汇总.xls’,keep_default_na&#x3D;False)<br>unit_list &#x3D; list(data[‘姓名’].drop_duplicates())<br>for i in unit_list:</p>
+<ul>
+<li>data_new &#x3D; data[data[‘姓名’] &#x3D;&#x3D; i]</li>
+<li>if i &#x3D;&#x3D; ‘’:<ul>
+<li>data_new.to_excel()</li>
+</ul>
+</li>
+<li>else:<ul>
+<li>data_new.to_excel(r”地址%s.xls” % (i),index&#x3D;False)</li>
+</ul>
+</li>
+</ul>
 
                 
             </div>

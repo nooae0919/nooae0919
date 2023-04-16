@@ -98,7 +98,18 @@
     </div>
 </div>
         <div class="post-content">
-            <p>import pandas as pd<br>data &#x3D; pd.read_excel(r’地址\汇总.xls’,keep_default_na&#x3D;False)<br>unit_list &#x3D; list(data[‘姓名’].drop_duplicates())<br>for i in unit_list:<br>    data_new &#x3D; data[data[‘姓名’] &#x3D;&#x3D; i]<br>    if i &#x3D;&#x3D; ‘’:<br>        data_new.to_excel()<br>    else:<br>        data_new.to_excel(r”地址%s.xls” % (i),index&#x3D;False)</p>
+            <p>import pandas as pd<br>data &#x3D; pd.read_excel(r’地址\汇总.xls’,keep_default_na&#x3D;False)<br>unit_list &#x3D; list(data[‘姓名’].drop_duplicates())<br>for i in unit_list:</p>
+<ul>
+<li>data_new &#x3D; data[data[‘姓名’] &#x3D;&#x3D; i]</li>
+<li>if i &#x3D;&#x3D; ‘’:<ul>
+<li>data_new.to_excel()</li>
+</ul>
+</li>
+<li>else:<ul>
+<li>data_new.to_excel(r”地址%s.xls” % (i),index&#x3D;False)</li>
+</ul>
+</li>
+</ul>
 
         </div>
         
