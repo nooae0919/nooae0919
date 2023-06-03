@@ -83,9 +83,9 @@
         <div class="posts">
     <article class="post-whole">
         <div class="post-title">
-            <h2 class="title">将工作薄按列拆分至工作表</h2>
+            <h2 class="title">设备性能确认(Qualify)</h2>
             <div class="post-meta">
-                <span class="post-time">2023-03-27</span>
+                <span class="post-time">2023-06-04</span>
                 
                 <span class="post-visit"> 阅读次数：<span id="busuanzi_value_page_pv"></span></span>
             </div>
@@ -98,19 +98,13 @@
     </div>
 </div>
         <div class="post-content">
-            <p>import pandas as pd</p>
-<p>data&#x3D;pd.read_excel(r”地址\汇总.xls”)<br>xlsx &#x3D; pd.ExcelWriter(r”地址\汇总-拆分完成.xlsx”)</p>
-<p>for i in data[“姓名”].unique():</p>
-<ul>
-<li>data[data[“姓名”]&#x3D;&#x3D;i].to_excel(xlsx,sheet_name&#x3D;i,index&#x3D;False)</li>
-</ul>
-<p>xlsx.close()</p>
+            <p>设备性能确认(Qualify)，即某个设备达到了一定的标准，可以被用来做某个预定的生产步骤。Qualify的过程一定要有”预定的标准”。<br>设备的用户需求说明(URS)和性能指标决定了设备的标准，确认就是通过实际操作、测试或试验，来收集证据，证明该设备已经达到了这些标准。</p>
 
         </div>
         
         <div class="post-tag">
             
-            <a class="tag" href="/tags/python/" title="python">python</a>
+            <a class="tag" href="/tags/system/" title="system">system</a>
             
         </div>
         
@@ -119,15 +113,9 @@
 <div class="paginator">
     
         
-            <a class="prev" href="/2023/03/27/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%89%8D%E7%BC%80%E5%90%AB%E4%B9%89/">
-                <i class="iconfont icon-prev"></i>
-                <span class="nav-default">字符串前缀含义</span>
-                <span class="nav-mobile">上一篇</span>
-            </a>
         
-        
-            <a class="next" href="/2023/03/27/%E5%B0%86%E5%B7%A5%E4%BD%9C%E8%96%84%E6%8C%89%E5%88%97%E6%8B%86%E5%88%86%E8%87%B3%E5%B7%A5%E4%BD%9C%E8%96%84/">
-                <span class="nav-default">将工作薄按列拆分至工作薄</span>
+            <a class="next" href="/2023/04/16/%E5%8F%8Cfor%E6%89%93%E5%8D%B0%E4%B9%9D%E4%B9%9D%E4%B9%98%E6%B3%95%E8%A1%A8/">
+                <span class="nav-default">双for打印九九乘法表</span>
                 <span class="nav-mobile">下一篇</span>
                 <i class="iconfont icon-next"></i>
             </a>
