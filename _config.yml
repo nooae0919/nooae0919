@@ -111,6 +111,6 @@ theme: sky
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
 - type: 'git'
-  repo: http://gitee.com/nooae/nooae.git
+  repo: git@github.com:nooae0919/nooae0919.git
   branch: master
 - type: baidu_url_submitter
