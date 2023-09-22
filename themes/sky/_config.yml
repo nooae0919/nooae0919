@@ -1,0 +1,9 @@
+# menu
+menu:
+  Home: /
+  Tags: /tags
+  About: /about
+
+#本地搜索
+local_search:
+  enable: true
