@@ -388,6 +388,55 @@
       </tags>
   </entry>
   <entry>
+    <title>PDF转图片</title>
+    <url>/2023/04/05/PDF%E8%BD%AC%E5%9B%BE%E7%89%87/</url>
+    <content><![CDATA[<p>import os<br>import fitz  # fitz就是pip install PyMuPDF</p>
+<span id="more"></span>
+<p>def pyMuPDF_fitz(pdfPath, imagePath):</p>
+<ul>
+<li>print(“imagePath&#x3D;” + imagePath)</li>
+<li>pdfDoc &#x3D; fitz.open(pdfPath)</li>
+<li>for pg in range(pdfDoc.pageCount):<ul>
+<li><p>page &#x3D; pdfDoc[pg]</p>
+</li>
+<li><p>rotate &#x3D; int(0)</p>
+</li>
+<li><p>#每个尺寸的缩放系数为1.3，这将为我们生成分辨率提高2.6的图像。</p>
+</li>
+<li><p>#此处若是不做设置，默认图片大小为：792X612, dpi&#x3D;96</p>
+</li>
+<li><p>zoom_x &#x3D; 1.33333333  # (1.33333333–&gt;1056x816)   (2–&gt;1584x1224)</p>
+</li>
+<li><p>zoom_y &#x3D; 1.33333333</p>
+</li>
+<li><p>mat &#x3D; fitz.Matrix(zoom_x, zoom_y).preRotate(rotate)</p>
+</li>
+<li><p>pix &#x3D; page.getPixmap(matrix&#x3D;mat, alpha&#x3D;False)</p>
+</li>
+<li><p>if not os.path.exists(imagePath):  # 判断存放图片的文件夹是否存在</p>
+<ul>
+<li>os.makedirs(imagePath)  # 若图片文件夹不存在就创建</li>
+</ul>
+</li>
+<li><p>pix.writePNG(imagePath + ‘&#x2F;‘ + ‘images_%s.png’ % pg)  # 将图片写入指定的文件夹内</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>if __name__ &#x3D;&#x3D; “__main__“:</p>
+<ul>
+<li>#1、PDF地址</li>
+<li>pdfPath &#x3D; ‘123.pdf’</li>
+<li>#2、需要储存图片的目录</li>
+<li>imagePath &#x3D; ‘.&#x2F;imgs’</li>
+<li>pyMuPDF_fitz(pdfPath, imagePath)</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Python常用单词表</title>
     <url>/2023/03/27/Python%E5%B8%B8%E7%94%A8%E5%8D%95%E8%AF%8D%E8%A1%A8/</url>
     <content><![CDATA[<p>学习python必须背的常见单词</p>
@@ -1118,55 +1167,6 @@
       </tags>
   </entry>
   <entry>
-    <title>PDF转图片</title>
-    <url>/2023/04/05/PDF%E8%BD%AC%E5%9B%BE%E7%89%87/</url>
-    <content><![CDATA[<p>import os<br>import fitz  # fitz就是pip install PyMuPDF</p>
-<span id="more"></span>
-<p>def pyMuPDF_fitz(pdfPath, imagePath):</p>
-<ul>
-<li>print(“imagePath&#x3D;” + imagePath)</li>
-<li>pdfDoc &#x3D; fitz.open(pdfPath)</li>
-<li>for pg in range(pdfDoc.pageCount):<ul>
-<li><p>page &#x3D; pdfDoc[pg]</p>
-</li>
-<li><p>rotate &#x3D; int(0)</p>
-</li>
-<li><p>#每个尺寸的缩放系数为1.3，这将为我们生成分辨率提高2.6的图像。</p>
-</li>
-<li><p>#此处若是不做设置，默认图片大小为：792X612, dpi&#x3D;96</p>
-</li>
-<li><p>zoom_x &#x3D; 1.33333333  # (1.33333333–&gt;1056x816)   (2–&gt;1584x1224)</p>
-</li>
-<li><p>zoom_y &#x3D; 1.33333333</p>
-</li>
-<li><p>mat &#x3D; fitz.Matrix(zoom_x, zoom_y).preRotate(rotate)</p>
-</li>
-<li><p>pix &#x3D; page.getPixmap(matrix&#x3D;mat, alpha&#x3D;False)</p>
-</li>
-<li><p>if not os.path.exists(imagePath):  # 判断存放图片的文件夹是否存在</p>
-<ul>
-<li>os.makedirs(imagePath)  # 若图片文件夹不存在就创建</li>
-</ul>
-</li>
-<li><p>pix.writePNG(imagePath + ‘&#x2F;‘ + ‘images_%s.png’ % pg)  # 将图片写入指定的文件夹内</p>
-</li>
-</ul>
-</li>
-</ul>
-<p>if __name__ &#x3D;&#x3D; “__main__“:</p>
-<ul>
-<li>#1、PDF地址</li>
-<li>pdfPath &#x3D; ‘123.pdf’</li>
-<li>#2、需要储存图片的目录</li>
-<li>imagePath &#x3D; ‘.&#x2F;imgs’</li>
-<li>pyMuPDF_fitz(pdfPath, imagePath)</li>
-</ul>
-]]></content>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Python爬取豆瓣电影排行榜</title>
     <url>/2023/03/27/Python%E7%88%AC%E5%8F%96%E8%B1%86%E7%93%A3%E7%94%B5%E5%BD%B1%E6%8E%92%E8%A1%8C%E6%A6%9C/</url>
     <content><![CDATA[<p>import requests<br>import re</p>
@@ -1182,6 +1182,18 @@
 ]]></content>
       <tags>
         <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>WI工作指示编写流程</title>
+    <url>/2023/09/29/WI%E5%B7%A5%E4%BD%9C%E6%8C%87%E7%A4%BA/</url>
+    <content><![CDATA[<p>一、确定编写目标及需求<br>在编写WI之前，首先需要明确编写目标及需求，包括:<br>(1)需要编写的工作内容及流程;<br>(2)操作人员的技能要求和培训需求;<br>(3)操作所需的设备、工具和材料等。</p>
+<p>二、制定WI的结构和内容<br>WI应该包含以下内容:<br>(1)工作名称、编号和版本号;<br>(2)操作人员的职责和要求;<br>(3)操作流程、步骤和注意事项;<br>(4)所需设备、工具、材料等清单;<br>(5)相关文件和记录表格。</p>
+<p>三、编写WI并进行审核<br>在编写WI时，应该遵循以下原则:<br>(1)语言简洁明了，易于理解和执行;<br>(2)图文并茂，便于理解和记忆:<br>(3)结构清晰，层次分明。<br>完成WI后，需要进行审核。审核人员应该对WI的准确性、完整性、可行性进行评估，并提出修改建议。</p>
+<p>四、备注：<br>(1)设备参数不要涉及环境温度，现场以工艺文件为准；<br>(2)涉及工艺参数的，以工艺文件为准，尽量不要写入文件；<br>(3)注明设备参数的（如：气压），要纳入点检表中并与其一致；<br>(4)设备的易损件需要在点检表中体现，每班检查。</p>
+]]></content>
+      <tags>
+        <tag>system</tag>
       </tags>
   </entry>
   <entry>
@@ -1299,21 +1311,6 @@
       </tags>
   </entry>
   <entry>
-    <title>多条件查找</title>
-    <url>/2023/09/17/%E5%A4%9A%E6%9D%A1%E4%BB%B6%E6%9F%A5%E6%89%BE/</url>
-    <content><![CDATA[<p>&#x3D;LOOKUP(1,0&#x2F;((B2:B9&#x3D;G3)*(C2:C9&#x3D;H3)),D2:D9)，以此函数为例：</p>
-<p>&#x3D;LOOKUP(1,0&#x2F;((条件1)*(条件2)),结果列）</p>
-<span id="more"></span>
-
-<p>（1）当“0&#x2F;条件所在区域&#x3D;条件”这部分数据中的条件所在区域&#x3D;条件，那么分母项是为1的，整个运算“0&#x2F;条件所在区域&#x3D;条件”就等于“0&#x2F;1”，结果就是0；</p>
-<p>（2）当“0&#x2F;条件所在区域&#x3D;条件”这部分数据中的条件所在区域不等于条件，那么分母项是为0的，整个运算“0&#x2F;条件所在区域&#x3D;条件”就等于“0&#x2F;0”，结果就是错误值；</p>
-<p>此时，只有条件所在区域&#x3D;条件的时候，&#x3D;LOOKUP(1，0&#x2F;条件所在区域&#x3D;条件，结果所在区域）此公式才有意义，找到唯一符合的条件时，就能做出对应的结果。</p>
-]]></content>
-      <tags>
-        <tag>excel</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>合并文件夹下工作薄</title>
     <url>/2023/03/27/%E5%90%88%E5%B9%B6%E6%96%87%E4%BB%B6%E5%A4%B9%E4%B8%8B%E5%B7%A5%E4%BD%9C%E8%96%84/</url>
     <content><![CDATA[<p>import os<br>import pandas as pd</p>
@@ -1333,6 +1330,21 @@
 ]]></content>
       <tags>
         <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>多条件查找</title>
+    <url>/2023/09/17/%E5%A4%9A%E6%9D%A1%E4%BB%B6%E6%9F%A5%E6%89%BE/</url>
+    <content><![CDATA[<p>&#x3D;LOOKUP(1,0&#x2F;((B2:B9&#x3D;G3)*(C2:C9&#x3D;H3)),D2:D9)，以此函数为例：</p>
+<p>&#x3D;LOOKUP(1,0&#x2F;((条件1)*(条件2)),结果列）</p>
+<span id="more"></span>
+
+<p>（1）当“0&#x2F;条件所在区域&#x3D;条件”这部分数据中的条件所在区域&#x3D;条件，那么分母项是为1的，整个运算“0&#x2F;条件所在区域&#x3D;条件”就等于“0&#x2F;1”，结果就是0；</p>
+<p>（2）当“0&#x2F;条件所在区域&#x3D;条件”这部分数据中的条件所在区域不等于条件，那么分母项是为0的，整个运算“0&#x2F;条件所在区域&#x3D;条件”就等于“0&#x2F;0”，结果就是错误值；</p>
+<p>此时，只有条件所在区域&#x3D;条件的时候，&#x3D;LOOKUP(1，0&#x2F;条件所在区域&#x3D;条件，结果所在区域）此公式才有意义，找到唯一符合的条件时，就能做出对应的结果。</p>
+]]></content>
+      <tags>
+        <tag>excel</tag>
       </tags>
   </entry>
   <entry>
@@ -1391,74 +1403,6 @@
 </ul>
 </li>
 </ul>
-]]></content>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>常用内置函数</title>
-    <url>/2023/03/27/%E5%B8%B8%E7%94%A8%E5%86%85%E7%BD%AE%E5%87%BD%E6%95%B0/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th align="left">函数</th>
-<th align="left">作用</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">print()</td>
-<td align="left">打印输出</td>
-</tr>
-<tr>
-<td align="left">input()</td>
-<td align="left">获取用户输出的内容</td>
-</tr>
-<tr>
-<td align="left">open()</td>
-<td align="left">用于打开一个文件,创建一个文件句柄</td>
-</tr>
-<tr>
-<td align="left">list()</td>
-<td align="left">将一个可迭代对象转换成列表</td>
-</tr>
-<tr>
-<td align="left">tuple()</td>
-<td align="left">将一个可迭代对象转换成元组</td>
-</tr>
-<tr>
-<td align="left">reversed()</td>
-<td align="left">将一个序列翻转,返回翻转序列的迭代器</td>
-</tr>
-<tr>
-<td align="left">range()</td>
-<td align="left">生成数据</td>
-</tr>
-<tr>
-<td align="left">str()</td>
-<td align="left">将数据转化成字符串</td>
-</tr>
-<tr>
-<td align="left">all()</td>
-<td align="left">可迭代对象中全部是True,结果才是True</td>
-</tr>
-<tr>
-<td align="left">any()</td>
-<td align="left">可迭代对象中有一个是True,结果就是True</td>
-</tr>
-<tr>
-<td align="left">eval()</td>
-<td align="left">执行字符串类型的代码,并返回最终结果</td>
-</tr>
-<tr>
-<td align="left">dir()</td>
-<td align="left">查看对象的内置属性,访问的是对象中的__dir__()方法</td>
-</tr>
-<tr>
-<td align="left">help()</td>
-<td align="left">函数用于查看函数或模块用途的详细说明</td>
-</tr>
-</tbody></table>
 ]]></content>
       <tags>
         <tag>python</tag>
@@ -1544,6 +1488,74 @@
       </tags>
   </entry>
   <entry>
+    <title>常用内置函数</title>
+    <url>/2023/03/27/%E5%B8%B8%E7%94%A8%E5%86%85%E7%BD%AE%E5%87%BD%E6%95%B0/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th align="left">函数</th>
+<th align="left">作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">print()</td>
+<td align="left">打印输出</td>
+</tr>
+<tr>
+<td align="left">input()</td>
+<td align="left">获取用户输出的内容</td>
+</tr>
+<tr>
+<td align="left">open()</td>
+<td align="left">用于打开一个文件,创建一个文件句柄</td>
+</tr>
+<tr>
+<td align="left">list()</td>
+<td align="left">将一个可迭代对象转换成列表</td>
+</tr>
+<tr>
+<td align="left">tuple()</td>
+<td align="left">将一个可迭代对象转换成元组</td>
+</tr>
+<tr>
+<td align="left">reversed()</td>
+<td align="left">将一个序列翻转,返回翻转序列的迭代器</td>
+</tr>
+<tr>
+<td align="left">range()</td>
+<td align="left">生成数据</td>
+</tr>
+<tr>
+<td align="left">str()</td>
+<td align="left">将数据转化成字符串</td>
+</tr>
+<tr>
+<td align="left">all()</td>
+<td align="left">可迭代对象中全部是True,结果才是True</td>
+</tr>
+<tr>
+<td align="left">any()</td>
+<td align="left">可迭代对象中有一个是True,结果就是True</td>
+</tr>
+<tr>
+<td align="left">eval()</td>
+<td align="left">执行字符串类型的代码,并返回最终结果</td>
+</tr>
+<tr>
+<td align="left">dir()</td>
+<td align="left">查看对象的内置属性,访问的是对象中的__dir__()方法</td>
+</tr>
+<tr>
+<td align="left">help()</td>
+<td align="left">函数用于查看函数或模块用途的详细说明</td>
+</tr>
+</tbody></table>
+]]></content>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>把汉字转换成拼音首字母</title>
     <url>/2023/03/27/%E6%8A%8A%E6%B1%89%E5%AD%97%E8%BD%AC%E6%8D%A2%E6%88%90%E6%8B%BC%E9%9F%B3%E9%A6%96%E5%AD%97%E6%AF%8D/</url>
     <content><![CDATA[<p>Function pinyin(p As String) As String<br>i &#x3D; Asc(p)<br>Select Case i<br>Case -20319 To -20284: pinyin &#x3D; “A”<br>Case -20283 To -19776: pinyin &#x3D; “B”<br>Case -19775 To -19219: pinyin &#x3D; “C”<br>Case -19218 To -18711: pinyin &#x3D; “D”</p>
@@ -1565,24 +1577,6 @@
       </tags>
   </entry>
   <entry>
-    <title>格式化字符串的三种方法</title>
-    <url>/2023/07/29/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E6%B3%95/</url>
-    <content><![CDATA[<p>f’{i}*{j}&#x3D;{i*j}’<br>‘{}*{}&#x3D;{}’.format(i,j,i*j)<br>‘%d*%d&#x3D;%d’%(i,j,i*j)</p>
-]]></content>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>条件求和</title>
-    <url>/2023/03/27/%E6%9D%A1%E4%BB%B6%E6%B1%82%E5%92%8C/</url>
-    <content><![CDATA[<p>&#x3D;SUMIF(A1:A10,E4,C1:C10)<br>“A1:A10”选择求和项列<br>“E4”选择求和项<br>“C1:C10”选择数值列</p>
-]]></content>
-      <tags>
-        <tag>excel</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>条件查找</title>
     <url>/2023/06/04/%E6%9D%A1%E4%BB%B6%E6%9F%A5%E6%89%BE/</url>
     <content><![CDATA[<p>&#x3D;VLOOKUP(A1,A:C,3,1)，以此函数为例：<br>“A1”为“查找值”内容，当前需要查找的目标；<br>“A:C”为“数据表”内容，查找表中的目标起始列和结果终止列；<br>“3”为“列序数”内容，“数据表”中目标列至结果列的列数；<br>“1”为“匹配条件”内容，“0”为精确查找，“1”为模糊查找。</p>
@@ -1592,40 +1586,12 @@
       </tags>
   </entry>
   <entry>
-    <title>爬取关键字写入表格</title>
-    <url>/2023/03/27/%E7%88%AC%E5%8F%96%E5%85%B3%E9%94%AE%E5%AD%97%E5%86%99%E5%85%A5%E8%A1%A8%E6%A0%BC/</url>
-    <content><![CDATA[<p>import requests<br>import re<br>import xlwt</p>
-<p>headers &#x3D; {‘User-Agent’:”Mozilla&#x2F;5.0 (X11; Linux x86_64; rv:45.0) Gecko&#x2F;20100101 Firefox&#x2F;45.0”}</p>
-<span id="more"></span>
-
-<p>book &#x3D; xlwt.Workbook()<br>sheet &#x3D; book.add_sheet(‘ke_tengxun’,cell_overwrite_ok&#x3D;True)</p>
-<p>rownum &#x3D; 1<br>def get_info(url):<br>    global rownum<br>    res &#x3D; requests.get(url,headers &#x3D; headers)<br>    pattern &#x3D; re.compile(‘.<em>?rel&#x3D;”nofollow”.</em>?&gt;(.<em>?)&lt;’,re.S)<br>    ke_chupin &#x3D;re.findall(pattern,res.text)<br>    pattern &#x3D; re.compile(‘<br>.*?cors-name&#x3D;”course”&gt;(.</em>?)&lt;’,re.S)<br>    ke_name &#x3D;re.findall(pattern,res.text)<br>    pattern &#x3D; re.compile(‘<br>.<em>?href&#x3D;”(.</em>?)”.*?target’,re.S)<br>    ke_href &#x3D;re.findall(pattern,res.text)<br>    print(ke_chupin)<br>    print(len(ke_chupin))<br>    print(ke_name)<br>    print(len(ke_name))<br>    print(ke_href)<br>    print(len(ke_href))</p>
-<pre><code>head = [&#39;课程&#39;,&#39;链接&#39;,&#39;出品人&#39;]
-for h in range(len(head)):
-    sheet.write(0,h,head[h])
-for l in range(len(ke_name[:24])):
-    sheet.write(rownum,0,ke_name[l])
-    sheet.write(rownum,1,ke_href[l])
-    sheet.write(rownum,2,ke_chupin[l])
-    rownum += 1
-
-book.save(&#39;test.xls&#39;)
-</code></pre>
-<p>if <strong>name</strong> &#x3D;&#x3D; ‘<strong>main</strong>‘:<br>    for i in range(1,13):<br>        urls &#x3D; ‘<a href="https://ke.qq.com/course/list?mt=1001&st=2002&tt=3019&page=%7B%7D%27.format(i)">https://ke.qq.com/course/list?mt=1001&amp;st=2002&amp;tt=3019&amp;page={}&#39;.format(i)</a><br>        get_info(urls)</p>
+    <title>条件求和</title>
+    <url>/2023/03/27/%E6%9D%A1%E4%BB%B6%E6%B1%82%E5%92%8C/</url>
+    <content><![CDATA[<p>&#x3D;SUMIF(A1:A10,E4,C1:C10)<br>“A1:A10”选择求和项列<br>“E4”选择求和项<br>“C1:C10”选择数值列</p>
 ]]></content>
       <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>爬虫标准框架</title>
-    <url>/2023/03/27/%E7%88%AC%E8%99%AB%E6%A0%87%E5%87%86%E6%A1%86%E6%9E%B6/</url>
-    <content><![CDATA[<p>import requests<br>url&#x3D;”<a href="https://www.sogou.com/web?query=%E5%91%A8%E6%9D%B0%E4%BC%A6">https://www.sogou.com/web?query=周杰伦</a>“</p>
-<span id="more"></span>
-<p>headers&#x3D;{ “User-Agent”:”Mozilla&#x2F;5.0 (Windows NT 10.0; Win64; x64) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;97.0.4692.71 Safari&#x2F;537.36 Edg&#x2F;97.0.1072.55” }<br>#以字典的形式设置请求头，处理反爬 resp&#x3D;requests.get(url,headers&#x3D;headers)<br>print(resp)<br>#结果：Response [200]<br>print(resp.text)<br>#拿到页面源代码<br>resp.close()<br>#关掉resp</p>
-]]></content>
-      <tags>
-        <tag>python</tag>
+        <tag>excel</tag>
       </tags>
   </entry>
   <entry>
@@ -1793,6 +1759,52 @@ book.save(&#39;test.xls&#39;)
       </tags>
   </entry>
   <entry>
+    <title>爬取关键字写入表格</title>
+    <url>/2023/03/27/%E7%88%AC%E5%8F%96%E5%85%B3%E9%94%AE%E5%AD%97%E5%86%99%E5%85%A5%E8%A1%A8%E6%A0%BC/</url>
+    <content><![CDATA[<p>import requests<br>import re<br>import xlwt</p>
+<p>headers &#x3D; {‘User-Agent’:”Mozilla&#x2F;5.0 (X11; Linux x86_64; rv:45.0) Gecko&#x2F;20100101 Firefox&#x2F;45.0”}</p>
+<span id="more"></span>
+
+<p>book &#x3D; xlwt.Workbook()<br>sheet &#x3D; book.add_sheet(‘ke_tengxun’,cell_overwrite_ok&#x3D;True)</p>
+<p>rownum &#x3D; 1<br>def get_info(url):<br>    global rownum<br>    res &#x3D; requests.get(url,headers &#x3D; headers)<br>    pattern &#x3D; re.compile(‘.<em>?rel&#x3D;”nofollow”.</em>?&gt;(.<em>?)&lt;’,re.S)<br>    ke_chupin &#x3D;re.findall(pattern,res.text)<br>    pattern &#x3D; re.compile(‘<br>.*?cors-name&#x3D;”course”&gt;(.</em>?)&lt;’,re.S)<br>    ke_name &#x3D;re.findall(pattern,res.text)<br>    pattern &#x3D; re.compile(‘<br>.<em>?href&#x3D;”(.</em>?)”.*?target’,re.S)<br>    ke_href &#x3D;re.findall(pattern,res.text)<br>    print(ke_chupin)<br>    print(len(ke_chupin))<br>    print(ke_name)<br>    print(len(ke_name))<br>    print(ke_href)<br>    print(len(ke_href))</p>
+<pre><code>head = [&#39;课程&#39;,&#39;链接&#39;,&#39;出品人&#39;]
+for h in range(len(head)):
+    sheet.write(0,h,head[h])
+for l in range(len(ke_name[:24])):
+    sheet.write(rownum,0,ke_name[l])
+    sheet.write(rownum,1,ke_href[l])
+    sheet.write(rownum,2,ke_chupin[l])
+    rownum += 1
+
+book.save(&#39;test.xls&#39;)
+</code></pre>
+<p>if <strong>name</strong> &#x3D;&#x3D; ‘<strong>main</strong>‘:<br>    for i in range(1,13):<br>        urls &#x3D; ‘<a href="https://ke.qq.com/course/list?mt=1001&st=2002&tt=3019&page=%7B%7D%27.format(i)">https://ke.qq.com/course/list?mt=1001&amp;st=2002&amp;tt=3019&amp;page={}&#39;.format(i)</a><br>        get_info(urls)</p>
+]]></content>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>格式化字符串的三种方法</title>
+    <url>/2023/07/29/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E6%B3%95/</url>
+    <content><![CDATA[<p>f’{i}*{j}&#x3D;{i*j}’<br>‘{}*{}&#x3D;{}’.format(i,j,i*j)<br>‘%d*%d&#x3D;%d’%(i,j,i*j)</p>
+]]></content>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>爬虫标准框架</title>
+    <url>/2023/03/27/%E7%88%AC%E8%99%AB%E6%A0%87%E5%87%86%E6%A1%86%E6%9E%B6/</url>
+    <content><![CDATA[<p>import requests<br>url&#x3D;”<a href="https://www.sogou.com/web?query=%E5%91%A8%E6%9D%B0%E4%BC%A6">https://www.sogou.com/web?query=周杰伦</a>“</p>
+<span id="more"></span>
+<p>headers&#x3D;{ “User-Agent”:”Mozilla&#x2F;5.0 (Windows NT 10.0; Win64; x64) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;97.0.4692.71 Safari&#x2F;537.36 Edg&#x2F;97.0.1072.55” }<br>#以字典的形式设置请求头，处理反爬 resp&#x3D;requests.get(url,headers&#x3D;headers)<br>print(resp)<br>#结果：Response [200]<br>print(resp.text)<br>#拿到页面源代码<br>resp.close()<br>#关掉resp</p>
+]]></content>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>第三方库安装命令</title>
     <url>/2023/03/27/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93%E5%AE%89%E8%A3%85%E5%91%BD%E4%BB%A4/</url>
     <content><![CDATA[<table>
@@ -1834,15 +1846,6 @@ book.save(&#39;test.xls&#39;)
       </tags>
   </entry>
   <entry>
-    <title>设备定义</title>
-    <url>/2023/03/30/%E8%AE%BE%E5%A4%87%E5%AE%9A%E4%B9%89/</url>
-    <content><![CDATA[<p>1、关键设备(A):重要工序上的设备，一旦发生故障将导致流水线全线停机，如涂布机、Busbar 焊接机等。<br>2、重要设备(B):重要工序上的设备，设备故障将导致局部停机或可用其他设备代替。<br>3、 一般设备(C): 非重要工序上的设备<span id="more"></span><br>4、 OEE: 设备综合效率，OEE&#x3D;时间开动率×性能开动率×合格品率。<br>5、 MTBF: 平均故障间隔时间，是两次故障间的平均正常运行时间.<br>6、 MTTR: 平均修理时间，修理故障使设备回到正常运行的平均耗时。<br>7、 设备性能指数(CMK) : 表示仅由设备普通原因变差决定的能力。<br>8、 Qualify: 设备性能验收。</p>
-]]></content>
-      <tags>
-        <tag>system</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>筛选求和</title>
     <url>/2023/03/27/%E7%AD%9B%E9%80%89%E6%B1%82%E5%92%8C/</url>
     <content><![CDATA[<p>&#x3D;SUBTOTAL(9,C1:C10)<br>“9”为函数序号<br>“C1:C10”选择数值列</p>
@@ -1867,6 +1870,15 @@ book.save(&#39;test.xls&#39;)
 ]]></content>
       <tags>
         <tag>excel</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>设备定义</title>
+    <url>/2023/03/30/%E8%AE%BE%E5%A4%87%E5%AE%9A%E4%B9%89/</url>
+    <content><![CDATA[<p>1、关键设备(A):重要工序上的设备，一旦发生故障将导致流水线全线停机，如涂布机、Busbar 焊接机等。<br>2、重要设备(B):重要工序上的设备，设备故障将导致局部停机或可用其他设备代替。<br>3、 一般设备(C): 非重要工序上的设备<span id="more"></span><br>4、 OEE: 设备综合效率，OEE&#x3D;时间开动率×性能开动率×合格品率。<br>5、 MTBF: 平均故障间隔时间，是两次故障间的平均正常运行时间.<br>6、 MTTR: 平均修理时间，修理故障使设备回到正常运行的平均耗时。<br>7、 设备性能指数(CMK) : 表示仅由设备普通原因变差决定的能力。<br>8、 Qualify: 设备性能验收。</p>
+]]></content>
+      <tags>
+        <tag>system</tag>
       </tags>
   </entry>
 </search>
