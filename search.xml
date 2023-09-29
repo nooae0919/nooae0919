@@ -1185,9 +1185,27 @@
       </tags>
   </entry>
   <entry>
+    <title>SQL命令</title>
+    <url>/2023/04/02/SQL%E5%91%BD%E4%BB%A4/</url>
+    <content><![CDATA[<p>#创建一个名为“day1”的数据库<br>create database day1;</p>
+<p>#进去day1数据库<br>use day1;<span id="more"></span></p>
+<p>#创建一个名为“test”的数据表<br>create table test(<br>id varchar(20)  primary key ,<br>name varchar(30),<br>password varchar(30)<br>);</p>
+<p>#向test表插入一行数据<br>insert into test(id,name,password) values(‘001’,’lisi’,’123456’);</p>
+<p>#查看创建的test表的数据<br>select * from test;</p>
+<p>#将id为001的密码改为xxxx<br>update test set password&#x3D;’xxxx’ where id&#x3D;’001’;</p>
+<p>#删除test表<br>drop table test;</p>
+<p>#删除day1数据库<br>drop database day1;</p>
+]]></content>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>WI工作指示编写流程</title>
     <url>/2023/09/29/WI%E5%B7%A5%E4%BD%9C%E6%8C%87%E7%A4%BA/</url>
     <content><![CDATA[<p>一、确定编写目标及需求<br>在编写WI之前，首先需要明确编写目标及需求，包括:<br>(1)需要编写的工作内容及流程;<br>(2)操作人员的技能要求和培训需求;<br>(3)操作所需的设备、工具和材料等。</p>
+<span id="more"></span>
+
 <p>二、制定WI的结构和内容<br>WI应该包含以下内容:<br>(1)工作名称、编号和版本号;<br>(2)操作人员的职责和要求;<br>(3)操作流程、步骤和注意事项;<br>(4)所需设备、工具、材料等清单;<br>(5)相关文件和记录表格。</p>
 <p>三、编写WI并进行审核<br>在编写WI时，应该遵循以下原则:<br>(1)语言简洁明了，易于理解和执行;<br>(2)图文并茂，便于理解和记忆:<br>(3)结构清晰，层次分明。<br>完成WI后，需要进行审核。审核人员应该对WI的准确性、完整性、可行性进行评估，并提出修改建议。</p>
 <p>四、备注：<br>(1)设备参数不要涉及环境温度，现场以工艺文件为准；<br>(2)涉及工艺参数的，以工艺文件为准，尽量不要写入文件；<br>(3)注明设备参数的（如：气压），要纳入点检表中并与其一致；<br>(4)设备的易损件需要在点检表中体现，每班检查。</p>
@@ -1248,22 +1266,6 @@
       </tags>
   </entry>
   <entry>
-    <title>SQL命令</title>
-    <url>/2023/04/02/SQL%E5%91%BD%E4%BB%A4/</url>
-    <content><![CDATA[<p>#创建一个名为“day1”的数据库<br>create database day1;</p>
-<p>#进去day1数据库<br>use day1;<span id="more"></span></p>
-<p>#创建一个名为“test”的数据表<br>create table test(<br>id varchar(20)  primary key ,<br>name varchar(30),<br>password varchar(30)<br>);</p>
-<p>#向test表插入一行数据<br>insert into test(id,name,password) values(‘001’,’lisi’,’123456’);</p>
-<p>#查看创建的test表的数据<br>select * from test;</p>
-<p>#将id为001的密码改为xxxx<br>update test set password&#x3D;’xxxx’ where id&#x3D;’001’;</p>
-<p>#删除test表<br>drop table test;</p>
-<p>#删除day1数据库<br>drop database day1;</p>
-]]></content>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>使用xlwt库将数据写入excel</title>
     <url>/2023/03/27/%E4%BD%BF%E7%94%A8xlwt%E5%BA%93%E5%B0%86%E6%95%B0%E6%8D%AE%E5%86%99%E5%85%A5excel/</url>
     <content><![CDATA[<p>import xlwt<br>#1. 创建workbook对象<br>workbook &#x3D; xlwt.Workbook(encoding&#x3D;”utf-8”)<br>#2. 增加一个sheet # 设置成可以覆盖原先内容<br>worksheet &#x3D; workbook.add_sheet(“sheet1”, cell_overwrite_ok&#x3D;True)<br>#3. 在单元格中添加内容，第一个参数为行，第二个参数为列，第三个参数为内容<br>worksheet.write(0,0, “hello”)<br>#4. 保存数据表<br>workbook.save(“.&#x2F;student.xls”)</p>
@@ -1284,6 +1286,17 @@
       </tags>
   </entry>
   <entry>
+    <title>合并当前目录下所有工作簿的全部工作表</title>
+    <url>/2023/03/27/%E5%90%88%E5%B9%B6%E5%BD%93%E5%89%8D%E7%9B%AE%E5%BD%95%E4%B8%8B%E6%89%80%E6%9C%89%E5%B7%A5%E4%BD%9C%E7%B0%BF%E7%9A%84%E5%85%A8%E9%83%A8%E5%B7%A5%E4%BD%9C%E8%A1%A8/</url>
+    <content><![CDATA[<p>Sub 合并当前目录下所有工作簿的全部工作表()<br>Dim MyPath, MyName, AWbName<br>Dim Wb As Workbook, WbN As String<br>Dim G As Long</p>
+<span id="more"></span>
+<p>Dim Num As Long<br>Dim BOX As String<br>Application.ScreenUpdating &#x3D; False<br>MyPath &#x3D; ActiveWorkbook.Path<br>MyName &#x3D; Dir(MyPath &amp; “&quot; &amp; “*.csv”)<br>AWbName &#x3D; ActiveWorkbook.Name<br>Num &#x3D; 0<br>Do While MyName &lt;&gt; “”<br>If MyName &lt;&gt; AWbName Then<br>Set Wb &#x3D; Workbooks.Open(MyPath &amp; “&quot; &amp; MyName)<br>Num &#x3D; Num + 1<br>With Workbooks(1).ActiveSheet<br>.Cells(.Range(“B65536”).End(xlUp).Row + 2, 1) &#x3D; Left(MyName, Len(MyName) - 4)<br>For G &#x3D; 1 To Sheets.Count<br>Wb.Sheets(G).UsedRange.Copy .Cells(.Range(“B65536”).End(xlUp).Row + 1, 1)<br>Next<br>WbN &#x3D; WbN &amp; Chr(13) &amp; Wb.Name<br>Wb.Close False<br>End With<br>End If<br>MyName &#x3D; Dir<br>Loop<br>Range(“B1”).Select<br>Application.ScreenUpdating &#x3D; True<br>MsgBox “共合并了” &amp; Num &amp; “个工作薄下的全部工作表。如下：” &amp; Chr(13) &amp; WbN, vbInformation, “提示”<br>End Sub</p>
+]]></content>
+      <tags>
+        <tag>excel</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>双for打印九九乘法表</title>
     <url>/2023/04/16/%E5%8F%8Cfor%E6%89%93%E5%8D%B0%E4%B9%9D%E4%B9%9D%E4%B9%98%E6%B3%95%E8%A1%A8/</url>
     <content><![CDATA[<p>for i in range(1, 10):</p>
@@ -1297,17 +1310,6 @@
 ]]></content>
       <tags>
         <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>合并当前目录下所有工作簿的全部工作表</title>
-    <url>/2023/03/27/%E5%90%88%E5%B9%B6%E5%BD%93%E5%89%8D%E7%9B%AE%E5%BD%95%E4%B8%8B%E6%89%80%E6%9C%89%E5%B7%A5%E4%BD%9C%E7%B0%BF%E7%9A%84%E5%85%A8%E9%83%A8%E5%B7%A5%E4%BD%9C%E8%A1%A8/</url>
-    <content><![CDATA[<p>Sub 合并当前目录下所有工作簿的全部工作表()<br>Dim MyPath, MyName, AWbName<br>Dim Wb As Workbook, WbN As String<br>Dim G As Long</p>
-<span id="more"></span>
-<p>Dim Num As Long<br>Dim BOX As String<br>Application.ScreenUpdating &#x3D; False<br>MyPath &#x3D; ActiveWorkbook.Path<br>MyName &#x3D; Dir(MyPath &amp; “&quot; &amp; “*.csv”)<br>AWbName &#x3D; ActiveWorkbook.Name<br>Num &#x3D; 0<br>Do While MyName &lt;&gt; “”<br>If MyName &lt;&gt; AWbName Then<br>Set Wb &#x3D; Workbooks.Open(MyPath &amp; “&quot; &amp; MyName)<br>Num &#x3D; Num + 1<br>With Workbooks(1).ActiveSheet<br>.Cells(.Range(“B65536”).End(xlUp).Row + 2, 1) &#x3D; Left(MyName, Len(MyName) - 4)<br>For G &#x3D; 1 To Sheets.Count<br>Wb.Sheets(G).UsedRange.Copy .Cells(.Range(“B65536”).End(xlUp).Row + 1, 1)<br>Next<br>WbN &#x3D; WbN &amp; Chr(13) &amp; Wb.Name<br>Wb.Close False<br>End With<br>End If<br>MyName &#x3D; Dir<br>Loop<br>Range(“B1”).Select<br>Application.ScreenUpdating &#x3D; True<br>MsgBox “共合并了” &amp; Num &amp; “个工作薄下的全部工作表。如下：” &amp; Chr(13) &amp; WbN, vbInformation, “提示”<br>End Sub</p>
-]]></content>
-      <tags>
-        <tag>excel</tag>
       </tags>
   </entry>
   <entry>
@@ -1424,70 +1426,6 @@
       </tags>
   </entry>
   <entry>
-    <title>常用运算符</title>
-    <url>/2023/03/27/%E5%B8%B8%E7%94%A8%E8%BF%90%E7%AE%97%E7%AC%A6/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th align="left">运算符</th>
-<th align="left">作用</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">+、-、*、&#x2F;</td>
-<td align="left">加减乘除</td>
-</tr>
-<tr>
-<td align="left">%</td>
-<td align="left">取余</td>
-</tr>
-<tr>
-<td align="left">&#x2F;&#x2F;</td>
-<td align="left">取整</td>
-</tr>
-<tr>
-<td align="left">**</td>
-<td align="left">幂（常用x**y或pow(x,y)表示）</td>
-</tr>
-<tr>
-<td align="left">&amp;</td>
-<td align="left">位运算符中的位与</td>
-</tr>
-<tr>
-<td align="left"></td>
-<td align="left"></td>
-</tr>
-<tr>
-<td align="left">^</td>
-<td align="left">位运算符中的位异或</td>
-</tr>
-<tr>
-<td align="left">~</td>
-<td align="left">位运算符中的取反</td>
-</tr>
-<tr>
-<td align="left">abs(x)</td>
-<td align="left">取绝对值</td>
-</tr>
-<tr>
-<td align="left">int(x)</td>
-<td align="left">转为整数</td>
-</tr>
-<tr>
-<td align="left">float(x)</td>
-<td align="left">转为浮点数</td>
-</tr>
-<tr>
-<td align="left">complex(re,im)</td>
-<td align="left">将参数转化为复数,re为复数的实部,im为复数的虚部</td>
-</tr>
-</tbody></table>
-]]></content>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>常用内置函数</title>
     <url>/2023/03/27/%E5%B8%B8%E7%94%A8%E5%86%85%E7%BD%AE%E5%87%BD%E6%95%B0/</url>
     <content><![CDATA[<table>
@@ -1556,6 +1494,70 @@
       </tags>
   </entry>
   <entry>
+    <title>常用运算符</title>
+    <url>/2023/03/27/%E5%B8%B8%E7%94%A8%E8%BF%90%E7%AE%97%E7%AC%A6/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th align="left">运算符</th>
+<th align="left">作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">+、-、*、&#x2F;</td>
+<td align="left">加减乘除</td>
+</tr>
+<tr>
+<td align="left">%</td>
+<td align="left">取余</td>
+</tr>
+<tr>
+<td align="left">&#x2F;&#x2F;</td>
+<td align="left">取整</td>
+</tr>
+<tr>
+<td align="left">**</td>
+<td align="left">幂（常用x**y或pow(x,y)表示）</td>
+</tr>
+<tr>
+<td align="left">&amp;</td>
+<td align="left">位运算符中的位与</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">^</td>
+<td align="left">位运算符中的位异或</td>
+</tr>
+<tr>
+<td align="left">~</td>
+<td align="left">位运算符中的取反</td>
+</tr>
+<tr>
+<td align="left">abs(x)</td>
+<td align="left">取绝对值</td>
+</tr>
+<tr>
+<td align="left">int(x)</td>
+<td align="left">转为整数</td>
+</tr>
+<tr>
+<td align="left">float(x)</td>
+<td align="left">转为浮点数</td>
+</tr>
+<tr>
+<td align="left">complex(re,im)</td>
+<td align="left">将参数转化为复数,re为复数的实部,im为复数的虚部</td>
+</tr>
+</tbody></table>
+]]></content>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>把汉字转换成拼音首字母</title>
     <url>/2023/03/27/%E6%8A%8A%E6%B1%89%E5%AD%97%E8%BD%AC%E6%8D%A2%E6%88%90%E6%8B%BC%E9%9F%B3%E9%A6%96%E5%AD%97%E6%AF%8D/</url>
     <content><![CDATA[<p>Function pinyin(p As String) As String<br>i &#x3D; Asc(p)<br>Select Case i<br>Case -20319 To -20284: pinyin &#x3D; “A”<br>Case -20283 To -19776: pinyin &#x3D; “B”<br>Case -19775 To -19219: pinyin &#x3D; “C”<br>Case -19218 To -18711: pinyin &#x3D; “D”</p>
@@ -1583,6 +1585,15 @@
 ]]></content>
       <tags>
         <tag>excel</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>格式化字符串的三种方法</title>
+    <url>/2023/07/29/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E6%B3%95/</url>
+    <content><![CDATA[<p>f’{i}*{j}&#x3D;{i*j}’<br>‘{}*{}&#x3D;{}’.format(i,j,i*j)<br>‘%d*%d&#x3D;%d’%(i,j,i*j)</p>
+]]></content>
+      <tags>
+        <tag>python</tag>
       </tags>
   </entry>
   <entry>
@@ -1785,15 +1796,6 @@ book.save(&#39;test.xls&#39;)
       </tags>
   </entry>
   <entry>
-    <title>格式化字符串的三种方法</title>
-    <url>/2023/07/29/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E6%B3%95/</url>
-    <content><![CDATA[<p>f’{i}*{j}&#x3D;{i*j}’<br>‘{}*{}&#x3D;{}’.format(i,j,i*j)<br>‘%d*%d&#x3D;%d’%(i,j,i*j)</p>
-]]></content>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>爬虫标准框架</title>
     <url>/2023/03/27/%E7%88%AC%E8%99%AB%E6%A0%87%E5%87%86%E6%A1%86%E6%9E%B6/</url>
     <content><![CDATA[<p>import requests<br>url&#x3D;”<a href="https://www.sogou.com/web?query=%E5%91%A8%E6%9D%B0%E4%BC%A6">https://www.sogou.com/web?query=周杰伦</a>“</p>
@@ -1855,6 +1857,15 @@ book.save(&#39;test.xls&#39;)
       </tags>
   </entry>
   <entry>
+    <title>设备定义</title>
+    <url>/2023/03/30/%E8%AE%BE%E5%A4%87%E5%AE%9A%E4%B9%89/</url>
+    <content><![CDATA[<p>1、关键设备(A):重要工序上的设备，一旦发生故障将导致流水线全线停机，如涂布机、Busbar 焊接机等。<br>2、重要设备(B):重要工序上的设备，设备故障将导致局部停机或可用其他设备代替。<br>3、 一般设备(C): 非重要工序上的设备<span id="more"></span><br>4、 OEE: 设备综合效率，OEE&#x3D;时间开动率×性能开动率×合格品率。<br>5、 MTBF: 平均故障间隔时间，是两次故障间的平均正常运行时间.<br>6、 MTTR: 平均修理时间，修理故障使设备回到正常运行的平均耗时。<br>7、 设备性能指数(CMK) : 表示仅由设备普通原因变差决定的能力。<br>8、 Qualify: 设备性能验收。</p>
+]]></content>
+      <tags>
+        <tag>system</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>设备性能确认(Qualify)</title>
     <url>/2023/06/04/%E8%AE%BE%E5%A4%87%E6%80%A7%E8%83%BD%E7%A1%AE%E8%AE%A4-Qualify/</url>
     <content><![CDATA[<p>设备性能确认(Qualify)，即某个设备达到了一定的标准，可以被用来做某个预定的生产步骤。Qualify的过程一定要有”预定的标准”。<br>设备的用户需求说明(URS)和性能指标决定了设备的标准，确认就是通过实际操作、测试或试验，来收集证据，证明该设备已经达到了这些标准。</p>
@@ -1870,15 +1881,6 @@ book.save(&#39;test.xls&#39;)
 ]]></content>
       <tags>
         <tag>excel</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>设备定义</title>
-    <url>/2023/03/30/%E8%AE%BE%E5%A4%87%E5%AE%9A%E4%B9%89/</url>
-    <content><![CDATA[<p>1、关键设备(A):重要工序上的设备，一旦发生故障将导致流水线全线停机，如涂布机、Busbar 焊接机等。<br>2、重要设备(B):重要工序上的设备，设备故障将导致局部停机或可用其他设备代替。<br>3、 一般设备(C): 非重要工序上的设备<span id="more"></span><br>4、 OEE: 设备综合效率，OEE&#x3D;时间开动率×性能开动率×合格品率。<br>5、 MTBF: 平均故障间隔时间，是两次故障间的平均正常运行时间.<br>6、 MTTR: 平均修理时间，修理故障使设备回到正常运行的平均耗时。<br>7、 设备性能指数(CMK) : 表示仅由设备普通原因变差决定的能力。<br>8、 Qualify: 设备性能验收。</p>
-]]></content>
-      <tags>
-        <tag>system</tag>
       </tags>
   </entry>
 </search>
