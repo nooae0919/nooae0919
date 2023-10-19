@@ -378,16 +378,6 @@
       </tags>
   </entry>
   <entry>
-    <title>OEE组成</title>
-    <url>/2023/03/30/OEE%E7%BB%84%E6%88%90/</url>
-    <content><![CDATA[<p>OEE &#x3D; 时间稼动率×性能稼动率×良品率<br>时间稼动率 &#x3D; (负荷时间-停机损失时间)&#x2F;负荷时间<br>性能稼动率 &#x3D; (生产量×理论节拍)&#x2F;稼动时间<span id="more"></span></p>
-<p>注：<br>A:实际作业时间 &#x3D; 日历工作时间<br>B:计划停止时间 &#x3D; 非设备原因停机时间<br>C:负荷时间 &#x3D; 实际作业时间-计划停止时间<br>D:停机损失时间 &#x3D; 更换刀具及故障停机时间<br>E:稼动时间 &#x3D; 负荷时间-停机损失时间<br>F:生产量 &#x3D; 日历工作时间内的总生产量<br>G:良品率 &#x3D; 合格品&#x2F;生产量<br>H:理论节拍(PPM) &#x3D; 每分钟产出数量</p>
-]]></content>
-      <tags>
-        <tag>system</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>PDF转图片</title>
     <url>/2023/04/05/PDF%E8%BD%AC%E5%9B%BE%E7%89%87/</url>
     <content><![CDATA[<p>import os<br>import fitz  # fitz就是pip install PyMuPDF</p>
@@ -434,6 +424,16 @@
 ]]></content>
       <tags>
         <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>OEE组成</title>
+    <url>/2023/03/30/OEE%E7%BB%84%E6%88%90/</url>
+    <content><![CDATA[<p>OEE &#x3D; 时间稼动率×性能稼动率×良品率<br>时间稼动率 &#x3D; (负荷时间-停机损失时间)&#x2F;负荷时间<br>性能稼动率 &#x3D; (生产量×理论节拍)&#x2F;稼动时间<span id="more"></span></p>
+<p>注：<br>A:实际作业时间 &#x3D; 日历工作时间<br>B:计划停止时间 &#x3D; 非设备原因停机时间<br>C:负荷时间 &#x3D; 实际作业时间-计划停止时间<br>D:停机损失时间 &#x3D; 更换刀具及故障停机时间<br>E:稼动时间 &#x3D; 负荷时间-停机损失时间<br>F:生产量 &#x3D; 日历工作时间内的总生产量<br>G:良品率 &#x3D; 合格品&#x2F;生产量<br>H:理论节拍(PPM) &#x3D; 每分钟产出数量</p>
+]]></content>
+      <tags>
+        <tag>system</tag>
       </tags>
   </entry>
   <entry>
@@ -1185,22 +1185,6 @@
       </tags>
   </entry>
   <entry>
-    <title>SQL命令</title>
-    <url>/2023/04/02/SQL%E5%91%BD%E4%BB%A4/</url>
-    <content><![CDATA[<p>#创建一个名为“day1”的数据库<br>create database day1;</p>
-<p>#进去day1数据库<br>use day1;<span id="more"></span></p>
-<p>#创建一个名为“test”的数据表<br>create table test(<br>id varchar(20)  primary key ,<br>name varchar(30),<br>password varchar(30)<br>);</p>
-<p>#向test表插入一行数据<br>insert into test(id,name,password) values(‘001’,’lisi’,’123456’);</p>
-<p>#查看创建的test表的数据<br>select * from test;</p>
-<p>#将id为001的密码改为xxxx<br>update test set password&#x3D;’xxxx’ where id&#x3D;’001’;</p>
-<p>#删除test表<br>drop table test;</p>
-<p>#删除day1数据库<br>drop database day1;</p>
-]]></content>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Termux常见命令</title>
     <url>/2023/09/30/Termux%E5%B8%B8%E8%A7%81%E5%91%BD%E4%BB%A4/</url>
     <content><![CDATA[<p>Termux是一个Android上的终端模拟器和Linux环境。它允许用户在其Android设备上直接运行各种 Linux 命令行实用程序。<br>在Termux中可以使用的一些常用命令包括:</p>
@@ -1278,6 +1262,22 @@
 ]]></content>
       <tags>
         <tag>system</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>SQL命令</title>
+    <url>/2023/04/02/SQL%E5%91%BD%E4%BB%A4/</url>
+    <content><![CDATA[<p>#创建一个名为“day1”的数据库<br>create database day1;</p>
+<p>#进去day1数据库<br>use day1;<span id="more"></span></p>
+<p>#创建一个名为“test”的数据表<br>create table test(<br>id varchar(20)  primary key ,<br>name varchar(30),<br>password varchar(30)<br>);</p>
+<p>#向test表插入一行数据<br>insert into test(id,name,password) values(‘001’,’lisi’,’123456’);</p>
+<p>#查看创建的test表的数据<br>select * from test;</p>
+<p>#将id为001的密码改为xxxx<br>update test set password&#x3D;’xxxx’ where id&#x3D;’001’;</p>
+<p>#删除test表<br>drop table test;</p>
+<p>#删除day1数据库<br>drop database day1;</p>
+]]></content>
+      <tags>
+        <tag>python</tag>
       </tags>
   </entry>
   <entry>
@@ -1401,15 +1401,27 @@
       </tags>
   </entry>
   <entry>
-    <title>多条件查找</title>
-    <url>/2023/09/17/%E5%A4%9A%E6%9D%A1%E4%BB%B6%E6%9F%A5%E6%89%BE/</url>
-    <content><![CDATA[<p>&#x3D;LOOKUP(1,0&#x2F;((B2:B9&#x3D;G3)*(C2:C9&#x3D;H3)),D2:D9)，以此函数为例：</p>
-<p>&#x3D;LOOKUP(1,0&#x2F;((条件1)*(条件2)),结果列）</p>
-<span id="more"></span>
-
-<p>（1）当“0&#x2F;条件所在区域&#x3D;条件”这部分数据中的条件所在区域&#x3D;条件，那么分母项是为1的，整个运算“0&#x2F;条件所在区域&#x3D;条件”就等于“0&#x2F;1”，结果就是0；</p>
-<p>（2）当“0&#x2F;条件所在区域&#x3D;条件”这部分数据中的条件所在区域不等于条件，那么分母项是为0的，整个运算“0&#x2F;条件所在区域&#x3D;条件”就等于“0&#x2F;0”，结果就是错误值；</p>
-<p>此时，只有条件所在区域&#x3D;条件的时候，&#x3D;LOOKUP(1，0&#x2F;条件所在区域&#x3D;条件，结果所在区域）此公式才有意义，找到唯一符合的条件时，就能做出对应的结果。</p>
+    <title>在一个工作薄内复制多个工作表</title>
+    <url>/2023/10/19/%E5%9C%A8%E4%B8%80%E4%B8%AA%E5%B7%A5%E4%BD%9C%E8%96%84%E5%86%85%E5%A4%8D%E5%88%B6%E5%A4%9A%E4%B8%AA%E5%B7%A5%E4%BD%9C%E8%A1%A8/</url>
+    <content><![CDATA[<p>import openpyxl</p>
+<p>print(“注意：”+”\n”<br>“1、此程序只支持XLSX格式文件；”+”\n”<br>“2、程序运行前需调整好打印预览模式；”+”\n”<br>“3、程序不会复制图片，运行完成后需手动复制图片。”+”\n”)</p>
+<p>wb_name &#x3D; input(“请输入文件名称：”)<br>wb &#x3D; openpyxl.load_workbook(f’{wb_name}.xlsx’)<br>old_sheet &#x3D; wb.worksheets[0]<br>sheet_name &#x3D; old_sheet.title</p>
+<p>num &#x3D; int(input(“请输入需要复制的数量：”))</p>
+<p>for i in range(2,num+1):</p>
+<ul>
+<li>new_sheet &#x3D; wb.copy_worksheet(old_sheet)</li>
+<li>new_sheet.title &#x3D; sheet_name + str(i)</li>
+</ul>
+<p>print(“已生成”f’{num}’”个sheet”)<br>wb.save(f’{wb_name}.xlsx’)</p>
+]]></content>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>在单元格中显示当前工作表名称</title>
+    <url>/2023/10/19/%E5%9C%A8%E5%8D%95%E5%85%83%E6%A0%BC%E4%B8%AD%E6%98%BE%E7%A4%BA%E5%BD%93%E5%89%8D%E5%B7%A5%E4%BD%9C%E8%A1%A8%E5%90%8D%E7%A7%B0/</url>
+    <content><![CDATA[<p>&#x3D;RIGHT(CELL(“filename”),LEN(CELL(“filename”))-FIND(“]”,CELL(“filename”)))</p>
 ]]></content>
       <tags>
         <tag>excel</tag>
@@ -1445,6 +1457,21 @@
 ]]></content>
       <tags>
         <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>多条件查找</title>
+    <url>/2023/09/17/%E5%A4%9A%E6%9D%A1%E4%BB%B6%E6%9F%A5%E6%89%BE/</url>
+    <content><![CDATA[<p>&#x3D;LOOKUP(1,0&#x2F;((B2:B9&#x3D;G3)*(C2:C9&#x3D;H3)),D2:D9)，以此函数为例：</p>
+<p>&#x3D;LOOKUP(1,0&#x2F;((条件1)*(条件2)),结果列）</p>
+<span id="more"></span>
+
+<p>（1）当“0&#x2F;条件所在区域&#x3D;条件”这部分数据中的条件所在区域&#x3D;条件，那么分母项是为1的，整个运算“0&#x2F;条件所在区域&#x3D;条件”就等于“0&#x2F;1”，结果就是0；</p>
+<p>（2）当“0&#x2F;条件所在区域&#x3D;条件”这部分数据中的条件所在区域不等于条件，那么分母项是为0的，整个运算“0&#x2F;条件所在区域&#x3D;条件”就等于“0&#x2F;0”，结果就是错误值；</p>
+<p>此时，只有条件所在区域&#x3D;条件的时候，&#x3D;LOOKUP(1，0&#x2F;条件所在区域&#x3D;条件，结果所在区域）此公式才有意义，找到唯一符合的条件时，就能做出对应的结果。</p>
+]]></content>
+      <tags>
+        <tag>excel</tag>
       </tags>
   </entry>
   <entry>
@@ -1663,15 +1690,6 @@
       </tags>
   </entry>
   <entry>
-    <title>格式化字符串的三种方法</title>
-    <url>/2023/07/29/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E6%B3%95/</url>
-    <content><![CDATA[<p>f’{i}*{j}&#x3D;{i*j}’<br>‘{}*{}&#x3D;{}’.format(i,j,i*j)<br>‘%d*%d&#x3D;%d’%(i,j,i*j)</p>
-]]></content>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>正则表达式模式</title>
     <url>/2023/03/27/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%A8%A1%E5%BC%8F/</url>
     <content><![CDATA[<p>正则表达式字符释义</p>
@@ -1836,6 +1854,15 @@
       </tags>
   </entry>
   <entry>
+    <title>格式化字符串的三种方法</title>
+    <url>/2023/07/29/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E6%B3%95/</url>
+    <content><![CDATA[<p>f’{i}*{j}&#x3D;{i*j}’<br>‘{}*{}&#x3D;{}’.format(i,j,i*j)<br>‘%d*%d&#x3D;%d’%(i,j,i*j)</p>
+]]></content>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>爬取关键字写入表格</title>
     <url>/2023/03/27/%E7%88%AC%E5%8F%96%E5%85%B3%E9%94%AE%E5%AD%97%E5%86%99%E5%85%A5%E8%A1%A8%E6%A0%BC/</url>
     <content><![CDATA[<p>import requests<br>import re<br>import xlwt</p>
@@ -1873,6 +1900,15 @@ book.save(&#39;test.xls&#39;)
       </tags>
   </entry>
   <entry>
+    <title>筛选后自动排列序号</title>
+    <url>/2023/03/27/%E7%AD%9B%E9%80%89%E5%90%8E%E8%87%AA%E5%8A%A8%E6%8E%92%E5%88%97%E5%BA%8F%E5%8F%B7/</url>
+    <content><![CDATA[<p>&#x3D;subtotal(3，B$2:B2)*1<br>“3”为函数序号<br>“B$2:B2”为序号数值</p>
+]]></content>
+      <tags>
+        <tag>excel</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>第三方库安装命令</title>
     <url>/2023/03/27/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93%E5%AE%89%E8%A3%85%E5%91%BD%E4%BB%A4/</url>
     <content><![CDATA[<table>
@@ -1905,30 +1941,12 @@ book.save(&#39;test.xls&#39;)
       </tags>
   </entry>
   <entry>
-    <title>筛选后自动排列序号</title>
-    <url>/2023/03/27/%E7%AD%9B%E9%80%89%E5%90%8E%E8%87%AA%E5%8A%A8%E6%8E%92%E5%88%97%E5%BA%8F%E5%8F%B7/</url>
-    <content><![CDATA[<p>&#x3D;subtotal(3，B$2:B2)*1<br>“3”为函数序号<br>“B$2:B2”为序号数值</p>
-]]></content>
-      <tags>
-        <tag>excel</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>筛选求和</title>
     <url>/2023/03/27/%E7%AD%9B%E9%80%89%E6%B1%82%E5%92%8C/</url>
     <content><![CDATA[<p>&#x3D;SUBTOTAL(9,C1:C10)<br>“9”为函数序号<br>“C1:C10”选择数值列</p>
 ]]></content>
       <tags>
         <tag>excel</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>设备定义</title>
-    <url>/2023/03/30/%E8%AE%BE%E5%A4%87%E5%AE%9A%E4%B9%89/</url>
-    <content><![CDATA[<p>1、关键设备(A):重要工序上的设备，一旦发生故障将导致流水线全线停机，如涂布机、Busbar 焊接机等。<br>2、重要设备(B):重要工序上的设备，设备故障将导致局部停机或可用其他设备代替。<br>3、 一般设备(C): 非重要工序上的设备<span id="more"></span><br>4、 OEE: 设备综合效率，OEE&#x3D;时间开动率×性能开动率×合格品率。<br>5、 MTBF: 平均故障间隔时间，是两次故障间的平均正常运行时间.<br>6、 MTTR: 平均修理时间，修理故障使设备回到正常运行的平均耗时。<br>7、 设备性能指数(CMK) : 表示仅由设备普通原因变差决定的能力。<br>8、 Qualify: 设备性能验收。</p>
-]]></content>
-      <tags>
-        <tag>system</tag>
       </tags>
   </entry>
   <entry>
@@ -1947,6 +1965,15 @@ book.save(&#39;test.xls&#39;)
 ]]></content>
       <tags>
         <tag>excel</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>设备定义</title>
+    <url>/2023/03/30/%E8%AE%BE%E5%A4%87%E5%AE%9A%E4%B9%89/</url>
+    <content><![CDATA[<p>1、关键设备(A):重要工序上的设备，一旦发生故障将导致流水线全线停机，如涂布机、Busbar 焊接机等。<br>2、重要设备(B):重要工序上的设备，设备故障将导致局部停机或可用其他设备代替。<br>3、 一般设备(C): 非重要工序上的设备<span id="more"></span><br>4、 OEE: 设备综合效率，OEE&#x3D;时间开动率×性能开动率×合格品率。<br>5、 MTBF: 平均故障间隔时间，是两次故障间的平均正常运行时间.<br>6、 MTTR: 平均修理时间，修理故障使设备回到正常运行的平均耗时。<br>7、 设备性能指数(CMK) : 表示仅由设备普通原因变差决定的能力。<br>8、 Qualify: 设备性能验收。</p>
+]]></content>
+      <tags>
+        <tag>system</tag>
       </tags>
   </entry>
 </search>

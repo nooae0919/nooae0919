@@ -2,6 +2,24 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://nooae.gitee.io/2023/10/19/%E5%9C%A8%E5%8D%95%E5%85%83%E6%A0%BC%E4%B8%AD%E6%98%BE%E7%A4%BA%E5%BD%93%E5%89%8D%E5%B7%A5%E4%BD%9C%E8%A1%A8%E5%90%8D%E7%A7%B0/</loc>
+    
+    <lastmod>2023-10-19</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://nooae.gitee.io/2023/10/19/%E5%9C%A8%E4%B8%80%E4%B8%AA%E5%B7%A5%E4%BD%9C%E8%96%84%E5%86%85%E5%A4%8D%E5%88%B6%E5%A4%9A%E4%B8%AA%E5%B7%A5%E4%BD%9C%E8%A1%A8/</loc>
+    
+    <lastmod>2023-10-19</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://nooae.gitee.io/about/index.html</loc>
     
     <lastmod>2023-09-30</lastmod>
@@ -373,7 +391,7 @@
 
   <url>
     <loc>https://nooae.gitee.io/</loc>
-    <lastmod>2023-10-05</lastmod>
+    <lastmod>2023-10-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -381,21 +399,21 @@
   
   <url>
     <loc>https://nooae.gitee.io/tags/system/</loc>
-    <lastmod>2023-10-05</lastmod>
+    <lastmod>2023-10-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://nooae.gitee.io/tags/excel/</loc>
-    <lastmod>2023-10-05</lastmod>
+    <lastmod>2023-10-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://nooae.gitee.io/tags/python/</loc>
-    <lastmod>2023-10-05</lastmod>
+    <lastmod>2023-10-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>

@@ -77,6 +77,47 @@
     
         <article class="post-abstract">
             <div class="post-title">
+                <h2><a class="post-title-link" href="/2023/10/19/%E5%9C%A8%E4%B8%80%E4%B8%AA%E5%B7%A5%E4%BD%9C%E8%96%84%E5%86%85%E5%A4%8D%E5%88%B6%E5%A4%9A%E4%B8%AA%E5%B7%A5%E4%BD%9C%E8%A1%A8/">在一个工作薄内复制多个工作表</a></h2>
+            </div>
+            <div class="post-meta">
+                <span class="post-time">2023-10-19</span>
+                
+            </div>
+            <div class="post-content">
+                
+                    <p>import openpyxl</p>
+<p>print(“注意：”+”\n”<br>“1、此程序只支持XLSX格式文件；”+”\n”<br>“2、程序运行前需调整好打印预览模式；”+”\n”<br>“3、程序不会复制图片，运行完成后需手动复制图片。”+”\n”)</p>
+<p>wb_name &#x3D; input(“请输入文件名称：”)<br>wb &#x3D; openpyxl.load_workbook(f’{wb_name}.xlsx’)<br>old_sheet &#x3D; wb.worksheets[0]<br>sheet_name &#x3D; old_sheet.title</p>
+<p>num &#x3D; int(input(“请输入需要复制的数量：”))</p>
+<p>for i in range(2,num+1):</p>
+<ul>
+<li>new_sheet &#x3D; wb.copy_worksheet(old_sheet)</li>
+<li>new_sheet.title &#x3D; sheet_name + str(i)</li>
+</ul>
+<p>print(“已生成”f’{num}’”个sheet”)<br>wb.save(f’{wb_name}.xlsx’)</p>
+
+                
+            </div>
+        </article>
+    
+        <article class="post-abstract">
+            <div class="post-title">
+                <h2><a class="post-title-link" href="/2023/10/19/%E5%9C%A8%E5%8D%95%E5%85%83%E6%A0%BC%E4%B8%AD%E6%98%BE%E7%A4%BA%E5%BD%93%E5%89%8D%E5%B7%A5%E4%BD%9C%E8%A1%A8%E5%90%8D%E7%A7%B0/">在单元格中显示当前工作表名称</a></h2>
+            </div>
+            <div class="post-meta">
+                <span class="post-time">2023-10-19</span>
+                
+            </div>
+            <div class="post-content">
+                
+                    <p>&#x3D;RIGHT(CELL(“filename”),LEN(CELL(“filename”))-FIND(“]”,CELL(“filename”)))</p>
+
+                
+            </div>
+        </article>
+    
+        <article class="post-abstract">
+            <div class="post-title">
                 <h2><a class="post-title-link" href="/2023/09/30/Termux%E5%B8%B8%E8%A7%81%E5%91%BD%E4%BB%A4/">Termux常见命令</a></h2>
             </div>
             <div class="post-meta">
@@ -223,48 +264,6 @@
                     <p>import os<br>import fitz  # fitz就是pip install PyMuPDF</p>
                     <div class="read-more">
                         <a href="/2023/04/05/PDF%E8%BD%AC%E5%9B%BE%E7%89%87/" class="read-more-link">
-                            阅读全文
-                            <i class="iconfont icon-readmore"></i>
-                        </a>
-                    </div>
-                
-            </div>
-        </article>
-    
-        <article class="post-abstract">
-            <div class="post-title">
-                <h2><a class="post-title-link" href="/2023/04/02/16949%E8%AE%A4%E8%AF%81%E4%BD%93%E7%B3%BB/">16949认证体系</a></h2>
-            </div>
-            <div class="post-meta">
-                <span class="post-time">2023-04-02</span>
-                
-            </div>
-            <div class="post-content">
-                
-                    <p>16949认证体系是汽车行业质量管理认证体系的简称，是基于ISO9001的基础，加进了汽车行业的技术规范。此规范完全和ISO9000&#x2F;2008保持一致，但更着重于缺陷防范、减少在汽车零部件供应链中容易产生的质量波动和浪费。
-                    <div class="read-more">
-                        <a href="/2023/04/02/16949%E8%AE%A4%E8%AF%81%E4%BD%93%E7%B3%BB/" class="read-more-link">
-                            阅读全文
-                            <i class="iconfont icon-readmore"></i>
-                        </a>
-                    </div>
-                
-            </div>
-        </article>
-    
-        <article class="post-abstract">
-            <div class="post-title">
-                <h2><a class="post-title-link" href="/2023/04/02/16949%E8%B4%A8%E9%87%8F%E7%AE%A1%E7%90%86%E4%BD%93%E7%B3%BB%E6%A0%87%E5%87%86/">16949质量管理体系标准</a></h2>
-            </div>
-            <div class="post-meta">
-                <span class="post-time">2023-04-02</span>
-                
-            </div>
-            <div class="post-content">
-                
-                    <p>16949质量管理体系标准是对汽车生产和相关配件组织应用ISO9001:2008的特殊要求，其适用于汽车生产供应链的组织形式。国内、外各大整车厂均已要求其供应商进行ISO16949:2009认证，确保各供应商具有高质量的运行业绩，并提供持续稳定的长期合作，以实现互惠互利。
-                    <div class="read-more">
-                        <a href="/2023/04/02/16949%E8%B4%A8%E9%87%8F%E7%AE%A1%E7%90%86%E4%BD%93%E7%B3%BB%E6%A0%87%E5%87%86/" class="read-more-link">
                             阅读全文
                             <i class="iconfont icon-readmore"></i>
                         </a>

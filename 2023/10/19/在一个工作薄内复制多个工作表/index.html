@@ -76,9 +76,9 @@
         <div class="posts">
     <article class="post-whole">
         <div class="post-title">
-            <h2 class="title">筛选求和</h2>
+            <h2 class="title">在一个工作薄内复制多个工作表</h2>
             <div class="post-meta">
-                <span class="post-time">2023-03-27</span>
+                <span class="post-time">2023-10-19</span>
                 
                 <span class="post-visit"> 阅读次数：<span id="busuanzi_value_page_pv"></span></span>
             </div>
@@ -91,13 +91,22 @@
     </div>
 </div>
         <div class="post-content">
-            <p>&#x3D;SUBTOTAL(9,C1:C10)<br>“9”为函数序号<br>“C1:C10”选择数值列</p>
+            <p>import openpyxl</p>
+<p>print(“注意：”+”\n”<br>“1、此程序只支持XLSX格式文件；”+”\n”<br>“2、程序运行前需调整好打印预览模式；”+”\n”<br>“3、程序不会复制图片，运行完成后需手动复制图片。”+”\n”)</p>
+<p>wb_name &#x3D; input(“请输入文件名称：”)<br>wb &#x3D; openpyxl.load_workbook(f’{wb_name}.xlsx’)<br>old_sheet &#x3D; wb.worksheets[0]<br>sheet_name &#x3D; old_sheet.title</p>
+<p>num &#x3D; int(input(“请输入需要复制的数量：”))</p>
+<p>for i in range(2,num+1):</p>
+<ul>
+<li>new_sheet &#x3D; wb.copy_worksheet(old_sheet)</li>
+<li>new_sheet.title &#x3D; sheet_name + str(i)</li>
+</ul>
+<p>print(“已生成”f’{num}’”个sheet”)<br>wb.save(f’{wb_name}.xlsx’)</p>
 
         </div>
         
         <div class="post-tag">
             
-            <a class="tag" href="/tags/excel/" title="excel">excel</a>
+            <a class="tag" href="/tags/python/" title="python">python</a>
             
         </div>
         
@@ -106,15 +115,9 @@
 <div class="paginator">
     
         
-            <a class="prev" href="/2023/03/27/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93%E5%AE%89%E8%A3%85%E5%91%BD%E4%BB%A4/">
-                <i class="iconfont icon-prev"></i>
-                <span class="nav-default">第三方库安装命令</span>
-                <span class="nav-mobile">上一篇</span>
-            </a>
         
-        
-            <a class="next" href="/2023/03/27/%E8%BF%94%E5%9B%9E%E5%B7%A6%E8%BE%B9%E4%B8%AD%E6%96%87%E6%96%87%E6%9C%AC/">
-                <span class="nav-default">返回左边中文文本</span>
+            <a class="next" href="/2023/10/19/%E5%9C%A8%E5%8D%95%E5%85%83%E6%A0%BC%E4%B8%AD%E6%98%BE%E7%A4%BA%E5%BD%93%E5%89%8D%E5%B7%A5%E4%BD%9C%E8%A1%A8%E5%90%8D%E7%A7%B0/">
+                <span class="nav-default">在单元格中显示当前工作表名称</span>
                 <span class="nav-mobile">下一篇</span>
                 <i class="iconfont icon-next"></i>
             </a>
