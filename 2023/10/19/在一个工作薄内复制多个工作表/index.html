@@ -93,6 +93,7 @@
         <div class="post-content">
             <p>import openpyxl</p>
 <p>print(“注意：”+”\n”<br>“1、此程序只支持XLSX格式文件；”+”\n”<br>“2、程序运行前需调整好打印预览模式；”+”\n”<br>“3、程序不会复制图片，运行完成后需手动复制图片。”+”\n”)</p>
+<span id="more"></span>
 <p>wb_name &#x3D; input(“请输入文件名称：”)<br>wb &#x3D; openpyxl.load_workbook(f’{wb_name}.xlsx’)<br>old_sheet &#x3D; wb.worksheets[0]<br>sheet_name &#x3D; old_sheet.title</p>
 <p>num &#x3D; int(input(“请输入需要复制的数量：”))</p>
 <p>for i in range(2,num+1):</p>
@@ -114,6 +115,12 @@
 </div>
 <div class="paginator">
     
+        
+            <a class="prev" href="/2023/10/22/Hexo%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">
+                <i class="iconfont icon-prev"></i>
+                <span class="nav-default">Hexo常用命令</span>
+                <span class="nav-mobile">上一篇</span>
+            </a>
         
         
             <a class="next" href="/2023/10/19/%E5%9C%A8%E5%8D%95%E5%85%83%E6%A0%BC%E4%B8%AD%E6%98%BE%E7%A4%BA%E5%BD%93%E5%89%8D%E5%B7%A5%E4%BD%9C%E8%A1%A8%E5%90%8D%E7%A7%B0/">

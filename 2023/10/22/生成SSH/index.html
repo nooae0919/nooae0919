@@ -76,9 +76,9 @@
         <div class="posts">
     <article class="post-whole">
         <div class="post-title">
-            <h2 class="title">Termux常用命令</h2>
+            <h2 class="title">生成SSH</h2>
             <div class="post-meta">
-                <span class="post-time">2023-09-30</span>
+                <span class="post-time">2023-10-22</span>
                 
                 <span class="post-visit"> 阅读次数：<span id="busuanzi_value_page_pv"></span></span>
             </div>
@@ -91,80 +91,16 @@
     </div>
 </div>
         <div class="post-content">
-            <p>Termux是一个Android上的终端模拟器和Linux环境。它允许用户在其Android设备上直接运行各种 Linux 命令行实用程序。<br>在Termux中可以使用的一些常用命令包括:</p>
-<span id="more"></span>
-<table>
-<thead>
-<tr>
-<th align="left">命令</th>
-<th align="left">作用</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">ls：</td>
-<td align="left">列出目录及文件名</td>
-</tr>
-<tr>
-<td align="left">cd：</td>
-<td align="left">切换目录</td>
-</tr>
-<tr>
-<td align="left">pwd：</td>
-<td align="left">显示当前目录</td>
-</tr>
-<tr>
-<td align="left">mkdir：</td>
-<td align="left">创建新目录</td>
-</tr>
-<tr>
-<td align="left">rmdir：</td>
-<td align="left">删除空目录</td>
-</tr>
-<tr>
-<td align="left">cp：</td>
-<td align="left">复制文件</td>
-</tr>
-<tr>
-<td align="left">rm：</td>
-<td align="left">删除文件</td>
-</tr>
-<tr>
-<td align="left">mv：</td>
-<td align="left">移动&#x2F;重命名文件</td>
-</tr>
-<tr>
-<td align="left">cl：</td>
-<td align="left">清空终端屏幕</td>
-</tr>
-<tr>
-<td align="left">touch：</td>
-<td align="left">创建一个空文件</td>
-</tr>
-<tr>
-<td align="left">wget：</td>
-<td align="left">下载文件</td>
-</tr>
-<tr>
-<td align="left">tar：</td>
-<td align="left">压缩&#x2F;解压文件</td>
-</tr>
-<tr>
-<td align="left">termux-setup-storage</td>
-<td align="left">获取存储权限</td>
-</tr>
-<tr>
-<td align="left">termux-change-repo</td>
-<td align="left">换源</td>
-</tr>
-<tr>
-<td align="left">pkg update</td>
-<td align="left">更新包目录</td>
-</tr>
-<tr>
-<td align="left">pkg upgrade</td>
-<td align="left">更新已安装包</td>
-</tr>
-</tbody></table>
+            <ul>
+<li><p>用户名和邮箱进行初始化<br>git config –global user.name yourname<br>git config –global user.email youremail</p>
+</li>
+<li><p>检查初始化信息<br>git config user.name<br>git config user.email</p>
+</li>
+<li><p>生成密钥<br>ssh-keygen -t rsa -C youremail</p>
+</li>
+<li><p>查看公钥<br>cat ~&#x2F;.ssh&#x2F;id_rsa.pub</p>
+</li>
+</ul>
 
         </div>
         
@@ -179,15 +115,9 @@
 <div class="paginator">
     
         
-            <a class="prev" href="/2023/10/19/%E5%9C%A8%E5%8D%95%E5%85%83%E6%A0%BC%E4%B8%AD%E6%98%BE%E7%A4%BA%E5%BD%93%E5%89%8D%E5%B7%A5%E4%BD%9C%E8%A1%A8%E5%90%8D%E7%A7%B0/">
-                <i class="iconfont icon-prev"></i>
-                <span class="nav-default">在单元格中显示当前工作表名称</span>
-                <span class="nav-mobile">上一篇</span>
-            </a>
         
-        
-            <a class="next" href="/2023/09/29/WI%E5%B7%A5%E4%BD%9C%E6%8C%87%E7%A4%BA/">
-                <span class="nav-default">WI工作指示编写流程</span>
+            <a class="next" href="/2023/10/22/Hexo%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">
+                <span class="nav-default">Hexo常用命令</span>
                 <span class="nav-mobile">下一篇</span>
                 <i class="iconfont icon-next"></i>
             </a>

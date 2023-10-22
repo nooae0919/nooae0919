@@ -77,6 +77,52 @@
     
         <article class="post-abstract">
             <div class="post-title">
+                <h2><a class="post-title-link" href="/2023/10/22/%E7%94%9F%E6%88%90SSH/">生成SSH</a></h2>
+            </div>
+            <div class="post-meta">
+                <span class="post-time">2023-10-22</span>
+                
+            </div>
+            <div class="post-content">
+                
+                    <ul>
+<li><p>用户名和邮箱进行初始化<br>git config –global user.name yourname<br>git config –global user.email youremail</p>
+</li>
+<li><p>检查初始化信息<br>git config user.name<br>git config user.email</p>
+</li>
+<li><p>生成密钥<br>ssh-keygen -t rsa -C youremail</p>
+</li>
+<li><p>查看公钥<br>cat ~&#x2F;.ssh&#x2F;id_rsa.pub</p>
+</li>
+</ul>
+
+                
+            </div>
+        </article>
+    
+        <article class="post-abstract">
+            <div class="post-title">
+                <h2><a class="post-title-link" href="/2023/10/22/Hexo%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">Hexo常用命令</a></h2>
+            </div>
+            <div class="post-meta">
+                <span class="post-time">2023-10-22</span>
+                
+            </div>
+            <div class="post-content">
+                
+                    <p>在Hexo中可以使用的一些常用命令包括:</p>
+                    <div class="read-more">
+                        <a href="/2023/10/22/Hexo%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" class="read-more-link">
+                            阅读全文
+                            <i class="iconfont icon-readmore"></i>
+                        </a>
+                    </div>
+                
+            </div>
+        </article>
+    
+        <article class="post-abstract">
+            <div class="post-title">
                 <h2><a class="post-title-link" href="/2023/10/19/%E5%9C%A8%E4%B8%80%E4%B8%AA%E5%B7%A5%E4%BD%9C%E8%96%84%E5%86%85%E5%A4%8D%E5%88%B6%E5%A4%9A%E4%B8%AA%E5%B7%A5%E4%BD%9C%E8%A1%A8/">在一个工作薄内复制多个工作表</a></h2>
             </div>
             <div class="post-meta">
@@ -87,15 +133,12 @@
                 
                     <p>import openpyxl</p>
 <p>print(“注意：”+”\n”<br>“1、此程序只支持XLSX格式文件；”+”\n”<br>“2、程序运行前需调整好打印预览模式；”+”\n”<br>“3、程序不会复制图片，运行完成后需手动复制图片。”+”\n”)</p>
-<p>wb_name &#x3D; input(“请输入文件名称：”)<br>wb &#x3D; openpyxl.load_workbook(f’{wb_name}.xlsx’)<br>old_sheet &#x3D; wb.worksheets[0]<br>sheet_name &#x3D; old_sheet.title</p>
-<p>num &#x3D; int(input(“请输入需要复制的数量：”))</p>
-<p>for i in range(2,num+1):</p>
-<ul>
-<li>new_sheet &#x3D; wb.copy_worksheet(old_sheet)</li>
-<li>new_sheet.title &#x3D; sheet_name + str(i)</li>
-</ul>
-<p>print(“已生成”f’{num}’”个sheet”)<br>wb.save(f’{wb_name}.xlsx’)</p>
-
+                    <div class="read-more">
+                        <a href="/2023/10/19/%E5%9C%A8%E4%B8%80%E4%B8%AA%E5%B7%A5%E4%BD%9C%E8%96%84%E5%86%85%E5%A4%8D%E5%88%B6%E5%A4%9A%E4%B8%AA%E5%B7%A5%E4%BD%9C%E8%A1%A8/" class="read-more-link">
+                            阅读全文
+                            <i class="iconfont icon-readmore"></i>
+                        </a>
+                    </div>
                 
             </div>
         </article>
@@ -118,7 +161,7 @@
     
         <article class="post-abstract">
             <div class="post-title">
-                <h2><a class="post-title-link" href="/2023/09/30/Termux%E5%B8%B8%E8%A7%81%E5%91%BD%E4%BB%A4/">Termux常见命令</a></h2>
+                <h2><a class="post-title-link" href="/2023/09/30/Termux%E5%B8%B8%E8%A7%81%E5%91%BD%E4%BB%A4/">Termux常用命令</a></h2>
             </div>
             <div class="post-meta">
                 <span class="post-time">2023-09-30</span>
@@ -224,50 +267,6 @@
                 
                     <p>设备性能确认(Qualify)，即某个设备达到了一定的标准，可以被用来做某个预定的生产步骤。Qualify的过程一定要有”预定的标准”。<br>设备的用户需求说明(URS)和性能指标决定了设备的标准，确认就是通过实际操作、测试或试验，来收集证据，证明该设备已经达到了这些标准。</p>
 
-                
-            </div>
-        </article>
-    
-        <article class="post-abstract">
-            <div class="post-title">
-                <h2><a class="post-title-link" href="/2023/04/16/%E5%8F%8Cfor%E6%89%93%E5%8D%B0%E4%B9%9D%E4%B9%9D%E4%B9%98%E6%B3%95%E8%A1%A8/">双for打印九九乘法表</a></h2>
-            </div>
-            <div class="post-meta">
-                <span class="post-time">2023-04-16</span>
-                
-            </div>
-            <div class="post-content">
-                
-                    <p>for i in range(1, 10):</p>
-<ul>
-<li>for j in range(1, i + 1):<ul>
-<li>print(‘{}*{}&#x3D;{}’.format(i,j,i*j), end&#x3D;’\t’)</li>
-</ul>
-</li>
-<li>print()</li>
-</ul>
-
-                
-            </div>
-        </article>
-    
-        <article class="post-abstract">
-            <div class="post-title">
-                <h2><a class="post-title-link" href="/2023/04/05/PDF%E8%BD%AC%E5%9B%BE%E7%89%87/">PDF转图片</a></h2>
-            </div>
-            <div class="post-meta">
-                <span class="post-time">2023-04-05</span>
-                
-            </div>
-            <div class="post-content">
-                
-                    <p>import os<br>import fitz  # fitz就是pip install PyMuPDF</p>
-                    <div class="read-more">
-                        <a href="/2023/04/05/PDF%E8%BD%AC%E5%9B%BE%E7%89%87/" class="read-more-link">
-                            阅读全文
-                            <i class="iconfont icon-readmore"></i>
-                        </a>
-                    </div>
                 
             </div>
         </article>
