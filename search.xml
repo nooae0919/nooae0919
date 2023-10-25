@@ -412,6 +412,16 @@
       </tags>
   </entry>
   <entry>
+    <title>OEE组成</title>
+    <url>/2023/03/30/OEE%E7%BB%84%E6%88%90/</url>
+    <content><![CDATA[<p>OEE &#x3D; 时间稼动率×性能稼动率×良品率<br>时间稼动率 &#x3D; (负荷时间-停机损失时间)&#x2F;负荷时间<br>性能稼动率 &#x3D; (生产量×理论节拍)&#x2F;稼动时间<span id="more"></span></p>
+<p>注：<br>A:实际作业时间 &#x3D; 日历工作时间<br>B:计划停止时间 &#x3D; 非设备原因停机时间<br>C:负荷时间 &#x3D; 实际作业时间-计划停止时间<br>D:停机损失时间 &#x3D; 更换刀具及故障停机时间<br>E:稼动时间 &#x3D; 负荷时间-停机损失时间<br>F:生产量 &#x3D; 日历工作时间内的总生产量<br>G:良品率 &#x3D; 合格品&#x2F;生产量<br>H:理论节拍(PPM) &#x3D; 每分钟产出数量</p>
+]]></content>
+      <tags>
+        <tag>system</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>PDF转图片</title>
     <url>/2023/04/05/PDF%E8%BD%AC%E5%9B%BE%E7%89%87/</url>
     <content><![CDATA[<p>import os<br>import fitz  # fitz就是pip install PyMuPDF</p>
@@ -458,16 +468,6 @@
 ]]></content>
       <tags>
         <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>OEE组成</title>
-    <url>/2023/03/30/OEE%E7%BB%84%E6%88%90/</url>
-    <content><![CDATA[<p>OEE &#x3D; 时间稼动率×性能稼动率×良品率<br>时间稼动率 &#x3D; (负荷时间-停机损失时间)&#x2F;负荷时间<br>性能稼动率 &#x3D; (生产量×理论节拍)&#x2F;稼动时间<span id="more"></span></p>
-<p>注：<br>A:实际作业时间 &#x3D; 日历工作时间<br>B:计划停止时间 &#x3D; 非设备原因停机时间<br>C:负荷时间 &#x3D; 实际作业时间-计划停止时间<br>D:停机损失时间 &#x3D; 更换刀具及故障停机时间<br>E:稼动时间 &#x3D; 负荷时间-停机损失时间<br>F:生产量 &#x3D; 日历工作时间内的总生产量<br>G:良品率 &#x3D; 合格品&#x2F;生产量<br>H:理论节拍(PPM) &#x3D; 每分钟产出数量</p>
-]]></content>
-      <tags>
-        <tag>system</tag>
       </tags>
   </entry>
   <entry>
@@ -1219,6 +1219,22 @@
       </tags>
   </entry>
   <entry>
+    <title>SQL命令</title>
+    <url>/2023/04/02/SQL%E5%91%BD%E4%BB%A4/</url>
+    <content><![CDATA[<p>#创建一个名为“day1”的数据库<br>create database day1;</p>
+<p>#进去day1数据库<br>use day1;<span id="more"></span></p>
+<p>#创建一个名为“test”的数据表<br>create table test(<br>id varchar(20)  primary key ,<br>name varchar(30),<br>password varchar(30)<br>);</p>
+<p>#向test表插入一行数据<br>insert into test(id,name,password) values(‘001’,’lisi’,’123456’);</p>
+<p>#查看创建的test表的数据<br>select * from test;</p>
+<p>#将id为001的密码改为xxxx<br>update test set password&#x3D;’xxxx’ where id&#x3D;’001’;</p>
+<p>#删除test表<br>drop table test;</p>
+<p>#删除day1数据库<br>drop database day1;</p>
+]]></content>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Termux常用命令</title>
     <url>/2023/09/30/Termux%E5%B8%B8%E8%A7%81%E5%91%BD%E4%BB%A4/</url>
     <content><![CDATA[<p>Termux是一个Android上的终端模拟器和Linux环境。它允许用户在其Android设备上直接运行各种 Linux 命令行实用程序。<br>在Termux中可以使用的一些常用命令包括:</p>
@@ -1301,22 +1317,6 @@
       </tags>
   </entry>
   <entry>
-    <title>SQL命令</title>
-    <url>/2023/04/02/SQL%E5%91%BD%E4%BB%A4/</url>
-    <content><![CDATA[<p>#创建一个名为“day1”的数据库<br>create database day1;</p>
-<p>#进去day1数据库<br>use day1;<span id="more"></span></p>
-<p>#创建一个名为“test”的数据表<br>create table test(<br>id varchar(20)  primary key ,<br>name varchar(30),<br>password varchar(30)<br>);</p>
-<p>#向test表插入一行数据<br>insert into test(id,name,password) values(‘001’,’lisi’,’123456’);</p>
-<p>#查看创建的test表的数据<br>select * from test;</p>
-<p>#将id为001的密码改为xxxx<br>update test set password&#x3D;’xxxx’ where id&#x3D;’001’;</p>
-<p>#删除test表<br>drop table test;</p>
-<p>#删除day1数据库<br>drop database day1;</p>
-]]></content>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>WI工作指示编写流程</title>
     <url>/2023/09/29/WI%E5%B7%A5%E4%BD%9C%E6%8C%87%E7%A4%BA/</url>
     <content><![CDATA[<p>一、确定编写目标及需求<br>在编写WI之前，首先需要明确编写目标及需求，包括:<br>(1)需要编写的工作内容及流程;<br>(2)操作人员的技能要求和培训需求;<br>(3)操作所需的设备、工具和材料等。</p>
@@ -1391,6 +1391,17 @@
       </tags>
   </entry>
   <entry>
+    <title>保留表头拆分数据为若干新工作簿</title>
+    <url>/2023/03/27/%E4%BF%9D%E7%95%99%E8%A1%A8%E5%A4%B4%E6%8B%86%E5%88%86%E6%95%B0%E6%8D%AE%E4%B8%BA%E8%8B%A5%E5%B9%B2%E6%96%B0%E5%B7%A5%E4%BD%9C%E7%B0%BF/</url>
+    <content><![CDATA[<p>Sub 保留表头拆分数据为若干新工作簿()<br>Dim arr, d As Object, k, t, i&amp;, lc%, rng As Range, c%<br>c &#x3D; Application.InputBox(“请输入拆分列号”, , 4, , , , , 1)</p>
+<span id="more"></span>
+<p>If c &#x3D; 0 Then Exit Sub<br>Application.ScreenUpdating &#x3D; False<br>Application.DisplayAlerts &#x3D; False<br>arr &#x3D; [a1].CurrentRegion<br>lc &#x3D; UBound(arr, 2)<br>Set rng &#x3D; [a1].Resize(, lc)<br>Set d &#x3D; CreateObject(“scripting.dictionary”)<br>For i &#x3D; 2 To UBound(arr)<br>If Not d.Exists(arr(i, c)) Then<br>Set d(arr(i, c)) &#x3D; Cells(i, 1).Resize(1, lc)<br>Else<br>Set d(arr(i, c)) &#x3D; Union(d(arr(i, c)), Cells(i, 1).Resize(1, lc))<br>End If<br>Next<br>k &#x3D; d.Keys<br>t &#x3D; d.Items<br>For i &#x3D; 0 To d.Count - 1<br>With Workbooks.Add(xlWBATWorksheet)<br>rng.Copy .Sheets(1).[a1]<br>t(i).Copy .Sheets(1).[a2]<br>.SaveAs Filename:&#x3D;ThisWorkbook.Path &amp; “&quot; &amp; k(i) &amp; “.xls”<br>.Close<br>End With<br>Next<br>Application.DisplayAlerts &#x3D; True<br>Application.ScreenUpdating &#x3D; True<br>MsgBox “完毕”<br>End Sub</p>
+]]></content>
+      <tags>
+        <tag>excel</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>双for打印九九乘法表</title>
     <url>/2023/04/16/%E5%8F%8Cfor%E6%89%93%E5%8D%B0%E4%B9%9D%E4%B9%9D%E4%B9%98%E6%B3%95%E8%A1%A8/</url>
     <content><![CDATA[<p>for i in range(1, 10):</p>
@@ -1404,17 +1415,6 @@
 ]]></content>
       <tags>
         <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>保留表头拆分数据为若干新工作簿</title>
-    <url>/2023/03/27/%E4%BF%9D%E7%95%99%E8%A1%A8%E5%A4%B4%E6%8B%86%E5%88%86%E6%95%B0%E6%8D%AE%E4%B8%BA%E8%8B%A5%E5%B9%B2%E6%96%B0%E5%B7%A5%E4%BD%9C%E7%B0%BF/</url>
-    <content><![CDATA[<p>Sub 保留表头拆分数据为若干新工作簿()<br>Dim arr, d As Object, k, t, i&amp;, lc%, rng As Range, c%<br>c &#x3D; Application.InputBox(“请输入拆分列号”, , 4, , , , , 1)</p>
-<span id="more"></span>
-<p>If c &#x3D; 0 Then Exit Sub<br>Application.ScreenUpdating &#x3D; False<br>Application.DisplayAlerts &#x3D; False<br>arr &#x3D; [a1].CurrentRegion<br>lc &#x3D; UBound(arr, 2)<br>Set rng &#x3D; [a1].Resize(, lc)<br>Set d &#x3D; CreateObject(“scripting.dictionary”)<br>For i &#x3D; 2 To UBound(arr)<br>If Not d.Exists(arr(i, c)) Then<br>Set d(arr(i, c)) &#x3D; Cells(i, 1).Resize(1, lc)<br>Else<br>Set d(arr(i, c)) &#x3D; Union(d(arr(i, c)), Cells(i, 1).Resize(1, lc))<br>End If<br>Next<br>k &#x3D; d.Keys<br>t &#x3D; d.Items<br>For i &#x3D; 0 To d.Count - 1<br>With Workbooks.Add(xlWBATWorksheet)<br>rng.Copy .Sheets(1).[a1]<br>t(i).Copy .Sheets(1).[a2]<br>.SaveAs Filename:&#x3D;ThisWorkbook.Path &amp; “&quot; &amp; k(i) &amp; “.xls”<br>.Close<br>End With<br>Next<br>Application.DisplayAlerts &#x3D; True<br>Application.ScreenUpdating &#x3D; True<br>MsgBox “完毕”<br>End Sub</p>
-]]></content>
-      <tags>
-        <tag>excel</tag>
       </tags>
   </entry>
   <entry>
@@ -1705,13 +1705,12 @@
     <title>批量成生二维码</title>
     <url>/2023/10/23/%E6%89%B9%E9%87%8F%E6%88%90%E7%94%9F%E4%BA%8C%E7%BB%B4%E7%A0%81/</url>
     <content><![CDATA[<p>import os<br>import qrcode<br>import openpyxl<br>from openpyxl.drawing.image import Image</p>
+<span id="more"></span>
 <p>def open_cell(num):</p>
 <ul>
 <li>cell &#x3D; sheet[“A” + num]</li>
-<li>return cell.value</li>
-</ul>
-<p>def gen_image(text,name):</p>
-<ul>
+<li>return cell.value<!--more-->
+def gen_image(text,name):</li>
 <li>img &#x3D; qrcode.make(text)</li>
 <li>with open(name,’wb’) as f:<ul>
 <li>img.save(f)</li>
@@ -1774,15 +1773,6 @@
       </tags>
   </entry>
   <entry>
-    <title>格式化字符串的三种方法</title>
-    <url>/2023/07/29/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E6%B3%95/</url>
-    <content><![CDATA[<p>f’{i}*{j}&#x3D;{i*j}’<br>‘{}*{}&#x3D;{}’.format(i,j,i*j)<br>‘%d*%d&#x3D;%d’%(i,j,i*j)</p>
-]]></content>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>条件查找</title>
     <url>/2023/06/04/%E6%9D%A1%E4%BB%B6%E6%9F%A5%E6%89%BE/</url>
     <content><![CDATA[<p>&#x3D;VLOOKUP(A1,A:C,3,1)，以此函数为例：<br>“A1”为“查找值”内容，当前需要查找的目标；<br>“A:C”为“数据表”内容，查找表中的目标起始列和结果终止列；<br>“3”为“列序数”内容，“数据表”中目标列至结果列的列数；<br>“1”为“匹配条件”内容，“0”为精确查找，“1”为模糊查找。</p>
@@ -1798,6 +1788,15 @@
 ]]></content>
       <tags>
         <tag>excel</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>格式化字符串的三种方法</title>
+    <url>/2023/07/29/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E6%B3%95/</url>
+    <content><![CDATA[<p>f’{i}*{j}&#x3D;{i*j}’<br>‘{}*{}&#x3D;{}’.format(i,j,i*j)<br>‘%d*%d&#x3D;%d’%(i,j,i*j)</p>
+]]></content>
+      <tags>
+        <tag>python</tag>
       </tags>
   </entry>
   <entry>
@@ -2002,6 +2001,24 @@ book.save(&#39;test.xls&#39;)
       </tags>
   </entry>
   <entry>
+    <title>生成SSH</title>
+    <url>/2023/10/22/%E7%94%9F%E6%88%90SSH/</url>
+    <content><![CDATA[<ul>
+<li><p>用户名和邮箱进行初始化<br>git config –global user.name yourname<br>git config –global user.email youremail</p>
+<span id="more"></span></li>
+<li><p>检查初始化信息<br>git config user.name<br>git config user.email</p>
+</li>
+<li><p>生成密钥<br>ssh-keygen -t rsa -C youremail</p>
+</li>
+<li><p>查看公钥<br>cat ~&#x2F;.ssh&#x2F;id_rsa.pub</p>
+</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>第三方库安装命令</title>
     <url>/2023/03/27/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93%E5%AE%89%E8%A3%85%E5%91%BD%E4%BB%A4/</url>
     <content><![CDATA[<table>
@@ -2034,24 +2051,6 @@ book.save(&#39;test.xls&#39;)
       </tags>
   </entry>
   <entry>
-    <title>生成SSH</title>
-    <url>/2023/10/22/%E7%94%9F%E6%88%90SSH/</url>
-    <content><![CDATA[<ul>
-<li><p>用户名和邮箱进行初始化<br>git config –global user.name yourname<br>git config –global user.email youremail</p>
-</li>
-<li><p>检查初始化信息<br>git config user.name<br>git config user.email</p>
-</li>
-<li><p>生成密钥<br>ssh-keygen -t rsa -C youremail</p>
-</li>
-<li><p>查看公钥<br>cat ~&#x2F;.ssh&#x2F;id_rsa.pub</p>
-</li>
-</ul>
-]]></content>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>筛选后自动排列序号</title>
     <url>/2023/03/27/%E7%AD%9B%E9%80%89%E5%90%8E%E8%87%AA%E5%8A%A8%E6%8E%92%E5%88%97%E5%BA%8F%E5%8F%B7/</url>
     <content><![CDATA[<p>&#x3D;subtotal(3，B$2:B2)*1<br>“3”为函数序号<br>“B$2:B2”为序号数值</p>
@@ -2070,18 +2069,18 @@ book.save(&#39;test.xls&#39;)
       </tags>
   </entry>
   <entry>
-    <title>设备性能确认(Qualify)</title>
-    <url>/2023/06/04/%E8%AE%BE%E5%A4%87%E6%80%A7%E8%83%BD%E7%A1%AE%E8%AE%A4-Qualify/</url>
-    <content><![CDATA[<p>设备性能确认(Qualify)，即某个设备达到了一定的标准，可以被用来做某个预定的生产步骤。Qualify的过程一定要有”预定的标准”。<br>设备的用户需求说明(URS)和性能指标决定了设备的标准，确认就是通过实际操作、测试或试验，来收集证据，证明该设备已经达到了这些标准。</p>
+    <title>设备定义</title>
+    <url>/2023/03/30/%E8%AE%BE%E5%A4%87%E5%AE%9A%E4%B9%89/</url>
+    <content><![CDATA[<p>1、关键设备(A):重要工序上的设备，一旦发生故障将导致流水线全线停机，如涂布机、Busbar 焊接机等。<br>2、重要设备(B):重要工序上的设备，设备故障将导致局部停机或可用其他设备代替。<br>3、 一般设备(C): 非重要工序上的设备<span id="more"></span><br>4、 OEE: 设备综合效率，OEE&#x3D;时间开动率×性能开动率×合格品率。<br>5、 MTBF: 平均故障间隔时间，是两次故障间的平均正常运行时间.<br>6、 MTTR: 平均修理时间，修理故障使设备回到正常运行的平均耗时。<br>7、 设备性能指数(CMK) : 表示仅由设备普通原因变差决定的能力。<br>8、 Qualify: 设备性能验收。</p>
 ]]></content>
       <tags>
         <tag>system</tag>
       </tags>
   </entry>
   <entry>
-    <title>设备定义</title>
-    <url>/2023/03/30/%E8%AE%BE%E5%A4%87%E5%AE%9A%E4%B9%89/</url>
-    <content><![CDATA[<p>1、关键设备(A):重要工序上的设备，一旦发生故障将导致流水线全线停机，如涂布机、Busbar 焊接机等。<br>2、重要设备(B):重要工序上的设备，设备故障将导致局部停机或可用其他设备代替。<br>3、 一般设备(C): 非重要工序上的设备<span id="more"></span><br>4、 OEE: 设备综合效率，OEE&#x3D;时间开动率×性能开动率×合格品率。<br>5、 MTBF: 平均故障间隔时间，是两次故障间的平均正常运行时间.<br>6、 MTTR: 平均修理时间，修理故障使设备回到正常运行的平均耗时。<br>7、 设备性能指数(CMK) : 表示仅由设备普通原因变差决定的能力。<br>8、 Qualify: 设备性能验收。</p>
+    <title>设备性能确认(Qualify)</title>
+    <url>/2023/06/04/%E8%AE%BE%E5%A4%87%E6%80%A7%E8%83%BD%E7%A1%AE%E8%AE%A4-Qualify/</url>
+    <content><![CDATA[<p>设备性能确认(Qualify)，即某个设备达到了一定的标准，可以被用来做某个预定的生产步骤。Qualify的过程一定要有”预定的标准”。<br>设备的用户需求说明(URS)和性能指标决定了设备的标准，确认就是通过实际操作、测试或试验，来收集证据，证明该设备已经达到了这些标准。</p>
 ]]></content>
       <tags>
         <tag>system</tag>

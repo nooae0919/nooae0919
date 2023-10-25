@@ -86,49 +86,12 @@
             <div class="post-content">
                 
                     <p>import os<br>import qrcode<br>import openpyxl<br>from openpyxl.drawing.image import Image</p>
-<p>def open_cell(num):</p>
-<ul>
-<li>cell &#x3D; sheet[“A” + num]</li>
-<li>return cell.value</li>
-</ul>
-<p>def gen_image(text,name):</p>
-<ul>
-<li>img &#x3D; qrcode.make(text)</li>
-<li>with open(name,’wb’) as f:<ul>
-<li>img.save(f)</li>
-</ul>
-</li>
-</ul>
-<p>def write_img(img_name,position):</p>
-<ul>
-<li>imgsize &#x3D; (720&#x2F;12,720&#x2F;12)</li>
-<li>img &#x3D; Image(img_name)</li>
-<li>img.width,img.height &#x3D; imgsize</li>
-<li>sheet.add_image(img,position)</li>
-</ul>
-<p>if _name_ &#x3D;&#x3D; “_main_“:    </p>
-<ul>
-<li><p>wb_name &#x3D; “text.xlsx”</p>
-</li>
-<li><p>wb &#x3D; openpyxl.load_workbook(wb_name)</p>
-</li>
-<li><p>sheet &#x3D; wb.worksheets[0]</p>
-</li>
-<li><p>os.mkdir(“qrcode”)</p>
-</li>
-<li><p>for i in range(1,10):</p>
-<ul>
-<li>test &#x3D; open_cell(str(i))</li>
-<li>test_png_name &#x3D; “qrcode&#x2F;“ + “A” + str(i) + “.png”</li>
-<li>paste &#x3D; “B” + str(i)</li>
-<li>gen_image(test,test_png_name)</li>
-<li>write_img(test_png_name,paste)</li>
-</ul>
-</li>
-<li><p>wb.save(wb_name)</p>
-</li>
-</ul>
-
+                    <div class="read-more">
+                        <a href="/2023/10/23/%E6%89%B9%E9%87%8F%E6%88%90%E7%94%9F%E4%BA%8C%E7%BB%B4%E7%A0%81/" class="read-more-link">
+                            阅读全文
+                            <i class="iconfont icon-readmore"></i>
+                        </a>
+                    </div>
                 
             </div>
         </article>
@@ -145,15 +108,12 @@
                 
                     <ul>
 <li><p>用户名和邮箱进行初始化<br>git config –global user.name yourname<br>git config –global user.email youremail</p>
-</li>
-<li><p>检查初始化信息<br>git config user.name<br>git config user.email</p>
-</li>
-<li><p>生成密钥<br>ssh-keygen -t rsa -C youremail</p>
-</li>
-<li><p>查看公钥<br>cat ~&#x2F;.ssh&#x2F;id_rsa.pub</p>
-</li>
-</ul>
-
+                    <div class="read-more">
+                        <a href="/2023/10/22/%E7%94%9F%E6%88%90SSH/" class="read-more-link">
+                            阅读全文
+                            <i class="iconfont icon-readmore"></i>
+                        </a>
+                    </div>
                 
             </div>
         </article>

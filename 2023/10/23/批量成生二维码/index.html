@@ -92,13 +92,12 @@
 </div>
         <div class="post-content">
             <p>import os<br>import qrcode<br>import openpyxl<br>from openpyxl.drawing.image import Image</p>
+<span id="more"></span>
 <p>def open_cell(num):</p>
 <ul>
 <li>cell &#x3D; sheet[“A” + num]</li>
-<li>return cell.value</li>
-</ul>
-<p>def gen_image(text,name):</p>
-<ul>
+<li>return cell.value<!--more-->
+def gen_image(text,name):</li>
 <li>img &#x3D; qrcode.make(text)</li>
 <li>with open(name,’wb’) as f:<ul>
 <li>img.save(f)</li>
