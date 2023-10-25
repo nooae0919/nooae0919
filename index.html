@@ -85,12 +85,10 @@
             </div>
             <div class="post-content">
                 
-                    <p>import qrcode<br>import openpyxl<br>from PIL import Image</p>
-<p>def open_cell(book_name,num):</p>
+                    <p>import os<br>import qrcode<br>import openpyxl<br>from openpyxl.drawing.image import Image</p>
+<p>def open_cell(num):</p>
 <ul>
-<li>wb &#x3D; openpyxl.load_workbook(book_name)</li>
-<li>sheet &#x3D; wb.worksheets[0]</li>
-<li>cell &#x3D; sheet[‘A’ + num]</li>
+<li>cell &#x3D; sheet[“A” + num]</li>
 <li>return cell.value</li>
 </ul>
 <p>def gen_image(text,name):</p>
@@ -101,13 +99,33 @@
 </ul>
 </li>
 </ul>
-<p>if _name_ &#x3D;&#x3D; “_main_”:</p>
+<p>def write_img(img_name,position):</p>
 <ul>
-<li>for i in range(1,10):<ul>
-<li>test &#x3D; open_cell(‘text.xlsx’,str(i))</li>
-<li>test_png_name &#x3D; “A” + str(i) + “.png”</li>
-<li>gen_image(test,test_png_name)</li>
+<li>imgsize &#x3D; (720&#x2F;12,720&#x2F;12)</li>
+<li>img &#x3D; Image(img_name)</li>
+<li>img.width,img.height &#x3D; imgsize</li>
+<li>sheet.add_image(img,position)</li>
 </ul>
+<p>if _name_ &#x3D;&#x3D; “_main_“:    </p>
+<ul>
+<li><p>wb_name &#x3D; “text.xlsx”</p>
+</li>
+<li><p>wb &#x3D; openpyxl.load_workbook(wb_name)</p>
+</li>
+<li><p>sheet &#x3D; wb.worksheets[0]</p>
+</li>
+<li><p>os.mkdir(“qrcode”)</p>
+</li>
+<li><p>for i in range(1,10):</p>
+<ul>
+<li>test &#x3D; open_cell(str(i))</li>
+<li>test_png_name &#x3D; “qrcode&#x2F;“ + “A” + str(i) + “.png”</li>
+<li>paste &#x3D; “B” + str(i)</li>
+<li>gen_image(test,test_png_name)</li>
+<li>write_img(test_png_name,paste)</li>
+</ul>
+</li>
+<li><p>wb.save(wb_name)</p>
 </li>
 </ul>
 
