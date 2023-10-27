@@ -1219,22 +1219,6 @@
       </tags>
   </entry>
   <entry>
-    <title>SQL命令</title>
-    <url>/2023/04/02/SQL%E5%91%BD%E4%BB%A4/</url>
-    <content><![CDATA[<p>#创建一个名为“day1”的数据库<br>create database day1;</p>
-<p>#进去day1数据库<br>use day1;<span id="more"></span></p>
-<p>#创建一个名为“test”的数据表<br>create table test(<br>id varchar(20)  primary key ,<br>name varchar(30),<br>password varchar(30)<br>);</p>
-<p>#向test表插入一行数据<br>insert into test(id,name,password) values(‘001’,’lisi’,’123456’);</p>
-<p>#查看创建的test表的数据<br>select * from test;</p>
-<p>#将id为001的密码改为xxxx<br>update test set password&#x3D;’xxxx’ where id&#x3D;’001’;</p>
-<p>#删除test表<br>drop table test;</p>
-<p>#删除day1数据库<br>drop database day1;</p>
-]]></content>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Termux常用命令</title>
     <url>/2023/09/30/Termux%E5%B8%B8%E8%A7%81%E5%91%BD%E4%BB%A4/</url>
     <content><![CDATA[<p>Termux是一个Android上的终端模拟器和Linux环境。它允许用户在其Android设备上直接运行各种 Linux 命令行实用程序。<br>在Termux中可以使用的一些常用命令包括:</p>
@@ -1317,6 +1301,22 @@
       </tags>
   </entry>
   <entry>
+    <title>SQL命令</title>
+    <url>/2023/04/02/SQL%E5%91%BD%E4%BB%A4/</url>
+    <content><![CDATA[<p>#创建一个名为“day1”的数据库<br>create database day1;</p>
+<p>#进去day1数据库<br>use day1;<span id="more"></span></p>
+<p>#创建一个名为“test”的数据表<br>create table test(<br>id varchar(20)  primary key ,<br>name varchar(30),<br>password varchar(30)<br>);</p>
+<p>#向test表插入一行数据<br>insert into test(id,name,password) values(‘001’,’lisi’,’123456’);</p>
+<p>#查看创建的test表的数据<br>select * from test;</p>
+<p>#将id为001的密码改为xxxx<br>update test set password&#x3D;’xxxx’ where id&#x3D;’001’;</p>
+<p>#删除test表<br>drop table test;</p>
+<p>#删除day1数据库<br>drop database day1;</p>
+]]></content>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>WI工作指示编写流程</title>
     <url>/2023/09/29/WI%E5%B7%A5%E4%BD%9C%E6%8C%87%E7%A4%BA/</url>
     <content><![CDATA[<p>一、确定编写目标及需求<br>在编写WI之前，首先需要明确编写目标及需求，包括:<br>(1)需要编写的工作内容及流程;<br>(2)操作人员的技能要求和培训需求;<br>(3)操作所需的设备、工具和材料等。</p>
@@ -1328,6 +1328,19 @@
 ]]></content>
       <tags>
         <tag>system</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>win32打印工作表</title>
+    <url>/2023/10/27/win32%E6%89%93%E5%8D%B0%E5%B7%A5%E4%BD%9C%E8%A1%A8/</url>
+    <content><![CDATA[<p>import win32com.client as win32</p>
+<p>excel &#x3D; win32.gencache.EnsureDispatch(‘Excel.Application’)</p>
+<p>wb &#x3D; excel.Workbooks.Open(r’C:\123.xlsx’)<br>ws &#x3D; wb.Sheets(‘Sheet1’) </p>
+<p>ws.PrintOut()</p>
+<p>wb.Close(False)<br>excel.Quit()</p>
+]]></content>
+      <tags>
+        <tag>python</tag>
       </tags>
   </entry>
   <entry>
@@ -1382,15 +1395,6 @@
       </tags>
   </entry>
   <entry>
-    <title>使用xlwt库将数据写入excel</title>
-    <url>/2023/03/27/%E4%BD%BF%E7%94%A8xlwt%E5%BA%93%E5%B0%86%E6%95%B0%E6%8D%AE%E5%86%99%E5%85%A5excel/</url>
-    <content><![CDATA[<p>import xlwt<br>#1. 创建workbook对象<br>workbook &#x3D; xlwt.Workbook(encoding&#x3D;”utf-8”)<br>#2. 增加一个sheet # 设置成可以覆盖原先内容<br>worksheet &#x3D; workbook.add_sheet(“sheet1”, cell_overwrite_ok&#x3D;True)<br>#3. 在单元格中添加内容，第一个参数为行，第二个参数为列，第三个参数为内容<br>worksheet.write(0,0, “hello”)<br>#4. 保存数据表<br>workbook.save(“.&#x2F;student.xls”)</p>
-]]></content>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>保留表头拆分数据为若干新工作簿</title>
     <url>/2023/03/27/%E4%BF%9D%E7%95%99%E8%A1%A8%E5%A4%B4%E6%8B%86%E5%88%86%E6%95%B0%E6%8D%AE%E4%B8%BA%E8%8B%A5%E5%B9%B2%E6%96%B0%E5%B7%A5%E4%BD%9C%E7%B0%BF/</url>
     <content><![CDATA[<p>Sub 保留表头拆分数据为若干新工作簿()<br>Dim arr, d As Object, k, t, i&amp;, lc%, rng As Range, c%<br>c &#x3D; Application.InputBox(“请输入拆分列号”, , 4, , , , , 1)</p>
@@ -1399,6 +1403,15 @@
 ]]></content>
       <tags>
         <tag>excel</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>使用xlwt库将数据写入excel</title>
+    <url>/2023/03/27/%E4%BD%BF%E7%94%A8xlwt%E5%BA%93%E5%B0%86%E6%95%B0%E6%8D%AE%E5%86%99%E5%85%A5excel/</url>
+    <content><![CDATA[<p>import xlwt<br>#1. 创建workbook对象<br>workbook &#x3D; xlwt.Workbook(encoding&#x3D;”utf-8”)<br>#2. 增加一个sheet # 设置成可以覆盖原先内容<br>worksheet &#x3D; workbook.add_sheet(“sheet1”, cell_overwrite_ok&#x3D;True)<br>#3. 在单元格中添加内容，第一个参数为行，第二个参数为列，第三个参数为内容<br>worksheet.write(0,0, “hello”)<br>#4. 保存数据表<br>workbook.save(“.&#x2F;student.xls”)</p>
+]]></content>
+      <tags>
+        <tag>python</tag>
       </tags>
   </entry>
   <entry>
@@ -1638,6 +1651,59 @@
       </tags>
   </entry>
   <entry>
+    <title>批量成生二维码</title>
+    <url>/2023/10/23/%E6%89%B9%E9%87%8F%E6%88%90%E7%94%9F%E4%BA%8C%E7%BB%B4%E7%A0%81/</url>
+    <content><![CDATA[<p>import os<br>import qrcode<br>import openpyxl<br>from openpyxl.drawing.image import Image</p>
+<span id="more"></span>
+
+<p>def open_cell(num):</p>
+<ul>
+<li>cell &#x3D; sheet[“A” + num]</li>
+<li>return cell.value</li>
+</ul>
+<p>def gen_image(text,name):</p>
+<ul>
+<li>img &#x3D; qrcode.make(text)</li>
+<li>with open(name,”wb”) as f:<ul>
+<li>img.save(f)</li>
+</ul>
+</li>
+</ul>
+<p>def write_img(img_name,position):</p>
+<ul>
+<li>imgsize &#x3D; (720&#x2F;12,720&#x2F;12)</li>
+<li>img &#x3D; Image(img_name)</li>
+<li>img.width,img.height &#x3D; imgsize</li>
+<li>sheet.add_image(img,position)</li>
+</ul>
+<p>if _name_ &#x3D;&#x3D; “_main_”:</p>
+<ul>
+<li><p>wb_name &#x3D; “text.xlsx”</p>
+</li>
+<li><p>wb &#x3D; openpyxl.load_workbook(wb_name)</p>
+</li>
+<li><p>sheet &#x3D; wb.worksheets[0]</p>
+</li>
+<li><p>os.mkdir(“qrcode”)</p>
+</li>
+<li><p>for i in range(1,10):</p>
+<ul>
+<li>test &#x3D; open_cell(str(i))</li>
+<li>test_png_name &#x3D; “qrcode&#x2F;“ + “A” + str(i) + “.png”</li>
+<li>paste &#x3D; “B” + str(i)</li>
+<li>gen_image(test,test_png_name)</li>
+<li>write_img(test_png_name,paste)</li>
+</ul>
+</li>
+<li><p>wb.save(wb_name)</p>
+</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>常用运算符</title>
     <url>/2023/03/27/%E5%B8%B8%E7%94%A8%E8%BF%90%E7%AE%97%E7%AC%A6/</url>
     <content><![CDATA[<table>
@@ -1702,59 +1768,6 @@
       </tags>
   </entry>
   <entry>
-    <title>批量成生二维码</title>
-    <url>/2023/10/23/%E6%89%B9%E9%87%8F%E6%88%90%E7%94%9F%E4%BA%8C%E7%BB%B4%E7%A0%81/</url>
-    <content><![CDATA[<p>import os<br>import qrcode<br>import openpyxl<br>from openpyxl.drawing.image import Image</p>
-<span id="more"></span>
-
-<p>def open_cell(num):</p>
-<ul>
-<li>cell &#x3D; sheet[“A” + num]</li>
-<li>return cell.value</li>
-</ul>
-<p>def gen_image(text,name):</p>
-<ul>
-<li>img &#x3D; qrcode.make(text)</li>
-<li>with open(name,”wb”) as f:<ul>
-<li>img.save(f)</li>
-</ul>
-</li>
-</ul>
-<p>def write_img(img_name,position):</p>
-<ul>
-<li>imgsize &#x3D; (720&#x2F;12,720&#x2F;12)</li>
-<li>img &#x3D; Image(img_name)</li>
-<li>img.width,img.height &#x3D; imgsize</li>
-<li>sheet.add_image(img,position)</li>
-</ul>
-<p>if _name_ &#x3D;&#x3D; “_main_”:</p>
-<ul>
-<li><p>wb_name &#x3D; “text.xlsx”</p>
-</li>
-<li><p>wb &#x3D; openpyxl.load_workbook(wb_name)</p>
-</li>
-<li><p>sheet &#x3D; wb.worksheets[0]</p>
-</li>
-<li><p>os.mkdir(“qrcode”)</p>
-</li>
-<li><p>for i in range(1,10):</p>
-<ul>
-<li>test &#x3D; open_cell(str(i))</li>
-<li>test_png_name &#x3D; “qrcode&#x2F;“ + “A” + str(i) + “.png”</li>
-<li>paste &#x3D; “B” + str(i)</li>
-<li>gen_image(test,test_png_name)</li>
-<li>write_img(test_png_name,paste)</li>
-</ul>
-</li>
-<li><p>wb.save(wb_name)</p>
-</li>
-</ul>
-]]></content>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>把汉字转换成拼音首字母</title>
     <url>/2023/03/27/%E6%8A%8A%E6%B1%89%E5%AD%97%E8%BD%AC%E6%8D%A2%E6%88%90%E6%8B%BC%E9%9F%B3%E9%A6%96%E5%AD%97%E6%AF%8D/</url>
     <content><![CDATA[<p>Function pinyin(p As String) As String<br>i &#x3D; Asc(p)<br>Select Case i<br>Case -20319 To -20284: pinyin &#x3D; “A”<br>Case -20283 To -19776: pinyin &#x3D; “B”<br>Case -19775 To -19219: pinyin &#x3D; “C”<br>Case -19218 To -18711: pinyin &#x3D; “D”</p>
@@ -1785,21 +1798,21 @@
       </tags>
   </entry>
   <entry>
-    <title>格式化字符串的三种方法</title>
-    <url>/2023/07/29/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E6%B3%95/</url>
-    <content><![CDATA[<p>f’{i}*{j}&#x3D;{i*j}’<br>‘{}*{}&#x3D;{}’.format(i,j,i*j)<br>‘%d*%d&#x3D;%d’%(i,j,i*j)</p>
-]]></content>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>条件求和</title>
     <url>/2023/03/27/%E6%9D%A1%E4%BB%B6%E6%B1%82%E5%92%8C/</url>
     <content><![CDATA[<p>&#x3D;SUMIF(A1:A10,E4,C1:C10)<br>“A1:A10”选择求和项列<br>“E4”选择求和项<br>“C1:C10”选择数值列</p>
 ]]></content>
       <tags>
         <tag>excel</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>格式化字符串的三种方法</title>
+    <url>/2023/07/29/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E6%B3%95/</url>
+    <content><![CDATA[<p>f’{i}*{j}&#x3D;{i*j}’<br>‘{}*{}&#x3D;{}’.format(i,j,i*j)<br>‘%d*%d&#x3D;%d’%(i,j,i*j)</p>
+]]></content>
+      <tags>
+        <tag>python</tag>
       </tags>
   </entry>
   <entry>
@@ -2063,21 +2076,21 @@ book.save(&#39;test.xls&#39;)
       </tags>
   </entry>
   <entry>
-    <title>筛选求和</title>
-    <url>/2023/03/27/%E7%AD%9B%E9%80%89%E6%B1%82%E5%92%8C/</url>
-    <content><![CDATA[<p>&#x3D;SUBTOTAL(9,C1:C10)<br>“9”为函数序号<br>“C1:C10”选择数值列</p>
-]]></content>
-      <tags>
-        <tag>excel</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>设备性能确认(Qualify)</title>
     <url>/2023/06/04/%E8%AE%BE%E5%A4%87%E6%80%A7%E8%83%BD%E7%A1%AE%E8%AE%A4-Qualify/</url>
     <content><![CDATA[<p>设备性能确认(Qualify)，即某个设备达到了一定的标准，可以被用来做某个预定的生产步骤。Qualify的过程一定要有”预定的标准”。<br>设备的用户需求说明(URS)和性能指标决定了设备的标准，确认就是通过实际操作、测试或试验，来收集证据，证明该设备已经达到了这些标准。</p>
 ]]></content>
       <tags>
         <tag>system</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>筛选求和</title>
+    <url>/2023/03/27/%E7%AD%9B%E9%80%89%E6%B1%82%E5%92%8C/</url>
+    <content><![CDATA[<p>&#x3D;SUBTOTAL(9,C1:C10)<br>“9”为函数序号<br>“C1:C10”选择数值列</p>
+]]></content>
+      <tags>
+        <tag>excel</tag>
       </tags>
   </entry>
   <entry>

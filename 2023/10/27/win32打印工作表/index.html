@@ -76,9 +76,9 @@
         <div class="posts">
     <article class="post-whole">
         <div class="post-title">
-            <h2 class="title">合并当前目录下所有工作簿的全部工作表</h2>
+            <h2 class="title">win32打印工作表</h2>
             <div class="post-meta">
-                <span class="post-time">2023-03-27</span>
+                <span class="post-time">2023-10-27</span>
                 
                 <span class="post-visit"> 阅读次数：<span id="busuanzi_value_page_pv"></span></span>
             </div>
@@ -91,15 +91,17 @@
     </div>
 </div>
         <div class="post-content">
-            <p>Sub 合并当前目录下所有工作簿的全部工作表()<br>Dim MyPath, MyName, AWbName<br>Dim Wb As Workbook, WbN As String<br>Dim G As Long</p>
-<span id="more"></span>
-<p>Dim Num As Long<br>Dim BOX As String<br>Application.ScreenUpdating &#x3D; False<br>MyPath &#x3D; ActiveWorkbook.Path<br>MyName &#x3D; Dir(MyPath &amp; “&quot; &amp; “*.csv”)<br>AWbName &#x3D; ActiveWorkbook.Name<br>Num &#x3D; 0<br>Do While MyName &lt;&gt; “”<br>If MyName &lt;&gt; AWbName Then<br>Set Wb &#x3D; Workbooks.Open(MyPath &amp; “&quot; &amp; MyName)<br>Num &#x3D; Num + 1<br>With Workbooks(1).ActiveSheet<br>.Cells(.Range(“B65536”).End(xlUp).Row + 2, 1) &#x3D; Left(MyName, Len(MyName) - 4)<br>For G &#x3D; 1 To Sheets.Count<br>Wb.Sheets(G).UsedRange.Copy .Cells(.Range(“B65536”).End(xlUp).Row + 1, 1)<br>Next<br>WbN &#x3D; WbN &amp; Chr(13) &amp; Wb.Name<br>Wb.Close False<br>End With<br>End If<br>MyName &#x3D; Dir<br>Loop<br>Range(“B1”).Select<br>Application.ScreenUpdating &#x3D; True<br>MsgBox “共合并了” &amp; Num &amp; “个工作薄下的全部工作表。如下：” &amp; Chr(13) &amp; WbN, vbInformation, “提示”<br>End Sub</p>
+            <p>import win32com.client as win32</p>
+<p>excel &#x3D; win32.gencache.EnsureDispatch(‘Excel.Application’)</p>
+<p>wb &#x3D; excel.Workbooks.Open(r’C:\123.xlsx’)<br>ws &#x3D; wb.Sheets(‘Sheet1’) </p>
+<p>ws.PrintOut()</p>
+<p>wb.Close(False)<br>excel.Quit()</p>
 
         </div>
         
         <div class="post-tag">
             
-            <a class="tag" href="/tags/excel/" title="excel">excel</a>
+            <a class="tag" href="/tags/python/" title="python">python</a>
             
         </div>
         
@@ -108,15 +110,9 @@
 <div class="paginator">
     
         
-            <a class="prev" href="/2023/03/27/%E4%BD%BF%E7%94%A8xlwt%E5%BA%93%E5%B0%86%E6%95%B0%E6%8D%AE%E5%86%99%E5%85%A5excel/">
-                <i class="iconfont icon-prev"></i>
-                <span class="nav-default">使用xlwt库将数据写入excel</span>
-                <span class="nav-mobile">上一篇</span>
-            </a>
         
-        
-            <a class="next" href="/2023/03/27/%E5%90%88%E5%B9%B6%E6%96%87%E4%BB%B6%E5%A4%B9%E4%B8%8B%E5%B7%A5%E4%BD%9C%E8%96%84/">
-                <span class="nav-default">合并文件夹下工作薄</span>
+            <a class="next" href="/2023/10/23/%E6%89%B9%E9%87%8F%E6%88%90%E7%94%9F%E4%BA%8C%E7%BB%B4%E7%A0%81/">
+                <span class="nav-default">批量成生二维码</span>
                 <span class="nav-mobile">下一篇</span>
                 <i class="iconfont icon-next"></i>
             </a>
