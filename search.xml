@@ -412,65 +412,6 @@
       </tags>
   </entry>
   <entry>
-    <title>PDF转图片</title>
-    <url>/2023/04/05/PDF%E8%BD%AC%E5%9B%BE%E7%89%87/</url>
-    <content><![CDATA[<p>import os<br>import fitz  # fitz就是pip install PyMuPDF</p>
-<span id="more"></span>
-<p>def pyMuPDF_fitz(pdfPath, imagePath):</p>
-<ul>
-<li>print(“imagePath&#x3D;” + imagePath)</li>
-<li>pdfDoc &#x3D; fitz.open(pdfPath)</li>
-<li>for pg in range(pdfDoc.pageCount):<ul>
-<li><p>page &#x3D; pdfDoc[pg]</p>
-</li>
-<li><p>rotate &#x3D; int(0)</p>
-</li>
-<li><p>#每个尺寸的缩放系数为1.3，这将为我们生成分辨率提高2.6的图像。</p>
-</li>
-<li><p>#此处若是不做设置，默认图片大小为：792X612, dpi&#x3D;96</p>
-</li>
-<li><p>zoom_x &#x3D; 1.33333333  # (1.33333333–&gt;1056x816)   (2–&gt;1584x1224)</p>
-</li>
-<li><p>zoom_y &#x3D; 1.33333333</p>
-</li>
-<li><p>mat &#x3D; fitz.Matrix(zoom_x, zoom_y).preRotate(rotate)</p>
-</li>
-<li><p>pix &#x3D; page.getPixmap(matrix&#x3D;mat, alpha&#x3D;False)</p>
-</li>
-<li><p>if not os.path.exists(imagePath):  # 判断存放图片的文件夹是否存在</p>
-<ul>
-<li>os.makedirs(imagePath)  # 若图片文件夹不存在就创建</li>
-</ul>
-</li>
-<li><p>pix.writePNG(imagePath + ‘&#x2F;‘ + ‘images_%s.png’ % pg)  # 将图片写入指定的文件夹内</p>
-</li>
-</ul>
-</li>
-</ul>
-<p>if __name__ &#x3D;&#x3D; “__main__“:</p>
-<ul>
-<li>#1、PDF地址</li>
-<li>pdfPath &#x3D; ‘123.pdf’</li>
-<li>#2、需要储存图片的目录</li>
-<li>imagePath &#x3D; ‘.&#x2F;imgs’</li>
-<li>pyMuPDF_fitz(pdfPath, imagePath)</li>
-</ul>
-]]></content>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>OEE组成</title>
-    <url>/2023/03/30/OEE%E7%BB%84%E6%88%90/</url>
-    <content><![CDATA[<p>OEE &#x3D; 时间稼动率×性能稼动率×良品率<br>时间稼动率 &#x3D; (负荷时间-停机损失时间)&#x2F;负荷时间<br>性能稼动率 &#x3D; (生产量×理论节拍)&#x2F;稼动时间<span id="more"></span></p>
-<p>注：<br>A:实际作业时间 &#x3D; 日历工作时间<br>B:计划停止时间 &#x3D; 非设备原因停机时间<br>C:负荷时间 &#x3D; 实际作业时间-计划停止时间<br>D:停机损失时间 &#x3D; 更换刀具及故障停机时间<br>E:稼动时间 &#x3D; 负荷时间-停机损失时间<br>F:生产量 &#x3D; 日历工作时间内的总生产量<br>G:良品率 &#x3D; 合格品&#x2F;生产量<br>H:理论节拍(PPM) &#x3D; 每分钟产出数量</p>
-]]></content>
-      <tags>
-        <tag>system</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Python常用单词表</title>
     <url>/2023/03/27/Python%E5%B8%B8%E7%94%A8%E5%8D%95%E8%AF%8D%E8%A1%A8/</url>
     <content><![CDATA[<p>学习python必须背的常见单词</p>
@@ -1201,6 +1142,65 @@
       </tags>
   </entry>
   <entry>
+    <title>PDF转图片</title>
+    <url>/2023/04/05/PDF%E8%BD%AC%E5%9B%BE%E7%89%87/</url>
+    <content><![CDATA[<p>import os<br>import fitz  # fitz就是pip install PyMuPDF</p>
+<span id="more"></span>
+<p>def pyMuPDF_fitz(pdfPath, imagePath):</p>
+<ul>
+<li>print(“imagePath&#x3D;” + imagePath)</li>
+<li>pdfDoc &#x3D; fitz.open(pdfPath)</li>
+<li>for pg in range(pdfDoc.pageCount):<ul>
+<li><p>page &#x3D; pdfDoc[pg]</p>
+</li>
+<li><p>rotate &#x3D; int(0)</p>
+</li>
+<li><p>#每个尺寸的缩放系数为1.3，这将为我们生成分辨率提高2.6的图像。</p>
+</li>
+<li><p>#此处若是不做设置，默认图片大小为：792X612, dpi&#x3D;96</p>
+</li>
+<li><p>zoom_x &#x3D; 1.33333333  # (1.33333333–&gt;1056x816)   (2–&gt;1584x1224)</p>
+</li>
+<li><p>zoom_y &#x3D; 1.33333333</p>
+</li>
+<li><p>mat &#x3D; fitz.Matrix(zoom_x, zoom_y).preRotate(rotate)</p>
+</li>
+<li><p>pix &#x3D; page.getPixmap(matrix&#x3D;mat, alpha&#x3D;False)</p>
+</li>
+<li><p>if not os.path.exists(imagePath):  # 判断存放图片的文件夹是否存在</p>
+<ul>
+<li>os.makedirs(imagePath)  # 若图片文件夹不存在就创建</li>
+</ul>
+</li>
+<li><p>pix.writePNG(imagePath + ‘&#x2F;‘ + ‘images_%s.png’ % pg)  # 将图片写入指定的文件夹内</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>if __name__ &#x3D;&#x3D; “__main__“:</p>
+<ul>
+<li>#1、PDF地址</li>
+<li>pdfPath &#x3D; ‘123.pdf’</li>
+<li>#2、需要储存图片的目录</li>
+<li>imagePath &#x3D; ‘.&#x2F;imgs’</li>
+<li>pyMuPDF_fitz(pdfPath, imagePath)</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>OEE组成</title>
+    <url>/2023/03/30/OEE%E7%BB%84%E6%88%90/</url>
+    <content><![CDATA[<p>OEE &#x3D; 时间稼动率×性能稼动率×良品率<br>时间稼动率 &#x3D; (负荷时间-停机损失时间)&#x2F;负荷时间<br>性能稼动率 &#x3D; (生产量×理论节拍)&#x2F;稼动时间<span id="more"></span></p>
+<p>注：<br>A:实际作业时间 &#x3D; 日历工作时间<br>B:计划停止时间 &#x3D; 非设备原因停机时间<br>C:负荷时间 &#x3D; 实际作业时间-计划停止时间<br>D:停机损失时间 &#x3D; 更换刀具及故障停机时间<br>E:稼动时间 &#x3D; 负荷时间-停机损失时间<br>F:生产量 &#x3D; 日历工作时间内的总生产量<br>G:良品率 &#x3D; 合格品&#x2F;生产量<br>H:理论节拍(PPM) &#x3D; 每分钟产出数量</p>
+]]></content>
+      <tags>
+        <tag>system</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Python爬取豆瓣电影排行榜</title>
     <url>/2023/03/27/Python%E7%88%AC%E5%8F%96%E8%B1%86%E7%93%A3%E7%94%B5%E5%BD%B1%E6%8E%92%E8%A1%8C%E6%A6%9C/</url>
     <content><![CDATA[<p>import requests<br>import re</p>
@@ -1216,6 +1216,20 @@
 ]]></content>
       <tags>
         <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>WI工作指示编写流程</title>
+    <url>/2023/09/29/WI%E5%B7%A5%E4%BD%9C%E6%8C%87%E7%A4%BA/</url>
+    <content><![CDATA[<p>一、确定编写目标及需求<br>在编写WI之前，首先需要明确编写目标及需求，包括:<br>(1)需要编写的工作内容及流程;<br>(2)操作人员的技能要求和培训需求;<br>(3)操作所需的设备、工具和材料等。</p>
+<span id="more"></span>
+
+<p>二、制定WI的结构和内容<br>WI应该包含以下内容:<br>(1)工作名称、编号和版本号;<br>(2)操作人员的职责和要求;<br>(3)操作流程、步骤和注意事项;<br>(4)所需设备、工具、材料等清单;<br>(5)相关文件和记录表格。</p>
+<p>三、编写WI并进行审核<br>在编写WI时，应该遵循以下原则:<br>(1)语言简洁明了，易于理解和执行;<br>(2)图文并茂，便于理解和记忆:<br>(3)结构清晰，层次分明。<br>完成WI后，需要进行审核。审核人员应该对WI的准确性、完整性、可行性进行评估，并提出修改建议。</p>
+<p>四、备注：<br>(1)设备参数不要涉及环境温度，现场以工艺文件为准；<br>(2)涉及工艺参数的，以工艺文件为准，尽量不要写入文件；<br>(3)注明设备参数的（如：气压），要纳入点检表中并与其一致；<br>(4)设备的易损件需要在点检表中体现，每班检查。</p>
+]]></content>
+      <tags>
+        <tag>system</tag>
       </tags>
   </entry>
   <entry>
@@ -1317,20 +1331,6 @@
       </tags>
   </entry>
   <entry>
-    <title>WI工作指示编写流程</title>
-    <url>/2023/09/29/WI%E5%B7%A5%E4%BD%9C%E6%8C%87%E7%A4%BA/</url>
-    <content><![CDATA[<p>一、确定编写目标及需求<br>在编写WI之前，首先需要明确编写目标及需求，包括:<br>(1)需要编写的工作内容及流程;<br>(2)操作人员的技能要求和培训需求;<br>(3)操作所需的设备、工具和材料等。</p>
-<span id="more"></span>
-
-<p>二、制定WI的结构和内容<br>WI应该包含以下内容:<br>(1)工作名称、编号和版本号;<br>(2)操作人员的职责和要求;<br>(3)操作流程、步骤和注意事项;<br>(4)所需设备、工具、材料等清单;<br>(5)相关文件和记录表格。</p>
-<p>三、编写WI并进行审核<br>在编写WI时，应该遵循以下原则:<br>(1)语言简洁明了，易于理解和执行;<br>(2)图文并茂，便于理解和记忆:<br>(3)结构清晰，层次分明。<br>完成WI后，需要进行审核。审核人员应该对WI的准确性、完整性、可行性进行评估，并提出修改建议。</p>
-<p>四、备注：<br>(1)设备参数不要涉及环境温度，现场以工艺文件为准；<br>(2)涉及工艺参数的，以工艺文件为准，尽量不要写入文件；<br>(3)注明设备参数的（如：气压），要纳入点检表中并与其一致；<br>(4)设备的易损件需要在点检表中体现，每班检查。</p>
-]]></content>
-      <tags>
-        <tag>system</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>win32打印工作表</title>
     <url>/2023/10/27/win32%E6%89%93%E5%8D%B0%E5%B7%A5%E4%BD%9C%E8%A1%A8/</url>
     <content><![CDATA[<p>import win32com.client as win32</p>
@@ -1395,6 +1395,15 @@
       </tags>
   </entry>
   <entry>
+    <title>使用xlwt库将数据写入excel</title>
+    <url>/2023/03/27/%E4%BD%BF%E7%94%A8xlwt%E5%BA%93%E5%B0%86%E6%95%B0%E6%8D%AE%E5%86%99%E5%85%A5excel/</url>
+    <content><![CDATA[<p>import xlwt<br>#1. 创建workbook对象<br>workbook &#x3D; xlwt.Workbook(encoding&#x3D;”utf-8”)<br>#2. 增加一个sheet # 设置成可以覆盖原先内容<br>worksheet &#x3D; workbook.add_sheet(“sheet1”, cell_overwrite_ok&#x3D;True)<br>#3. 在单元格中添加内容，第一个参数为行，第二个参数为列，第三个参数为内容<br>worksheet.write(0,0, “hello”)<br>#4. 保存数据表<br>workbook.save(“.&#x2F;student.xls”)</p>
+]]></content>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>保留表头拆分数据为若干新工作簿</title>
     <url>/2023/03/27/%E4%BF%9D%E7%95%99%E8%A1%A8%E5%A4%B4%E6%8B%86%E5%88%86%E6%95%B0%E6%8D%AE%E4%B8%BA%E8%8B%A5%E5%B9%B2%E6%96%B0%E5%B7%A5%E4%BD%9C%E7%B0%BF/</url>
     <content><![CDATA[<p>Sub 保留表头拆分数据为若干新工作簿()<br>Dim arr, d As Object, k, t, i&amp;, lc%, rng As Range, c%<br>c &#x3D; Application.InputBox(“请输入拆分列号”, , 4, , , , , 1)</p>
@@ -1403,15 +1412,6 @@
 ]]></content>
       <tags>
         <tag>excel</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>使用xlwt库将数据写入excel</title>
-    <url>/2023/03/27/%E4%BD%BF%E7%94%A8xlwt%E5%BA%93%E5%B0%86%E6%95%B0%E6%8D%AE%E5%86%99%E5%85%A5excel/</url>
-    <content><![CDATA[<p>import xlwt<br>#1. 创建workbook对象<br>workbook &#x3D; xlwt.Workbook(encoding&#x3D;”utf-8”)<br>#2. 增加一个sheet # 设置成可以覆盖原先内容<br>worksheet &#x3D; workbook.add_sheet(“sheet1”, cell_overwrite_ok&#x3D;True)<br>#3. 在单元格中添加内容，第一个参数为行，第二个参数为列，第三个参数为内容<br>worksheet.write(0,0, “hello”)<br>#4. 保存数据表<br>workbook.save(“.&#x2F;student.xls”)</p>
-]]></content>
-      <tags>
-        <tag>python</tag>
       </tags>
   </entry>
   <entry>
@@ -1651,59 +1651,6 @@
       </tags>
   </entry>
   <entry>
-    <title>批量成生二维码</title>
-    <url>/2023/10/23/%E6%89%B9%E9%87%8F%E6%88%90%E7%94%9F%E4%BA%8C%E7%BB%B4%E7%A0%81/</url>
-    <content><![CDATA[<p>import os<br>import qrcode<br>import openpyxl<br>from openpyxl.drawing.image import Image</p>
-<span id="more"></span>
-
-<p>def open_cell(num):</p>
-<ul>
-<li>cell &#x3D; sheet[“A” + num]</li>
-<li>return cell.value</li>
-</ul>
-<p>def gen_image(text,name):</p>
-<ul>
-<li>img &#x3D; qrcode.make(text)</li>
-<li>with open(name,”wb”) as f:<ul>
-<li>img.save(f)</li>
-</ul>
-</li>
-</ul>
-<p>def write_img(img_name,position):</p>
-<ul>
-<li>imgsize &#x3D; (720&#x2F;12,720&#x2F;12)</li>
-<li>img &#x3D; Image(img_name)</li>
-<li>img.width,img.height &#x3D; imgsize</li>
-<li>sheet.add_image(img,position)</li>
-</ul>
-<p>if _name_ &#x3D;&#x3D; “_main_”:</p>
-<ul>
-<li><p>wb_name &#x3D; “text.xlsx”</p>
-</li>
-<li><p>wb &#x3D; openpyxl.load_workbook(wb_name)</p>
-</li>
-<li><p>sheet &#x3D; wb.worksheets[0]</p>
-</li>
-<li><p>os.mkdir(“qrcode”)</p>
-</li>
-<li><p>for i in range(1,10):</p>
-<ul>
-<li>test &#x3D; open_cell(str(i))</li>
-<li>test_png_name &#x3D; “qrcode&#x2F;“ + “A” + str(i) + “.png”</li>
-<li>paste &#x3D; “B” + str(i)</li>
-<li>gen_image(test,test_png_name)</li>
-<li>write_img(test_png_name,paste)</li>
-</ul>
-</li>
-<li><p>wb.save(wb_name)</p>
-</li>
-</ul>
-]]></content>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>常用运算符</title>
     <url>/2023/03/27/%E5%B8%B8%E7%94%A8%E8%BF%90%E7%AE%97%E7%AC%A6/</url>
     <content><![CDATA[<table>
@@ -1780,6 +1727,59 @@
       </tags>
   </entry>
   <entry>
+    <title>批量成生二维码</title>
+    <url>/2023/10/23/%E6%89%B9%E9%87%8F%E6%88%90%E7%94%9F%E4%BA%8C%E7%BB%B4%E7%A0%81/</url>
+    <content><![CDATA[<p>import os<br>import qrcode<br>import openpyxl<br>from openpyxl.drawing.image import Image</p>
+<span id="more"></span>
+
+<p>def open_cell(num):</p>
+<ul>
+<li>cell &#x3D; sheet[“A” + num]</li>
+<li>return cell.value</li>
+</ul>
+<p>def gen_image(text,name):</p>
+<ul>
+<li>img &#x3D; qrcode.make(text)</li>
+<li>with open(name,”wb”) as f:<ul>
+<li>img.save(f)</li>
+</ul>
+</li>
+</ul>
+<p>def write_img(img_name,position):</p>
+<ul>
+<li>imgsize &#x3D; (720&#x2F;12,720&#x2F;12)</li>
+<li>img &#x3D; Image(img_name)</li>
+<li>img.width,img.height &#x3D; imgsize</li>
+<li>sheet.add_image(img,position)</li>
+</ul>
+<p>if _name_ &#x3D;&#x3D; “_main_”:</p>
+<ul>
+<li><p>wb_name &#x3D; “text.xlsx”</p>
+</li>
+<li><p>wb &#x3D; openpyxl.load_workbook(wb_name)</p>
+</li>
+<li><p>sheet &#x3D; wb.worksheets[0]</p>
+</li>
+<li><p>os.mkdir(“qrcode”)</p>
+</li>
+<li><p>for i in range(1,10):</p>
+<ul>
+<li>test &#x3D; open_cell(str(i))</li>
+<li>test_png_name &#x3D; “qrcode&#x2F;“ + “A” + str(i) + “.png”</li>
+<li>paste &#x3D; “B” + str(i)</li>
+<li>gen_image(test,test_png_name)</li>
+<li>write_img(test_png_name,paste)</li>
+</ul>
+</li>
+<li><p>wb.save(wb_name)</p>
+</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>指定条件单元格计数</title>
     <url>/2023/03/27/%E6%8C%87%E5%AE%9A%E6%9D%A1%E4%BB%B6%E5%8D%95%E5%85%83%E6%A0%BC%E8%AE%A1%E6%95%B0/</url>
     <content><![CDATA[<p>&#x3D;COUNTIFS（B2：B9，“男”）<br>“B2：B9”为需要计数的区域<br>“男”，计数条件</p>
@@ -1804,15 +1804,6 @@
 ]]></content>
       <tags>
         <tag>excel</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>格式化字符串的三种方法</title>
-    <url>/2023/07/29/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E6%B3%95/</url>
-    <content><![CDATA[<p>f’{i}*{j}&#x3D;{i*j}’<br>‘{}*{}&#x3D;{}’.format(i,j,i*j)<br>‘%d*%d&#x3D;%d’%(i,j,i*j)</p>
-]]></content>
-      <tags>
-        <tag>python</tag>
       </tags>
   </entry>
   <entry>
@@ -1980,6 +1971,26 @@
       </tags>
   </entry>
   <entry>
+    <title>格式化字符串的三种方法</title>
+    <url>/2023/07/29/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E6%B3%95/</url>
+    <content><![CDATA[<p>f’{i}*{j}&#x3D;{i*j}’<br>‘{}*{}&#x3D;{}’.format(i,j,i*j)<br>‘%d*%d&#x3D;%d’%(i,j,i*j)</p>
+]]></content>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>爬虫标准框架</title>
+    <url>/2023/03/27/%E7%88%AC%E8%99%AB%E6%A0%87%E5%87%86%E6%A1%86%E6%9E%B6/</url>
+    <content><![CDATA[<p>import requests<br>url&#x3D;”<a href="https://www.sogou.com/web?query=%E5%91%A8%E6%9D%B0%E4%BC%A6">https://www.sogou.com/web?query=周杰伦</a>“</p>
+<span id="more"></span>
+<p>headers&#x3D;{ “User-Agent”:”Mozilla&#x2F;5.0 (Windows NT 10.0; Win64; x64) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;97.0.4692.71 Safari&#x2F;537.36 Edg&#x2F;97.0.1072.55” }<br>#以字典的形式设置请求头，处理反爬 resp&#x3D;requests.get(url,headers&#x3D;headers)<br>print(resp)<br>#结果：Response [200]<br>print(resp.text)<br>#拿到页面源代码<br>resp.close()<br>#关掉resp</p>
+]]></content>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>爬取关键字写入表格</title>
     <url>/2023/03/27/%E7%88%AC%E5%8F%96%E5%85%B3%E9%94%AE%E5%AD%97%E5%86%99%E5%85%A5%E8%A1%A8%E6%A0%BC/</url>
     <content><![CDATA[<p>import requests<br>import re<br>import xlwt</p>
@@ -2006,11 +2017,18 @@ book.save(&#39;test.xls&#39;)
       </tags>
   </entry>
   <entry>
-    <title>爬虫标准框架</title>
-    <url>/2023/03/27/%E7%88%AC%E8%99%AB%E6%A0%87%E5%87%86%E6%A1%86%E6%9E%B6/</url>
-    <content><![CDATA[<p>import requests<br>url&#x3D;”<a href="https://www.sogou.com/web?query=%E5%91%A8%E6%9D%B0%E4%BC%A6">https://www.sogou.com/web?query=周杰伦</a>“</p>
-<span id="more"></span>
-<p>headers&#x3D;{ “User-Agent”:”Mozilla&#x2F;5.0 (Windows NT 10.0; Win64; x64) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;97.0.4692.71 Safari&#x2F;537.36 Edg&#x2F;97.0.1072.55” }<br>#以字典的形式设置请求头，处理反爬 resp&#x3D;requests.get(url,headers&#x3D;headers)<br>print(resp)<br>#结果：Response [200]<br>print(resp.text)<br>#拿到页面源代码<br>resp.close()<br>#关掉resp</p>
+    <title>生成SSH</title>
+    <url>/2023/10/22/%E7%94%9F%E6%88%90SSH/</url>
+    <content><![CDATA[<ul>
+<li><p>用户名和邮箱进行初始化<br>git config –global user.name yourname<br>git config –global user.email youremail</p>
+<span id="more"></span></li>
+<li><p>检查初始化信息<br>git config user.name<br>git config user.email</p>
+</li>
+<li><p>生成密钥<br>ssh-keygen -t rsa -C youremail</p>
+</li>
+<li><p>查看公钥<br>cat ~&#x2F;.ssh&#x2F;id_rsa.pub</p>
+</li>
+</ul>
 ]]></content>
       <tags>
         <tag>python</tag>
@@ -2049,24 +2067,6 @@ book.save(&#39;test.xls&#39;)
       </tags>
   </entry>
   <entry>
-    <title>生成SSH</title>
-    <url>/2023/10/22/%E7%94%9F%E6%88%90SSH/</url>
-    <content><![CDATA[<ul>
-<li><p>用户名和邮箱进行初始化<br>git config –global user.name yourname<br>git config –global user.email youremail</p>
-<span id="more"></span></li>
-<li><p>检查初始化信息<br>git config user.name<br>git config user.email</p>
-</li>
-<li><p>生成密钥<br>ssh-keygen -t rsa -C youremail</p>
-</li>
-<li><p>查看公钥<br>cat ~&#x2F;.ssh&#x2F;id_rsa.pub</p>
-</li>
-</ul>
-]]></content>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>筛选后自动排列序号</title>
     <url>/2023/03/27/%E7%AD%9B%E9%80%89%E5%90%8E%E8%87%AA%E5%8A%A8%E6%8E%92%E5%88%97%E5%BA%8F%E5%8F%B7/</url>
     <content><![CDATA[<p>&#x3D;subtotal(3，B$2:B2)*1<br>“3”为函数序号<br>“B$2:B2”为序号数值</p>
@@ -2076,9 +2076,9 @@ book.save(&#39;test.xls&#39;)
       </tags>
   </entry>
   <entry>
-    <title>设备性能确认(Qualify)</title>
-    <url>/2023/06/04/%E8%AE%BE%E5%A4%87%E6%80%A7%E8%83%BD%E7%A1%AE%E8%AE%A4-Qualify/</url>
-    <content><![CDATA[<p>设备性能确认(Qualify)，即某个设备达到了一定的标准，可以被用来做某个预定的生产步骤。Qualify的过程一定要有”预定的标准”。<br>设备的用户需求说明(URS)和性能指标决定了设备的标准，确认就是通过实际操作、测试或试验，来收集证据，证明该设备已经达到了这些标准。</p>
+    <title>设备定义</title>
+    <url>/2023/03/30/%E8%AE%BE%E5%A4%87%E5%AE%9A%E4%B9%89/</url>
+    <content><![CDATA[<p>1、关键设备(A):重要工序上的设备，一旦发生故障将导致流水线全线停机，如涂布机、Busbar 焊接机等。<br>2、重要设备(B):重要工序上的设备，设备故障将导致局部停机或可用其他设备代替。<br>3、 一般设备(C): 非重要工序上的设备<span id="more"></span><br>4、 OEE: 设备综合效率，OEE&#x3D;时间开动率×性能开动率×合格品率。<br>5、 MTBF: 平均故障间隔时间，是两次故障间的平均正常运行时间.<br>6、 MTTR: 平均修理时间，修理故障使设备回到正常运行的平均耗时。<br>7、 设备性能指数(CMK) : 表示仅由设备普通原因变差决定的能力。<br>8、 Qualify: 设备性能验收。</p>
 ]]></content>
       <tags>
         <tag>system</tag>
@@ -2094,9 +2094,9 @@ book.save(&#39;test.xls&#39;)
       </tags>
   </entry>
   <entry>
-    <title>设备定义</title>
-    <url>/2023/03/30/%E8%AE%BE%E5%A4%87%E5%AE%9A%E4%B9%89/</url>
-    <content><![CDATA[<p>1、关键设备(A):重要工序上的设备，一旦发生故障将导致流水线全线停机，如涂布机、Busbar 焊接机等。<br>2、重要设备(B):重要工序上的设备，设备故障将导致局部停机或可用其他设备代替。<br>3、 一般设备(C): 非重要工序上的设备<span id="more"></span><br>4、 OEE: 设备综合效率，OEE&#x3D;时间开动率×性能开动率×合格品率。<br>5、 MTBF: 平均故障间隔时间，是两次故障间的平均正常运行时间.<br>6、 MTTR: 平均修理时间，修理故障使设备回到正常运行的平均耗时。<br>7、 设备性能指数(CMK) : 表示仅由设备普通原因变差决定的能力。<br>8、 Qualify: 设备性能验收。</p>
+    <title>设备性能确认(Qualify)</title>
+    <url>/2023/06/04/%E8%AE%BE%E5%A4%87%E6%80%A7%E8%83%BD%E7%A1%AE%E8%AE%A4-Qualify/</url>
+    <content><![CDATA[<p>设备性能确认(Qualify)，即某个设备达到了一定的标准，可以被用来做某个预定的生产步骤。Qualify的过程一定要有”预定的标准”。<br>设备的用户需求说明(URS)和性能指标决定了设备的标准，确认就是通过实际操作、测试或试验，来收集证据，证明该设备已经达到了这些标准。</p>
 ]]></content>
       <tags>
         <tag>system</tag>
