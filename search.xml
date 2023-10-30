@@ -1404,17 +1404,6 @@
       </tags>
   </entry>
   <entry>
-    <title>保留表头拆分数据为若干新工作簿</title>
-    <url>/2023/03/27/%E4%BF%9D%E7%95%99%E8%A1%A8%E5%A4%B4%E6%8B%86%E5%88%86%E6%95%B0%E6%8D%AE%E4%B8%BA%E8%8B%A5%E5%B9%B2%E6%96%B0%E5%B7%A5%E4%BD%9C%E7%B0%BF/</url>
-    <content><![CDATA[<p>Sub 保留表头拆分数据为若干新工作簿()<br>Dim arr, d As Object, k, t, i&amp;, lc%, rng As Range, c%<br>c &#x3D; Application.InputBox(“请输入拆分列号”, , 4, , , , , 1)</p>
-<span id="more"></span>
-<p>If c &#x3D; 0 Then Exit Sub<br>Application.ScreenUpdating &#x3D; False<br>Application.DisplayAlerts &#x3D; False<br>arr &#x3D; [a1].CurrentRegion<br>lc &#x3D; UBound(arr, 2)<br>Set rng &#x3D; [a1].Resize(, lc)<br>Set d &#x3D; CreateObject(“scripting.dictionary”)<br>For i &#x3D; 2 To UBound(arr)<br>If Not d.Exists(arr(i, c)) Then<br>Set d(arr(i, c)) &#x3D; Cells(i, 1).Resize(1, lc)<br>Else<br>Set d(arr(i, c)) &#x3D; Union(d(arr(i, c)), Cells(i, 1).Resize(1, lc))<br>End If<br>Next<br>k &#x3D; d.Keys<br>t &#x3D; d.Items<br>For i &#x3D; 0 To d.Count - 1<br>With Workbooks.Add(xlWBATWorksheet)<br>rng.Copy .Sheets(1).[a1]<br>t(i).Copy .Sheets(1).[a2]<br>.SaveAs Filename:&#x3D;ThisWorkbook.Path &amp; “&quot; &amp; k(i) &amp; “.xls”<br>.Close<br>End With<br>Next<br>Application.DisplayAlerts &#x3D; True<br>Application.ScreenUpdating &#x3D; True<br>MsgBox “完毕”<br>End Sub</p>
-]]></content>
-      <tags>
-        <tag>excel</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>双for打印九九乘法表</title>
     <url>/2023/04/16/%E5%8F%8Cfor%E6%89%93%E5%8D%B0%E4%B9%9D%E4%B9%9D%E4%B9%98%E6%B3%95%E8%A1%A8/</url>
     <content><![CDATA[<p>for i in range(1, 10):</p>
@@ -1428,6 +1417,17 @@
 ]]></content>
       <tags>
         <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>保留表头拆分数据为若干新工作簿</title>
+    <url>/2023/03/27/%E4%BF%9D%E7%95%99%E8%A1%A8%E5%A4%B4%E6%8B%86%E5%88%86%E6%95%B0%E6%8D%AE%E4%B8%BA%E8%8B%A5%E5%B9%B2%E6%96%B0%E5%B7%A5%E4%BD%9C%E7%B0%BF/</url>
+    <content><![CDATA[<p>Sub 保留表头拆分数据为若干新工作簿()<br>Dim arr, d As Object, k, t, i&amp;, lc%, rng As Range, c%<br>c &#x3D; Application.InputBox(“请输入拆分列号”, , 4, , , , , 1)</p>
+<span id="more"></span>
+<p>If c &#x3D; 0 Then Exit Sub<br>Application.ScreenUpdating &#x3D; False<br>Application.DisplayAlerts &#x3D; False<br>arr &#x3D; [a1].CurrentRegion<br>lc &#x3D; UBound(arr, 2)<br>Set rng &#x3D; [a1].Resize(, lc)<br>Set d &#x3D; CreateObject(“scripting.dictionary”)<br>For i &#x3D; 2 To UBound(arr)<br>If Not d.Exists(arr(i, c)) Then<br>Set d(arr(i, c)) &#x3D; Cells(i, 1).Resize(1, lc)<br>Else<br>Set d(arr(i, c)) &#x3D; Union(d(arr(i, c)), Cells(i, 1).Resize(1, lc))<br>End If<br>Next<br>k &#x3D; d.Keys<br>t &#x3D; d.Items<br>For i &#x3D; 0 To d.Count - 1<br>With Workbooks.Add(xlWBATWorksheet)<br>rng.Copy .Sheets(1).[a1]<br>t(i).Copy .Sheets(1).[a2]<br>.SaveAs Filename:&#x3D;ThisWorkbook.Path &amp; “&quot; &amp; k(i) &amp; “.xls”<br>.Close<br>End With<br>Next<br>Application.DisplayAlerts &#x3D; True<br>Application.ScreenUpdating &#x3D; True<br>MsgBox “完毕”<br>End Sub</p>
+]]></content>
+      <tags>
+        <tag>excel</tag>
       </tags>
   </entry>
   <entry>
@@ -1483,15 +1483,6 @@
       </tags>
   </entry>
   <entry>
-    <title>在单元格中显示当前工作表名称</title>
-    <url>/2023/10/19/%E5%9C%A8%E5%8D%95%E5%85%83%E6%A0%BC%E4%B8%AD%E6%98%BE%E7%A4%BA%E5%BD%93%E5%89%8D%E5%B7%A5%E4%BD%9C%E8%A1%A8%E5%90%8D%E7%A7%B0/</url>
-    <content><![CDATA[<p>&#x3D;RIGHT(CELL(“filename”),LEN(CELL(“filename”))-FIND(“]”,CELL(“filename”)))</p>
-]]></content>
-      <tags>
-        <tag>excel</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>多条件查找</title>
     <url>/2023/09/17/%E5%A4%9A%E6%9D%A1%E4%BB%B6%E6%9F%A5%E6%89%BE/</url>
     <content><![CDATA[<p>&#x3D;LOOKUP(1,0&#x2F;((B2:B9&#x3D;G3)*(C2:C9&#x3D;H3)),D2:D9)，以此函数为例：</p>
@@ -1501,6 +1492,15 @@
 <p>（1）当“0&#x2F;条件所在区域&#x3D;条件”这部分数据中的条件所在区域&#x3D;条件，那么分母项是为1的，整个运算“0&#x2F;条件所在区域&#x3D;条件”就等于“0&#x2F;1”，结果就是0；</p>
 <p>（2）当“0&#x2F;条件所在区域&#x3D;条件”这部分数据中的条件所在区域不等于条件，那么分母项是为0的，整个运算“0&#x2F;条件所在区域&#x3D;条件”就等于“0&#x2F;0”，结果就是错误值；</p>
 <p>此时，只有条件所在区域&#x3D;条件的时候，&#x3D;LOOKUP(1，0&#x2F;条件所在区域&#x3D;条件，结果所在区域）此公式才有意义，找到唯一符合的条件时，就能做出对应的结果。</p>
+]]></content>
+      <tags>
+        <tag>excel</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>在单元格中显示当前工作表名称</title>
+    <url>/2023/10/19/%E5%9C%A8%E5%8D%95%E5%85%83%E6%A0%BC%E4%B8%AD%E6%98%BE%E7%A4%BA%E5%BD%93%E5%89%8D%E5%B7%A5%E4%BD%9C%E8%A1%A8%E5%90%8D%E7%A7%B0/</url>
+    <content><![CDATA[<p>&#x3D;RIGHT(CELL(“filename”),LEN(CELL(“filename”))-FIND(“]”,CELL(“filename”)))</p>
 ]]></content>
       <tags>
         <tag>excel</tag>
@@ -1562,21 +1562,6 @@
 </ul>
 </li>
 </ul>
-]]></content>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>将工作薄按列拆分至工作表</title>
-    <url>/2023/03/27/%E5%B0%86%E5%B7%A5%E4%BD%9C%E8%96%84%E6%8C%89%E5%88%97%E6%8B%86%E5%88%86%E8%87%B3%E5%B7%A5%E4%BD%9C%E8%A1%A8/</url>
-    <content><![CDATA[<p>import pandas as pd</p>
-<p>data&#x3D;pd.read_excel(r”地址\汇总.xls”)<br>xlsx &#x3D; pd.ExcelWriter(r”地址\汇总-拆分完成.xlsx”)</p>
-<p>for i in data[“姓名”].unique():</p>
-<ul>
-<li>data[data[“姓名”]&#x3D;&#x3D;i].to_excel(xlsx,sheet_name&#x3D;i,index&#x3D;False)</li>
-</ul>
-<p>xlsx.close()</p>
 ]]></content>
       <tags>
         <tag>python</tag>
@@ -1645,6 +1630,21 @@
 <td align="left">函数用于查看函数或模块用途的详细说明</td>
 </tr>
 </tbody></table>
+]]></content>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>将工作薄按列拆分至工作表</title>
+    <url>/2023/03/27/%E5%B0%86%E5%B7%A5%E4%BD%9C%E8%96%84%E6%8C%89%E5%88%97%E6%8B%86%E5%88%86%E8%87%B3%E5%B7%A5%E4%BD%9C%E8%A1%A8/</url>
+    <content><![CDATA[<p>import pandas as pd</p>
+<p>data&#x3D;pd.read_excel(r”地址\汇总.xls”)<br>xlsx &#x3D; pd.ExcelWriter(r”地址\汇总-拆分完成.xlsx”)</p>
+<p>for i in data[“姓名”].unique():</p>
+<ul>
+<li>data[data[“姓名”]&#x3D;&#x3D;i].to_excel(xlsx,sheet_name&#x3D;i,index&#x3D;False)</li>
+</ul>
+<p>xlsx.close()</p>
 ]]></content>
       <tags>
         <tag>python</tag>
