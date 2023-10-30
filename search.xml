@@ -412,6 +412,65 @@
       </tags>
   </entry>
   <entry>
+    <title>OEE组成</title>
+    <url>/2023/03/30/OEE%E7%BB%84%E6%88%90/</url>
+    <content><![CDATA[<p>OEE &#x3D; 时间稼动率×性能稼动率×良品率<br>时间稼动率 &#x3D; (负荷时间-停机损失时间)&#x2F;负荷时间<br>性能稼动率 &#x3D; (生产量×理论节拍)&#x2F;稼动时间<span id="more"></span></p>
+<p>注：<br>A:实际作业时间 &#x3D; 日历工作时间<br>B:计划停止时间 &#x3D; 非设备原因停机时间<br>C:负荷时间 &#x3D; 实际作业时间-计划停止时间<br>D:停机损失时间 &#x3D; 更换刀具及故障停机时间<br>E:稼动时间 &#x3D; 负荷时间-停机损失时间<br>F:生产量 &#x3D; 日历工作时间内的总生产量<br>G:良品率 &#x3D; 合格品&#x2F;生产量<br>H:理论节拍(PPM) &#x3D; 每分钟产出数量</p>
+]]></content>
+      <tags>
+        <tag>system</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>PDF转图片</title>
+    <url>/2023/04/05/PDF%E8%BD%AC%E5%9B%BE%E7%89%87/</url>
+    <content><![CDATA[<p>import os<br>import fitz  # fitz就是pip install PyMuPDF</p>
+<span id="more"></span>
+<p>def pyMuPDF_fitz(pdfPath, imagePath):</p>
+<ul>
+<li>print(“imagePath&#x3D;” + imagePath)</li>
+<li>pdfDoc &#x3D; fitz.open(pdfPath)</li>
+<li>for pg in range(pdfDoc.pageCount):<ul>
+<li><p>page &#x3D; pdfDoc[pg]</p>
+</li>
+<li><p>rotate &#x3D; int(0)</p>
+</li>
+<li><p>#每个尺寸的缩放系数为1.3，这将为我们生成分辨率提高2.6的图像。</p>
+</li>
+<li><p>#此处若是不做设置，默认图片大小为：792X612, dpi&#x3D;96</p>
+</li>
+<li><p>zoom_x &#x3D; 1.33333333  # (1.33333333–&gt;1056x816)   (2–&gt;1584x1224)</p>
+</li>
+<li><p>zoom_y &#x3D; 1.33333333</p>
+</li>
+<li><p>mat &#x3D; fitz.Matrix(zoom_x, zoom_y).preRotate(rotate)</p>
+</li>
+<li><p>pix &#x3D; page.getPixmap(matrix&#x3D;mat, alpha&#x3D;False)</p>
+</li>
+<li><p>if not os.path.exists(imagePath):  # 判断存放图片的文件夹是否存在</p>
+<ul>
+<li>os.makedirs(imagePath)  # 若图片文件夹不存在就创建</li>
+</ul>
+</li>
+<li><p>pix.writePNG(imagePath + ‘&#x2F;‘ + ‘images_%s.png’ % pg)  # 将图片写入指定的文件夹内</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>if __name__ &#x3D;&#x3D; “__main__“:</p>
+<ul>
+<li>#1、PDF地址</li>
+<li>pdfPath &#x3D; ‘123.pdf’</li>
+<li>#2、需要储存图片的目录</li>
+<li>imagePath &#x3D; ‘.&#x2F;imgs’</li>
+<li>pyMuPDF_fitz(pdfPath, imagePath)</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Python常用单词表</title>
     <url>/2023/03/27/Python%E5%B8%B8%E7%94%A8%E5%8D%95%E8%AF%8D%E8%A1%A8/</url>
     <content><![CDATA[<p>学习python必须背的常见单词</p>
@@ -1142,65 +1201,6 @@
       </tags>
   </entry>
   <entry>
-    <title>PDF转图片</title>
-    <url>/2023/04/05/PDF%E8%BD%AC%E5%9B%BE%E7%89%87/</url>
-    <content><![CDATA[<p>import os<br>import fitz  # fitz就是pip install PyMuPDF</p>
-<span id="more"></span>
-<p>def pyMuPDF_fitz(pdfPath, imagePath):</p>
-<ul>
-<li>print(“imagePath&#x3D;” + imagePath)</li>
-<li>pdfDoc &#x3D; fitz.open(pdfPath)</li>
-<li>for pg in range(pdfDoc.pageCount):<ul>
-<li><p>page &#x3D; pdfDoc[pg]</p>
-</li>
-<li><p>rotate &#x3D; int(0)</p>
-</li>
-<li><p>#每个尺寸的缩放系数为1.3，这将为我们生成分辨率提高2.6的图像。</p>
-</li>
-<li><p>#此处若是不做设置，默认图片大小为：792X612, dpi&#x3D;96</p>
-</li>
-<li><p>zoom_x &#x3D; 1.33333333  # (1.33333333–&gt;1056x816)   (2–&gt;1584x1224)</p>
-</li>
-<li><p>zoom_y &#x3D; 1.33333333</p>
-</li>
-<li><p>mat &#x3D; fitz.Matrix(zoom_x, zoom_y).preRotate(rotate)</p>
-</li>
-<li><p>pix &#x3D; page.getPixmap(matrix&#x3D;mat, alpha&#x3D;False)</p>
-</li>
-<li><p>if not os.path.exists(imagePath):  # 判断存放图片的文件夹是否存在</p>
-<ul>
-<li>os.makedirs(imagePath)  # 若图片文件夹不存在就创建</li>
-</ul>
-</li>
-<li><p>pix.writePNG(imagePath + ‘&#x2F;‘ + ‘images_%s.png’ % pg)  # 将图片写入指定的文件夹内</p>
-</li>
-</ul>
-</li>
-</ul>
-<p>if __name__ &#x3D;&#x3D; “__main__“:</p>
-<ul>
-<li>#1、PDF地址</li>
-<li>pdfPath &#x3D; ‘123.pdf’</li>
-<li>#2、需要储存图片的目录</li>
-<li>imagePath &#x3D; ‘.&#x2F;imgs’</li>
-<li>pyMuPDF_fitz(pdfPath, imagePath)</li>
-</ul>
-]]></content>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>OEE组成</title>
-    <url>/2023/03/30/OEE%E7%BB%84%E6%88%90/</url>
-    <content><![CDATA[<p>OEE &#x3D; 时间稼动率×性能稼动率×良品率<br>时间稼动率 &#x3D; (负荷时间-停机损失时间)&#x2F;负荷时间<br>性能稼动率 &#x3D; (生产量×理论节拍)&#x2F;稼动时间<span id="more"></span></p>
-<p>注：<br>A:实际作业时间 &#x3D; 日历工作时间<br>B:计划停止时间 &#x3D; 非设备原因停机时间<br>C:负荷时间 &#x3D; 实际作业时间-计划停止时间<br>D:停机损失时间 &#x3D; 更换刀具及故障停机时间<br>E:稼动时间 &#x3D; 负荷时间-停机损失时间<br>F:生产量 &#x3D; 日历工作时间内的总生产量<br>G:良品率 &#x3D; 合格品&#x2F;生产量<br>H:理论节拍(PPM) &#x3D; 每分钟产出数量</p>
-]]></content>
-      <tags>
-        <tag>system</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Python爬取豆瓣电影排行榜</title>
     <url>/2023/03/27/Python%E7%88%AC%E5%8F%96%E8%B1%86%E7%93%A3%E7%94%B5%E5%BD%B1%E6%8E%92%E8%A1%8C%E6%A6%9C/</url>
     <content><![CDATA[<p>import requests<br>import re</p>
@@ -1219,17 +1219,19 @@
       </tags>
   </entry>
   <entry>
-    <title>WI工作指示编写流程</title>
-    <url>/2023/09/29/WI%E5%B7%A5%E4%BD%9C%E6%8C%87%E7%A4%BA/</url>
-    <content><![CDATA[<p>一、确定编写目标及需求<br>在编写WI之前，首先需要明确编写目标及需求，包括:<br>(1)需要编写的工作内容及流程;<br>(2)操作人员的技能要求和培训需求;<br>(3)操作所需的设备、工具和材料等。</p>
-<span id="more"></span>
-
-<p>二、制定WI的结构和内容<br>WI应该包含以下内容:<br>(1)工作名称、编号和版本号;<br>(2)操作人员的职责和要求;<br>(3)操作流程、步骤和注意事项;<br>(4)所需设备、工具、材料等清单;<br>(5)相关文件和记录表格。</p>
-<p>三、编写WI并进行审核<br>在编写WI时，应该遵循以下原则:<br>(1)语言简洁明了，易于理解和执行;<br>(2)图文并茂，便于理解和记忆:<br>(3)结构清晰，层次分明。<br>完成WI后，需要进行审核。审核人员应该对WI的准确性、完整性、可行性进行评估，并提出修改建议。</p>
-<p>四、备注：<br>(1)设备参数不要涉及环境温度，现场以工艺文件为准；<br>(2)涉及工艺参数的，以工艺文件为准，尽量不要写入文件；<br>(3)注明设备参数的（如：气压），要纳入点检表中并与其一致；<br>(4)设备的易损件需要在点检表中体现，每班检查。</p>
+    <title>SQL命令</title>
+    <url>/2023/04/02/SQL%E5%91%BD%E4%BB%A4/</url>
+    <content><![CDATA[<p>#创建一个名为“day1”的数据库<br>create database day1;</p>
+<p>#进去day1数据库<br>use day1;<span id="more"></span></p>
+<p>#创建一个名为“test”的数据表<br>create table test(<br>id varchar(20)  primary key ,<br>name varchar(30),<br>password varchar(30)<br>);</p>
+<p>#向test表插入一行数据<br>insert into test(id,name,password) values(‘001’,’lisi’,’123456’);</p>
+<p>#查看创建的test表的数据<br>select * from test;</p>
+<p>#将id为001的密码改为xxxx<br>update test set password&#x3D;’xxxx’ where id&#x3D;’001’;</p>
+<p>#删除test表<br>drop table test;</p>
+<p>#删除day1数据库<br>drop database day1;</p>
 ]]></content>
       <tags>
-        <tag>system</tag>
+        <tag>python</tag>
       </tags>
   </entry>
   <entry>
@@ -1315,19 +1317,17 @@
       </tags>
   </entry>
   <entry>
-    <title>SQL命令</title>
-    <url>/2023/04/02/SQL%E5%91%BD%E4%BB%A4/</url>
-    <content><![CDATA[<p>#创建一个名为“day1”的数据库<br>create database day1;</p>
-<p>#进去day1数据库<br>use day1;<span id="more"></span></p>
-<p>#创建一个名为“test”的数据表<br>create table test(<br>id varchar(20)  primary key ,<br>name varchar(30),<br>password varchar(30)<br>);</p>
-<p>#向test表插入一行数据<br>insert into test(id,name,password) values(‘001’,’lisi’,’123456’);</p>
-<p>#查看创建的test表的数据<br>select * from test;</p>
-<p>#将id为001的密码改为xxxx<br>update test set password&#x3D;’xxxx’ where id&#x3D;’001’;</p>
-<p>#删除test表<br>drop table test;</p>
-<p>#删除day1数据库<br>drop database day1;</p>
+    <title>WI工作指示编写流程</title>
+    <url>/2023/09/29/WI%E5%B7%A5%E4%BD%9C%E6%8C%87%E7%A4%BA/</url>
+    <content><![CDATA[<p>一、确定编写目标及需求<br>在编写WI之前，首先需要明确编写目标及需求，包括:<br>(1)需要编写的工作内容及流程;<br>(2)操作人员的技能要求和培训需求;<br>(3)操作所需的设备、工具和材料等。</p>
+<span id="more"></span>
+
+<p>二、制定WI的结构和内容<br>WI应该包含以下内容:<br>(1)工作名称、编号和版本号;<br>(2)操作人员的职责和要求;<br>(3)操作流程、步骤和注意事项;<br>(4)所需设备、工具、材料等清单;<br>(5)相关文件和记录表格。</p>
+<p>三、编写WI并进行审核<br>在编写WI时，应该遵循以下原则:<br>(1)语言简洁明了，易于理解和执行;<br>(2)图文并茂，便于理解和记忆:<br>(3)结构清晰，层次分明。<br>完成WI后，需要进行审核。审核人员应该对WI的准确性、完整性、可行性进行评估，并提出修改建议。</p>
+<p>四、备注：<br>(1)设备参数不要涉及环境温度，现场以工艺文件为准；<br>(2)涉及工艺参数的，以工艺文件为准，尽量不要写入文件；<br>(3)注明设备参数的（如：气压），要纳入点检表中并与其一致；<br>(4)设备的易损件需要在点检表中体现，每班检查。</p>
 ]]></content>
       <tags>
-        <tag>python</tag>
+        <tag>system</tag>
       </tags>
   </entry>
   <entry>
@@ -1715,18 +1715,6 @@
       </tags>
   </entry>
   <entry>
-    <title>把汉字转换成拼音首字母</title>
-    <url>/2023/03/27/%E6%8A%8A%E6%B1%89%E5%AD%97%E8%BD%AC%E6%8D%A2%E6%88%90%E6%8B%BC%E9%9F%B3%E9%A6%96%E5%AD%97%E6%AF%8D/</url>
-    <content><![CDATA[<p>Function pinyin(p As String) As String<br>i &#x3D; Asc(p)<br>Select Case i<br>Case -20319 To -20284: pinyin &#x3D; “A”<br>Case -20283 To -19776: pinyin &#x3D; “B”<br>Case -19775 To -19219: pinyin &#x3D; “C”<br>Case -19218 To -18711: pinyin &#x3D; “D”</p>
-<span id="more"></span>
-<p>Case -18710 To -18527: pinyin &#x3D; “E”<br>Case -18526 To -18240: pinyin &#x3D; “F”<br>Case -18239 To -17923: pinyin &#x3D; “G”<br>Case -17922 To -17418: pinyin &#x3D; “H”<br>Case -17417 To -16475: pinyin &#x3D; “J”<br>Case -16474 To -16213: pinyin &#x3D; “K”<br>Case -16212 To -15641: pinyin &#x3D; “L”<br>Case -15640 To -15166: pinyin &#x3D; “M”<br>Case -15165 To -14923: pinyin &#x3D; “N”<br>Case -14922 To -14915: pinyin &#x3D; “O”<br>Case -14914 To -14631: pinyin &#x3D; “P”<br>Case -14630 To -14150: pinyin &#x3D; “Q”<br>Case -14149 To -14091: pinyin &#x3D; “R”<br>Case -14090 To -13319: pinyin &#x3D; “S”<br>Case -13318 To -12839: pinyin &#x3D; “T”<br>Case -12838 To -12557: pinyin &#x3D; “W”<br>Case -12556 To -11848: pinyin &#x3D; “X”<br>Case -11847 To -11056: pinyin &#x3D; “Y”<br>Case -11055 To -2050: pinyin &#x3D; “Z”<br>Case Else: pinyin &#x3D; p<br>End Select<br>End Function<br>Function getpy(str)<br>For i &#x3D; 1 To Len(str)<br>getpy &#x3D; getpy &amp; pinyin(Mid(str, i, 1))<br>Next i<br>End Function</p>
-<p>在单元格输入公式”&#x3D;getpy()”</p>
-]]></content>
-      <tags>
-        <tag>excel</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>批量成生二维码</title>
     <url>/2023/10/23/%E6%89%B9%E9%87%8F%E6%88%90%E7%94%9F%E4%BA%8C%E7%BB%B4%E7%A0%81/</url>
     <content><![CDATA[<p>import os<br>import qrcode<br>import openpyxl<br>from openpyxl.drawing.image import Image</p>
@@ -1780,6 +1768,18 @@
       </tags>
   </entry>
   <entry>
+    <title>把汉字转换成拼音首字母</title>
+    <url>/2023/03/27/%E6%8A%8A%E6%B1%89%E5%AD%97%E8%BD%AC%E6%8D%A2%E6%88%90%E6%8B%BC%E9%9F%B3%E9%A6%96%E5%AD%97%E6%AF%8D/</url>
+    <content><![CDATA[<p>Function pinyin(p As String) As String<br>i &#x3D; Asc(p)<br>Select Case i<br>Case -20319 To -20284: pinyin &#x3D; “A”<br>Case -20283 To -19776: pinyin &#x3D; “B”<br>Case -19775 To -19219: pinyin &#x3D; “C”<br>Case -19218 To -18711: pinyin &#x3D; “D”</p>
+<span id="more"></span>
+<p>Case -18710 To -18527: pinyin &#x3D; “E”<br>Case -18526 To -18240: pinyin &#x3D; “F”<br>Case -18239 To -17923: pinyin &#x3D; “G”<br>Case -17922 To -17418: pinyin &#x3D; “H”<br>Case -17417 To -16475: pinyin &#x3D; “J”<br>Case -16474 To -16213: pinyin &#x3D; “K”<br>Case -16212 To -15641: pinyin &#x3D; “L”<br>Case -15640 To -15166: pinyin &#x3D; “M”<br>Case -15165 To -14923: pinyin &#x3D; “N”<br>Case -14922 To -14915: pinyin &#x3D; “O”<br>Case -14914 To -14631: pinyin &#x3D; “P”<br>Case -14630 To -14150: pinyin &#x3D; “Q”<br>Case -14149 To -14091: pinyin &#x3D; “R”<br>Case -14090 To -13319: pinyin &#x3D; “S”<br>Case -13318 To -12839: pinyin &#x3D; “T”<br>Case -12838 To -12557: pinyin &#x3D; “W”<br>Case -12556 To -11848: pinyin &#x3D; “X”<br>Case -11847 To -11056: pinyin &#x3D; “Y”<br>Case -11055 To -2050: pinyin &#x3D; “Z”<br>Case Else: pinyin &#x3D; p<br>End Select<br>End Function<br>Function getpy(str)<br>For i &#x3D; 1 To Len(str)<br>getpy &#x3D; getpy &amp; pinyin(Mid(str, i, 1))<br>Next i<br>End Function</p>
+<p>在单元格输入公式”&#x3D;getpy()”</p>
+]]></content>
+      <tags>
+        <tag>excel</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>指定条件单元格计数</title>
     <url>/2023/03/27/%E6%8C%87%E5%AE%9A%E6%9D%A1%E4%BB%B6%E5%8D%95%E5%85%83%E6%A0%BC%E8%AE%A1%E6%95%B0/</url>
     <content><![CDATA[<p>&#x3D;COUNTIFS（B2：B9，“男”）<br>“B2：B9”为需要计数的区域<br>“男”，计数条件</p>
@@ -1804,6 +1804,15 @@
 ]]></content>
       <tags>
         <tag>excel</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>格式化字符串的三种方法</title>
+    <url>/2023/07/29/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E6%B3%95/</url>
+    <content><![CDATA[<p>f’{i}*{j}&#x3D;{i*j}’<br>‘{}*{}&#x3D;{}’.format(i,j,i*j)<br>‘%d*%d&#x3D;%d’%(i,j,i*j)</p>
+]]></content>
+      <tags>
+        <tag>python</tag>
       </tags>
   </entry>
   <entry>
@@ -1971,26 +1980,6 @@
       </tags>
   </entry>
   <entry>
-    <title>格式化字符串的三种方法</title>
-    <url>/2023/07/29/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E6%B3%95/</url>
-    <content><![CDATA[<p>f’{i}*{j}&#x3D;{i*j}’<br>‘{}*{}&#x3D;{}’.format(i,j,i*j)<br>‘%d*%d&#x3D;%d’%(i,j,i*j)</p>
-]]></content>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>爬虫标准框架</title>
-    <url>/2023/03/27/%E7%88%AC%E8%99%AB%E6%A0%87%E5%87%86%E6%A1%86%E6%9E%B6/</url>
-    <content><![CDATA[<p>import requests<br>url&#x3D;”<a href="https://www.sogou.com/web?query=%E5%91%A8%E6%9D%B0%E4%BC%A6">https://www.sogou.com/web?query=周杰伦</a>“</p>
-<span id="more"></span>
-<p>headers&#x3D;{ “User-Agent”:”Mozilla&#x2F;5.0 (Windows NT 10.0; Win64; x64) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;97.0.4692.71 Safari&#x2F;537.36 Edg&#x2F;97.0.1072.55” }<br>#以字典的形式设置请求头，处理反爬 resp&#x3D;requests.get(url,headers&#x3D;headers)<br>print(resp)<br>#结果：Response [200]<br>print(resp.text)<br>#拿到页面源代码<br>resp.close()<br>#关掉resp</p>
-]]></content>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>爬取关键字写入表格</title>
     <url>/2023/03/27/%E7%88%AC%E5%8F%96%E5%85%B3%E9%94%AE%E5%AD%97%E5%86%99%E5%85%A5%E8%A1%A8%E6%A0%BC/</url>
     <content><![CDATA[<p>import requests<br>import re<br>import xlwt</p>
@@ -2011,6 +2000,17 @@ for l in range(len(ke_name[:24])):
 book.save(&#39;test.xls&#39;)
 </code></pre>
 <p>if <strong>name</strong> &#x3D;&#x3D; ‘<strong>main</strong>‘:<br>    for i in range(1,13):<br>        urls &#x3D; ‘<a href="https://ke.qq.com/course/list?mt=1001&st=2002&tt=3019&page=%7B%7D%27.format(i)">https://ke.qq.com/course/list?mt=1001&amp;st=2002&amp;tt=3019&amp;page={}&#39;.format(i)</a><br>        get_info(urls)</p>
+]]></content>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>爬虫标准框架</title>
+    <url>/2023/03/27/%E7%88%AC%E8%99%AB%E6%A0%87%E5%87%86%E6%A1%86%E6%9E%B6/</url>
+    <content><![CDATA[<p>import requests<br>url&#x3D;”<a href="https://www.sogou.com/web?query=%E5%91%A8%E6%9D%B0%E4%BC%A6">https://www.sogou.com/web?query=周杰伦</a>“</p>
+<span id="more"></span>
+<p>headers&#x3D;{ “User-Agent”:”Mozilla&#x2F;5.0 (Windows NT 10.0; Win64; x64) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;97.0.4692.71 Safari&#x2F;537.36 Edg&#x2F;97.0.1072.55” }<br>#以字典的形式设置请求头，处理反爬 resp&#x3D;requests.get(url,headers&#x3D;headers)<br>print(resp)<br>#结果：Response [200]<br>print(resp.text)<br>#拿到页面源代码<br>resp.close()<br>#关掉resp</p>
 ]]></content>
       <tags>
         <tag>python</tag>
@@ -2076,21 +2076,21 @@ book.save(&#39;test.xls&#39;)
       </tags>
   </entry>
   <entry>
-    <title>设备定义</title>
-    <url>/2023/03/30/%E8%AE%BE%E5%A4%87%E5%AE%9A%E4%B9%89/</url>
-    <content><![CDATA[<p>1、关键设备(A):重要工序上的设备，一旦发生故障将导致流水线全线停机，如涂布机、Busbar 焊接机等。<br>2、重要设备(B):重要工序上的设备，设备故障将导致局部停机或可用其他设备代替。<br>3、 一般设备(C): 非重要工序上的设备<span id="more"></span><br>4、 OEE: 设备综合效率，OEE&#x3D;时间开动率×性能开动率×合格品率。<br>5、 MTBF: 平均故障间隔时间，是两次故障间的平均正常运行时间.<br>6、 MTTR: 平均修理时间，修理故障使设备回到正常运行的平均耗时。<br>7、 设备性能指数(CMK) : 表示仅由设备普通原因变差决定的能力。<br>8、 Qualify: 设备性能验收。</p>
-]]></content>
-      <tags>
-        <tag>system</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>筛选求和</title>
     <url>/2023/03/27/%E7%AD%9B%E9%80%89%E6%B1%82%E5%92%8C/</url>
     <content><![CDATA[<p>&#x3D;SUBTOTAL(9,C1:C10)<br>“9”为函数序号<br>“C1:C10”选择数值列</p>
 ]]></content>
       <tags>
         <tag>excel</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>设备定义</title>
+    <url>/2023/03/30/%E8%AE%BE%E5%A4%87%E5%AE%9A%E4%B9%89/</url>
+    <content><![CDATA[<p>1、关键设备(A):重要工序上的设备，一旦发生故障将导致流水线全线停机，如涂布机、Busbar 焊接机等。<br>2、重要设备(B):重要工序上的设备，设备故障将导致局部停机或可用其他设备代替。<br>3、 一般设备(C): 非重要工序上的设备<span id="more"></span><br>4、 OEE: 设备综合效率，OEE&#x3D;时间开动率×性能开动率×合格品率。<br>5、 MTBF: 平均故障间隔时间，是两次故障间的平均正常运行时间.<br>6、 MTTR: 平均修理时间，修理故障使设备回到正常运行的平均耗时。<br>7、 设备性能指数(CMK) : 表示仅由设备普通原因变差决定的能力。<br>8、 Qualify: 设备性能验收。</p>
+]]></content>
+      <tags>
+        <tag>system</tag>
       </tags>
   </entry>
   <entry>
