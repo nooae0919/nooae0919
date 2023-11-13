@@ -4,8 +4,13 @@ User-agent: *
 
 Allow: /
 
+Allow: /home/
 Allow: /archives/
 
+
+Allow: /tags/
+
+Allow: /about/
 
 Disallow: /vendors/
 
@@ -18,3 +23,6 @@ Disallow: /fonts/
 Disallow: /vendors/
 
 Disallow: /fancybox/
+
+Sitemap: https://www.nooae.com/sitemap.xml
+Sitemap: https://www.nooae.com/baidusitemap.xml
