@@ -2,7 +2,7 @@
 <search>
   <entry>
     <title>16949认证体系</title>
-    <url>/2023/04/02/16949%E8%AE%A4%E8%AF%81%E4%BD%93%E7%B3%BB/</url>
+    <url>/16949%E8%AE%A4%E8%AF%81%E4%BD%93%E7%B3%BB/</url>
     <content><![CDATA[<p>16949认证体系是汽车行业质量管理认证体系的简称，是基于ISO9001的基础，加进了汽车行业的技术规范。此规范完全和ISO9000&#x2F;2008保持一致，但更着重于缺陷防范、减少在汽车零部件供应链中容易产生的质量波动和浪费。<span id="more"></span><br>ISO&#x2F;TS16949标准的针对性和适用性非常明确，只适用于汽车整车厂和其直接的零备件制造商，也就是说这些厂家必须是直接与生产汽车有关的，能开展加工制造活动，并通过这种活动使产品能够增值。<br>同时，对所认证公司厂家的资格也有着严格的限定，那些只具备支持功能的单位，如设计中心、公司总部等，或者那些为整车厂家或汽车零备件厂家制造设备和工具的厂家，都不能获得认证。</p>
 ]]></content>
       <tags>
@@ -11,7 +11,7 @@
   </entry>
   <entry>
     <title>16949质量管理体系标准</title>
-    <url>/2023/04/02/16949%E8%B4%A8%E9%87%8F%E7%AE%A1%E7%90%86%E4%BD%93%E7%B3%BB%E6%A0%87%E5%87%86/</url>
+    <url>/16949%E8%B4%A8%E9%87%8F%E7%AE%A1%E7%90%86%E4%BD%93%E7%B3%BB%E6%A0%87%E5%87%86/</url>
     <content><![CDATA[<p>16949质量管理体系标准是对汽车生产和相关配件组织应用ISO9001:2008的特殊要求，其适用于汽车生产供应链的组织形式。国内、外各大整车厂均已要求其供应商进行ISO16949:2009认证，确保各供应商具有高质量的运行业绩，并提供持续稳定的长期合作，以实现互惠互利。<span id="more"></span><br>16949质量管理体系标准实施方法：<br>运用系统化的方法开展ISO16949:2009质量体系的策划、建立和实施，以确保组织满足标准要求并提高运营绩效。<br>1、对企业现场进行差距分析。<br>2、实施QOS（质量操作系统）培训并开展QOS活动。<br>3、实施标准培训。<br>4、利用乌龟图对过程进行定义，确定过程的边界和相互关系。<br>5、讨论详细过程流程，建立过程流程图，作为程序文件编制的输入。<br>6、程序文件准备。<br>7、质量体系试运行，提供ISO16949:2009实施必需的质量工具培训（如APQP、FMEA、MSA、SPC、PPAP、8D等）。<br>8、开展内部审核，实施改进。</p>
 ]]></content>
       <tags>
@@ -20,7 +20,7 @@
   </entry>
   <entry>
     <title>Excel函数公式大全</title>
-    <url>/2023/03/27/Excel%E5%87%BD%E6%95%B0%E5%85%AC%E5%BC%8F%E5%A4%A7%E5%85%A8/</url>
+    <url>/Excel%E5%87%BD%E6%95%B0%E5%85%AC%E5%BC%8F%E5%A4%A7%E5%85%A8/</url>
     <content><![CDATA[<p>一、Excel中：逻辑函数，共有9个；<br>IF函数：&#x3D;IF(G2&gt;&#x3D;6000,”高薪”,”低薪”)<br>通过IF函数，判断条月薪是否大于6000；大于6000返回高薪，小于6000返回低薪；</p>
 <span id="more"></span>
 <p>IFS函数：&#x3D;IFS(G2&lt;6000,”员工”,G2&lt;10000,”经理”,G2&gt;&#x3D;10000,”老板”)<br>IFS函数，用于判断多个条件；判断月薪条件为：6000、8000、10000的员工，分别为：员工、经理、老板；</p>
@@ -51,141 +51,8 @@
       </tags>
   </entry>
   <entry>
-    <title>Excel库对比</title>
-    <url>/2023/03/27/Excel%E5%BA%93%E5%AF%B9%E6%AF%94/</url>
-    <content><![CDATA[<p>Excel库对应的各种版本<span id="more"></span></p>
-<table>
-<thead>
-<tr>
-<th align="left"></th>
-<th align="center">WIN</th>
-<th align="center">MAC</th>
-<th align="center">PY2</th>
-<th align="center">PY3</th>
-<th align="center">.xls</th>
-<th align="center">.xlsx</th>
-<th align="center">读</th>
-<th align="center">写</th>
-<th align="center">修改</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">xlrd</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">×</td>
-<td align="center">×</td>
-</tr>
-<tr>
-<td align="left">xlwt</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">×</td>
-<td align="center">×</td>
-<td align="center">√</td>
-<td align="center">√</td>
-</tr>
-<tr>
-<td align="left">xlutils</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">×</td>
-<td align="center">×</td>
-<td align="center">×</td>
-<td align="center">√</td>
-</tr>
-<tr>
-<td align="left">xlwings</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-</tr>
-<tr>
-<td align="left">openpyxl</td>
-<td align="center">√</td>
-<td align="center">×</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">×</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-</tr>
-<tr>
-<td align="left">xlswriter</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">×</td>
-<td align="center">√</td>
-<td align="center">×</td>
-<td align="center">√</td>
-<td align="center">×</td>
-</tr>
-<tr>
-<td align="left">win32com</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-</tr>
-<tr>
-<td align="left">DataNitro</td>
-<td align="center">√</td>
-<td align="center">×</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">-</td>
-<td align="center">-</td>
-<td align="center">-</td>
-</tr>
-<tr>
-<td align="left">pandas</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">×</td>
-</tr>
-</tbody></table>
-]]></content>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Excel快捷键</title>
-    <url>/2023/03/27/Excel%E5%BF%AB%E6%8D%B7%E9%94%AE/</url>
+    <url>/Excel%E5%BF%AB%E6%8D%B7%E9%94%AE/</url>
     <content><![CDATA[<p>在Excel中合理的使用快捷键会更好的提高工作效率</p>
 <span id="more"></span>
 <table>
@@ -378,8 +245,141 @@
       </tags>
   </entry>
   <entry>
+    <title>Excel库对比</title>
+    <url>/Excel%E5%BA%93%E5%AF%B9%E6%AF%94/</url>
+    <content><![CDATA[<p>Excel库对应的各种版本<span id="more"></span></p>
+<table>
+<thead>
+<tr>
+<th align="left"></th>
+<th align="center">WIN</th>
+<th align="center">MAC</th>
+<th align="center">PY2</th>
+<th align="center">PY3</th>
+<th align="center">.xls</th>
+<th align="center">.xlsx</th>
+<th align="center">读</th>
+<th align="center">写</th>
+<th align="center">修改</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">xlrd</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">×</td>
+<td align="center">×</td>
+</tr>
+<tr>
+<td align="left">xlwt</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">×</td>
+<td align="center">×</td>
+<td align="center">√</td>
+<td align="center">√</td>
+</tr>
+<tr>
+<td align="left">xlutils</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">×</td>
+<td align="center">×</td>
+<td align="center">×</td>
+<td align="center">√</td>
+</tr>
+<tr>
+<td align="left">xlwings</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+</tr>
+<tr>
+<td align="left">openpyxl</td>
+<td align="center">√</td>
+<td align="center">×</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">×</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+</tr>
+<tr>
+<td align="left">xlswriter</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">×</td>
+<td align="center">√</td>
+<td align="center">×</td>
+<td align="center">√</td>
+<td align="center">×</td>
+</tr>
+<tr>
+<td align="left">win32com</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+</tr>
+<tr>
+<td align="left">DataNitro</td>
+<td align="center">√</td>
+<td align="center">×</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">-</td>
+<td align="center">-</td>
+<td align="center">-</td>
+</tr>
+<tr>
+<td align="left">pandas</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">×</td>
+</tr>
+</tbody></table>
+]]></content>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Hexo常用命令</title>
-    <url>/2023/10/22/Hexo%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</url>
+    <url>/Hexo%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</url>
     <content><![CDATA[<p>在Hexo中可以使用的一些常用命令包括:</p>
 <span id="more"></span>
 <table>
@@ -412,57 +412,8 @@
       </tags>
   </entry>
   <entry>
-    <title>PDF转图片</title>
-    <url>/2023/04/05/PDF%E8%BD%AC%E5%9B%BE%E7%89%87/</url>
-    <content><![CDATA[<p>import os<br>import fitz  # fitz就是pip install PyMuPDF</p>
-<span id="more"></span>
-<p>def pyMuPDF_fitz(pdfPath, imagePath):</p>
-<ul>
-<li>print(“imagePath&#x3D;” + imagePath)</li>
-<li>pdfDoc &#x3D; fitz.open(pdfPath)</li>
-<li>for pg in range(pdfDoc.pageCount):<ul>
-<li><p>page &#x3D; pdfDoc[pg]</p>
-</li>
-<li><p>rotate &#x3D; int(0)</p>
-</li>
-<li><p>#每个尺寸的缩放系数为1.3，这将为我们生成分辨率提高2.6的图像。</p>
-</li>
-<li><p>#此处若是不做设置，默认图片大小为：792X612, dpi&#x3D;96</p>
-</li>
-<li><p>zoom_x &#x3D; 1.33333333  # (1.33333333–&gt;1056x816)   (2–&gt;1584x1224)</p>
-</li>
-<li><p>zoom_y &#x3D; 1.33333333</p>
-</li>
-<li><p>mat &#x3D; fitz.Matrix(zoom_x, zoom_y).preRotate(rotate)</p>
-</li>
-<li><p>pix &#x3D; page.getPixmap(matrix&#x3D;mat, alpha&#x3D;False)</p>
-</li>
-<li><p>if not os.path.exists(imagePath):  # 判断存放图片的文件夹是否存在</p>
-<ul>
-<li>os.makedirs(imagePath)  # 若图片文件夹不存在就创建</li>
-</ul>
-</li>
-<li><p>pix.writePNG(imagePath + ‘&#x2F;‘ + ‘images_%s.png’ % pg)  # 将图片写入指定的文件夹内</p>
-</li>
-</ul>
-</li>
-</ul>
-<p>if __name__ &#x3D;&#x3D; “__main__“:</p>
-<ul>
-<li>#1、PDF地址</li>
-<li>pdfPath &#x3D; ‘123.pdf’</li>
-<li>#2、需要储存图片的目录</li>
-<li>imagePath &#x3D; ‘.&#x2F;imgs’</li>
-<li>pyMuPDF_fitz(pdfPath, imagePath)</li>
-</ul>
-]]></content>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>OEE组成</title>
-    <url>/2023/03/30/OEE%E7%BB%84%E6%88%90/</url>
+    <url>/OEE%E7%BB%84%E6%88%90/</url>
     <content><![CDATA[<p>OEE &#x3D; 时间稼动率×性能稼动率×良品率<br>时间稼动率 &#x3D; (负荷时间-停机损失时间)&#x2F;负荷时间<br>性能稼动率 &#x3D; (生产量×理论节拍)&#x2F;稼动时间<span id="more"></span></p>
 <p>注：<br>A:实际作业时间 &#x3D; 日历工作时间<br>B:计划停止时间 &#x3D; 非设备原因停机时间<br>C:负荷时间 &#x3D; 实际作业时间-计划停止时间<br>D:停机损失时间 &#x3D; 更换刀具及故障停机时间<br>E:稼动时间 &#x3D; 负荷时间-停机损失时间<br>F:生产量 &#x3D; 日历工作时间内的总生产量<br>G:良品率 &#x3D; 合格品&#x2F;生产量<br>H:理论节拍(PPM) &#x3D; 每分钟产出数量</p>
 ]]></content>
@@ -472,7 +423,7 @@
   </entry>
   <entry>
     <title>Python常用单词表</title>
-    <url>/2023/03/27/Python%E5%B8%B8%E7%94%A8%E5%8D%95%E8%AF%8D%E8%A1%A8/</url>
+    <url>/Python%E5%B8%B8%E7%94%A8%E5%8D%95%E8%AF%8D%E8%A1%A8/</url>
     <content><![CDATA[<p>学习python必须背的常见单词</p>
 <span id="more"></span>
 <table>
@@ -1201,8 +1152,57 @@
       </tags>
   </entry>
   <entry>
+    <title>PDF转图片</title>
+    <url>/PDF%E8%BD%AC%E5%9B%BE%E7%89%87/</url>
+    <content><![CDATA[<p>import os<br>import fitz  # fitz就是pip install PyMuPDF</p>
+<span id="more"></span>
+<p>def pyMuPDF_fitz(pdfPath, imagePath):</p>
+<ul>
+<li>print(“imagePath&#x3D;” + imagePath)</li>
+<li>pdfDoc &#x3D; fitz.open(pdfPath)</li>
+<li>for pg in range(pdfDoc.pageCount):<ul>
+<li><p>page &#x3D; pdfDoc[pg]</p>
+</li>
+<li><p>rotate &#x3D; int(0)</p>
+</li>
+<li><p>#每个尺寸的缩放系数为1.3，这将为我们生成分辨率提高2.6的图像。</p>
+</li>
+<li><p>#此处若是不做设置，默认图片大小为：792X612, dpi&#x3D;96</p>
+</li>
+<li><p>zoom_x &#x3D; 1.33333333  # (1.33333333–&gt;1056x816)   (2–&gt;1584x1224)</p>
+</li>
+<li><p>zoom_y &#x3D; 1.33333333</p>
+</li>
+<li><p>mat &#x3D; fitz.Matrix(zoom_x, zoom_y).preRotate(rotate)</p>
+</li>
+<li><p>pix &#x3D; page.getPixmap(matrix&#x3D;mat, alpha&#x3D;False)</p>
+</li>
+<li><p>if not os.path.exists(imagePath):  # 判断存放图片的文件夹是否存在</p>
+<ul>
+<li>os.makedirs(imagePath)  # 若图片文件夹不存在就创建</li>
+</ul>
+</li>
+<li><p>pix.writePNG(imagePath + ‘&#x2F;‘ + ‘images_%s.png’ % pg)  # 将图片写入指定的文件夹内</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>if __name__ &#x3D;&#x3D; “__main__“:</p>
+<ul>
+<li>#1、PDF地址</li>
+<li>pdfPath &#x3D; ‘123.pdf’</li>
+<li>#2、需要储存图片的目录</li>
+<li>imagePath &#x3D; ‘.&#x2F;imgs’</li>
+<li>pyMuPDF_fitz(pdfPath, imagePath)</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Python爬取豆瓣电影排行榜</title>
-    <url>/2023/03/27/Python%E7%88%AC%E5%8F%96%E8%B1%86%E7%93%A3%E7%94%B5%E5%BD%B1%E6%8E%92%E8%A1%8C%E6%A6%9C/</url>
+    <url>/Python%E7%88%AC%E5%8F%96%E8%B1%86%E7%93%A3%E7%94%B5%E5%BD%B1%E6%8E%92%E8%A1%8C%E6%A6%9C/</url>
     <content><![CDATA[<p>import requests<br>import re</p>
 <p>#1-爬取数据<span id="more"></span><br>url &#x3D; ‘<a href="https://movie.douban.com/chart">https://movie.douban.com/chart</a>‘<br>headers &#x3D; {‘User-Agent’:’Mozilla&#x2F;5.0 (Windows NT 6.1; WOW64) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;78.0.3904.108 Safari&#x2F;537.36’}<br>response &#x3D; requests.get(url,headers &#x3D; headers)<br>#print(response.text)<br>html_str &#x3D; response.text</p>
 <p>#2-解析数据<br>patten &#x3D; re.compile(‘&lt; a.*?nbg.*?title&#x3D;”(.*?)”&gt;’,re.S)<br>items &#x3D; re.findall(patten,html_str)<br>print(items)</p>
@@ -1220,7 +1220,7 @@
   </entry>
   <entry>
     <title>SQL命令</title>
-    <url>/2023/04/02/SQL%E5%91%BD%E4%BB%A4/</url>
+    <url>/SQL%E5%91%BD%E4%BB%A4/</url>
     <content><![CDATA[<p>#创建一个名为“day1”的数据库<br>create database day1;</p>
 <p>#进去day1数据库<br>use day1;<span id="more"></span></p>
 <p>#创建一个名为“test”的数据表<br>create table test(<br>id varchar(20)  primary key ,<br>name varchar(30),<br>password varchar(30)<br>);</p>
@@ -1236,7 +1236,7 @@
   </entry>
   <entry>
     <title>Termux常用命令</title>
-    <url>/2023/09/30/Termux%E5%B8%B8%E8%A7%81%E5%91%BD%E4%BB%A4/</url>
+    <url>/Termux%E5%B8%B8%E8%A7%81%E5%91%BD%E4%BB%A4/</url>
     <content><![CDATA[<p>Termux是一个Android上的终端模拟器和Linux环境。它允许用户在其Android设备上直接运行各种 Linux 命令行实用程序。<br>在Termux中可以使用的一些常用命令包括:</p>
 <span id="more"></span>
 <table>
@@ -1317,8 +1317,21 @@
       </tags>
   </entry>
   <entry>
+    <title>win32打印工作表</title>
+    <url>/win32%E6%89%93%E5%8D%B0%E5%B7%A5%E4%BD%9C%E8%A1%A8/</url>
+    <content><![CDATA[<p>import win32com.client as win32</p>
+<p>excel &#x3D; win32.gencache.EnsureDispatch(‘Excel.Application’)</p>
+<p>wb &#x3D; excel.Workbooks.Open(r’C:\123.xlsx’)<br>ws &#x3D; wb.Sheets(‘Sheet1’) </p>
+<p>ws.PrintOut()</p>
+<p>wb.Close(False)<br>excel.Quit()</p>
+]]></content>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>WI工作指示编写流程</title>
-    <url>/2023/09/29/WI%E5%B7%A5%E4%BD%9C%E6%8C%87%E7%A4%BA/</url>
+    <url>/WI%E5%B7%A5%E4%BD%9C%E6%8C%87%E7%A4%BA/</url>
     <content><![CDATA[<p>一、确定编写目标及需求<br>在编写WI之前，首先需要明确编写目标及需求，包括:<br>(1)需要编写的工作内容及流程;<br>(2)操作人员的技能要求和培训需求;<br>(3)操作所需的设备、工具和材料等。</p>
 <span id="more"></span>
 
@@ -1331,21 +1344,19 @@
       </tags>
   </entry>
   <entry>
-    <title>win32打印工作表</title>
-    <url>/2023/10/27/win32%E6%89%93%E5%8D%B0%E5%B7%A5%E4%BD%9C%E8%A1%A8/</url>
-    <content><![CDATA[<p>import win32com.client as win32</p>
-<p>excel &#x3D; win32.gencache.EnsureDispatch(‘Excel.Application’)</p>
-<p>wb &#x3D; excel.Workbooks.Open(r’C:\123.xlsx’)<br>ws &#x3D; wb.Sheets(‘Sheet1’) </p>
-<p>ws.PrintOut()</p>
-<p>wb.Close(False)<br>excel.Quit()</p>
+    <title>保留表头拆分数据为若干新工作簿</title>
+    <url>/%E4%BF%9D%E7%95%99%E8%A1%A8%E5%A4%B4%E6%8B%86%E5%88%86%E6%95%B0%E6%8D%AE%E4%B8%BA%E8%8B%A5%E5%B9%B2%E6%96%B0%E5%B7%A5%E4%BD%9C%E7%B0%BF/</url>
+    <content><![CDATA[<p>Sub 保留表头拆分数据为若干新工作簿()<br>Dim arr, d As Object, k, t, i&amp;, lc%, rng As Range, c%<br>c &#x3D; Application.InputBox(“请输入拆分列号”, , 4, , , , , 1)</p>
+<span id="more"></span>
+<p>If c &#x3D; 0 Then Exit Sub<br>Application.ScreenUpdating &#x3D; False<br>Application.DisplayAlerts &#x3D; False<br>arr &#x3D; [a1].CurrentRegion<br>lc &#x3D; UBound(arr, 2)<br>Set rng &#x3D; [a1].Resize(, lc)<br>Set d &#x3D; CreateObject(“scripting.dictionary”)<br>For i &#x3D; 2 To UBound(arr)<br>If Not d.Exists(arr(i, c)) Then<br>Set d(arr(i, c)) &#x3D; Cells(i, 1).Resize(1, lc)<br>Else<br>Set d(arr(i, c)) &#x3D; Union(d(arr(i, c)), Cells(i, 1).Resize(1, lc))<br>End If<br>Next<br>k &#x3D; d.Keys<br>t &#x3D; d.Items<br>For i &#x3D; 0 To d.Count - 1<br>With Workbooks.Add(xlWBATWorksheet)<br>rng.Copy .Sheets(1).[a1]<br>t(i).Copy .Sheets(1).[a2]<br>.SaveAs Filename:&#x3D;ThisWorkbook.Path &amp; “&quot; &amp; k(i) &amp; “.xls”<br>.Close<br>End With<br>Next<br>Application.DisplayAlerts &#x3D; True<br>Application.ScreenUpdating &#x3D; True<br>MsgBox “完毕”<br>End Sub</p>
 ]]></content>
       <tags>
-        <tag>python</tag>
+        <tag>excel</tag>
       </tags>
   </entry>
   <entry>
     <title>xlsxwriter新建Excel表格</title>
-    <url>/2023/03/27/xlsxwriter%E6%96%B0%E5%BB%BAExcel%E8%A1%A8%E6%A0%BC/</url>
+    <url>/xlsxwriter%E6%96%B0%E5%BB%BAExcel%E8%A1%A8%E6%A0%BC/</url>
     <content><![CDATA[<p>import xlsxwriter</p>
 <p>#新建excel表<br>workbook &#x3D; xlsxwriter.Workbook(‘D:&#x2F;hello.xlsx’)</p>
 <span id="more"></span>
@@ -1396,7 +1407,7 @@
   </entry>
   <entry>
     <title>使用xlwt库将数据写入excel</title>
-    <url>/2023/03/27/%E4%BD%BF%E7%94%A8xlwt%E5%BA%93%E5%B0%86%E6%95%B0%E6%8D%AE%E5%86%99%E5%85%A5excel/</url>
+    <url>/%E4%BD%BF%E7%94%A8xlwt%E5%BA%93%E5%B0%86%E6%95%B0%E6%8D%AE%E5%86%99%E5%85%A5excel/</url>
     <content><![CDATA[<p>import xlwt<br>#1. 创建workbook对象<br>workbook &#x3D; xlwt.Workbook(encoding&#x3D;”utf-8”)<br>#2. 增加一个sheet # 设置成可以覆盖原先内容<br>worksheet &#x3D; workbook.add_sheet(“sheet1”, cell_overwrite_ok&#x3D;True)<br>#3. 在单元格中添加内容，第一个参数为行，第二个参数为列，第三个参数为内容<br>worksheet.write(0,0, “hello”)<br>#4. 保存数据表<br>workbook.save(“.&#x2F;student.xls”)</p>
 ]]></content>
       <tags>
@@ -1405,7 +1416,7 @@
   </entry>
   <entry>
     <title>双for打印九九乘法表</title>
-    <url>/2023/04/16/%E5%8F%8Cfor%E6%89%93%E5%8D%B0%E4%B9%9D%E4%B9%9D%E4%B9%98%E6%B3%95%E8%A1%A8/</url>
+    <url>/%E5%8F%8Cfor%E6%89%93%E5%8D%B0%E4%B9%9D%E4%B9%9D%E4%B9%98%E6%B3%95%E8%A1%A8/</url>
     <content><![CDATA[<p>for i in range(1, 10):</p>
 <ul>
 <li>for j in range(1, i + 1):<ul>
@@ -1420,30 +1431,8 @@
       </tags>
   </entry>
   <entry>
-    <title>保留表头拆分数据为若干新工作簿</title>
-    <url>/2023/03/27/%E4%BF%9D%E7%95%99%E8%A1%A8%E5%A4%B4%E6%8B%86%E5%88%86%E6%95%B0%E6%8D%AE%E4%B8%BA%E8%8B%A5%E5%B9%B2%E6%96%B0%E5%B7%A5%E4%BD%9C%E7%B0%BF/</url>
-    <content><![CDATA[<p>Sub 保留表头拆分数据为若干新工作簿()<br>Dim arr, d As Object, k, t, i&amp;, lc%, rng As Range, c%<br>c &#x3D; Application.InputBox(“请输入拆分列号”, , 4, , , , , 1)</p>
-<span id="more"></span>
-<p>If c &#x3D; 0 Then Exit Sub<br>Application.ScreenUpdating &#x3D; False<br>Application.DisplayAlerts &#x3D; False<br>arr &#x3D; [a1].CurrentRegion<br>lc &#x3D; UBound(arr, 2)<br>Set rng &#x3D; [a1].Resize(, lc)<br>Set d &#x3D; CreateObject(“scripting.dictionary”)<br>For i &#x3D; 2 To UBound(arr)<br>If Not d.Exists(arr(i, c)) Then<br>Set d(arr(i, c)) &#x3D; Cells(i, 1).Resize(1, lc)<br>Else<br>Set d(arr(i, c)) &#x3D; Union(d(arr(i, c)), Cells(i, 1).Resize(1, lc))<br>End If<br>Next<br>k &#x3D; d.Keys<br>t &#x3D; d.Items<br>For i &#x3D; 0 To d.Count - 1<br>With Workbooks.Add(xlWBATWorksheet)<br>rng.Copy .Sheets(1).[a1]<br>t(i).Copy .Sheets(1).[a2]<br>.SaveAs Filename:&#x3D;ThisWorkbook.Path &amp; “&quot; &amp; k(i) &amp; “.xls”<br>.Close<br>End With<br>Next<br>Application.DisplayAlerts &#x3D; True<br>Application.ScreenUpdating &#x3D; True<br>MsgBox “完毕”<br>End Sub</p>
-]]></content>
-      <tags>
-        <tag>excel</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>合并当前目录下所有工作簿的全部工作表</title>
-    <url>/2023/03/27/%E5%90%88%E5%B9%B6%E5%BD%93%E5%89%8D%E7%9B%AE%E5%BD%95%E4%B8%8B%E6%89%80%E6%9C%89%E5%B7%A5%E4%BD%9C%E7%B0%BF%E7%9A%84%E5%85%A8%E9%83%A8%E5%B7%A5%E4%BD%9C%E8%A1%A8/</url>
-    <content><![CDATA[<p>Sub 合并当前目录下所有工作簿的全部工作表()<br>Dim MyPath, MyName, AWbName<br>Dim Wb As Workbook, WbN As String<br>Dim G As Long</p>
-<span id="more"></span>
-<p>Dim Num As Long<br>Dim BOX As String<br>Application.ScreenUpdating &#x3D; False<br>MyPath &#x3D; ActiveWorkbook.Path<br>MyName &#x3D; Dir(MyPath &amp; “&quot; &amp; “*.csv”)<br>AWbName &#x3D; ActiveWorkbook.Name<br>Num &#x3D; 0<br>Do While MyName &lt;&gt; “”<br>If MyName &lt;&gt; AWbName Then<br>Set Wb &#x3D; Workbooks.Open(MyPath &amp; “&quot; &amp; MyName)<br>Num &#x3D; Num + 1<br>With Workbooks(1).ActiveSheet<br>.Cells(.Range(“B65536”).End(xlUp).Row + 2, 1) &#x3D; Left(MyName, Len(MyName) - 4)<br>For G &#x3D; 1 To Sheets.Count<br>Wb.Sheets(G).UsedRange.Copy .Cells(.Range(“B65536”).End(xlUp).Row + 1, 1)<br>Next<br>WbN &#x3D; WbN &amp; Chr(13) &amp; Wb.Name<br>Wb.Close False<br>End With<br>End If<br>MyName &#x3D; Dir<br>Loop<br>Range(“B1”).Select<br>Application.ScreenUpdating &#x3D; True<br>MsgBox “共合并了” &amp; Num &amp; “个工作薄下的全部工作表。如下：” &amp; Chr(13) &amp; WbN, vbInformation, “提示”<br>End Sub</p>
-]]></content>
-      <tags>
-        <tag>excel</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>合并文件夹下工作薄</title>
-    <url>/2023/03/27/%E5%90%88%E5%B9%B6%E6%96%87%E4%BB%B6%E5%A4%B9%E4%B8%8B%E5%B7%A5%E4%BD%9C%E8%96%84/</url>
+    <url>/%E5%90%88%E5%B9%B6%E6%96%87%E4%BB%B6%E5%A4%B9%E4%B8%8B%E5%B7%A5%E4%BD%9C%E8%96%84/</url>
     <content><![CDATA[<p>import os<br>import pandas as pd</p>
 <p>path &#x3D; r’地址’<span id="more"></span><br>file_list &#x3D; []</p>
 <p>dfs &#x3D; []</p>
@@ -1464,9 +1453,11 @@
       </tags>
   </entry>
   <entry>
-    <title>在单元格中显示当前工作表名称</title>
-    <url>/2023/10/19/%E5%9C%A8%E5%8D%95%E5%85%83%E6%A0%BC%E4%B8%AD%E6%98%BE%E7%A4%BA%E5%BD%93%E5%89%8D%E5%B7%A5%E4%BD%9C%E8%A1%A8%E5%90%8D%E7%A7%B0/</url>
-    <content><![CDATA[<p>&#x3D;RIGHT(CELL(“filename”),LEN(CELL(“filename”))-FIND(“]”,CELL(“filename”)))</p>
+    <title>合并当前目录下所有工作簿的全部工作表</title>
+    <url>/%E5%90%88%E5%B9%B6%E5%BD%93%E5%89%8D%E7%9B%AE%E5%BD%95%E4%B8%8B%E6%89%80%E6%9C%89%E5%B7%A5%E4%BD%9C%E7%B0%BF%E7%9A%84%E5%85%A8%E9%83%A8%E5%B7%A5%E4%BD%9C%E8%A1%A8/</url>
+    <content><![CDATA[<p>Sub 合并当前目录下所有工作簿的全部工作表()<br>Dim MyPath, MyName, AWbName<br>Dim Wb As Workbook, WbN As String<br>Dim G As Long</p>
+<span id="more"></span>
+<p>Dim Num As Long<br>Dim BOX As String<br>Application.ScreenUpdating &#x3D; False<br>MyPath &#x3D; ActiveWorkbook.Path<br>MyName &#x3D; Dir(MyPath &amp; “&quot; &amp; “*.csv”)<br>AWbName &#x3D; ActiveWorkbook.Name<br>Num &#x3D; 0<br>Do While MyName &lt;&gt; “”<br>If MyName &lt;&gt; AWbName Then<br>Set Wb &#x3D; Workbooks.Open(MyPath &amp; “&quot; &amp; MyName)<br>Num &#x3D; Num + 1<br>With Workbooks(1).ActiveSheet<br>.Cells(.Range(“B65536”).End(xlUp).Row + 2, 1) &#x3D; Left(MyName, Len(MyName) - 4)<br>For G &#x3D; 1 To Sheets.Count<br>Wb.Sheets(G).UsedRange.Copy .Cells(.Range(“B65536”).End(xlUp).Row + 1, 1)<br>Next<br>WbN &#x3D; WbN &amp; Chr(13) &amp; Wb.Name<br>Wb.Close False<br>End With<br>End If<br>MyName &#x3D; Dir<br>Loop<br>Range(“B1”).Select<br>Application.ScreenUpdating &#x3D; True<br>MsgBox “共合并了” &amp; Num &amp; “个工作薄下的全部工作表。如下：” &amp; Chr(13) &amp; WbN, vbInformation, “提示”<br>End Sub</p>
 ]]></content>
       <tags>
         <tag>excel</tag>
@@ -1474,7 +1465,7 @@
   </entry>
   <entry>
     <title>在一个工作薄内复制多个工作表</title>
-    <url>/2023/10/19/%E5%9C%A8%E4%B8%80%E4%B8%AA%E5%B7%A5%E4%BD%9C%E8%96%84%E5%86%85%E5%A4%8D%E5%88%B6%E5%A4%9A%E4%B8%AA%E5%B7%A5%E4%BD%9C%E8%A1%A8/</url>
+    <url>/%E5%9C%A8%E4%B8%80%E4%B8%AA%E5%B7%A5%E4%BD%9C%E8%96%84%E5%86%85%E5%A4%8D%E5%88%B6%E5%A4%9A%E4%B8%AA%E5%B7%A5%E4%BD%9C%E8%A1%A8/</url>
     <content><![CDATA[<p>import openpyxl</p>
 <p>print(“注意：”+”\n”<br>“1、此程序只支持XLSX格式文件；”+”\n”<br>“2、程序运行前需调整好打印预览模式；”+”\n”<br>“3、程序不会复制图片，运行完成后需手动复制图片。”+”\n”)</p>
 <span id="more"></span>
@@ -1492,23 +1483,8 @@
       </tags>
   </entry>
   <entry>
-    <title>多条件查找</title>
-    <url>/2023/09/17/%E5%A4%9A%E6%9D%A1%E4%BB%B6%E6%9F%A5%E6%89%BE/</url>
-    <content><![CDATA[<p>&#x3D;LOOKUP(1,0&#x2F;((B2:B9&#x3D;G3)*(C2:C9&#x3D;H3)),D2:D9)，以此函数为例：</p>
-<p>&#x3D;LOOKUP(1,0&#x2F;((条件1)*(条件2)),结果列）</p>
-<span id="more"></span>
-
-<p>（1）当“0&#x2F;条件所在区域&#x3D;条件”这部分数据中的条件所在区域&#x3D;条件，那么分母项是为1的，整个运算“0&#x2F;条件所在区域&#x3D;条件”就等于“0&#x2F;1”，结果就是0；</p>
-<p>（2）当“0&#x2F;条件所在区域&#x3D;条件”这部分数据中的条件所在区域不等于条件，那么分母项是为0的，整个运算“0&#x2F;条件所在区域&#x3D;条件”就等于“0&#x2F;0”，结果就是错误值；</p>
-<p>此时，只有条件所在区域&#x3D;条件的时候，&#x3D;LOOKUP(1，0&#x2F;条件所在区域&#x3D;条件，结果所在区域）此公式才有意义，找到唯一符合的条件时，就能做出对应的结果。</p>
-]]></content>
-      <tags>
-        <tag>excel</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>字符串前缀含义</title>
-    <url>/2023/03/27/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%89%8D%E7%BC%80%E5%90%AB%E4%B9%89/</url>
+    <url>/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%89%8D%E7%BC%80%E5%90%AB%E4%B9%89/</url>
     <content><![CDATA[<table>
 <thead>
 <tr>
@@ -1539,17 +1515,32 @@
       </tags>
   </entry>
   <entry>
-    <title>实施16949质量管理体系标准的益处</title>
-    <url>/2023/04/02/%E5%AE%9E%E6%96%BD16949%E8%B4%A8%E9%87%8F%E7%AE%A1%E7%90%86%E4%BD%93%E7%B3%BB%E6%A0%87%E5%87%86%E7%9A%84%E7%9B%8A%E5%A4%84/</url>
-    <content><![CDATA[<p>1、开拓市场：ISO16949:2009作为质量保证的标志有助于企业获得顾客的信任，以获得更为广阔的市场空间。<br>2、提高顾客满意度：通过实施ISO16949:2009，关注并满足顾客要求，以提高顾客满意度。<br>3、降本增效：持续关注企业运营业绩，改进过程绩效指标，以实现降本增效。<br>4、提高产品和交付质量：运用系统的开发和改进方法，保证产品质量和交付业绩。</p>
+    <title>多条件查找</title>
+    <url>/%E5%A4%9A%E6%9D%A1%E4%BB%B6%E6%9F%A5%E6%89%BE/</url>
+    <content><![CDATA[<p>&#x3D;LOOKUP(1,0&#x2F;((B2:B9&#x3D;G3)*(C2:C9&#x3D;H3)),D2:D9)，以此函数为例：</p>
+<p>&#x3D;LOOKUP(1,0&#x2F;((条件1)*(条件2)),结果列）</p>
+<span id="more"></span>
+
+<p>（1）当“0&#x2F;条件所在区域&#x3D;条件”这部分数据中的条件所在区域&#x3D;条件，那么分母项是为1的，整个运算“0&#x2F;条件所在区域&#x3D;条件”就等于“0&#x2F;1”，结果就是0；</p>
+<p>（2）当“0&#x2F;条件所在区域&#x3D;条件”这部分数据中的条件所在区域不等于条件，那么分母项是为0的，整个运算“0&#x2F;条件所在区域&#x3D;条件”就等于“0&#x2F;0”，结果就是错误值；</p>
+<p>此时，只有条件所在区域&#x3D;条件的时候，&#x3D;LOOKUP(1，0&#x2F;条件所在区域&#x3D;条件，结果所在区域）此公式才有意义，找到唯一符合的条件时，就能做出对应的结果。</p>
 ]]></content>
       <tags>
-        <tag>system</tag>
+        <tag>excel</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>在单元格中显示当前工作表名称</title>
+    <url>/%E5%9C%A8%E5%8D%95%E5%85%83%E6%A0%BC%E4%B8%AD%E6%98%BE%E7%A4%BA%E5%BD%93%E5%89%8D%E5%B7%A5%E4%BD%9C%E8%A1%A8%E5%90%8D%E7%A7%B0/</url>
+    <content><![CDATA[<p>&#x3D;RIGHT(CELL(“filename”),LEN(CELL(“filename”))-FIND(“]”,CELL(“filename”)))</p>
+]]></content>
+      <tags>
+        <tag>excel</tag>
       </tags>
   </entry>
   <entry>
     <title>将工作薄按列拆分至工作薄</title>
-    <url>/2023/03/27/%E5%B0%86%E5%B7%A5%E4%BD%9C%E8%96%84%E6%8C%89%E5%88%97%E6%8B%86%E5%88%86%E8%87%B3%E5%B7%A5%E4%BD%9C%E8%96%84/</url>
+    <url>/%E5%B0%86%E5%B7%A5%E4%BD%9C%E8%96%84%E6%8C%89%E5%88%97%E6%8B%86%E5%88%86%E8%87%B3%E5%B7%A5%E4%BD%9C%E8%96%84/</url>
     <content><![CDATA[<p>import pandas as pd<br>data &#x3D; pd.read_excel(r’地址\汇总.xls’,keep_default_na&#x3D;False)<br>unit_list &#x3D; list(data[‘姓名’].drop_duplicates())<br>for i in unit_list:</p>
 <ul>
 <li>data_new &#x3D; data[data[‘姓名’] &#x3D;&#x3D; i]</li>
@@ -1569,7 +1560,7 @@
   </entry>
   <entry>
     <title>将工作薄按列拆分至工作表</title>
-    <url>/2023/03/27/%E5%B0%86%E5%B7%A5%E4%BD%9C%E8%96%84%E6%8C%89%E5%88%97%E6%8B%86%E5%88%86%E8%87%B3%E5%B7%A5%E4%BD%9C%E8%A1%A8/</url>
+    <url>/%E5%B0%86%E5%B7%A5%E4%BD%9C%E8%96%84%E6%8C%89%E5%88%97%E6%8B%86%E5%88%86%E8%87%B3%E5%B7%A5%E4%BD%9C%E8%A1%A8/</url>
     <content><![CDATA[<p>import pandas as pd</p>
 <p>data&#x3D;pd.read_excel(r”地址\汇总.xls”)<br>xlsx &#x3D; pd.ExcelWriter(r”地址\汇总-拆分完成.xlsx”)</p>
 <p>for i in data[“姓名”].unique():</p>
@@ -1583,8 +1574,81 @@
       </tags>
   </entry>
   <entry>
+    <title>常用运算符</title>
+    <url>/%E5%B8%B8%E7%94%A8%E8%BF%90%E7%AE%97%E7%AC%A6/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th align="left">运算符</th>
+<th align="left">作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">+、-、*、&#x2F;</td>
+<td align="left">加减乘除</td>
+</tr>
+<tr>
+<td align="left">%</td>
+<td align="left">取余</td>
+</tr>
+<tr>
+<td align="left">&#x2F;&#x2F;</td>
+<td align="left">取整</td>
+</tr>
+<tr>
+<td align="left">**</td>
+<td align="left">幂（常用x**y或pow(x,y)表示）</td>
+</tr>
+<tr>
+<td align="left">&amp;</td>
+<td align="left">位运算符中的位与</td>
+</tr>
+<tr>
+<td align="left">|</td>
+<td align="left">位运算符中的位或</td>
+</tr>
+<tr>
+<td align="left">^</td>
+<td align="left">位运算符中的位异或</td>
+</tr>
+<tr>
+<td align="left">~</td>
+<td align="left">位运算符中的取反</td>
+</tr>
+<tr>
+<td align="left">abs(x)</td>
+<td align="left">取绝对值</td>
+</tr>
+<tr>
+<td align="left">int(x)</td>
+<td align="left">转为整数</td>
+</tr>
+<tr>
+<td align="left">float(x)</td>
+<td align="left">转为浮点数</td>
+</tr>
+<tr>
+<td align="left">complex(re,im)</td>
+<td align="left">将参数转化为复数,re为复数的实部,im为复数的虚部</td>
+</tr>
+</tbody></table>
+]]></content>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>实施16949质量管理体系标准的益处</title>
+    <url>/%E5%AE%9E%E6%96%BD16949%E8%B4%A8%E9%87%8F%E7%AE%A1%E7%90%86%E4%BD%93%E7%B3%BB%E6%A0%87%E5%87%86%E7%9A%84%E7%9B%8A%E5%A4%84/</url>
+    <content><![CDATA[<p>1、开拓市场：ISO16949:2009作为质量保证的标志有助于企业获得顾客的信任，以获得更为广阔的市场空间。<br>2、提高顾客满意度：通过实施ISO16949:2009，关注并满足顾客要求，以提高顾客满意度。<br>3、降本增效：持续关注企业运营业绩，改进过程绩效指标，以实现降本增效。<br>4、提高产品和交付质量：运用系统的开发和改进方法，保证产品质量和交付业绩。</p>
+]]></content>
+      <tags>
+        <tag>system</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>常用内置函数</title>
-    <url>/2023/03/27/%E5%B8%B8%E7%94%A8%E5%86%85%E7%BD%AE%E5%87%BD%E6%95%B0/</url>
+    <url>/%E5%B8%B8%E7%94%A8%E5%86%85%E7%BD%AE%E5%87%BD%E6%95%B0/</url>
     <content><![CDATA[<table>
 <thead>
 <tr>
@@ -1651,72 +1715,8 @@
       </tags>
   </entry>
   <entry>
-    <title>常用运算符</title>
-    <url>/2023/03/27/%E5%B8%B8%E7%94%A8%E8%BF%90%E7%AE%97%E7%AC%A6/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th align="left">运算符</th>
-<th align="left">作用</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">+、-、*、&#x2F;</td>
-<td align="left">加减乘除</td>
-</tr>
-<tr>
-<td align="left">%</td>
-<td align="left">取余</td>
-</tr>
-<tr>
-<td align="left">&#x2F;&#x2F;</td>
-<td align="left">取整</td>
-</tr>
-<tr>
-<td align="left">**</td>
-<td align="left">幂（常用x**y或pow(x,y)表示）</td>
-</tr>
-<tr>
-<td align="left">&amp;</td>
-<td align="left">位运算符中的位与</td>
-</tr>
-<tr>
-<td align="left">|</td>
-<td align="left">位运算符中的位或</td>
-</tr>
-<tr>
-<td align="left">^</td>
-<td align="left">位运算符中的位异或</td>
-</tr>
-<tr>
-<td align="left">~</td>
-<td align="left">位运算符中的取反</td>
-</tr>
-<tr>
-<td align="left">abs(x)</td>
-<td align="left">取绝对值</td>
-</tr>
-<tr>
-<td align="left">int(x)</td>
-<td align="left">转为整数</td>
-</tr>
-<tr>
-<td align="left">float(x)</td>
-<td align="left">转为浮点数</td>
-</tr>
-<tr>
-<td align="left">complex(re,im)</td>
-<td align="left">将参数转化为复数,re为复数的实部,im为复数的虚部</td>
-</tr>
-</tbody></table>
-]]></content>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>批量成生二维码</title>
-    <url>/2023/10/23/%E6%89%B9%E9%87%8F%E6%88%90%E7%94%9F%E4%BA%8C%E7%BB%B4%E7%A0%81/</url>
+    <url>/%E6%89%B9%E9%87%8F%E6%88%90%E7%94%9F%E4%BA%8C%E7%BB%B4%E7%A0%81/</url>
     <content><![CDATA[<p>import os<br>import qrcode<br>import openpyxl<br>from openpyxl.drawing.image import Image</p>
 <span id="more"></span>
 
@@ -1769,7 +1769,7 @@
   </entry>
   <entry>
     <title>把汉字转换成拼音首字母</title>
-    <url>/2023/03/27/%E6%8A%8A%E6%B1%89%E5%AD%97%E8%BD%AC%E6%8D%A2%E6%88%90%E6%8B%BC%E9%9F%B3%E9%A6%96%E5%AD%97%E6%AF%8D/</url>
+    <url>/%E6%8A%8A%E6%B1%89%E5%AD%97%E8%BD%AC%E6%8D%A2%E6%88%90%E6%8B%BC%E9%9F%B3%E9%A6%96%E5%AD%97%E6%AF%8D/</url>
     <content><![CDATA[<p>Function pinyin(p As String) As String<br>i &#x3D; Asc(p)<br>Select Case i<br>Case -20319 To -20284: pinyin &#x3D; “A”<br>Case -20283 To -19776: pinyin &#x3D; “B”<br>Case -19775 To -19219: pinyin &#x3D; “C”<br>Case -19218 To -18711: pinyin &#x3D; “D”</p>
 <span id="more"></span>
 <p>Case -18710 To -18527: pinyin &#x3D; “E”<br>Case -18526 To -18240: pinyin &#x3D; “F”<br>Case -18239 To -17923: pinyin &#x3D; “G”<br>Case -17922 To -17418: pinyin &#x3D; “H”<br>Case -17417 To -16475: pinyin &#x3D; “J”<br>Case -16474 To -16213: pinyin &#x3D; “K”<br>Case -16212 To -15641: pinyin &#x3D; “L”<br>Case -15640 To -15166: pinyin &#x3D; “M”<br>Case -15165 To -14923: pinyin &#x3D; “N”<br>Case -14922 To -14915: pinyin &#x3D; “O”<br>Case -14914 To -14631: pinyin &#x3D; “P”<br>Case -14630 To -14150: pinyin &#x3D; “Q”<br>Case -14149 To -14091: pinyin &#x3D; “R”<br>Case -14090 To -13319: pinyin &#x3D; “S”<br>Case -13318 To -12839: pinyin &#x3D; “T”<br>Case -12838 To -12557: pinyin &#x3D; “W”<br>Case -12556 To -11848: pinyin &#x3D; “X”<br>Case -11847 To -11056: pinyin &#x3D; “Y”<br>Case -11055 To -2050: pinyin &#x3D; “Z”<br>Case Else: pinyin &#x3D; p<br>End Select<br>End Function<br>Function getpy(str)<br>For i &#x3D; 1 To Len(str)<br>getpy &#x3D; getpy &amp; pinyin(Mid(str, i, 1))<br>Next i<br>End Function</p>
@@ -1781,7 +1781,7 @@
   </entry>
   <entry>
     <title>指定条件单元格计数</title>
-    <url>/2023/03/27/%E6%8C%87%E5%AE%9A%E6%9D%A1%E4%BB%B6%E5%8D%95%E5%85%83%E6%A0%BC%E8%AE%A1%E6%95%B0/</url>
+    <url>/%E6%8C%87%E5%AE%9A%E6%9D%A1%E4%BB%B6%E5%8D%95%E5%85%83%E6%A0%BC%E8%AE%A1%E6%95%B0/</url>
     <content><![CDATA[<p>&#x3D;COUNTIFS（B2：B9，“男”）<br>“B2：B9”为需要计数的区域<br>“男”，计数条件</p>
 ]]></content>
       <tags>
@@ -1790,7 +1790,7 @@
   </entry>
   <entry>
     <title>条件查找</title>
-    <url>/2023/06/04/%E6%9D%A1%E4%BB%B6%E6%9F%A5%E6%89%BE/</url>
+    <url>/%E6%9D%A1%E4%BB%B6%E6%9F%A5%E6%89%BE/</url>
     <content><![CDATA[<p>&#x3D;VLOOKUP(A1,A:C,3,1)，以此函数为例：<br>“A1”为“查找值”内容，当前需要查找的目标；<br>“A:C”为“数据表”内容，查找表中的目标起始列和结果终止列；<br>“3”为“列序数”内容，“数据表”中目标列至结果列的列数；<br>“1”为“匹配条件”内容，“0”为精确查找，“1”为模糊查找。</p>
 ]]></content>
       <tags>
@@ -1798,17 +1798,8 @@
       </tags>
   </entry>
   <entry>
-    <title>格式化字符串的三种方法</title>
-    <url>/2023/07/29/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E6%B3%95/</url>
-    <content><![CDATA[<p>f’{i}*{j}&#x3D;{i*j}’<br>‘{}*{}&#x3D;{}’.format(i,j,i*j)<br>‘%d*%d&#x3D;%d’%(i,j,i*j)</p>
-]]></content>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>条件求和</title>
-    <url>/2023/03/27/%E6%9D%A1%E4%BB%B6%E6%B1%82%E5%92%8C/</url>
+    <url>/%E6%9D%A1%E4%BB%B6%E6%B1%82%E5%92%8C/</url>
     <content><![CDATA[<p>&#x3D;SUMIF(A1:A10,E4,C1:C10)<br>“A1:A10”选择求和项列<br>“E4”选择求和项<br>“C1:C10”选择数值列</p>
 ]]></content>
       <tags>
@@ -1816,8 +1807,17 @@
       </tags>
   </entry>
   <entry>
+    <title>格式化字符串的三种方法</title>
+    <url>/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E6%B3%95/</url>
+    <content><![CDATA[<p>f’{i}*{j}&#x3D;{i*j}’<br>‘{}*{}&#x3D;{}’.format(i,j,i*j)<br>‘%d*%d&#x3D;%d’%(i,j,i*j)</p>
+]]></content>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>正则表达式模式</title>
-    <url>/2023/03/27/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%A8%A1%E5%BC%8F/</url>
+    <url>/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%A8%A1%E5%BC%8F/</url>
     <content><![CDATA[<p>正则表达式字符释义</p>
 <span id="more"></span>
 <table>
@@ -1980,8 +1980,19 @@
       </tags>
   </entry>
   <entry>
+    <title>爬虫标准框架</title>
+    <url>/%E7%88%AC%E8%99%AB%E6%A0%87%E5%87%86%E6%A1%86%E6%9E%B6/</url>
+    <content><![CDATA[<p>import requests<br>url&#x3D;”<a href="https://www.sogou.com/web?query=%E5%91%A8%E6%9D%B0%E4%BC%A6">https://www.sogou.com/web?query=周杰伦</a>“</p>
+<span id="more"></span>
+<p>headers&#x3D;{ “User-Agent”:”Mozilla&#x2F;5.0 (Windows NT 10.0; Win64; x64) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;97.0.4692.71 Safari&#x2F;537.36 Edg&#x2F;97.0.1072.55” }<br>#以字典的形式设置请求头，处理反爬 resp&#x3D;requests.get(url,headers&#x3D;headers)<br>print(resp)<br>#结果：Response [200]<br>print(resp.text)<br>#拿到页面源代码<br>resp.close()<br>#关掉resp</p>
+]]></content>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>爬取关键字写入表格</title>
-    <url>/2023/03/27/%E7%88%AC%E5%8F%96%E5%85%B3%E9%94%AE%E5%AD%97%E5%86%99%E5%85%A5%E8%A1%A8%E6%A0%BC/</url>
+    <url>/%E7%88%AC%E5%8F%96%E5%85%B3%E9%94%AE%E5%AD%97%E5%86%99%E5%85%A5%E8%A1%A8%E6%A0%BC/</url>
     <content><![CDATA[<p>import requests<br>import re<br>import xlwt</p>
 <p>headers &#x3D; {‘User-Agent’:”Mozilla&#x2F;5.0 (X11; Linux x86_64; rv:45.0) Gecko&#x2F;20100101 Firefox&#x2F;45.0”}</p>
 <span id="more"></span>
@@ -2006,37 +2017,8 @@ book.save(&#39;test.xls&#39;)
       </tags>
   </entry>
   <entry>
-    <title>爬虫标准框架</title>
-    <url>/2023/03/27/%E7%88%AC%E8%99%AB%E6%A0%87%E5%87%86%E6%A1%86%E6%9E%B6/</url>
-    <content><![CDATA[<p>import requests<br>url&#x3D;”<a href="https://www.sogou.com/web?query=%E5%91%A8%E6%9D%B0%E4%BC%A6">https://www.sogou.com/web?query=周杰伦</a>“</p>
-<span id="more"></span>
-<p>headers&#x3D;{ “User-Agent”:”Mozilla&#x2F;5.0 (Windows NT 10.0; Win64; x64) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;97.0.4692.71 Safari&#x2F;537.36 Edg&#x2F;97.0.1072.55” }<br>#以字典的形式设置请求头，处理反爬 resp&#x3D;requests.get(url,headers&#x3D;headers)<br>print(resp)<br>#结果：Response [200]<br>print(resp.text)<br>#拿到页面源代码<br>resp.close()<br>#关掉resp</p>
-]]></content>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>生成SSH</title>
-    <url>/2023/10/22/%E7%94%9F%E6%88%90SSH/</url>
-    <content><![CDATA[<ul>
-<li><p>用户名和邮箱进行初始化<br>git config –global user.name yourname<br>git config –global user.email youremail</p>
-<span id="more"></span></li>
-<li><p>检查初始化信息<br>git config user.name<br>git config user.email</p>
-</li>
-<li><p>生成密钥<br>ssh-keygen -t rsa -C youremail</p>
-</li>
-<li><p>查看公钥<br>cat ~&#x2F;.ssh&#x2F;id_rsa.pub</p>
-</li>
-</ul>
-]]></content>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>第三方库安装命令</title>
-    <url>/2023/03/27/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93%E5%AE%89%E8%A3%85%E5%91%BD%E4%BB%A4/</url>
+    <url>/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93%E5%AE%89%E8%A3%85%E5%91%BD%E4%BB%A4/</url>
     <content><![CDATA[<table>
 <thead>
 <tr>
@@ -2067,8 +2049,26 @@ book.save(&#39;test.xls&#39;)
       </tags>
   </entry>
   <entry>
+    <title>生成SSH</title>
+    <url>/%E7%94%9F%E6%88%90SSH/</url>
+    <content><![CDATA[<ul>
+<li><p>用户名和邮箱进行初始化<br>git config –global user.name yourname<br>git config –global user.email youremail</p>
+<span id="more"></span></li>
+<li><p>检查初始化信息<br>git config user.name<br>git config user.email</p>
+</li>
+<li><p>生成密钥<br>ssh-keygen -t rsa -C youremail</p>
+</li>
+<li><p>查看公钥<br>cat ~&#x2F;.ssh&#x2F;id_rsa.pub</p>
+</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>筛选后自动排列序号</title>
-    <url>/2023/03/27/%E7%AD%9B%E9%80%89%E5%90%8E%E8%87%AA%E5%8A%A8%E6%8E%92%E5%88%97%E5%BA%8F%E5%8F%B7/</url>
+    <url>/%E7%AD%9B%E9%80%89%E5%90%8E%E8%87%AA%E5%8A%A8%E6%8E%92%E5%88%97%E5%BA%8F%E5%8F%B7/</url>
     <content><![CDATA[<p>&#x3D;subtotal(3，B$2:B2)*1<br>“3”为函数序号<br>“B$2:B2”为序号数值</p>
 ]]></content>
       <tags>
@@ -2077,7 +2077,7 @@ book.save(&#39;test.xls&#39;)
   </entry>
   <entry>
     <title>筛选求和</title>
-    <url>/2023/03/27/%E7%AD%9B%E9%80%89%E6%B1%82%E5%92%8C/</url>
+    <url>/%E7%AD%9B%E9%80%89%E6%B1%82%E5%92%8C/</url>
     <content><![CDATA[<p>&#x3D;SUBTOTAL(9,C1:C10)<br>“9”为函数序号<br>“C1:C10”选择数值列</p>
 ]]></content>
       <tags>
@@ -2086,7 +2086,7 @@ book.save(&#39;test.xls&#39;)
   </entry>
   <entry>
     <title>设备定义</title>
-    <url>/2023/03/30/%E8%AE%BE%E5%A4%87%E5%AE%9A%E4%B9%89/</url>
+    <url>/%E8%AE%BE%E5%A4%87%E5%AE%9A%E4%B9%89/</url>
     <content><![CDATA[<p>1、关键设备(A):重要工序上的设备，一旦发生故障将导致流水线全线停机，如涂布机、Busbar 焊接机等。<br>2、重要设备(B):重要工序上的设备，设备故障将导致局部停机或可用其他设备代替。<br>3、 一般设备(C): 非重要工序上的设备<span id="more"></span><br>4、 OEE: 设备综合效率，OEE&#x3D;时间开动率×性能开动率×合格品率。<br>5、 MTBF: 平均故障间隔时间，是两次故障间的平均正常运行时间.<br>6、 MTTR: 平均修理时间，修理故障使设备回到正常运行的平均耗时。<br>7、 设备性能指数(CMK) : 表示仅由设备普通原因变差决定的能力。<br>8、 Qualify: 设备性能验收。</p>
 ]]></content>
       <tags>
@@ -2094,8 +2094,17 @@ book.save(&#39;test.xls&#39;)
       </tags>
   </entry>
   <entry>
+    <title>设备性能确认(Qualify)</title>
+    <url>/%E8%AE%BE%E5%A4%87%E6%80%A7%E8%83%BD%E7%A1%AE%E8%AE%A4-Qualify/</url>
+    <content><![CDATA[<p>设备性能确认(Qualify)，即某个设备达到了一定的标准，可以被用来做某个预定的生产步骤。Qualify的过程一定要有”预定的标准”。<br>设备的用户需求说明(URS)和性能指标决定了设备的标准，确认就是通过实际操作、测试或试验，来收集证据，证明该设备已经达到了这些标准。</p>
+]]></content>
+      <tags>
+        <tag>system</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>《设备管理体系-要求》</title>
-    <url>/2023/11/09/%E8%AE%BE%E5%A4%87%E7%AE%A1%E7%90%86%E4%BD%93%E7%B3%BB-%E8%A6%81%E6%B1%82/</url>
+    <url>/%E8%AE%BE%E5%A4%87%E7%AE%A1%E7%90%86%E4%BD%93%E7%B3%BB-%E8%A6%81%E6%B1%82/</url>
     <content><![CDATA[<p>《设备管理体系-要求》的制定考虑了 GB&#x2F;T 19001-2008《质量管理体系 要求》、 GB&#x2F;T24001-2004《环境管理体系要求及使用指南》、GB&#x2F;T 28001-2009《职业健康安全管理体系 要求》标准间的兼容性，以便整合质量、环境和设备管理体系。</p>
 <span id="more"></span>
 
@@ -2111,17 +2120,8 @@ book.save(&#39;test.xls&#39;)
       </tags>
   </entry>
   <entry>
-    <title>设备性能确认(Qualify)</title>
-    <url>/2023/06/04/%E8%AE%BE%E5%A4%87%E6%80%A7%E8%83%BD%E7%A1%AE%E8%AE%A4-Qualify/</url>
-    <content><![CDATA[<p>设备性能确认(Qualify)，即某个设备达到了一定的标准，可以被用来做某个预定的生产步骤。Qualify的过程一定要有”预定的标准”。<br>设备的用户需求说明(URS)和性能指标决定了设备的标准，确认就是通过实际操作、测试或试验，来收集证据，证明该设备已经达到了这些标准。</p>
-]]></content>
-      <tags>
-        <tag>system</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>返回左边中文文本</title>
-    <url>/2023/03/27/%E8%BF%94%E5%9B%9E%E5%B7%A6%E8%BE%B9%E4%B8%AD%E6%96%87%E6%96%87%E6%9C%AC/</url>
+    <url>/%E8%BF%94%E5%9B%9E%E5%B7%A6%E8%BE%B9%E4%B8%AD%E6%96%87%E6%96%87%E6%9C%AC/</url>
     <content><![CDATA[<p>&#x3D;LEFTB(A1,SEARCHB(“?”,A1)-1)<br>“A1”为所选单元格</p>
 ]]></content>
       <tags>
