@@ -412,16 +412,6 @@
       </tags>
   </entry>
   <entry>
-    <title>OEE组成</title>
-    <url>/OEE%E7%BB%84%E6%88%90/</url>
-    <content><![CDATA[<p>OEE &#x3D; 时间稼动率×性能稼动率×良品率<br>时间稼动率 &#x3D; (负荷时间-停机损失时间)&#x2F;负荷时间<br>性能稼动率 &#x3D; (生产量×理论节拍)&#x2F;稼动时间<span id="more"></span></p>
-<p>注：<br>A:实际作业时间 &#x3D; 日历工作时间<br>B:计划停止时间 &#x3D; 非设备原因停机时间<br>C:负荷时间 &#x3D; 实际作业时间-计划停止时间<br>D:停机损失时间 &#x3D; 更换刀具及故障停机时间<br>E:稼动时间 &#x3D; 负荷时间-停机损失时间<br>F:生产量 &#x3D; 日历工作时间内的总生产量<br>G:良品率 &#x3D; 合格品&#x2F;生产量<br>H:理论节拍(PPM) &#x3D; 每分钟产出数量</p>
-]]></content>
-      <tags>
-        <tag>system</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>PDF转图片</title>
     <url>/PDF%E8%BD%AC%E5%9B%BE%E7%89%87/</url>
     <content><![CDATA[<p>import os<br>import fitz  # fitz就是pip install PyMuPDF</p>
@@ -468,6 +458,16 @@
 ]]></content>
       <tags>
         <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>OEE组成</title>
+    <url>/OEE%E7%BB%84%E6%88%90/</url>
+    <content><![CDATA[<p>OEE &#x3D; 时间稼动率×性能稼动率×良品率<br>时间稼动率 &#x3D; (负荷时间-停机损失时间)&#x2F;负荷时间<br>性能稼动率 &#x3D; (生产量×理论节拍)&#x2F;稼动时间<span id="more"></span></p>
+<p>注：<br>A:实际作业时间 &#x3D; 日历工作时间<br>B:计划停止时间 &#x3D; 非设备原因停机时间<br>C:负荷时间 &#x3D; 实际作业时间-计划停止时间<br>D:停机损失时间 &#x3D; 更换刀具及故障停机时间<br>E:稼动时间 &#x3D; 负荷时间-停机损失时间<br>F:生产量 &#x3D; 日历工作时间内的总生产量<br>G:良品率 &#x3D; 合格品&#x2F;生产量<br>H:理论节拍(PPM) &#x3D; 每分钟产出数量</p>
+]]></content>
+      <tags>
+        <tag>system</tag>
       </tags>
   </entry>
   <entry>
@@ -1219,22 +1219,6 @@
       </tags>
   </entry>
   <entry>
-    <title>SQL命令</title>
-    <url>/SQL%E5%91%BD%E4%BB%A4/</url>
-    <content><![CDATA[<p>#创建一个名为“day1”的数据库<br>create database day1;</p>
-<p>#进去day1数据库<br>use day1;<span id="more"></span></p>
-<p>#创建一个名为“test”的数据表<br>create table test(<br>id varchar(20)  primary key ,<br>name varchar(30),<br>password varchar(30)<br>);</p>
-<p>#向test表插入一行数据<br>insert into test(id,name,password) values(‘001’,’lisi’,’123456’);</p>
-<p>#查看创建的test表的数据<br>select * from test;</p>
-<p>#将id为001的密码改为xxxx<br>update test set password&#x3D;’xxxx’ where id&#x3D;’001’;</p>
-<p>#删除test表<br>drop table test;</p>
-<p>#删除day1数据库<br>drop database day1;</p>
-]]></content>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Termux常用命令</title>
     <url>/Termux%E5%B8%B8%E8%A7%81%E5%91%BD%E4%BB%A4/</url>
     <content><![CDATA[<p>Termux是一个Android上的终端模拟器和Linux环境。它允许用户在其Android设备上直接运行各种 Linux 命令行实用程序。<br>在Termux中可以使用的一些常用命令包括:</p>
@@ -1311,6 +1295,22 @@
 <td align="left">更新已安装包</td>
 </tr>
 </tbody></table>
+]]></content>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>SQL命令</title>
+    <url>/SQL%E5%91%BD%E4%BB%A4/</url>
+    <content><![CDATA[<p>#创建一个名为“day1”的数据库<br>create database day1;</p>
+<p>#进去day1数据库<br>use day1;<span id="more"></span></p>
+<p>#创建一个名为“test”的数据表<br>create table test(<br>id varchar(20)  primary key ,<br>name varchar(30),<br>password varchar(30)<br>);</p>
+<p>#向test表插入一行数据<br>insert into test(id,name,password) values(‘001’,’lisi’,’123456’);</p>
+<p>#查看创建的test表的数据<br>select * from test;</p>
+<p>#将id为001的密码改为xxxx<br>update test set password&#x3D;’xxxx’ where id&#x3D;’001’;</p>
+<p>#删除test表<br>drop table test;</p>
+<p>#删除day1数据库<br>drop database day1;</p>
 ]]></content>
       <tags>
         <tag>python</tag>
@@ -1404,6 +1404,22 @@
       </tags>
   </entry>
   <entry>
+    <title>设备保养计划编制依据</title>
+    <url>/%E4%BF%9D%E5%85%BB%E8%AE%A1%E5%88%92%E7%BC%96%E5%88%B6%E4%BE%9D%E6%8D%AE/</url>
+    <content><![CDATA[<p>第一个设备的履历；第二个生产计划的安排；第三个设备的维修史，也就是它的故障率。</p>
+<span id="more"></span>
+<p>编制的时候要注意，生产急需的影响产品质量的关键工序的设备，还有重点安排生产线上单一的关键设备，应该尽可能安排在节假日和不影响生产的前提下来抢修以缩短停歇时间。</p>
+<p>编制的时候应考虑检修工作量的平衡，使全年检修工作能够均衡的进行。</p>
+<p>同类型的设备工装模具尽可能安排连续的修理。</p>
+<p>对高故障的设备工装模具，根据以往的故障统计数据分析来调整保养计划，缩短保养周期。</p>
+<p>对于还没有纳入保养计划的设备工装模具，一定要及时的调整，将其纳入保养计划里面。</p>
+<p>保养计划要按照一级、二级、三级纳入，一级是点检不排入计划内；二级是以机修工为主，主操作工为辅；三级是以外公司为主，机修工为辅。</p>
+]]></content>
+      <tags>
+        <tag>system</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>保留表头拆分数据为若干新工作簿</title>
     <url>/%E4%BF%9D%E7%95%99%E8%A1%A8%E5%A4%B4%E6%8B%86%E5%88%86%E6%95%B0%E6%8D%AE%E4%B8%BA%E8%8B%A5%E5%B9%B2%E6%96%B0%E5%B7%A5%E4%BD%9C%E7%B0%BF/</url>
     <content><![CDATA[<p>Sub 保留表头拆分数据为若干新工作簿()<br>Dim arr, d As Object, k, t, i&amp;, lc%, rng As Range, c%<br>c &#x3D; Application.InputBox(“请输入拆分列号”, , 4, , , , , 1)</p>
@@ -1442,25 +1458,6 @@
       </tags>
   </entry>
   <entry>
-    <title>在一个工作薄内复制多个工作表</title>
-    <url>/%E5%9C%A8%E4%B8%80%E4%B8%AA%E5%B7%A5%E4%BD%9C%E8%96%84%E5%86%85%E5%A4%8D%E5%88%B6%E5%A4%9A%E4%B8%AA%E5%B7%A5%E4%BD%9C%E8%A1%A8/</url>
-    <content><![CDATA[<p>import openpyxl</p>
-<p>print(“注意：”+”\n”<br>“1、此程序只支持XLSX格式文件；”+”\n”<br>“2、程序运行前需调整好打印预览模式；”+”\n”<br>“3、程序不会复制图片，运行完成后需手动复制图片。”+”\n”)</p>
-<span id="more"></span>
-<p>wb_name &#x3D; input(“请输入文件名称：”)<br>wb &#x3D; openpyxl.load_workbook(f’{wb_name}.xlsx’)<br>old_sheet &#x3D; wb.worksheets[0]<br>sheet_name &#x3D; old_sheet.title</p>
-<p>num &#x3D; int(input(“请输入需要复制的数量：”))</p>
-<p>for i in range(2,num+1):</p>
-<ul>
-<li>new_sheet &#x3D; wb.copy_worksheet(old_sheet)</li>
-<li>new_sheet.title &#x3D; sheet_name + str(i)</li>
-</ul>
-<p>print(“已生成”f’{num}’”个sheet”)<br>wb.save(f’{wb_name}.xlsx’)</p>
-]]></content>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>合并文件夹下工作薄</title>
     <url>/%E5%90%88%E5%B9%B6%E6%96%87%E4%BB%B6%E5%A4%B9%E4%B8%8B%E5%B7%A5%E4%BD%9C%E8%96%84/</url>
     <content><![CDATA[<p>import os<br>import pandas as pd</p>
@@ -1477,6 +1474,25 @@
 </li>
 </ul>
 <p>df.to_excel(r’地址\汇总.xls’, index&#x3D;False)</p>
+]]></content>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>在一个工作薄内复制多个工作表</title>
+    <url>/%E5%9C%A8%E4%B8%80%E4%B8%AA%E5%B7%A5%E4%BD%9C%E8%96%84%E5%86%85%E5%A4%8D%E5%88%B6%E5%A4%9A%E4%B8%AA%E5%B7%A5%E4%BD%9C%E8%A1%A8/</url>
+    <content><![CDATA[<p>import openpyxl</p>
+<p>print(“注意：”+”\n”<br>“1、此程序只支持XLSX格式文件；”+”\n”<br>“2、程序运行前需调整好打印预览模式；”+”\n”<br>“3、程序不会复制图片，运行完成后需手动复制图片。”+”\n”)</p>
+<span id="more"></span>
+<p>wb_name &#x3D; input(“请输入文件名称：”)<br>wb &#x3D; openpyxl.load_workbook(f’{wb_name}.xlsx’)<br>old_sheet &#x3D; wb.worksheets[0]<br>sheet_name &#x3D; old_sheet.title</p>
+<p>num &#x3D; int(input(“请输入需要复制的数量：”))</p>
+<p>for i in range(2,num+1):</p>
+<ul>
+<li>new_sheet &#x3D; wb.copy_worksheet(old_sheet)</li>
+<li>new_sheet.title &#x3D; sheet_name + str(i)</li>
+</ul>
+<p>print(“已生成”f’{num}’”个sheet”)<br>wb.save(f’{wb_name}.xlsx’)</p>
 ]]></content>
       <tags>
         <tag>python</tag>
@@ -1504,15 +1520,6 @@
 ]]></content>
       <tags>
         <tag>excel</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>实施16949质量管理体系标准的益处</title>
-    <url>/%E5%AE%9E%E6%96%BD16949%E8%B4%A8%E9%87%8F%E7%AE%A1%E7%90%86%E4%BD%93%E7%B3%BB%E6%A0%87%E5%87%86%E7%9A%84%E7%9B%8A%E5%A4%84/</url>
-    <content><![CDATA[<p>1、开拓市场：ISO16949:2009作为质量保证的标志有助于企业获得顾客的信任，以获得更为广阔的市场空间。<br>2、提高顾客满意度：通过实施ISO16949:2009，关注并满足顾客要求，以提高顾客满意度。<br>3、降本增效：持续关注企业运营业绩，改进过程绩效指标，以实现降本增效。<br>4、提高产品和交付质量：运用系统的开发和改进方法，保证产品质量和交付业绩。</p>
-]]></content>
-      <tags>
-        <tag>system</tag>
       </tags>
   </entry>
   <entry>
@@ -1548,6 +1555,15 @@
       </tags>
   </entry>
   <entry>
+    <title>实施16949质量管理体系标准的益处</title>
+    <url>/%E5%AE%9E%E6%96%BD16949%E8%B4%A8%E9%87%8F%E7%AE%A1%E7%90%86%E4%BD%93%E7%B3%BB%E6%A0%87%E5%87%86%E7%9A%84%E7%9B%8A%E5%A4%84/</url>
+    <content><![CDATA[<p>1、开拓市场：ISO16949:2009作为质量保证的标志有助于企业获得顾客的信任，以获得更为广阔的市场空间。<br>2、提高顾客满意度：通过实施ISO16949:2009，关注并满足顾客要求，以提高顾客满意度。<br>3、降本增效：持续关注企业运营业绩，改进过程绩效指标，以实现降本增效。<br>4、提高产品和交付质量：运用系统的开发和改进方法，保证产品质量和交付业绩。</p>
+]]></content>
+      <tags>
+        <tag>system</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>将工作薄按列拆分至工作薄</title>
     <url>/%E5%B0%86%E5%B7%A5%E4%BD%9C%E8%96%84%E6%8C%89%E5%88%97%E6%8B%86%E5%88%86%E8%87%B3%E5%B7%A5%E4%BD%9C%E8%96%84/</url>
     <content><![CDATA[<p>import pandas as pd<br>data &#x3D; pd.read_excel(r’地址\汇总.xls’,keep_default_na&#x3D;False)<br>unit_list &#x3D; list(data[‘姓名’].drop_duplicates())<br>for i in unit_list:</p>
@@ -1577,6 +1593,70 @@
 <li>data[data[“姓名”]&#x3D;&#x3D;i].to_excel(xlsx,sheet_name&#x3D;i,index&#x3D;False)</li>
 </ul>
 <p>xlsx.close()</p>
+]]></content>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>常用运算符</title>
+    <url>/%E5%B8%B8%E7%94%A8%E8%BF%90%E7%AE%97%E7%AC%A6/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th align="left">运算符</th>
+<th align="left">作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">+、-、*、&#x2F;</td>
+<td align="left">加减乘除</td>
+</tr>
+<tr>
+<td align="left">%</td>
+<td align="left">取余</td>
+</tr>
+<tr>
+<td align="left">&#x2F;&#x2F;</td>
+<td align="left">取整</td>
+</tr>
+<tr>
+<td align="left">**</td>
+<td align="left">幂（常用x**y或pow(x,y)表示）</td>
+</tr>
+<tr>
+<td align="left">&amp;</td>
+<td align="left">位运算符中的位与</td>
+</tr>
+<tr>
+<td align="left">|</td>
+<td align="left">位运算符中的位或</td>
+</tr>
+<tr>
+<td align="left">^</td>
+<td align="left">位运算符中的位异或</td>
+</tr>
+<tr>
+<td align="left">~</td>
+<td align="left">位运算符中的取反</td>
+</tr>
+<tr>
+<td align="left">abs(x)</td>
+<td align="left">取绝对值</td>
+</tr>
+<tr>
+<td align="left">int(x)</td>
+<td align="left">转为整数</td>
+</tr>
+<tr>
+<td align="left">float(x)</td>
+<td align="left">转为浮点数</td>
+</tr>
+<tr>
+<td align="left">complex(re,im)</td>
+<td align="left">将参数转化为复数,re为复数的实部,im为复数的虚部</td>
+</tr>
+</tbody></table>
 ]]></content>
       <tags>
         <tag>python</tag>
@@ -1651,82 +1731,6 @@
       </tags>
   </entry>
   <entry>
-    <title>常用运算符</title>
-    <url>/%E5%B8%B8%E7%94%A8%E8%BF%90%E7%AE%97%E7%AC%A6/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th align="left">运算符</th>
-<th align="left">作用</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">+、-、*、&#x2F;</td>
-<td align="left">加减乘除</td>
-</tr>
-<tr>
-<td align="left">%</td>
-<td align="left">取余</td>
-</tr>
-<tr>
-<td align="left">&#x2F;&#x2F;</td>
-<td align="left">取整</td>
-</tr>
-<tr>
-<td align="left">**</td>
-<td align="left">幂（常用x**y或pow(x,y)表示）</td>
-</tr>
-<tr>
-<td align="left">&amp;</td>
-<td align="left">位运算符中的位与</td>
-</tr>
-<tr>
-<td align="left">|</td>
-<td align="left">位运算符中的位或</td>
-</tr>
-<tr>
-<td align="left">^</td>
-<td align="left">位运算符中的位异或</td>
-</tr>
-<tr>
-<td align="left">~</td>
-<td align="left">位运算符中的取反</td>
-</tr>
-<tr>
-<td align="left">abs(x)</td>
-<td align="left">取绝对值</td>
-</tr>
-<tr>
-<td align="left">int(x)</td>
-<td align="left">转为整数</td>
-</tr>
-<tr>
-<td align="left">float(x)</td>
-<td align="left">转为浮点数</td>
-</tr>
-<tr>
-<td align="left">complex(re,im)</td>
-<td align="left">将参数转化为复数,re为复数的实部,im为复数的虚部</td>
-</tr>
-</tbody></table>
-]]></content>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>把汉字转换成拼音首字母</title>
-    <url>/%E6%8A%8A%E6%B1%89%E5%AD%97%E8%BD%AC%E6%8D%A2%E6%88%90%E6%8B%BC%E9%9F%B3%E9%A6%96%E5%AD%97%E6%AF%8D/</url>
-    <content><![CDATA[<p>Function pinyin(p As String) As String<br>i &#x3D; Asc(p)<br>Select Case i<br>Case -20319 To -20284: pinyin &#x3D; “A”<br>Case -20283 To -19776: pinyin &#x3D; “B”<br>Case -19775 To -19219: pinyin &#x3D; “C”<br>Case -19218 To -18711: pinyin &#x3D; “D”</p>
-<span id="more"></span>
-<p>Case -18710 To -18527: pinyin &#x3D; “E”<br>Case -18526 To -18240: pinyin &#x3D; “F”<br>Case -18239 To -17923: pinyin &#x3D; “G”<br>Case -17922 To -17418: pinyin &#x3D; “H”<br>Case -17417 To -16475: pinyin &#x3D; “J”<br>Case -16474 To -16213: pinyin &#x3D; “K”<br>Case -16212 To -15641: pinyin &#x3D; “L”<br>Case -15640 To -15166: pinyin &#x3D; “M”<br>Case -15165 To -14923: pinyin &#x3D; “N”<br>Case -14922 To -14915: pinyin &#x3D; “O”<br>Case -14914 To -14631: pinyin &#x3D; “P”<br>Case -14630 To -14150: pinyin &#x3D; “Q”<br>Case -14149 To -14091: pinyin &#x3D; “R”<br>Case -14090 To -13319: pinyin &#x3D; “S”<br>Case -13318 To -12839: pinyin &#x3D; “T”<br>Case -12838 To -12557: pinyin &#x3D; “W”<br>Case -12556 To -11848: pinyin &#x3D; “X”<br>Case -11847 To -11056: pinyin &#x3D; “Y”<br>Case -11055 To -2050: pinyin &#x3D; “Z”<br>Case Else: pinyin &#x3D; p<br>End Select<br>End Function<br>Function getpy(str)<br>For i &#x3D; 1 To Len(str)<br>getpy &#x3D; getpy &amp; pinyin(Mid(str, i, 1))<br>Next i<br>End Function</p>
-<p>在单元格输入公式”&#x3D;getpy()”</p>
-]]></content>
-      <tags>
-        <tag>excel</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>批量成生二维码</title>
     <url>/%E6%89%B9%E9%87%8F%E6%88%90%E7%94%9F%E4%BA%8C%E7%BB%B4%E7%A0%81/</url>
     <content><![CDATA[<p>import os<br>import qrcode<br>import openpyxl<br>from openpyxl.drawing.image import Image</p>
@@ -1780,6 +1784,18 @@
       </tags>
   </entry>
   <entry>
+    <title>把汉字转换成拼音首字母</title>
+    <url>/%E6%8A%8A%E6%B1%89%E5%AD%97%E8%BD%AC%E6%8D%A2%E6%88%90%E6%8B%BC%E9%9F%B3%E9%A6%96%E5%AD%97%E6%AF%8D/</url>
+    <content><![CDATA[<p>Function pinyin(p As String) As String<br>i &#x3D; Asc(p)<br>Select Case i<br>Case -20319 To -20284: pinyin &#x3D; “A”<br>Case -20283 To -19776: pinyin &#x3D; “B”<br>Case -19775 To -19219: pinyin &#x3D; “C”<br>Case -19218 To -18711: pinyin &#x3D; “D”</p>
+<span id="more"></span>
+<p>Case -18710 To -18527: pinyin &#x3D; “E”<br>Case -18526 To -18240: pinyin &#x3D; “F”<br>Case -18239 To -17923: pinyin &#x3D; “G”<br>Case -17922 To -17418: pinyin &#x3D; “H”<br>Case -17417 To -16475: pinyin &#x3D; “J”<br>Case -16474 To -16213: pinyin &#x3D; “K”<br>Case -16212 To -15641: pinyin &#x3D; “L”<br>Case -15640 To -15166: pinyin &#x3D; “M”<br>Case -15165 To -14923: pinyin &#x3D; “N”<br>Case -14922 To -14915: pinyin &#x3D; “O”<br>Case -14914 To -14631: pinyin &#x3D; “P”<br>Case -14630 To -14150: pinyin &#x3D; “Q”<br>Case -14149 To -14091: pinyin &#x3D; “R”<br>Case -14090 To -13319: pinyin &#x3D; “S”<br>Case -13318 To -12839: pinyin &#x3D; “T”<br>Case -12838 To -12557: pinyin &#x3D; “W”<br>Case -12556 To -11848: pinyin &#x3D; “X”<br>Case -11847 To -11056: pinyin &#x3D; “Y”<br>Case -11055 To -2050: pinyin &#x3D; “Z”<br>Case Else: pinyin &#x3D; p<br>End Select<br>End Function<br>Function getpy(str)<br>For i &#x3D; 1 To Len(str)<br>getpy &#x3D; getpy &amp; pinyin(Mid(str, i, 1))<br>Next i<br>End Function</p>
+<p>在单元格输入公式”&#x3D;getpy()”</p>
+]]></content>
+      <tags>
+        <tag>excel</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>指定条件单元格计数</title>
     <url>/%E6%8C%87%E5%AE%9A%E6%9D%A1%E4%BB%B6%E5%8D%95%E5%85%83%E6%A0%BC%E8%AE%A1%E6%95%B0/</url>
     <content><![CDATA[<p>&#x3D;COUNTIFS（B2：B9，“男”）<br>“B2：B9”为需要计数的区域<br>“男”，计数条件</p>
@@ -1798,21 +1814,21 @@
       </tags>
   </entry>
   <entry>
-    <title>条件求和</title>
-    <url>/%E6%9D%A1%E4%BB%B6%E6%B1%82%E5%92%8C/</url>
-    <content><![CDATA[<p>&#x3D;SUMIF(A1:A10,E4,C1:C10)<br>“A1:A10”选择求和项列<br>“E4”选择求和项<br>“C1:C10”选择数值列</p>
-]]></content>
-      <tags>
-        <tag>excel</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>格式化字符串的三种方法</title>
     <url>/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E6%B3%95/</url>
     <content><![CDATA[<p>f’{i}*{j}&#x3D;{i*j}’<br>‘{}*{}&#x3D;{}’.format(i,j,i*j)<br>‘%d*%d&#x3D;%d’%(i,j,i*j)</p>
 ]]></content>
       <tags>
         <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>条件求和</title>
+    <url>/%E6%9D%A1%E4%BB%B6%E6%B1%82%E5%92%8C/</url>
+    <content><![CDATA[<p>&#x3D;SUMIF(A1:A10,E4,C1:C10)<br>“A1:A10”选择求和项列<br>“E4”选择求和项<br>“C1:C10”选择数值列</p>
+]]></content>
+      <tags>
+        <tag>excel</tag>
       </tags>
   </entry>
   <entry>
@@ -2017,24 +2033,6 @@ book.save(&#39;test.xls&#39;)
       </tags>
   </entry>
   <entry>
-    <title>生成SSH</title>
-    <url>/%E7%94%9F%E6%88%90SSH/</url>
-    <content><![CDATA[<ul>
-<li><p>用户名和邮箱进行初始化<br>git config –global user.name yourname<br>git config –global user.email youremail</p>
-<span id="more"></span></li>
-<li><p>检查初始化信息<br>git config user.name<br>git config user.email</p>
-</li>
-<li><p>生成密钥<br>ssh-keygen -t rsa -C youremail</p>
-</li>
-<li><p>查看公钥<br>cat ~&#x2F;.ssh&#x2F;id_rsa.pub</p>
-</li>
-</ul>
-]]></content>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>第三方库安装命令</title>
     <url>/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93%E5%AE%89%E8%A3%85%E5%91%BD%E4%BB%A4/</url>
     <content><![CDATA[<table>
@@ -2067,15 +2065,6 @@ book.save(&#39;test.xls&#39;)
       </tags>
   </entry>
   <entry>
-    <title>筛选后自动排列序号</title>
-    <url>/%E7%AD%9B%E9%80%89%E5%90%8E%E8%87%AA%E5%8A%A8%E6%8E%92%E5%88%97%E5%BA%8F%E5%8F%B7/</url>
-    <content><![CDATA[<p>&#x3D;subtotal(3，B$2:B2)*1<br>“3”为函数序号<br>“B$2:B2”为序号数值</p>
-]]></content>
-      <tags>
-        <tag>excel</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>筛选求和</title>
     <url>/%E7%AD%9B%E9%80%89%E6%B1%82%E5%92%8C/</url>
     <content><![CDATA[<p>&#x3D;SUBTOTAL(9,C1:C10)<br>“9”为函数序号<br>“C1:C10”选择数值列</p>
@@ -2085,18 +2074,36 @@ book.save(&#39;test.xls&#39;)
       </tags>
   </entry>
   <entry>
-    <title>设备定义</title>
-    <url>/%E8%AE%BE%E5%A4%87%E5%AE%9A%E4%B9%89/</url>
-    <content><![CDATA[<p>1、关键设备(A):重要工序上的设备，一旦发生故障将导致流水线全线停机，如涂布机、Busbar 焊接机等。<br>2、重要设备(B):重要工序上的设备，设备故障将导致局部停机或可用其他设备代替。<br>3、 一般设备(C): 非重要工序上的设备<span id="more"></span><br>4、 OEE: 设备综合效率，OEE&#x3D;时间开动率×性能开动率×合格品率。<br>5、 MTBF: 平均故障间隔时间，是两次故障间的平均正常运行时间.<br>6、 MTTR: 平均修理时间，修理故障使设备回到正常运行的平均耗时。<br>7、 设备性能指数(CMK) : 表示仅由设备普通原因变差决定的能力。<br>8、 Qualify: 设备性能验收。</p>
+    <title>生成SSH</title>
+    <url>/%E7%94%9F%E6%88%90SSH/</url>
+    <content><![CDATA[<ul>
+<li><p>用户名和邮箱进行初始化<br>git config –global user.name yourname<br>git config –global user.email youremail</p>
+<span id="more"></span></li>
+<li><p>检查初始化信息<br>git config user.name<br>git config user.email</p>
+</li>
+<li><p>生成密钥<br>ssh-keygen -t rsa -C youremail</p>
+</li>
+<li><p>查看公钥<br>cat ~&#x2F;.ssh&#x2F;id_rsa.pub</p>
+</li>
+</ul>
 ]]></content>
       <tags>
-        <tag>system</tag>
+        <tag>python</tag>
       </tags>
   </entry>
   <entry>
     <title>设备性能确认(Qualify)</title>
     <url>/%E8%AE%BE%E5%A4%87%E6%80%A7%E8%83%BD%E7%A1%AE%E8%AE%A4-Qualify/</url>
     <content><![CDATA[<p>设备性能确认(Qualify)，即某个设备达到了一定的标准，可以被用来做某个预定的生产步骤。Qualify的过程一定要有”预定的标准”。<br>设备的用户需求说明(URS)和性能指标决定了设备的标准，确认就是通过实际操作、测试或试验，来收集证据，证明该设备已经达到了这些标准。</p>
+]]></content>
+      <tags>
+        <tag>system</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>设备定义</title>
+    <url>/%E8%AE%BE%E5%A4%87%E5%AE%9A%E4%B9%89/</url>
+    <content><![CDATA[<p>1、关键设备(A):重要工序上的设备，一旦发生故障将导致流水线全线停机，如涂布机、Busbar 焊接机等。<br>2、重要设备(B):重要工序上的设备，设备故障将导致局部停机或可用其他设备代替。<br>3、 一般设备(C): 非重要工序上的设备<span id="more"></span><br>4、 OEE: 设备综合效率，OEE&#x3D;时间开动率×性能开动率×合格品率。<br>5、 MTBF: 平均故障间隔时间，是两次故障间的平均正常运行时间.<br>6、 MTTR: 平均修理时间，修理故障使设备回到正常运行的平均耗时。<br>7、 设备性能指数(CMK) : 表示仅由设备普通原因变差决定的能力。<br>8、 Qualify: 设备性能验收。</p>
 ]]></content>
       <tags>
         <tag>system</tag>
@@ -2117,6 +2124,15 @@ book.save(&#39;test.xls&#39;)
 ]]></content>
       <tags>
         <tag>system</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>筛选后自动排列序号</title>
+    <url>/%E7%AD%9B%E9%80%89%E5%90%8E%E8%87%AA%E5%8A%A8%E6%8E%92%E5%88%97%E5%BA%8F%E5%8F%B7/</url>
+    <content><![CDATA[<p>&#x3D;subtotal(3，B$2:B2)*1<br>“3”为函数序号<br>“B$2:B2”为序号数值</p>
+]]></content>
+      <tags>
+        <tag>excel</tag>
       </tags>
   </entry>
   <entry>
