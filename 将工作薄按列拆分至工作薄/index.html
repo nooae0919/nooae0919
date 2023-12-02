@@ -101,19 +101,7 @@
     </div>
 </div>
         <div class="post-content">
-            <p>import pandas as pd<br>data &#x3D; pd.read_excel(r’地址\汇总.xls’,keep_default_na&#x3D;False)<br>unit_list &#x3D; list(data[‘姓名’].drop_duplicates())<br>for i in unit_list:</p>
-<ul>
-<li>data_new &#x3D; data[data[‘姓名’] &#x3D;&#x3D; i]</li>
-<li>if i &#x3D;&#x3D; ‘’:<ul>
-<li>data_new.to_excel()</li>
-</ul>
-</li>
-<li>else:<ul>
-<li>data_new.to_excel(r”地址%s.xls” % (i),index&#x3D;False)</li>
-</ul>
-</li>
-</ul>
-
+            <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">import pandas as pd</span><br><span class="line">data = pd.read_excel(r&#x27;地址\汇总.xls&#x27;,keep_default_na=False)</span><br><span class="line">unit_list = list(data[&#x27;姓名&#x27;].drop_duplicates())</span><br><span class="line">for i in unit_list:</span><br><span class="line">	data_new = data[data[&#x27;姓名&#x27;] == i]</span><br><span class="line">	if i == &#x27;&#x27;:</span><br><span class="line">		data_new.to_excel()</span><br><span class="line">	else:</span><br><span class="line">		data_new.to_excel(r&quot;地址\%s.xls&quot; % (i),index=False)</span><br></pre></td></tr></table></figure>
         </div>
         
         <div class="post-tag">

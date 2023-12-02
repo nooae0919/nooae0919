@@ -101,17 +101,7 @@
     </div>
 </div>
         <div class="post-content">
-            <p>import requests<br>import re</p>
-<p>#1-爬取数据<span id="more"></span><br>url &#x3D; ‘<a target="_blank" rel="noopener" href="https://movie.douban.com/chart">https://movie.douban.com/chart</a>‘<br>headers &#x3D; {‘User-Agent’:’Mozilla&#x2F;5.0 (Windows NT 6.1; WOW64) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;78.0.3904.108 Safari&#x2F;537.36’}<br>response &#x3D; requests.get(url,headers &#x3D; headers)<br>#print(response.text)<br>html_str &#x3D; response.text</p>
-<p>#2-解析数据<br>patten &#x3D; re.compile(‘&lt; a.*?nbg.*?title&#x3D;”(.*?)”&gt;’,re.S)<br>items &#x3D; re.findall(patten,html_str)<br>print(items)</p>
-<p>#3-存储数据<br>with open(‘douban.txt’,”w”,encoding&#x3D;’utf-8’) as f:</p>
-<ul>
-<li>for item in items:<ul>
-<li>f.write(item+’\n’)</li>
-</ul>
-</li>
-</ul>
-
+            <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">import re</span><br><span class="line"></span><br><span class="line">#1-爬取数据&lt;!--more--&gt;</span><br><span class="line">url = &#x27;https://movie.douban.com/chart&#x27;</span><br><span class="line">headers = &#123;&#x27;User-Agent&#x27;:&#x27;Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36&#x27;&#125;</span><br><span class="line">response = requests.get(url,headers = headers)</span><br><span class="line">#print(response.text)</span><br><span class="line">html_str = response.text</span><br><span class="line"></span><br><span class="line">#2-解析数据</span><br><span class="line">patten = re.compile(&#x27;&lt; a.*?nbg.*?title=&quot;(.*?)&quot;&gt;&#x27;,re.S)</span><br><span class="line">items = re.findall(patten,html_str)</span><br><span class="line">print(items)</span><br><span class="line"></span><br><span class="line">#3-存储数据</span><br><span class="line">with open(&#x27;douban.txt&#x27;,&quot;w&quot;,encoding=&#x27;utf-8&#x27;) as f:</span><br><span class="line">+ for item in items:</span><br><span class="line">	- f.write(item+&#x27;\n&#x27;)</span><br></pre></td></tr></table></figure>
         </div>
         
         <div class="post-tag">

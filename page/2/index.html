@@ -87,6 +87,27 @@
     
         <article class="post-abstract">
             <div class="post-title">
+                <h2><a class="post-title-link" href="/WI%E5%B7%A5%E4%BD%9C%E6%8C%87%E7%A4%BA/">WI工作指示编写流程</a></h2>
+            </div>
+            <div class="post-meta">
+                <span class="post-time">2023-09-29</span>
+                
+            </div>
+            <div class="post-content">
+                
+                    <p>一、确定编写目标及需求<br>在编写WI之前，首先需要明确编写目标及需求，包括:<br>(1)需要编写的工作内容及流程;<br>(2)操作人员的技能要求和培训需求;<br>(3)操作所需的设备、工具和材料等。</p>
+                    <div class="read-more">
+                        <a href="/WI%E5%B7%A5%E4%BD%9C%E6%8C%87%E7%A4%BA/" class="read-more-link">
+                            阅读全文
+                            <i class="iconfont icon-readmore"></i>
+                        </a>
+                    </div>
+                
+            </div>
+        </article>
+    
+        <article class="post-abstract">
+            <div class="post-title">
                 <h2><a class="post-title-link" href="/%E5%A4%9A%E6%9D%A1%E4%BB%B6%E6%9F%A5%E6%89%BE/">多条件查找</a></h2>
             </div>
             <div class="post-meta">
@@ -165,15 +186,7 @@
             </div>
             <div class="post-content">
                 
-                    <p>for i in range(1, 10):</p>
-<ul>
-<li>for j in range(1, i + 1):<ul>
-<li>print(‘{}*{}&#x3D;{}’.format(i,j,i*j), end&#x3D;’\t’)</li>
-</ul>
-</li>
-<li>print()</li>
-</ul>
-
+                    <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">for i in range(1, 10):</span><br><span class="line">	for j in range(1, i + 1):</span><br><span class="line">		print(&#x27;&#123;&#125;\*&#123;&#125;=&#123;&#125;&#x27;.format(i,j,i\*j), end=&#x27;\t&#x27;)</span><br><span class="line">	print()</span><br></pre></td></tr></table></figure>
                 
             </div>
         </article>
@@ -188,13 +201,7 @@
             </div>
             <div class="post-content">
                 
-                    <p>import os<br>import fitz  # fitz就是pip install PyMuPDF</p>
-                    <div class="read-more">
-                        <a href="/PDF%E8%BD%AC%E5%9B%BE%E7%89%87/" class="read-more-link">
-                            阅读全文
-                            <i class="iconfont icon-readmore"></i>
-                        </a>
-                    </div>
+                    <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">import os</span><br><span class="line">import fitz  # fitz就是pip install PyMuPDF</span><br><span class="line"></span><br><span class="line">def pyMuPDF_fitz(pdfPath, imagePath):</span><br><span class="line">	print(&quot;imagePath=&quot; + imagePath)</span><br><span class="line">	pdfDoc = fitz.open(pdfPath)</span><br><span class="line">	for pg in range(pdfDoc.pageCount):</span><br><span class="line">		page = pdfDoc[pg]</span><br><span class="line">		rotate = int(0)</span><br><span class="line">		\#每个尺寸的缩放系数为1.3，这将为我们生成分辨率提高2.6的图像。</span><br><span class="line">		\#此处若是不做设置，默认图片大小为：792X612, dpi=96</span><br><span class="line">		zoom_x = 1.33333333  # (1.33333333--&gt;1056x816)   (2--&gt;1584x1224)</span><br><span class="line">		zoom_y = 1.33333333</span><br><span class="line">		mat = fitz.Matrix(zoom_x, zoom_y).preRotate(rotate)</span><br><span class="line">		pix = page.getPixmap(matrix=mat, alpha=False)</span><br><span class="line"></span><br><span class="line">		if not os.path.exists(imagePath):  # 判断存放图片的文件夹是否存在</span><br><span class="line">			os.makedirs(imagePath)  # 若图片文件夹不存在就创建</span><br><span class="line"></span><br><span class="line">		pix.writePNG(imagePath + &#x27;/&#x27; + &#x27;images_%s.png&#x27; % pg)  # 将图片写入指定的文件夹内</span><br><span class="line"></span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">	pdfPath = &#x27;123.pdf&#x27;</span><br><span class="line">	imagePath = &#x27;./imgs&#x27;</span><br><span class="line">	pyMuPDF_fitz(pdfPath, imagePath)</span><br></pre></td></tr></table></figure>
                 
             </div>
         </article>
@@ -259,22 +266,6 @@
                             <i class="iconfont icon-readmore"></i>
                         </a>
                     </div>
-                
-            </div>
-        </article>
-    
-        <article class="post-abstract">
-            <div class="post-title">
-                <h2><a class="post-title-link" href="/%E5%AE%9E%E6%96%BD16949%E8%B4%A8%E9%87%8F%E7%AE%A1%E7%90%86%E4%BD%93%E7%B3%BB%E6%A0%87%E5%87%86%E7%9A%84%E7%9B%8A%E5%A4%84/">实施16949质量管理体系标准的益处</a></h2>
-            </div>
-            <div class="post-meta">
-                <span class="post-time">2023-04-02</span>
-                
-            </div>
-            <div class="post-content">
-                
-                    <p>1、开拓市场：ISO16949:2009作为质量保证的标志有助于企业获得顾客的信任，以获得更为广阔的市场空间。<br>2、提高顾客满意度：通过实施ISO16949:2009，关注并满足顾客要求，以提高顾客满意度。<br>3、降本增效：持续关注企业运营业绩，改进过程绩效指标，以实现降本增效。<br>4、提高产品和交付质量：运用系统的开发和改进方法，保证产品质量和交付业绩。</p>
-
                 
             </div>
         </article>

@@ -101,52 +101,7 @@
     </div>
 </div>
         <div class="post-content">
-            <p>import os<br>import qrcode<br>import openpyxl<br>from openpyxl.drawing.image import Image</p>
-<span id="more"></span>
-
-<p>def open_cell(num):</p>
-<ul>
-<li>cell &#x3D; sheet[“A” + num]</li>
-<li>return cell.value</li>
-</ul>
-<p>def gen_image(text,name):</p>
-<ul>
-<li>img &#x3D; qrcode.make(text)</li>
-<li>with open(name,”wb”) as f:<ul>
-<li>img.save(f)</li>
-</ul>
-</li>
-</ul>
-<p>def write_img(img_name,position):</p>
-<ul>
-<li>imgsize &#x3D; (720&#x2F;12,720&#x2F;12)</li>
-<li>img &#x3D; Image(img_name)</li>
-<li>img.width,img.height &#x3D; imgsize</li>
-<li>sheet.add_image(img,position)</li>
-</ul>
-<p>if _name_ &#x3D;&#x3D; “_main_”:</p>
-<ul>
-<li><p>wb_name &#x3D; “text.xlsx”</p>
-</li>
-<li><p>wb &#x3D; openpyxl.load_workbook(wb_name)</p>
-</li>
-<li><p>sheet &#x3D; wb.worksheets[0]</p>
-</li>
-<li><p>os.mkdir(“qrcode”)</p>
-</li>
-<li><p>for i in range(1,10):</p>
-<ul>
-<li>test &#x3D; open_cell(str(i))</li>
-<li>test_png_name &#x3D; “qrcode&#x2F;“ + “A” + str(i) + “.png”</li>
-<li>paste &#x3D; “B” + str(i)</li>
-<li>gen_image(test,test_png_name)</li>
-<li>write_img(test_png_name,paste)</li>
-</ul>
-</li>
-<li><p>wb.save(wb_name)</p>
-</li>
-</ul>
-
+            <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">import os</span><br><span class="line">import qrcode</span><br><span class="line">import openpyxl</span><br><span class="line">from openpyxl.drawing.image import Image</span><br><span class="line"></span><br><span class="line">def open_cell(num):</span><br><span class="line">	cell = sheet[&quot;A&quot; + num]</span><br><span class="line">	return cell.value</span><br><span class="line"></span><br><span class="line">def gen_image(text,name):</span><br><span class="line">	img = qrcode.make(text)</span><br><span class="line">	with open(name,&quot;wb&quot;) as f:</span><br><span class="line">	img.save(f)</span><br><span class="line"></span><br><span class="line">def write_img(img_name,position):</span><br><span class="line">	imgsize = (720/12,720/12)</span><br><span class="line">	img = Image(img_name)</span><br><span class="line">	img.width,img.height = imgsize</span><br><span class="line">	sheet.add_image(img,position)</span><br><span class="line"></span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">	wb_name = &quot;text.xlsx&quot;</span><br><span class="line">	wb = openpyxl.load_workbook(wb_name)</span><br><span class="line">	sheet = wb.worksheets[0]</span><br><span class="line">	os.mkdir(&quot;qrcode&quot;)</span><br><span class="line"></span><br><span class="line">	for i in range(1,10):</span><br><span class="line">		test = open_cell(str(i))</span><br><span class="line">		test_png_name = &quot;qrcode/&quot; + &quot;A&quot; + str(i) + &quot;.png&quot;</span><br><span class="line">		paste = &quot;B&quot; + str(i)</span><br><span class="line">		gen_image(test,test_png_name)</span><br><span class="line">		write_img(test_png_name,paste)</span><br><span class="line"></span><br><span class="line">	wb.save(wb_name)</span><br></pre></td></tr></table></figure>
         </div>
         
         <div class="post-tag">
