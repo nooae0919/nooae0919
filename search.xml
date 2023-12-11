@@ -412,9 +412,10 @@
       </tags>
   </entry>
   <entry>
-    <title>PDF转图片</title>
-    <url>/PDF%E8%BD%AC%E5%9B%BE%E7%89%87/</url>
-    <content><![CDATA[<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import os</span><br><span class="line">import fitz  # fitz就是pip install PyMuPDF</span><br><span class="line"></span><br><span class="line">def pyMuPDF_fitz(pdfPath, imagePath):</span><br><span class="line">	print(&quot;imagePath=&quot; + imagePath)</span><br><span class="line">	pdfDoc = fitz.open(pdfPath)</span><br><span class="line">	for pg in range(pdfDoc.pageCount):</span><br><span class="line">		page = pdfDoc[pg]</span><br><span class="line">		rotate = int(0)</span><br><span class="line">		\#每个尺寸的缩放系数为1.3，这将为我们生成分辨率提高2.6的图像。</span><br><span class="line">		\#此处若是不做设置，默认图片大小为：792X612, dpi=96</span><br><span class="line">		zoom_x = 1.33333333  # (1.33333333--&gt;1056x816)   (2--&gt;1584x1224)</span><br><span class="line">		zoom_y = 1.33333333</span><br><span class="line">		mat = fitz.Matrix(zoom_x, zoom_y).preRotate(rotate)</span><br><span class="line">		pix = page.getPixmap(matrix=mat, alpha=False)</span><br><span class="line"></span><br><span class="line">		if not os.path.exists(imagePath):  # 判断存放图片的文件夹是否存在</span><br><span class="line">			os.makedirs(imagePath)  # 若图片文件夹不存在就创建</span><br><span class="line"></span><br><span class="line">		pix.writePNG(imagePath + &#x27;/&#x27; + &#x27;images_%s.png&#x27; % pg)  # 将图片写入指定的文件夹内</span><br><span class="line"></span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">	pdfPath = &#x27;123.pdf&#x27;</span><br><span class="line">	imagePath = &#x27;./imgs&#x27;</span><br><span class="line">	pyMuPDF_fitz(pdfPath, imagePath)</span><br></pre></td></tr></table></figure>]]></content>
+    <title>Office批量转PDF</title>
+    <url>/Office%E6%89%B9%E9%87%8F%E8%BD%ACPDF/</url>
+    <content><![CDATA[<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import os, win32com.client, gc</span><br><span class="line"></span><br><span class="line"># Word</span><br><span class="line">def word2Pdf(filePath, words):</span><br><span class="line">    # 如果没有文件则提示后直接退出</span><br><span class="line">    if(len(words)&lt;1):</span><br><span class="line">        print (&quot;\n【无 Word 文件】\n&quot;)</span><br><span class="line">        return</span><br><span class="line">    # 开始转换</span><br><span class="line">    print (&quot;\n【开始 Word -&gt; PDF 转换】&quot;)</span><br><span class="line">    try:</span><br><span class="line">        print (&quot;打开 Word 进程...&quot;)</span><br><span class="line">        word = win32com.client.Dispatch(&quot;Word.Application&quot;)</span><br><span class="line">        word.Visible = 0</span><br><span class="line">        word.DisplayAlerts = False</span><br><span class="line">        doc = None</span><br><span class="line">        for i in range(len(words)):</span><br><span class="line">            print(i)</span><br><span class="line">            fileName = words[i] # 文件名称</span><br><span class="line">            fromFile = os.path.join(filePath, fileName) # 文件地址</span><br><span class="line">            toFileName = changeSufix2Pdf(fileName) # 生成的文件名称</span><br><span class="line">            toFile = toFileJoin(filePath,toFileName) # 生成的文件地址</span><br><span class="line"></span><br><span class="line">            print (&quot;转换：&quot;+fileName+&quot;文件中...&quot;)</span><br><span class="line">            # 某文件出错不影响其他文件打印</span><br><span class="line">            try:</span><br><span class="line">                doc = word.Documents.Open(fromFile)</span><br><span class="line">                doc.SaveAs(toFile,17) # 生成的所有 PDF 都会在 PDF 文件夹中</span><br><span class="line">                print (&quot;转换到：&quot;+toFileName+&quot;完成&quot;)</span><br><span class="line">            except Exception as e:</span><br><span class="line">                print(e)</span><br><span class="line">            # 关闭 Word 进程</span><br><span class="line">        print (&quot;所有 Word 文件已打印完毕&quot;)</span><br><span class="line">        print (&quot;结束 Word 进程...\n&quot;)</span><br><span class="line">        doc.Close()</span><br><span class="line">        doc = None</span><br><span class="line">        word.Quit()</span><br><span class="line">        word = None</span><br><span class="line">    except Exception as e:</span><br><span class="line">        print(e)</span><br><span class="line">    finally:</span><br><span class="line">        gc.collect()</span><br><span class="line"></span><br><span class="line"># Excel</span><br><span class="line">def excel2Pdf(filePath, excels):</span><br><span class="line">    # 如果没有文件则提示后直接退出</span><br><span class="line">    if(len(excels)&lt;1):</span><br><span class="line">        print (&quot;\n【无 Excel 文件】\n&quot;)</span><br><span class="line">        return</span><br><span class="line">    # 开始转换</span><br><span class="line">    print (&quot;\n【开始 Excel -&gt; PDF 转换】&quot;)</span><br><span class="line">    try:</span><br><span class="line">        print (&quot;打开 Excel 进程中...&quot;)</span><br><span class="line">        excel = win32com.client.Dispatch(&quot;Excel.Application&quot;)</span><br><span class="line">        excel.Visible = 0</span><br><span class="line">        excel.DisplayAlerts = False</span><br><span class="line">        wb = None</span><br><span class="line">        ws = None</span><br><span class="line">        for i in range(len(excels)):</span><br><span class="line">            print(i)</span><br><span class="line">            fileName = excels[i] # 文件名称</span><br><span class="line">            fromFile = os.path.join(filePath, fileName) # 文件地址</span><br><span class="line">           </span><br><span class="line">            print (&quot;转换：&quot;+fileName+&quot;文件中...&quot;)</span><br><span class="line">            # 某文件出错不影响其他文件打印</span><br><span class="line">            try:</span><br><span class="line">                wb = excel.Workbooks.Open(fromFile)</span><br><span class="line">                for j in range(wb.Worksheets.Count): # 工作表数量，一个工作簿可能有多张工作表</span><br><span class="line">                    toFileName = addWorksheetsOrder(fileName, j+1) # 生成的文件名称</span><br><span class="line">                    toFile = toFileJoin(filePath,toFileName) # 生成的文件地址</span><br><span class="line">                   </span><br><span class="line">                    ws = wb.Worksheets(j+1) # 若为[0]则打包后会提示越界</span><br><span class="line">                    ws.ExportAsFixedFormat(0,toFile) # 每一张都需要打印</span><br><span class="line">                    print (&quot;转换至：&quot;+toFileName+&quot;文件完成&quot;)</span><br><span class="line">            except Exception as e:</span><br><span class="line">                print(e)</span><br><span class="line">        # 关闭 Excel 进程</span><br><span class="line">        print (&quot;所有 Excel 文件已打印完毕&quot;)</span><br><span class="line">        print (&quot;结束 Excel 进程中...\n&quot;)</span><br><span class="line">        ws = None</span><br><span class="line">        wb.Close()</span><br><span class="line">        wb = None</span><br><span class="line">        excel.Quit()</span><br><span class="line">        excel = None</span><br><span class="line">    except Exception as e:</span><br><span class="line">        print(e)</span><br><span class="line">    finally:</span><br><span class="line">        gc.collect()</span><br><span class="line"></span><br><span class="line"># PPT</span><br><span class="line">def ppt2Pdf(filePath, ppts):</span><br><span class="line">    # 如果没有文件则提示后直接退出</span><br><span class="line">    if(len(ppts)&lt;1):</span><br><span class="line">        print (&quot;\n【无 PPT 文件】\n&quot;)</span><br><span class="line">        return</span><br><span class="line">    # 开始转换</span><br><span class="line">    print (&quot;\n【开始 PPT -&gt; PDF 转换】&quot;)</span><br><span class="line">    try:</span><br><span class="line">        print (&quot;打开 PowerPoint 进程中...&quot;)</span><br><span class="line">        powerpoint = win32com.client.Dispatch(&quot;PowerPoint.Application&quot;)</span><br><span class="line">        ppt = None</span><br><span class="line">        # 某文件出错不影响其他文件打印</span><br><span class="line"></span><br><span class="line">        for i in range(len(ppts)):</span><br><span class="line">            print(i)</span><br><span class="line">            fileName = ppts[i] # 文件名称</span><br><span class="line">            fromFile = os.path.join(filePath, fileName) # 文件地址</span><br><span class="line">            toFileName = changeSufix2Pdf(fileName) # 生成的文件名称</span><br><span class="line">            toFile = toFileJoin(filePath,toFileName) # 生成的文件地址</span><br><span class="line"></span><br><span class="line">            print (&quot;转换：&quot;+fileName+&quot;文件中...&quot;)</span><br><span class="line">            try:</span><br><span class="line">                ppt = powerpoint.Presentations.Open(fromFile,WithWindow=False)</span><br><span class="line">                if ppt.Slides.Count&gt;0:</span><br><span class="line">                    ppt.SaveAs(toFile, 32) # 如果为空则会跳出提示框（暂时没有找到消除办法）</span><br><span class="line">                    print (&quot;转换至：&quot;+toFileName+&quot;文件完成&quot;)</span><br><span class="line">                else:</span><br><span class="line">                    print(&quot;（错误，发生意外：此文件为空，跳过此文件）&quot;)</span><br><span class="line">            except Exception as e:</span><br><span class="line">                print(e)</span><br><span class="line">        # 关闭 PPT 进程</span><br><span class="line">        print (&quot;所有 PPT 文件已打印完毕&quot;)</span><br><span class="line">        print (&quot;结束 PowerPoint 进程中...\n&quot;)</span><br><span class="line">        ppt.Close()</span><br><span class="line">        ppt = None</span><br><span class="line">        powerpoint.Quit()</span><br><span class="line">        powerpoint = None</span><br><span class="line">    except Exception as e:</span><br><span class="line">        print(e)</span><br><span class="line">    finally:</span><br><span class="line">        gc.collect()</span><br><span class="line"></span><br><span class="line"># 修改后缀名</span><br><span class="line">def changeSufix2Pdf(file):</span><br><span class="line">    return file[:file.rfind(&#x27;.&#x27;)]+&quot;.pdf&quot;</span><br><span class="line"># 添加工作簿序号</span><br><span class="line">def addWorksheetsOrder(file, i):</span><br><span class="line">    return file[:file.rfind(&#x27;.&#x27;)]+&quot;_工作表&quot;+str(i)+&quot;.pdf&quot;</span><br><span class="line"># 转换地址</span><br><span class="line">def toFileJoin(filePath,file):</span><br><span class="line">    return os.path.join(filePath,&#x27;pdf&#x27;,file[:file.rfind(&#x27;.&#x27;)]+&quot;.pdf&quot;)</span><br><span class="line">   </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 开始程序</span><br><span class="line">print (&quot;====================程序开始====================&quot;)</span><br><span class="line">print (&quot;【程序功能】将目标路径下内所有的 ppt、excel、word 均生成一份对应的 PDF 文件，存在新生成的 pdf 文件夹中（需已经安装office，不包括子文件夹）&quot;)</span><br><span class="line">print (&quot;注意：若某 PPT 和 Excel 文件为空，则会出错跳过此文件。若转换 PPT 时间过长，请查看是否有报错窗口等待确认，暂时无法彻底解决 PPT 的窗口问题（为空错误已解决）。在关闭进程过程中，时间可能会较长，十秒左右，请耐心等待。&quot;)</span><br><span class="line">filePath = input (&quot;输入目标路径：(若为当前路径：&quot;+os.getcwd()+&quot;，请直接回车）\n&quot;)</span><br><span class="line"></span><br><span class="line"># 目标路径，若没有输入路径则为当前路径</span><br><span class="line">if(filePath==&quot;&quot;):</span><br><span class="line">    filePath = os.getcwd()</span><br><span class="line"></span><br><span class="line"># 将目标文件夹所有文件归类，转换时只打开一个进程</span><br><span class="line">words = []</span><br><span class="line">ppts = []</span><br><span class="line">excels = []</span><br><span class="line"></span><br><span class="line">for fn in os.listdir(filePath):</span><br><span class="line">    if fn.endswith((&#x27;.doc&#x27;, &#x27;docx&#x27;)):</span><br><span class="line">        words.append(fn)</span><br><span class="line">    if fn.endswith((&#x27;.ppt&#x27;, &#x27;pptx&#x27;)):</span><br><span class="line">        ppts.append(fn)</span><br><span class="line">    if fn.endswith((&#x27;.xls&#x27;, &#x27;xlsx&#x27;)):</span><br><span class="line">        excels.append(fn)</span><br><span class="line"></span><br><span class="line"># 调用方法</span><br><span class="line">print (&quot;====================开始转换====================&quot;)</span><br><span class="line"></span><br><span class="line"># 新建 pdf 文件夹，所有生成的 PDF 文件都放在里面</span><br><span class="line">folder = filePath + &#x27;\\pdf\\&#x27;</span><br><span class="line">if not os.path.exists(folder):</span><br><span class="line">    os.makedirs(folder)</span><br><span class="line"></span><br><span class="line">word2Pdf(filePath,words)</span><br><span class="line">excel2Pdf(filePath,excels)</span><br><span class="line">ppt2Pdf(filePath,ppts)</span><br><span class="line">print (&quot;====================转换结束====================&quot;)</span><br><span class="line">print (&quot;\n====================程序结束====================&quot;)</span><br><span class="line">os.system(&quot;pause&quot;)</span><br></pre></td></tr></table></figure>
+]]></content>
       <tags>
         <tag>python</tag>
       </tags>
@@ -427,6 +428,14 @@
 ]]></content>
       <tags>
         <tag>system</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>PDF转图片</title>
+    <url>/PDF%E8%BD%AC%E5%9B%BE%E7%89%87/</url>
+    <content><![CDATA[<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import os</span><br><span class="line">import fitz  # fitz就是pip install PyMuPDF</span><br><span class="line"></span><br><span class="line">def pyMuPDF_fitz(pdfPath, imagePath):</span><br><span class="line">	print(&quot;imagePath=&quot; + imagePath)</span><br><span class="line">	pdfDoc = fitz.open(pdfPath)</span><br><span class="line">	for pg in range(pdfDoc.pageCount):</span><br><span class="line">		page = pdfDoc[pg]</span><br><span class="line">		rotate = int(0)</span><br><span class="line">		\#每个尺寸的缩放系数为1.3，这将为我们生成分辨率提高2.6的图像。</span><br><span class="line">		\#此处若是不做设置，默认图片大小为：792X612, dpi=96</span><br><span class="line">		zoom_x = 1.33333333  # (1.33333333--&gt;1056x816)   (2--&gt;1584x1224)</span><br><span class="line">		zoom_y = 1.33333333</span><br><span class="line">		mat = fitz.Matrix(zoom_x, zoom_y).preRotate(rotate)</span><br><span class="line">		pix = page.getPixmap(matrix=mat, alpha=False)</span><br><span class="line"></span><br><span class="line">		if not os.path.exists(imagePath):  # 判断存放图片的文件夹是否存在</span><br><span class="line">			os.makedirs(imagePath)  # 若图片文件夹不存在就创建</span><br><span class="line"></span><br><span class="line">		pix.writePNG(imagePath + &#x27;/&#x27; + &#x27;images_%s.png&#x27; % pg)  # 将图片写入指定的文件夹内</span><br><span class="line"></span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">	pdfPath = &#x27;123.pdf&#x27;</span><br><span class="line">	imagePath = &#x27;./imgs&#x27;</span><br><span class="line">	pyMuPDF_fitz(pdfPath, imagePath)</span><br></pre></td></tr></table></figure>]]></content>
+      <tags>
+        <tag>python</tag>
       </tags>
   </entry>
   <entry>
@@ -1176,22 +1185,6 @@
       </tags>
   </entry>
   <entry>
-    <title>SQL命令</title>
-    <url>/SQL%E5%91%BD%E4%BB%A4/</url>
-    <content><![CDATA[<p>#创建一个名为“day1”的数据库<br>create database day1;</p>
-<p>#进去day1数据库<br>use day1;<span id="more"></span></p>
-<p>#创建一个名为“test”的数据表<br>create table test(<br>id varchar(20)  primary key ,<br>name varchar(30),<br>password varchar(30)<br>);</p>
-<p>#向test表插入一行数据<br>insert into test(id,name,password) values(‘001’,’lisi’,’123456’);</p>
-<p>#查看创建的test表的数据<br>select * from test;</p>
-<p>#将id为001的密码改为xxxx<br>update test set password&#x3D;’xxxx’ where id&#x3D;’001’;</p>
-<p>#删除test表<br>drop table test;</p>
-<p>#删除day1数据库<br>drop database day1;</p>
-]]></content>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Termux常用命令</title>
     <url>/Termux%E5%B8%B8%E8%A7%81%E5%91%BD%E4%BB%A4/</url>
     <content><![CDATA[<p>Termux是一个Android上的终端模拟器和Linux环境。它允许用户在其Android设备上直接运行各种 Linux 命令行实用程序。<br>在Termux中可以使用的一些常用命令包括:</p>
@@ -1285,6 +1278,22 @@
 ]]></content>
       <tags>
         <tag>system</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>SQL命令</title>
+    <url>/SQL%E5%91%BD%E4%BB%A4/</url>
+    <content><![CDATA[<p>#创建一个名为“day1”的数据库<br>create database day1;</p>
+<p>#进去day1数据库<br>use day1;<span id="more"></span></p>
+<p>#创建一个名为“test”的数据表<br>create table test(<br>id varchar(20)  primary key ,<br>name varchar(30),<br>password varchar(30)<br>);</p>
+<p>#向test表插入一行数据<br>insert into test(id,name,password) values(‘001’,’lisi’,’123456’);</p>
+<p>#查看创建的test表的数据<br>select * from test;</p>
+<p>#将id为001的密码改为xxxx<br>update test set password&#x3D;’xxxx’ where id&#x3D;’001’;</p>
+<p>#删除test表<br>drop table test;</p>
+<p>#删除day1数据库<br>drop database day1;</p>
+]]></content>
+      <tags>
+        <tag>python</tag>
       </tags>
   </entry>
   <entry>
@@ -1616,24 +1625,6 @@
       </tags>
   </entry>
   <entry>
-    <title>条件查找</title>
-    <url>/%E6%9D%A1%E4%BB%B6%E6%9F%A5%E6%89%BE/</url>
-    <content><![CDATA[<p>&#x3D;VLOOKUP(A1,A:C,3,1)，以此函数为例：<br>“A1”为“查找值”内容，当前需要查找的目标；<br>“A:C”为“数据表”内容，查找表中的目标起始列和结果终止列；<br>“3”为“列序数”内容，“数据表”中目标列至结果列的列数；<br>“1”为“匹配条件”内容，“0”为精确查找，“1”为模糊查找。</p>
-]]></content>
-      <tags>
-        <tag>excel</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>条件求和</title>
-    <url>/%E6%9D%A1%E4%BB%B6%E6%B1%82%E5%92%8C/</url>
-    <content><![CDATA[<p>&#x3D;SUMIF(A1:A10,E4,C1:C10)<br>“A1:A10”选择求和项列<br>“E4”选择求和项<br>“C1:C10”选择数值列</p>
-]]></content>
-      <tags>
-        <tag>excel</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>正则表达式模式</title>
     <url>/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%A8%A1%E5%BC%8F/</url>
     <content><![CDATA[<p>正则表达式字符释义</p>
@@ -1798,6 +1789,24 @@
       </tags>
   </entry>
   <entry>
+    <title>条件求和</title>
+    <url>/%E6%9D%A1%E4%BB%B6%E6%B1%82%E5%92%8C/</url>
+    <content><![CDATA[<p>&#x3D;SUMIF(A1:A10,E4,C1:C10)<br>“A1:A10”选择求和项列<br>“E4”选择求和项<br>“C1:C10”选择数值列</p>
+]]></content>
+      <tags>
+        <tag>excel</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>条件查找</title>
+    <url>/%E6%9D%A1%E4%BB%B6%E6%9F%A5%E6%89%BE/</url>
+    <content><![CDATA[<p>&#x3D;VLOOKUP(A1,A:C,3,1)，以此函数为例：<br>“A1”为“查找值”内容，当前需要查找的目标；<br>“A:C”为“数据表”内容，查找表中的目标起始列和结果终止列；<br>“3”为“列序数”内容，“数据表”中目标列至结果列的列数；<br>“1”为“匹配条件”内容，“0”为精确查找，“1”为模糊查找。</p>
+]]></content>
+      <tags>
+        <tag>excel</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>爬取关键字写入表格</title>
     <url>/%E7%88%AC%E5%8F%96%E5%85%B3%E9%94%AE%E5%AD%97%E5%86%99%E5%85%A5%E8%A1%A8%E6%A0%BC/</url>
     <content><![CDATA[<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import requests</span><br><span class="line">import re</span><br><span class="line">import xlwt</span><br><span class="line"></span><br><span class="line">headers = &#123;&#x27;User-Agent&#x27;:&quot;Mozilla/5.0 (X11; Linux x86_64; rv:45.0) Gecko/20100101 Firefox/45.0&quot;&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">book = xlwt.Workbook()</span><br><span class="line">sheet = book.add_sheet(&#x27;ke_tengxun&#x27;,cell_overwrite_ok=True)</span><br><span class="line"></span><br><span class="line">rownum = 1</span><br><span class="line">def get_info(url):</span><br><span class="line">    global rownum</span><br><span class="line">    res = requests.get(url,headers = headers)</span><br><span class="line">    pattern = re.compile(&#x27;.*?rel=&quot;nofollow&quot;.*?&gt;(.*?)&lt;&#x27;,re.S)</span><br><span class="line">    ke_chupin =re.findall(pattern,res.text)</span><br><span class="line">    pattern = re.compile(&#x27;</span><br><span class="line">.*?cors-name=&quot;course&quot;&gt;(.*?)&lt;&#x27;,re.S)</span><br><span class="line">    ke_name =re.findall(pattern,res.text)</span><br><span class="line">    pattern = re.compile(&#x27;</span><br><span class="line">.*?href=&quot;(.*?)&quot;.*?target&#x27;,re.S)</span><br><span class="line">    ke_href =re.findall(pattern,res.text)</span><br><span class="line">    print(ke_chupin)</span><br><span class="line">    print(len(ke_chupin))</span><br><span class="line">    print(ke_name)</span><br><span class="line">    print(len(ke_name))</span><br><span class="line">    print(ke_href)</span><br><span class="line">    print(len(ke_href))</span><br><span class="line"></span><br><span class="line">    head = [&#x27;课程&#x27;,&#x27;链接&#x27;,&#x27;出品人&#x27;]</span><br><span class="line">    for h in range(len(head)):</span><br><span class="line">        sheet.write(0,h,head[h])</span><br><span class="line">    for l in range(len(ke_name[:24])):</span><br><span class="line">        sheet.write(rownum,0,ke_name[l])</span><br><span class="line">        sheet.write(rownum,1,ke_href[l])</span><br><span class="line">        sheet.write(rownum,2,ke_chupin[l])</span><br><span class="line">        rownum += 1</span><br><span class="line"></span><br><span class="line">    book.save(&#x27;test.xls&#x27;)</span><br><span class="line"></span><br><span class="line">if __name__ == &#x27;__main__&#x27;:</span><br><span class="line">    for i in range(1,13):</span><br><span class="line">        urls = &#x27;https://ke.qq.com/course/list?mt=1001&amp;st=2002&amp;tt=3019&amp;page=&#123;&#125;&#x27;.format(i)</span><br><span class="line">        get_info(urls)</span><br></pre></td></tr></table></figure>]]></content>
@@ -1809,6 +1818,24 @@
     <title>爬虫标准框架</title>
     <url>/%E7%88%AC%E8%99%AB%E6%A0%87%E5%87%86%E6%A1%86%E6%9E%B6/</url>
     <content><![CDATA[<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import requests</span><br><span class="line">url=&quot;https://www.sogou.com/web?query=周杰伦&quot;</span><br><span class="line"></span><br><span class="line">headers=&#123; &quot;User-Agent&quot;:&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36 Edg/97.0.1072.55&quot; &#125;</span><br><span class="line">#以字典的形式设置请求头，处理反爬 resp=requests.get(url,headers=headers)</span><br><span class="line">print(resp)</span><br><span class="line">#结果：Response [200]</span><br><span class="line">print(resp.text)</span><br><span class="line">#拿到页面源代码</span><br><span class="line">resp.close()</span><br><span class="line">#关掉resp</span><br></pre></td></tr></table></figure>]]></content>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>生成SSH</title>
+    <url>/%E7%94%9F%E6%88%90SSH/</url>
+    <content><![CDATA[<ul>
+<li><p>用户名和邮箱进行初始化<br>git config –global user.name yourname<br>git config –global user.email youremail</p>
+<span id="more"></span></li>
+<li><p>检查初始化信息<br>git config user.name<br>git config user.email</p>
+</li>
+<li><p>生成密钥<br>ssh-keygen -t rsa -C youremail</p>
+</li>
+<li><p>查看公钥<br>cat ~&#x2F;.ssh&#x2F;id_rsa.pub</p>
+</li>
+</ul>
+]]></content>
       <tags>
         <tag>python</tag>
       </tags>
@@ -1840,24 +1867,6 @@
 <td align="left">pip install xlrd</td>
 </tr>
 </tbody></table>
-]]></content>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>生成SSH</title>
-    <url>/%E7%94%9F%E6%88%90SSH/</url>
-    <content><![CDATA[<ul>
-<li><p>用户名和邮箱进行初始化<br>git config –global user.name yourname<br>git config –global user.email youremail</p>
-<span id="more"></span></li>
-<li><p>检查初始化信息<br>git config user.name<br>git config user.email</p>
-</li>
-<li><p>生成密钥<br>ssh-keygen -t rsa -C youremail</p>
-</li>
-<li><p>查看公钥<br>cat ~&#x2F;.ssh&#x2F;id_rsa.pub</p>
-</li>
-</ul>
 ]]></content>
       <tags>
         <tag>python</tag>
