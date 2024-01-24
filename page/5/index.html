@@ -157,6 +157,21 @@
     
         <article class="post-abstract">
             <div class="post-title">
+                <h2><a class="post-title-link" href="/%E7%88%AC%E8%99%AB%E6%A0%87%E5%87%86%E6%A1%86%E6%9E%B6/">爬虫标准框架</a></h2>
+            </div>
+            <div class="post-meta">
+                <span class="post-time">2023-03-27</span>
+                
+            </div>
+            <div class="post-content">
+                
+                    <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">url=&quot;https://www.sogou.com/web?query=周杰伦&quot;</span><br><span class="line"></span><br><span class="line">headers=&#123; &quot;User-Agent&quot;:&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36 Edg/97.0.1072.55&quot; &#125;</span><br><span class="line">#以字典的形式设置请求头，处理反爬 resp=requests.get(url,headers=headers)</span><br><span class="line">print(resp)</span><br><span class="line">#结果：Response [200]</span><br><span class="line">print(resp.text)</span><br><span class="line">#拿到页面源代码</span><br><span class="line">resp.close()</span><br><span class="line">#关掉resp</span><br></pre></td></tr></table></figure>
+                
+            </div>
+        </article>
+    
+        <article class="post-abstract">
+            <div class="post-title">
                 <h2><a class="post-title-link" href="/%E7%88%AC%E5%8F%96%E5%85%B3%E9%94%AE%E5%AD%97%E5%86%99%E5%85%A5%E8%A1%A8%E6%A0%BC/">爬取关键字写入表格</a></h2>
             </div>
             <div class="post-meta">
@@ -205,21 +220,6 @@
 </tr>
 </tbody></table>
 
-                
-            </div>
-        </article>
-    
-        <article class="post-abstract">
-            <div class="post-title">
-                <h2><a class="post-title-link" href="/%E7%88%AC%E8%99%AB%E6%A0%87%E5%87%86%E6%A1%86%E6%9E%B6/">爬虫标准框架</a></h2>
-            </div>
-            <div class="post-meta">
-                <span class="post-time">2023-03-27</span>
-                
-            </div>
-            <div class="post-content">
-                
-                    <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">url=&quot;https://www.sogou.com/web?query=周杰伦&quot;</span><br><span class="line"></span><br><span class="line">headers=&#123; &quot;User-Agent&quot;:&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36 Edg/97.0.1072.55&quot; &#125;</span><br><span class="line">#以字典的形式设置请求头，处理反爬 resp=requests.get(url,headers=headers)</span><br><span class="line">print(resp)</span><br><span class="line">#结果：Response [200]</span><br><span class="line">print(resp.text)</span><br><span class="line">#拿到页面源代码</span><br><span class="line">resp.close()</span><br><span class="line">#关掉resp</span><br></pre></td></tr></table></figure>
                 
             </div>
         </article>
