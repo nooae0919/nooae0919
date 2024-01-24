@@ -86,9 +86,9 @@
         <div class="posts">
     <article class="post-whole">
         <div class="post-title">
-            <h2 class="title">筛选求和</h2>
+            <h2 class="title">打印文件夹内所有Excel文件</h2>
             <div class="post-meta">
-                <span class="post-time">2023-03-27</span>
+                <span class="post-time">2024-01-24</span>
                 
                 <span class="post-visit"> 阅读次数：<span id="busuanzi_value_page_pv"></span></span>
             </div>
@@ -101,13 +101,12 @@
     </div>
 </div>
         <div class="post-content">
-            <p>&#x3D;SUBTOTAL(9,C1:C10)<br>“9”为函数序号<br>“C1:C10”选择数值列</p>
-
+            <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">import os</span><br><span class="line">import win32com.client as win32</span><br><span class="line"></span><br><span class="line">def init_excel(print_file):</span><br><span class="line">    excel = win32.gencache.EnsureDispatch(&#x27;Excel.Application&#x27;)</span><br><span class="line">    wb = excel.Workbooks.Open(print_file)</span><br><span class="line">    ws = wb.Sheets(&#x27;Sheet1&#x27;)</span><br><span class="line">    ws.PrintOut()</span><br><span class="line">    wb.Close(False)</span><br><span class="line">    excel.Quit()</span><br><span class="line"></span><br><span class="line">def excel_file():</span><br><span class="line">    path = os.getcwd()</span><br><span class="line">    files = os.listdir(path)</span><br><span class="line">    excelfiles = [f for f in files if not f.startswith((&quot;~$&quot;)) and f.endswith((&quot;.xlsx&quot;))]</span><br><span class="line">    for file in excelfiles:</span><br><span class="line">        fullpath = os.path.join(path,file)</span><br><span class="line">        print(fullpath)</span><br><span class="line">        init_excel(fullpath)</span><br><span class="line"></span><br><span class="line">excel_file()</span><br></pre></td></tr></table></figure>
         </div>
         
         <div class="post-tag">
             
-            <a class="tag" href="/tags/excel/" title="excel">excel</a>
+            <a class="tag" href="/tags/python/" title="python">python</a>
             
         </div>
         
@@ -116,15 +115,9 @@
 <div class="paginator">
     
         
-            <a class="prev" href="/%E7%AD%9B%E9%80%89%E5%90%8E%E8%87%AA%E5%8A%A8%E6%8E%92%E5%88%97%E5%BA%8F%E5%8F%B7/">
-                <i class="iconfont icon-prev"></i>
-                <span class="nav-default">筛选后自动排列序号</span>
-                <span class="nav-mobile">上一篇</span>
-            </a>
         
-        
-            <a class="next" href="/%E8%BF%94%E5%9B%9E%E5%B7%A6%E8%BE%B9%E4%B8%AD%E6%96%87%E6%96%87%E6%9C%AC/">
-                <span class="nav-default">返回左边中文文本</span>
+            <a class="next" href="/Office%E6%89%B9%E9%87%8F%E8%BD%ACPDF/">
+                <span class="nav-default">Office批量转PDF</span>
                 <span class="nav-mobile">下一篇</span>
                 <i class="iconfont icon-next"></i>
             </a>

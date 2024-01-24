@@ -87,6 +87,23 @@
     
         <article class="post-abstract">
             <div class="post-title">
+                <h2><a class="post-title-link" href="/%E6%8A%8A%E6%B1%89%E5%AD%97%E8%BD%AC%E6%8D%A2%E6%88%90%E6%8B%BC%E9%9F%B3%E9%A6%96%E5%AD%97%E6%AF%8D/">把汉字转换成拼音首字母</a></h2>
+            </div>
+            <div class="post-meta">
+                <span class="post-time">2023-03-27</span>
+                
+            </div>
+            <div class="post-content">
+                
+                    <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">Function pinyin(p As String) As String</span><br><span class="line">i = Asc(p)</span><br><span class="line">Select Case i</span><br><span class="line">Case -20319 To -20284: pinyin = &quot;A&quot;</span><br><span class="line">Case -20283 To -19776: pinyin = &quot;B&quot;</span><br><span class="line">Case -19775 To -19219: pinyin = &quot;C&quot;</span><br><span class="line">Case -19218 To -18711: pinyin = &quot;D&quot;</span><br><span class="line">Case -18710 To -18527: pinyin = &quot;E&quot;</span><br><span class="line">Case -18526 To -18240: pinyin = &quot;F&quot;</span><br><span class="line">Case -18239 To -17923: pinyin = &quot;G&quot;</span><br><span class="line">Case -17922 To -17418: pinyin = &quot;H&quot;</span><br><span class="line">Case -17417 To -16475: pinyin = &quot;J&quot;</span><br><span class="line">Case -16474 To -16213: pinyin = &quot;K&quot;</span><br><span class="line">Case -16212 To -15641: pinyin = &quot;L&quot;</span><br><span class="line">Case -15640 To -15166: pinyin = &quot;M&quot;</span><br><span class="line">Case -15165 To -14923: pinyin = &quot;N&quot;</span><br><span class="line">Case -14922 To -14915: pinyin = &quot;O&quot;</span><br><span class="line">Case -14914 To -14631: pinyin = &quot;P&quot;</span><br><span class="line">Case -14630 To -14150: pinyin = &quot;Q&quot;</span><br><span class="line">Case -14149 To -14091: pinyin = &quot;R&quot;</span><br><span class="line">Case -14090 To -13319: pinyin = &quot;S&quot;</span><br><span class="line">Case -13318 To -12839: pinyin = &quot;T&quot;</span><br><span class="line">Case -12838 To -12557: pinyin = &quot;W&quot;</span><br><span class="line">Case -12556 To -11848: pinyin = &quot;X&quot;</span><br><span class="line">Case -11847 To -11056: pinyin = &quot;Y&quot;</span><br><span class="line">Case -11055 To -2050: pinyin = &quot;Z&quot;</span><br><span class="line">Case Else: pinyin = p</span><br><span class="line">End Select</span><br><span class="line">End Function</span><br><span class="line">Function getpy(str)</span><br><span class="line">For i = 1 To Len(str)</span><br><span class="line">getpy = getpy &amp; pinyin(Mid(str, i, 1))</span><br><span class="line">Next i</span><br><span class="line">End Function</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>在单元格输入公式”&#x3D;getpy()”</p>
+
+                
+            </div>
+        </article>
+    
+        <article class="post-abstract">
+            <div class="post-title">
                 <h2><a class="post-title-link" href="/%E6%8C%87%E5%AE%9A%E6%9D%A1%E4%BB%B6%E5%8D%95%E5%85%83%E6%A0%BC%E8%AE%A1%E6%95%B0/">指定条件单元格计数</a></h2>
             </div>
             <div class="post-meta">
@@ -155,21 +172,6 @@
     
         <article class="post-abstract">
             <div class="post-title">
-                <h2><a class="post-title-link" href="/%E7%88%AC%E8%99%AB%E6%A0%87%E5%87%86%E6%A1%86%E6%9E%B6/">爬虫标准框架</a></h2>
-            </div>
-            <div class="post-meta">
-                <span class="post-time">2023-03-27</span>
-                
-            </div>
-            <div class="post-content">
-                
-                    <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">url=&quot;https://www.sogou.com/web?query=周杰伦&quot;</span><br><span class="line"></span><br><span class="line">headers=&#123; &quot;User-Agent&quot;:&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36 Edg/97.0.1072.55&quot; &#125;</span><br><span class="line">#以字典的形式设置请求头，处理反爬 resp=requests.get(url,headers=headers)</span><br><span class="line">print(resp)</span><br><span class="line">#结果：Response [200]</span><br><span class="line">print(resp.text)</span><br><span class="line">#拿到页面源代码</span><br><span class="line">resp.close()</span><br><span class="line">#关掉resp</span><br></pre></td></tr></table></figure>
-                
-            </div>
-        </article>
-    
-        <article class="post-abstract">
-            <div class="post-title">
                 <h2><a class="post-title-link" href="/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93%E5%AE%89%E8%A3%85%E5%91%BD%E4%BB%A4/">第三方库安装命令</a></h2>
             </div>
             <div class="post-meta">
@@ -209,6 +211,21 @@
     
         <article class="post-abstract">
             <div class="post-title">
+                <h2><a class="post-title-link" href="/%E7%88%AC%E8%99%AB%E6%A0%87%E5%87%86%E6%A1%86%E6%9E%B6/">爬虫标准框架</a></h2>
+            </div>
+            <div class="post-meta">
+                <span class="post-time">2023-03-27</span>
+                
+            </div>
+            <div class="post-content">
+                
+                    <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">url=&quot;https://www.sogou.com/web?query=周杰伦&quot;</span><br><span class="line"></span><br><span class="line">headers=&#123; &quot;User-Agent&quot;:&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36 Edg/97.0.1072.55&quot; &#125;</span><br><span class="line">#以字典的形式设置请求头，处理反爬 resp=requests.get(url,headers=headers)</span><br><span class="line">print(resp)</span><br><span class="line">#结果：Response [200]</span><br><span class="line">print(resp.text)</span><br><span class="line">#拿到页面源代码</span><br><span class="line">resp.close()</span><br><span class="line">#关掉resp</span><br></pre></td></tr></table></figure>
+                
+            </div>
+        </article>
+    
+        <article class="post-abstract">
+            <div class="post-title">
                 <h2><a class="post-title-link" href="/%E7%AD%9B%E9%80%89%E5%90%8E%E8%87%AA%E5%8A%A8%E6%8E%92%E5%88%97%E5%BA%8F%E5%8F%B7/">筛选后自动排列序号</a></h2>
             </div>
             <div class="post-meta">
@@ -225,22 +242,6 @@
     
         <article class="post-abstract">
             <div class="post-title">
-                <h2><a class="post-title-link" href="/%E8%BF%94%E5%9B%9E%E5%B7%A6%E8%BE%B9%E4%B8%AD%E6%96%87%E6%96%87%E6%9C%AC/">返回左边中文文本</a></h2>
-            </div>
-            <div class="post-meta">
-                <span class="post-time">2023-03-27</span>
-                
-            </div>
-            <div class="post-content">
-                
-                    <p>&#x3D;LEFTB(A1,SEARCHB(“?”,A1)-1)<br>“A1”为所选单元格</p>
-
-                
-            </div>
-        </article>
-    
-        <article class="post-abstract">
-            <div class="post-title">
                 <h2><a class="post-title-link" href="/%E7%AD%9B%E9%80%89%E6%B1%82%E5%92%8C/">筛选求和</a></h2>
             </div>
             <div class="post-meta">
@@ -250,6 +251,22 @@
             <div class="post-content">
                 
                     <p>&#x3D;SUBTOTAL(9,C1:C10)<br>“9”为函数序号<br>“C1:C10”选择数值列</p>
+
+                
+            </div>
+        </article>
+    
+        <article class="post-abstract">
+            <div class="post-title">
+                <h2><a class="post-title-link" href="/%E8%BF%94%E5%9B%9E%E5%B7%A6%E8%BE%B9%E4%B8%AD%E6%96%87%E6%96%87%E6%9C%AC/">返回左边中文文本</a></h2>
+            </div>
+            <div class="post-meta">
+                <span class="post-time">2023-03-27</span>
+                
+            </div>
+            <div class="post-content">
+                
+                    <p>&#x3D;LEFTB(A1,SEARCHB(“?”,A1)-1)<br>“A1”为所选单元格</p>
 
                 
             </div>

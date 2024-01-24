@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://www.nooae.com/%E6%89%93%E5%8D%B0%E6%96%87%E4%BB%B6%E5%A4%B9%E5%86%85%E6%89%80%E6%9C%89Excel%E6%96%87%E4%BB%B6/</loc>
+    
+    <lastmod>2024-01-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://www.nooae.com/%E6%89%B9%E9%87%8F%E6%88%90%E7%94%9F%E4%BA%8C%E7%BB%B4%E7%A0%81/</loc>
     
     <lastmod>2024-01-11</lastmod>
@@ -463,7 +472,7 @@
 
   <url>
     <loc>https://www.nooae.com/</loc>
-    <lastmod>2024-01-11</lastmod>
+    <lastmod>2024-01-24</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -471,21 +480,21 @@
   
   <url>
     <loc>https://www.nooae.com/tags/system/</loc>
-    <lastmod>2024-01-11</lastmod>
+    <lastmod>2024-01-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://www.nooae.com/tags/excel/</loc>
-    <lastmod>2024-01-11</lastmod>
+    <lastmod>2024-01-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://www.nooae.com/tags/python/</loc>
-    <lastmod>2024-01-11</lastmod>
+    <lastmod>2024-01-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
