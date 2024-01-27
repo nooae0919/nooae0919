@@ -87,6 +87,27 @@
     
         <article class="post-abstract">
             <div class="post-title">
+                <h2><a class="post-title-link" href="/16949%E8%AE%A4%E8%AF%81%E4%BD%93%E7%B3%BB/">16949认证体系</a></h2>
+            </div>
+            <div class="post-meta">
+                <span class="post-time">2023-04-02</span>
+                
+            </div>
+            <div class="post-content">
+                
+                    <p>16949认证体系是汽车行业质量管理认证体系的简称，是基于ISO9001的基础，加进了汽车行业的技术规范。此规范完全和ISO9000&#x2F;2008保持一致，但更着重于缺陷防范、减少在汽车零部件供应链中容易产生的质量波动和浪费。
+                    <div class="read-more">
+                        <a href="/16949%E8%AE%A4%E8%AF%81%E4%BD%93%E7%B3%BB/" class="read-more-link">
+                            阅读全文
+                            <i class="iconfont icon-readmore"></i>
+                        </a>
+                    </div>
+                
+            </div>
+        </article>
+    
+        <article class="post-abstract">
+            <div class="post-title">
                 <h2><a class="post-title-link" href="/16949%E8%B4%A8%E9%87%8F%E7%AE%A1%E7%90%86%E4%BD%93%E7%B3%BB%E6%A0%87%E5%87%86/">16949质量管理体系标准</a></h2>
             </div>
             <div class="post-meta">
@@ -245,21 +266,6 @@
                             <i class="iconfont icon-readmore"></i>
                         </a>
                     </div>
-                
-            </div>
-        </article>
-    
-        <article class="post-abstract">
-            <div class="post-title">
-                <h2><a class="post-title-link" href="/Python%E7%88%AC%E5%8F%96%E8%B1%86%E7%93%A3%E7%94%B5%E5%BD%B1%E6%8E%92%E8%A1%8C%E6%A6%9C/">Python爬取豆瓣电影排行榜</a></h2>
-            </div>
-            <div class="post-meta">
-                <span class="post-time">2023-03-27</span>
-                
-            </div>
-            <div class="post-content">
-                
-                    <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">import re</span><br><span class="line"></span><br><span class="line">#1-爬取数据&lt;!--more--&gt;</span><br><span class="line">url = &#x27;https://movie.douban.com/chart&#x27;</span><br><span class="line">headers = &#123;&#x27;User-Agent&#x27;:&#x27;Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36&#x27;&#125;</span><br><span class="line">response = requests.get(url,headers = headers)</span><br><span class="line">#print(response.text)</span><br><span class="line">html_str = response.text</span><br><span class="line"></span><br><span class="line">#2-解析数据</span><br><span class="line">patten = re.compile(&#x27;&lt; a.*?nbg.*?title=&quot;(.*?)&quot;&gt;&#x27;,re.S)</span><br><span class="line">items = re.findall(patten,html_str)</span><br><span class="line">print(items)</span><br><span class="line"></span><br><span class="line">#3-存储数据</span><br><span class="line">with open(&#x27;douban.txt&#x27;,&quot;w&quot;,encoding=&#x27;utf-8&#x27;) as f:</span><br><span class="line">+ for item in items:</span><br><span class="line">	- f.write(item+&#x27;\n&#x27;)</span><br></pre></td></tr></table></figure>
                 
             </div>
         </article>

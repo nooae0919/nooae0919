@@ -86,9 +86,9 @@
         <div class="posts">
     <article class="post-whole">
         <div class="post-title">
-            <h2 class="title">Python爬取豆瓣电影排行榜</h2>
+            <h2 class="title">生成词云</h2>
             <div class="post-meta">
-                <span class="post-time">2023-03-27</span>
+                <span class="post-time">2024-01-27</span>
                 
                 <span class="post-visit"> 阅读次数：<span id="busuanzi_value_page_pv"></span></span>
             </div>
@@ -101,12 +101,12 @@
     </div>
 </div>
         <div class="post-content">
-            <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">import re</span><br><span class="line"></span><br><span class="line">#1-爬取数据&lt;!--more--&gt;</span><br><span class="line">url = &#x27;https://movie.douban.com/chart&#x27;</span><br><span class="line">headers = &#123;&#x27;User-Agent&#x27;:&#x27;Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36&#x27;&#125;</span><br><span class="line">response = requests.get(url,headers = headers)</span><br><span class="line">#print(response.text)</span><br><span class="line">html_str = response.text</span><br><span class="line"></span><br><span class="line">#2-解析数据</span><br><span class="line">patten = re.compile(&#x27;&lt; a.*?nbg.*?title=&quot;(.*?)&quot;&gt;&#x27;,re.S)</span><br><span class="line">items = re.findall(patten,html_str)</span><br><span class="line">print(items)</span><br><span class="line"></span><br><span class="line">#3-存储数据</span><br><span class="line">with open(&#x27;douban.txt&#x27;,&quot;w&quot;,encoding=&#x27;utf-8&#x27;) as f:</span><br><span class="line">+ for item in items:</span><br><span class="line">	- f.write(item+&#x27;\n&#x27;)</span><br></pre></td></tr></table></figure>
+            <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">import pandas as pd</span><br><span class="line">import matplotlib.pyplot as plt</span><br><span class="line">from wordcloud import WordCloud</span><br><span class="line"></span><br><span class="line"># 读取Excel文件</span><br><span class="line">data = pd.read_excel(&#x27;index.xlsx&#x27;)</span><br><span class="line">df = pd.DataFrame(data)</span><br><span class="line"></span><br><span class="line"># 从DataFrame中提取数据</span><br><span class="line">text = df[&#x27;Name&#x27;]</span><br><span class="line">text1 = &#x27; &#x27;.join(df[&#x27;Name&#x27;])</span><br><span class="line">print(text)</span><br><span class="line">print(text1)</span><br><span class="line"></span><br><span class="line"># 创建词云对象</span><br><span class="line">wordcloud = WordCloud(background_color=&#x27;white&#x27;).generate(text1)</span><br><span class="line"></span><br><span class="line"># 展示词云</span><br><span class="line">plt.imshow(wordcloud, interpolation=&#x27;bilinear&#x27;)</span><br><span class="line">plt.axis(&#x27;off&#x27;)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
         </div>
         
         <div class="post-tag">
             
-            <a class="tag" href="/tags/python/" title="python">python</a>
+            <a class="tag" href="/tags/pyhton/" title="pyhton">pyhton</a>
             
         </div>
         
@@ -115,15 +115,9 @@
 <div class="paginator">
     
         
-            <a class="prev" href="/Python%E5%B8%B8%E7%94%A8%E5%8D%95%E8%AF%8D%E8%A1%A8/">
-                <i class="iconfont icon-prev"></i>
-                <span class="nav-default">Python常用单词表</span>
-                <span class="nav-mobile">上一篇</span>
-            </a>
         
-        
-            <a class="next" href="/xlsxwriter%E6%96%B0%E5%BB%BAExcel%E8%A1%A8%E6%A0%BC/">
-                <span class="nav-default">xlsxwriter新建Excel表格</span>
+            <a class="next" href="/%E6%89%93%E5%8D%B0%E6%96%87%E4%BB%B6%E5%A4%B9%E5%86%85%E6%89%80%E6%9C%89Excel%E6%96%87%E4%BB%B6/">
+                <span class="nav-default">打印文件夹内所有Excel文件</span>
                 <span class="nav-mobile">下一篇</span>
                 <i class="iconfont icon-next"></i>
             </a>
