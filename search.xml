@@ -51,139 +51,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Excel库对比</title>
-    <url>/Excel%E5%BA%93%E5%AF%B9%E6%AF%94/</url>
-    <content><![CDATA[<p>Excel库对应的各种版本<span id="more"></span></p>
-<table>
-<thead>
-<tr>
-<th align="left"></th>
-<th align="center">WIN</th>
-<th align="center">MAC</th>
-<th align="center">PY2</th>
-<th align="center">PY3</th>
-<th align="center">.xls</th>
-<th align="center">.xlsx</th>
-<th align="center">读</th>
-<th align="center">写</th>
-<th align="center">修改</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">xlrd</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">×</td>
-<td align="center">×</td>
-</tr>
-<tr>
-<td align="left">xlwt</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">×</td>
-<td align="center">×</td>
-<td align="center">√</td>
-<td align="center">√</td>
-</tr>
-<tr>
-<td align="left">xlutils</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">×</td>
-<td align="center">×</td>
-<td align="center">×</td>
-<td align="center">√</td>
-</tr>
-<tr>
-<td align="left">xlwings</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-</tr>
-<tr>
-<td align="left">openpyxl</td>
-<td align="center">√</td>
-<td align="center">×</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">×</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-</tr>
-<tr>
-<td align="left">xlswriter</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">×</td>
-<td align="center">√</td>
-<td align="center">×</td>
-<td align="center">√</td>
-<td align="center">×</td>
-</tr>
-<tr>
-<td align="left">win32com</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-</tr>
-<tr>
-<td align="left">DataNitro</td>
-<td align="center">√</td>
-<td align="center">×</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">-</td>
-<td align="center">-</td>
-<td align="center">-</td>
-</tr>
-<tr>
-<td align="left">pandas</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">×</td>
-</tr>
-</tbody></table>
-]]></content>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Excel快捷键</title>
     <url>/Excel%E5%BF%AB%E6%8D%B7%E9%94%AE/</url>
     <content><![CDATA[<p>在Excel中合理的使用快捷键会更好的提高工作效率</p>
@@ -375,6 +242,139 @@
 ]]></content>
       <tags>
         <tag>excel</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Excel库对比</title>
+    <url>/Excel%E5%BA%93%E5%AF%B9%E6%AF%94/</url>
+    <content><![CDATA[<p>Excel库对应的各种版本<span id="more"></span></p>
+<table>
+<thead>
+<tr>
+<th align="left"></th>
+<th align="center">WIN</th>
+<th align="center">MAC</th>
+<th align="center">PY2</th>
+<th align="center">PY3</th>
+<th align="center">.xls</th>
+<th align="center">.xlsx</th>
+<th align="center">读</th>
+<th align="center">写</th>
+<th align="center">修改</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">xlrd</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">×</td>
+<td align="center">×</td>
+</tr>
+<tr>
+<td align="left">xlwt</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">×</td>
+<td align="center">×</td>
+<td align="center">√</td>
+<td align="center">√</td>
+</tr>
+<tr>
+<td align="left">xlutils</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">×</td>
+<td align="center">×</td>
+<td align="center">×</td>
+<td align="center">√</td>
+</tr>
+<tr>
+<td align="left">xlwings</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+</tr>
+<tr>
+<td align="left">openpyxl</td>
+<td align="center">√</td>
+<td align="center">×</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">×</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+</tr>
+<tr>
+<td align="left">xlswriter</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">×</td>
+<td align="center">√</td>
+<td align="center">×</td>
+<td align="center">√</td>
+<td align="center">×</td>
+</tr>
+<tr>
+<td align="left">win32com</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+</tr>
+<tr>
+<td align="left">DataNitro</td>
+<td align="center">√</td>
+<td align="center">×</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">-</td>
+<td align="center">-</td>
+<td align="center">-</td>
+</tr>
+<tr>
+<td align="left">pandas</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">×</td>
+</tr>
+</tbody></table>
+]]></content>
+      <tags>
+        <tag>python</tag>
       </tags>
   </entry>
   <entry>
@@ -1393,14 +1393,6 @@
       </tags>
   </entry>
   <entry>
-    <title>保留表头拆分数据为若干新工作簿</title>
-    <url>/%E4%BF%9D%E7%95%99%E8%A1%A8%E5%A4%B4%E6%8B%86%E5%88%86%E6%95%B0%E6%8D%AE%E4%B8%BA%E8%8B%A5%E5%B9%B2%E6%96%B0%E5%B7%A5%E4%BD%9C%E7%B0%BF/</url>
-    <content><![CDATA[<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Sub 保留表头拆分数据为若干新工作簿()</span><br><span class="line">Dim arr, d As Object, k, t, i&amp;, lc%, rng As Range, c%</span><br><span class="line">c = Application.InputBox(&quot;请输入拆分列号&quot;, , 4, , , , , 1)</span><br><span class="line"></span><br><span class="line">If c = 0 Then Exit Sub</span><br><span class="line">Application.ScreenUpdating = False</span><br><span class="line">Application.DisplayAlerts = False</span><br><span class="line">arr = [a1].CurrentRegion</span><br><span class="line">lc = UBound(arr, 2)</span><br><span class="line">Set rng = [a1].Resize(, lc)</span><br><span class="line">Set d = CreateObject(&quot;scripting.dictionary&quot;)</span><br><span class="line">For i = 2 To UBound(arr)</span><br><span class="line">If Not d.Exists(arr(i, c)) Then</span><br><span class="line">Set d(arr(i, c)) = Cells(i, 1).Resize(1, lc)</span><br><span class="line">Else</span><br><span class="line">Set d(arr(i, c)) = Union(d(arr(i, c)), Cells(i, 1).Resize(1, lc))</span><br><span class="line">End If</span><br><span class="line">Next</span><br><span class="line">k = d.Keys</span><br><span class="line">t = d.Items</span><br><span class="line">For i = 0 To d.Count - 1</span><br><span class="line">With Workbooks.Add(xlWBATWorksheet)</span><br><span class="line">rng.Copy .Sheets(1).[a1]</span><br><span class="line">t(i).Copy .Sheets(1).[a2]</span><br><span class="line">.SaveAs Filename:=ThisWorkbook.Path &amp; &quot;\&quot; &amp; k(i) &amp; &quot;.xls&quot;</span><br><span class="line">.Close</span><br><span class="line">End With</span><br><span class="line">Next</span><br><span class="line">Application.DisplayAlerts = True</span><br><span class="line">Application.ScreenUpdating = True</span><br><span class="line">MsgBox &quot;完毕&quot;</span><br><span class="line">End Sub</span><br></pre></td></tr></table></figure>]]></content>
-      <tags>
-        <tag>excel</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>双for打印九九乘法表</title>
     <url>/%E5%8F%8Cfor%E6%89%93%E5%8D%B0%E4%B9%9D%E4%B9%9D%E4%B9%98%E6%B3%95%E8%A1%A8/</url>
     <content><![CDATA[<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">for i in range(1, 10):</span><br><span class="line">	for j in range(1, i + 1):</span><br><span class="line">		print(&#x27;&#123;&#125;\*&#123;&#125;=&#123;&#125;&#x27;.format(i,j,i\*j), end=&#x27;\t&#x27;)</span><br><span class="line">	print()</span><br></pre></td></tr></table></figure>]]></content>
@@ -1417,6 +1409,14 @@
       </tags>
   </entry>
   <entry>
+    <title>保留表头拆分数据为若干新工作簿</title>
+    <url>/%E4%BF%9D%E7%95%99%E8%A1%A8%E5%A4%B4%E6%8B%86%E5%88%86%E6%95%B0%E6%8D%AE%E4%B8%BA%E8%8B%A5%E5%B9%B2%E6%96%B0%E5%B7%A5%E4%BD%9C%E7%B0%BF/</url>
+    <content><![CDATA[<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Sub 保留表头拆分数据为若干新工作簿()</span><br><span class="line">Dim arr, d As Object, k, t, i&amp;, lc%, rng As Range, c%</span><br><span class="line">c = Application.InputBox(&quot;请输入拆分列号&quot;, , 4, , , , , 1)</span><br><span class="line"></span><br><span class="line">If c = 0 Then Exit Sub</span><br><span class="line">Application.ScreenUpdating = False</span><br><span class="line">Application.DisplayAlerts = False</span><br><span class="line">arr = [a1].CurrentRegion</span><br><span class="line">lc = UBound(arr, 2)</span><br><span class="line">Set rng = [a1].Resize(, lc)</span><br><span class="line">Set d = CreateObject(&quot;scripting.dictionary&quot;)</span><br><span class="line">For i = 2 To UBound(arr)</span><br><span class="line">If Not d.Exists(arr(i, c)) Then</span><br><span class="line">Set d(arr(i, c)) = Cells(i, 1).Resize(1, lc)</span><br><span class="line">Else</span><br><span class="line">Set d(arr(i, c)) = Union(d(arr(i, c)), Cells(i, 1).Resize(1, lc))</span><br><span class="line">End If</span><br><span class="line">Next</span><br><span class="line">k = d.Keys</span><br><span class="line">t = d.Items</span><br><span class="line">For i = 0 To d.Count - 1</span><br><span class="line">With Workbooks.Add(xlWBATWorksheet)</span><br><span class="line">rng.Copy .Sheets(1).[a1]</span><br><span class="line">t(i).Copy .Sheets(1).[a2]</span><br><span class="line">.SaveAs Filename:=ThisWorkbook.Path &amp; &quot;\&quot; &amp; k(i) &amp; &quot;.xls&quot;</span><br><span class="line">.Close</span><br><span class="line">End With</span><br><span class="line">Next</span><br><span class="line">Application.DisplayAlerts = True</span><br><span class="line">Application.ScreenUpdating = True</span><br><span class="line">MsgBox &quot;完毕&quot;</span><br><span class="line">End Sub</span><br></pre></td></tr></table></figure>]]></content>
+      <tags>
+        <tag>excel</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>合并当前目录下所有工作簿的全部工作表</title>
     <url>/%E5%90%88%E5%B9%B6%E5%BD%93%E5%89%8D%E7%9B%AE%E5%BD%95%E4%B8%8B%E6%89%80%E6%9C%89%E5%B7%A5%E4%BD%9C%E7%B0%BF%E7%9A%84%E5%85%A8%E9%83%A8%E5%B7%A5%E4%BD%9C%E8%A1%A8/</url>
     <content><![CDATA[<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Sub 合并当前目录下所有工作簿的全部工作表()</span><br><span class="line">Dim MyPath, MyName, AWbName</span><br><span class="line">Dim Wb As Workbook, WbN As String</span><br><span class="line">Dim G As Long</span><br><span class="line"></span><br><span class="line">Dim Num As Long</span><br><span class="line">Dim BOX As String</span><br><span class="line">Application.ScreenUpdating = False</span><br><span class="line">MyPath = ActiveWorkbook.Path</span><br><span class="line">MyName = Dir(MyPath &amp; &quot;\&quot; &amp; &quot;*.csv&quot;)</span><br><span class="line">AWbName = ActiveWorkbook.Name</span><br><span class="line">Num = 0</span><br><span class="line">Do While MyName &lt;&gt; &quot;&quot;</span><br><span class="line">If MyName &lt;&gt; AWbName Then</span><br><span class="line">Set Wb = Workbooks.Open(MyPath &amp; &quot;\&quot; &amp; MyName)</span><br><span class="line">Num = Num + 1</span><br><span class="line">With Workbooks(1).ActiveSheet</span><br><span class="line">.Cells(.Range(&quot;B65536&quot;).End(xlUp).Row + 2, 1) = Left(MyName, Len(MyName) - 4)</span><br><span class="line">For G = 1 To Sheets.Count</span><br><span class="line">Wb.Sheets(G).UsedRange.Copy .Cells(.Range(&quot;B65536&quot;).End(xlUp).Row + 1, 1)</span><br><span class="line">Next</span><br><span class="line">WbN = WbN &amp; Chr(13) &amp; Wb.Name</span><br><span class="line">Wb.Close False</span><br><span class="line">End With</span><br><span class="line">End If</span><br><span class="line">MyName = Dir</span><br><span class="line">Loop</span><br><span class="line">Range(&quot;B1&quot;).Select</span><br><span class="line">Application.ScreenUpdating = True</span><br><span class="line">MsgBox &quot;共合并了&quot; &amp; Num &amp; &quot;个工作薄下的全部工作表。如下：&quot; &amp; Chr(13) &amp; WbN, vbInformation, &quot;提示&quot;</span><br><span class="line">End Sub</span><br></pre></td></tr></table></figure>]]></content>
@@ -1428,14 +1428,6 @@
     <title>合并文件夹下工作薄</title>
     <url>/%E5%90%88%E5%B9%B6%E6%96%87%E4%BB%B6%E5%A4%B9%E4%B8%8B%E5%B7%A5%E4%BD%9C%E8%96%84/</url>
     <content><![CDATA[<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import os</span><br><span class="line">import pandas as pd</span><br><span class="line"></span><br><span class="line">path = r&#x27;地址&#x27;&lt;!--more--&gt;</span><br><span class="line">file_list = []</span><br><span class="line"></span><br><span class="line">dfs = []</span><br><span class="line"></span><br><span class="line">for root,dirs,files in os.walk(path):</span><br><span class="line">	for file in files:</span><br><span class="line">		file_path = os.path.join(root, file)</span><br><span class="line">		file_list.append(file_path)</span><br><span class="line">		df = pd.read_csv(file_path,encoding=&quot;gbk&quot;)</span><br><span class="line">		dfs.append(df)</span><br><span class="line">df = pd.concat(dfs)</span><br><span class="line">df.to_excel(r&#x27;地址\汇总.xls&#x27;, index=False)</span><br></pre></td></tr></table></figure>]]></content>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>在一个工作薄内复制多个工作表</title>
-    <url>/%E5%9C%A8%E4%B8%80%E4%B8%AA%E5%B7%A5%E4%BD%9C%E8%96%84%E5%86%85%E5%A4%8D%E5%88%B6%E5%A4%9A%E4%B8%AA%E5%B7%A5%E4%BD%9C%E8%A1%A8/</url>
-    <content><![CDATA[<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import openpyxl</span><br><span class="line"></span><br><span class="line">print(&quot;注意：&quot;+&quot;\n&quot;</span><br><span class="line">&quot;1、此程序只支持XLSX格式文件；&quot;+&quot;\n&quot;</span><br><span class="line">&quot;2、程序运行前需调整好打印预览模式；&quot;+&quot;\n&quot;</span><br><span class="line">&quot;3、程序不会复制图片，运行完成后需手动复制图片。&quot;+&quot;\n&quot;)</span><br><span class="line"></span><br><span class="line">wb_name = input(&quot;请输入文件名称：&quot;)</span><br><span class="line">wb = openpyxl.load_workbook(f&#x27;&#123;wb_name&#125;.xlsx&#x27;)</span><br><span class="line">old_sheet = wb.worksheets[0]</span><br><span class="line">sheet_name = old_sheet.title</span><br><span class="line"></span><br><span class="line">num = int(input(&quot;请输入需要复制的数量：&quot;))</span><br><span class="line"></span><br><span class="line">for i in range(2,num+1):</span><br><span class="line">	new_sheet = wb.copy_worksheet(old_sheet)</span><br><span class="line">	new_sheet.title = sheet_name + str(i)</span><br><span class="line"></span><br><span class="line">print(&quot;已生成&quot;f&#x27;&#123;num&#125;&#x27;&quot;个sheet&quot;)    </span><br><span class="line">wb.save(f&#x27;&#123;wb_name&#125;.xlsx&#x27;)</span><br></pre></td></tr></table></figure>]]></content>
       <tags>
         <tag>python</tag>
       </tags>
@@ -1461,6 +1453,14 @@
 ]]></content>
       <tags>
         <tag>excel</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>在一个工作薄内复制多个工作表</title>
+    <url>/%E5%9C%A8%E4%B8%80%E4%B8%AA%E5%B7%A5%E4%BD%9C%E8%96%84%E5%86%85%E5%A4%8D%E5%88%B6%E5%A4%9A%E4%B8%AA%E5%B7%A5%E4%BD%9C%E8%A1%A8/</url>
+    <content><![CDATA[<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import openpyxl</span><br><span class="line"></span><br><span class="line">print(&quot;注意：&quot;+&quot;\n&quot;</span><br><span class="line">&quot;1、此程序只支持XLSX格式文件；&quot;+&quot;\n&quot;</span><br><span class="line">&quot;2、程序运行前需调整好打印预览模式；&quot;+&quot;\n&quot;</span><br><span class="line">&quot;3、程序不会复制图片，运行完成后需手动复制图片。&quot;+&quot;\n&quot;)</span><br><span class="line"></span><br><span class="line">wb_name = input(&quot;请输入文件名称：&quot;)</span><br><span class="line">wb = openpyxl.load_workbook(f&#x27;&#123;wb_name&#125;.xlsx&#x27;)</span><br><span class="line">old_sheet = wb.worksheets[0]</span><br><span class="line">sheet_name = old_sheet.title</span><br><span class="line"></span><br><span class="line">num = int(input(&quot;请输入需要复制的数量：&quot;))</span><br><span class="line"></span><br><span class="line">for i in range(2,num+1):</span><br><span class="line">	new_sheet = wb.copy_worksheet(old_sheet)</span><br><span class="line">	new_sheet.title = sheet_name + str(i)</span><br><span class="line"></span><br><span class="line">print(&quot;已生成&quot;f&#x27;&#123;num&#125;&#x27;&quot;个sheet&quot;)    </span><br><span class="line">wb.save(f&#x27;&#123;wb_name&#125;.xlsx&#x27;)</span><br></pre></td></tr></table></figure>]]></content>
+      <tags>
+        <tag>python</tag>
       </tags>
   </entry>
   <entry>
@@ -1496,20 +1496,20 @@
       </tags>
   </entry>
   <entry>
+    <title>将工作薄按列拆分至工作薄</title>
+    <url>/%E5%B0%86%E5%B7%A5%E4%BD%9C%E8%96%84%E6%8C%89%E5%88%97%E6%8B%86%E5%88%86%E8%87%B3%E5%B7%A5%E4%BD%9C%E8%96%84/</url>
+    <content><![CDATA[<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import pandas as pd</span><br><span class="line">data = pd.read_excel(r&#x27;地址\汇总.xls&#x27;,keep_default_na=False)</span><br><span class="line">unit_list = list(data[&#x27;姓名&#x27;].drop_duplicates())</span><br><span class="line">for i in unit_list:</span><br><span class="line">	data_new = data[data[&#x27;姓名&#x27;] == i]</span><br><span class="line">	if i == &#x27;&#x27;:</span><br><span class="line">		data_new.to_excel()</span><br><span class="line">	else:</span><br><span class="line">		data_new.to_excel(r&quot;地址\%s.xls&quot; % (i),index=False)</span><br></pre></td></tr></table></figure>]]></content>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>实施16949质量管理体系标准的益处</title>
     <url>/%E5%AE%9E%E6%96%BD16949%E8%B4%A8%E9%87%8F%E7%AE%A1%E7%90%86%E4%BD%93%E7%B3%BB%E6%A0%87%E5%87%86%E7%9A%84%E7%9B%8A%E5%A4%84/</url>
     <content><![CDATA[<p>1、开拓市场：ISO16949:2009作为质量保证的标志有助于企业获得顾客的信任，以获得更为广阔的市场空间。<br>2、提高顾客满意度：通过实施ISO16949:2009，关注并满足顾客要求，以提高顾客满意度。<br>3、降本增效：持续关注企业运营业绩，改进过程绩效指标，以实现降本增效。<br>4、提高产品和交付质量：运用系统的开发和改进方法，保证产品质量和交付业绩。</p>
 ]]></content>
       <tags>
         <tag>system</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>将工作薄按列拆分至工作薄</title>
-    <url>/%E5%B0%86%E5%B7%A5%E4%BD%9C%E8%96%84%E6%8C%89%E5%88%97%E6%8B%86%E5%88%86%E8%87%B3%E5%B7%A5%E4%BD%9C%E8%96%84/</url>
-    <content><![CDATA[<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import pandas as pd</span><br><span class="line">data = pd.read_excel(r&#x27;地址\汇总.xls&#x27;,keep_default_na=False)</span><br><span class="line">unit_list = list(data[&#x27;姓名&#x27;].drop_duplicates())</span><br><span class="line">for i in unit_list:</span><br><span class="line">	data_new = data[data[&#x27;姓名&#x27;] == i]</span><br><span class="line">	if i == &#x27;&#x27;:</span><br><span class="line">		data_new.to_excel()</span><br><span class="line">	else:</span><br><span class="line">		data_new.to_excel(r&quot;地址\%s.xls&quot; % (i),index=False)</span><br></pre></td></tr></table></figure>]]></content>
-      <tags>
-        <tag>python</tag>
       </tags>
   </entry>
   <entry>
@@ -1534,6 +1534,70 @@
     <url>/%E5%B7%A5%E4%BD%9C%E8%96%84%E8%BD%AC%E6%8D%A2%E4%B8%BAPDF/</url>
     <content><![CDATA[<p>将EXCEL中的所有工作表转换为一个PDF文件</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import win32com.client,os</span><br><span class="line">  </span><br><span class="line">def excel_to_pdf(excel_path, pdf_path):  </span><br><span class="line">    excel = win32com.client.Dispatch(&quot;Excel.Application&quot;)  </span><br><span class="line">    excel.Visible = False    </span><br><span class="line">    wb = excel.Workbooks.Open(excel_path)  </span><br><span class="line">  </span><br><span class="line">    wb.ExportAsFixedFormat(  </span><br><span class="line">        Type=0,  </span><br><span class="line">        Filename=pdf_path,  </span><br><span class="line">        Quality=win32com.client.constants.xlQualityStandard,  </span><br><span class="line">        IncludeDocProperties=True,  </span><br><span class="line">        IgnorePrintAreas=False,  </span><br><span class="line">        OpenAfterPublish=False  </span><br><span class="line">    )  </span><br><span class="line">  </span><br><span class="line">    wb.Close(SaveChanges=False)</span><br><span class="line">    excel.Quit()</span><br><span class="line"></span><br><span class="line">def excel_file():</span><br><span class="line">    path = os.getcwd()</span><br><span class="line">    files = os.listdir(path)</span><br><span class="line">    if not os.path.exists(&quot;pdf&quot;):</span><br><span class="line">        os.mkdir(&quot;pdf&quot;)</span><br><span class="line">    excelfiles = [f for f in files if not f.startswith((&quot;~$&quot;)) and f.endswith((&quot;.xlsx&quot;))]</span><br><span class="line">    for file in excelfiles:</span><br><span class="line">        excel_path = os.path.join(path,file)</span><br><span class="line">        pdf_name = os.path.splitext(file)[0]</span><br><span class="line">        pdf_path = path + &quot;\\&quot; + &quot;pdf&quot; + &quot;\\&quot; + pdf_name + &quot;.pdf&quot;</span><br><span class="line">        excel_to_pdf(excel_path, pdf_path)</span><br><span class="line">        print(excel_path+&quot;格式转换完成&quot;)</span><br><span class="line">    </span><br><span class="line">excel_file()</span><br></pre></td></tr></table></figure>]]></content>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>常用运算符</title>
+    <url>/%E5%B8%B8%E7%94%A8%E8%BF%90%E7%AE%97%E7%AC%A6/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th align="left">运算符</th>
+<th align="left">作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">+、-、*、&#x2F;</td>
+<td align="left">加减乘除</td>
+</tr>
+<tr>
+<td align="left">%</td>
+<td align="left">取余</td>
+</tr>
+<tr>
+<td align="left">&#x2F;&#x2F;</td>
+<td align="left">取整</td>
+</tr>
+<tr>
+<td align="left">**</td>
+<td align="left">幂（常用x**y或pow(x,y)表示）</td>
+</tr>
+<tr>
+<td align="left">&amp;</td>
+<td align="left">位运算符中的位与</td>
+</tr>
+<tr>
+<td align="left">|</td>
+<td align="left">位运算符中的位或</td>
+</tr>
+<tr>
+<td align="left">^</td>
+<td align="left">位运算符中的位异或</td>
+</tr>
+<tr>
+<td align="left">~</td>
+<td align="left">位运算符中的取反</td>
+</tr>
+<tr>
+<td align="left">abs(x)</td>
+<td align="left">取绝对值</td>
+</tr>
+<tr>
+<td align="left">int(x)</td>
+<td align="left">转为整数</td>
+</tr>
+<tr>
+<td align="left">float(x)</td>
+<td align="left">转为浮点数</td>
+</tr>
+<tr>
+<td align="left">complex(re,im)</td>
+<td align="left">将参数转化为复数,re为复数的实部,im为复数的虚部</td>
+</tr>
+</tbody></table>
+]]></content>
       <tags>
         <tag>python</tag>
       </tags>
@@ -1599,70 +1663,6 @@
 <tr>
 <td align="left">help()</td>
 <td align="left">函数用于查看函数或模块用途的详细说明</td>
-</tr>
-</tbody></table>
-]]></content>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>常用运算符</title>
-    <url>/%E5%B8%B8%E7%94%A8%E8%BF%90%E7%AE%97%E7%AC%A6/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th align="left">运算符</th>
-<th align="left">作用</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">+、-、*、&#x2F;</td>
-<td align="left">加减乘除</td>
-</tr>
-<tr>
-<td align="left">%</td>
-<td align="left">取余</td>
-</tr>
-<tr>
-<td align="left">&#x2F;&#x2F;</td>
-<td align="left">取整</td>
-</tr>
-<tr>
-<td align="left">**</td>
-<td align="left">幂（常用x**y或pow(x,y)表示）</td>
-</tr>
-<tr>
-<td align="left">&amp;</td>
-<td align="left">位运算符中的位与</td>
-</tr>
-<tr>
-<td align="left">|</td>
-<td align="left">位运算符中的位或</td>
-</tr>
-<tr>
-<td align="left">^</td>
-<td align="left">位运算符中的位异或</td>
-</tr>
-<tr>
-<td align="left">~</td>
-<td align="left">位运算符中的取反</td>
-</tr>
-<tr>
-<td align="left">abs(x)</td>
-<td align="left">取绝对值</td>
-</tr>
-<tr>
-<td align="left">int(x)</td>
-<td align="left">转为整数</td>
-</tr>
-<tr>
-<td align="left">float(x)</td>
-<td align="left">转为浮点数</td>
-</tr>
-<tr>
-<td align="left">complex(re,im)</td>
-<td align="left">将参数转化为复数,re为复数的实部,im为复数的虚部</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -1947,6 +1947,15 @@
       </tags>
   </entry>
   <entry>
+    <title>筛选后自动排列序号</title>
+    <url>/%E7%AD%9B%E9%80%89%E5%90%8E%E8%87%AA%E5%8A%A8%E6%8E%92%E5%88%97%E5%BA%8F%E5%8F%B7/</url>
+    <content><![CDATA[<p>&#x3D;subtotal(3，B$2:B2)*1<br>“3”为函数序号<br>“B$2:B2”为序号数值</p>
+]]></content>
+      <tags>
+        <tag>excel</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>第三方库安装命令</title>
     <url>/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93%E5%AE%89%E8%A3%85%E5%91%BD%E4%BB%A4/</url>
     <content><![CDATA[<table>
@@ -1976,15 +1985,6 @@
 ]]></content>
       <tags>
         <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>筛选后自动排列序号</title>
-    <url>/%E7%AD%9B%E9%80%89%E5%90%8E%E8%87%AA%E5%8A%A8%E6%8E%92%E5%88%97%E5%BA%8F%E5%8F%B7/</url>
-    <content><![CDATA[<p>&#x3D;subtotal(3，B$2:B2)*1<br>“3”为函数序号<br>“B$2:B2”为序号数值</p>
-]]></content>
-      <tags>
-        <tag>excel</tag>
       </tags>
   </entry>
   <entry>
