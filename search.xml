@@ -10,6 +10,15 @@
       </tags>
   </entry>
   <entry>
+    <title>16949质量管理体系标准</title>
+    <url>/16949%E8%B4%A8%E9%87%8F%E7%AE%A1%E7%90%86%E4%BD%93%E7%B3%BB%E6%A0%87%E5%87%86/</url>
+    <content><![CDATA[<p>16949质量管理体系标准是对汽车生产和相关配件组织应用ISO9001:2008的特殊要求，其适用于汽车生产供应链的组织形式。国内、外各大整车厂均已要求其供应商进行ISO16949:2009认证，确保各供应商具有高质量的运行业绩，并提供持续稳定的长期合作，以实现互惠互利。<span id="more"></span><br>16949质量管理体系标准实施方法：<br>运用系统化的方法开展ISO16949:2009质量体系的策划、建立和实施，以确保组织满足标准要求并提高运营绩效。<br>1、对企业现场进行差距分析。<br>2、实施QOS（质量操作系统）培训并开展QOS活动。<br>3、实施标准培训。<br>4、利用乌龟图对过程进行定义，确定过程的边界和相互关系。<br>5、讨论详细过程流程，建立过程流程图，作为程序文件编制的输入。<br>6、程序文件准备。<br>7、质量体系试运行，提供ISO16949:2009实施必需的质量工具培训（如APQP、FMEA、MSA、SPC、PPAP、8D等）。<br>8、开展内部审核，实施改进。</p>
+]]></content>
+      <tags>
+        <tag>system</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Excel函数公式大全</title>
     <url>/Excel%E5%87%BD%E6%95%B0%E5%85%AC%E5%BC%8F%E5%A4%A7%E5%85%A8/</url>
     <content><![CDATA[<p>一、Excel中：逻辑函数，共有9个；<br>IF函数：&#x3D;IF(G2&gt;&#x3D;6000,”高薪”,”低薪”)<br>通过IF函数，判断条月薪是否大于6000；大于6000返回高薪，小于6000返回低薪；</p>
@@ -42,12 +51,136 @@
       </tags>
   </entry>
   <entry>
-    <title>16949质量管理体系标准</title>
-    <url>/16949%E8%B4%A8%E9%87%8F%E7%AE%A1%E7%90%86%E4%BD%93%E7%B3%BB%E6%A0%87%E5%87%86/</url>
-    <content><![CDATA[<p>16949质量管理体系标准是对汽车生产和相关配件组织应用ISO9001:2008的特殊要求，其适用于汽车生产供应链的组织形式。国内、外各大整车厂均已要求其供应商进行ISO16949:2009认证，确保各供应商具有高质量的运行业绩，并提供持续稳定的长期合作，以实现互惠互利。<span id="more"></span><br>16949质量管理体系标准实施方法：<br>运用系统化的方法开展ISO16949:2009质量体系的策划、建立和实施，以确保组织满足标准要求并提高运营绩效。<br>1、对企业现场进行差距分析。<br>2、实施QOS（质量操作系统）培训并开展QOS活动。<br>3、实施标准培训。<br>4、利用乌龟图对过程进行定义，确定过程的边界和相互关系。<br>5、讨论详细过程流程，建立过程流程图，作为程序文件编制的输入。<br>6、程序文件准备。<br>7、质量体系试运行，提供ISO16949:2009实施必需的质量工具培训（如APQP、FMEA、MSA、SPC、PPAP、8D等）。<br>8、开展内部审核，实施改进。</p>
+    <title>Excel库对比</title>
+    <url>/Excel%E5%BA%93%E5%AF%B9%E6%AF%94/</url>
+    <content><![CDATA[<p>Excel库对应的各种版本<span id="more"></span></p>
+<table>
+<thead>
+<tr>
+<th align="left"></th>
+<th align="center">WIN</th>
+<th align="center">MAC</th>
+<th align="center">PY2</th>
+<th align="center">PY3</th>
+<th align="center">.xls</th>
+<th align="center">.xlsx</th>
+<th align="center">读</th>
+<th align="center">写</th>
+<th align="center">修改</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">xlrd</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">×</td>
+<td align="center">×</td>
+</tr>
+<tr>
+<td align="left">xlwt</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">×</td>
+<td align="center">×</td>
+<td align="center">√</td>
+<td align="center">√</td>
+</tr>
+<tr>
+<td align="left">xlutils</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">×</td>
+<td align="center">×</td>
+<td align="center">×</td>
+<td align="center">√</td>
+</tr>
+<tr>
+<td align="left">xlwings</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+</tr>
+<tr>
+<td align="left">openpyxl</td>
+<td align="center">√</td>
+<td align="center">×</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">×</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+</tr>
+<tr>
+<td align="left">xlswriter</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">×</td>
+<td align="center">√</td>
+<td align="center">×</td>
+<td align="center">√</td>
+<td align="center">×</td>
+</tr>
+<tr>
+<td align="left">win32com</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+</tr>
+<tr>
+<td align="left">DataNitro</td>
+<td align="center">√</td>
+<td align="center">×</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">-</td>
+<td align="center">-</td>
+<td align="center">-</td>
+</tr>
+<tr>
+<td align="left">pandas</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">×</td>
+</tr>
+</tbody></table>
 ]]></content>
       <tags>
-        <tag>system</tag>
+        <tag>python</tag>
       </tags>
   </entry>
   <entry>
@@ -242,139 +375,6 @@
 ]]></content>
       <tags>
         <tag>excel</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Excel库对比</title>
-    <url>/Excel%E5%BA%93%E5%AF%B9%E6%AF%94/</url>
-    <content><![CDATA[<p>Excel库对应的各种版本<span id="more"></span></p>
-<table>
-<thead>
-<tr>
-<th align="left"></th>
-<th align="center">WIN</th>
-<th align="center">MAC</th>
-<th align="center">PY2</th>
-<th align="center">PY3</th>
-<th align="center">.xls</th>
-<th align="center">.xlsx</th>
-<th align="center">读</th>
-<th align="center">写</th>
-<th align="center">修改</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">xlrd</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">×</td>
-<td align="center">×</td>
-</tr>
-<tr>
-<td align="left">xlwt</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">×</td>
-<td align="center">×</td>
-<td align="center">√</td>
-<td align="center">√</td>
-</tr>
-<tr>
-<td align="left">xlutils</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">×</td>
-<td align="center">×</td>
-<td align="center">×</td>
-<td align="center">√</td>
-</tr>
-<tr>
-<td align="left">xlwings</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-</tr>
-<tr>
-<td align="left">openpyxl</td>
-<td align="center">√</td>
-<td align="center">×</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">×</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-</tr>
-<tr>
-<td align="left">xlswriter</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">×</td>
-<td align="center">√</td>
-<td align="center">×</td>
-<td align="center">√</td>
-<td align="center">×</td>
-</tr>
-<tr>
-<td align="left">win32com</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-</tr>
-<tr>
-<td align="left">DataNitro</td>
-<td align="center">√</td>
-<td align="center">×</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">-</td>
-<td align="center">-</td>
-<td align="center">-</td>
-</tr>
-<tr>
-<td align="left">pandas</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td align="center">×</td>
-</tr>
-</tbody></table>
-]]></content>
-      <tags>
-        <tag>python</tag>
       </tags>
   </entry>
   <entry>
@@ -1185,6 +1185,22 @@
       </tags>
   </entry>
   <entry>
+    <title>SQL命令</title>
+    <url>/SQL%E5%91%BD%E4%BB%A4/</url>
+    <content><![CDATA[<p>#创建一个名为“day1”的数据库<br>create database day1;</p>
+<p>#进去day1数据库<br>use day1;<span id="more"></span></p>
+<p>#创建一个名为“test”的数据表<br>create table test(<br>id varchar(20)  primary key ,<br>name varchar(30),<br>password varchar(30)<br>);</p>
+<p>#向test表插入一行数据<br>insert into test(id,name,password) values(‘001’,’lisi’,’123456’);</p>
+<p>#查看创建的test表的数据<br>select * from test;</p>
+<p>#将id为001的密码改为xxxx<br>update test set password&#x3D;’xxxx’ where id&#x3D;’001’;</p>
+<p>#删除test表<br>drop table test;</p>
+<p>#删除day1数据库<br>drop database day1;</p>
+]]></content>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Termux常用命令</title>
     <url>/Termux%E5%B8%B8%E8%A7%81%E5%91%BD%E4%BB%A4/</url>
     <content><![CDATA[<p>Termux是一个Android上的终端模拟器和Linux环境。它允许用户在其Android设备上直接运行各种 Linux 命令行实用程序。<br>在Termux中可以使用的一些常用命令包括:</p>
@@ -1267,22 +1283,6 @@
       </tags>
   </entry>
   <entry>
-    <title>SQL命令</title>
-    <url>/SQL%E5%91%BD%E4%BB%A4/</url>
-    <content><![CDATA[<p>#创建一个名为“day1”的数据库<br>create database day1;</p>
-<p>#进去day1数据库<br>use day1;<span id="more"></span></p>
-<p>#创建一个名为“test”的数据表<br>create table test(<br>id varchar(20)  primary key ,<br>name varchar(30),<br>password varchar(30)<br>);</p>
-<p>#向test表插入一行数据<br>insert into test(id,name,password) values(‘001’,’lisi’,’123456’);</p>
-<p>#查看创建的test表的数据<br>select * from test;</p>
-<p>#将id为001的密码改为xxxx<br>update test set password&#x3D;’xxxx’ where id&#x3D;’001’;</p>
-<p>#删除test表<br>drop table test;</p>
-<p>#删除day1数据库<br>drop database day1;</p>
-]]></content>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>WI工作指示编写流程</title>
     <url>/WI%E5%B7%A5%E4%BD%9C%E6%8C%87%E7%A4%BA/</url>
     <content><![CDATA[<p>一、确定编写目标及需求<br>在编写WI之前，首先需要明确编写目标及需求，包括:<br>(1)需要编写的工作内容及流程;<br>(2)操作人员的技能要求和培训需求;<br>(3)操作所需的设备、工具和材料等。</p>
@@ -1298,9 +1298,8 @@
   </entry>
   <entry>
     <title>Win组合快捷键</title>
-    <url>/in%E7%BB%84%E5%90%88%E5%BF%AB%E6%8D%B7%E9%94%AE/</url>
-    <content><![CDATA[<p>123</p>
-<table>
+    <url>/Win%E7%BB%84%E5%90%88%E5%BF%AB%E6%8D%B7%E9%94%AE/</url>
+    <content><![CDATA[<table>
 <thead>
 <tr>
 <th align="left">快捷键</th>
@@ -1362,17 +1361,17 @@
       </tags>
   </entry>
   <entry>
-    <title>使用xlwt库将数据写入excel</title>
-    <url>/%E4%BD%BF%E7%94%A8xlwt%E5%BA%93%E5%B0%86%E6%95%B0%E6%8D%AE%E5%86%99%E5%85%A5excel/</url>
-    <content><![CDATA[<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import xlwt</span><br><span class="line">#1. 创建workbook对象</span><br><span class="line">workbook = xlwt.Workbook(encoding=&quot;utf-8&quot;)</span><br><span class="line">#2. 增加一个sheet # 设置成可以覆盖原先内容</span><br><span class="line">worksheet = workbook.add_sheet(&quot;sheet1&quot;, cell_overwrite_ok=True)</span><br><span class="line">#3. 在单元格中添加内容，第一个参数为行，第二个参数为列，第三个参数为内容</span><br><span class="line">worksheet.write(0,0, &quot;hello&quot;)</span><br><span class="line">#4. 保存数据表</span><br><span class="line">workbook.save(&quot;./student.xls&quot;)</span><br></pre></td></tr></table></figure>]]></content>
+    <title>xlsxwriter新建Excel表格</title>
+    <url>/xlsxwriter%E6%96%B0%E5%BB%BAExcel%E8%A1%A8%E6%A0%BC/</url>
+    <content><![CDATA[<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import xlsxwriter</span><br><span class="line"></span><br><span class="line">#新建excel表</span><br><span class="line">workbook = xlsxwriter.Workbook(&#x27;D:/hello.xlsx&#x27;)</span><br><span class="line">&lt;!--more--&gt;</span><br><span class="line"></span><br><span class="line">#新建sheet（sheet的名称为&quot;sheet1&quot;）</span><br><span class="line">worksheet = workbook.add_worksheet()</span><br><span class="line"></span><br><span class="line">#定义表头内容</span><br><span class="line">Title = [&#x27;实例ID&#x27;, &#x27;实例配置&#x27;, &#x27;实例名&#x27;, &#x27;地域&#x27;, &#x27;安全组&#x27;, &#x27;EIP&#x27;]</span><br><span class="line"></span><br><span class="line">#定义标题格式</span><br><span class="line">merge_format = workbook.add_format(&#123;</span><br><span class="line">+ &#x27;bold&#x27;: True,</span><br><span class="line">+ &#x27;border&#x27;: 1,</span><br><span class="line">+ &#x27;align&#x27;: &#x27;center&#x27;,</span><br><span class="line">+ &#x27;valign&#x27;: &#x27;vcenter&#x27;,</span><br><span class="line">+ &#x27;fg_color&#x27;: &#x27;#E0FFFF&#x27;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">#定义表头格式</span><br><span class="line">title_format = workbook.add_format(&#123;</span><br><span class="line">+ &#x27;bold&#x27;: True,</span><br><span class="line">+ &#x27;border&#x27;: 1,</span><br><span class="line">+ &#x27;align&#x27;: &#x27;center&#x27;,</span><br><span class="line">+ &#x27;valign&#x27;: &#x27;vcenter&#x27;,</span><br><span class="line">+ &#x27;fg_color&#x27;: &#x27;#87CEFF&#x27;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">#定义内容格式</span><br><span class="line">data_format = workbook.add_format(&#123;</span><br><span class="line">+ &#x27;border&#x27;: 1,</span><br><span class="line">+ &#x27;align&#x27;: &#x27;center&#x27;,</span><br><span class="line">+ &#x27;valign&#x27;: &#x27;vcenter&#x27;,</span><br><span class="line">+ &#x27;fg_color&#x27;: &#x27;#EED8AE&#x27;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">#拟数据</span><br><span class="line">data = [[&#x27;i-1&#x27;, &#x27;1C1G&#x27;, &#x27;demo1&#x27;, &#x27;上海&#x27;, &#x27;sg-1&#x27;, &#x27;172.20.2.10&#x27;],</span><br><span class="line">+ [&#x27;i-2&#x27;, &#x27;1C1G&#x27;, &#x27;demo2&#x27;, &#x27;郑州&#x27;, &#x27;sg-2&#x27;, &#x27;172.20.2.11&#x27;],</span><br><span class="line">+ [&#x27;i-3&#x27;, &#x27;1C1G&#x27;, &#x27;demo3&#x27;, &#x27;北京&#x27;, &#x27;sg-3&#x27;, &#x27;172.20.2.12&#x27;]]</span><br><span class="line"></span><br><span class="line">#合并 A1 - F1 单元格作为标题，传入参数：1：合并单元格，2：标题文字，3：标题格式</span><br><span class="line">worksheet.merge_range(&#x27;A1:F1&#x27;, &#x27;ECS信息表&#x27;, merge_format)</span><br><span class="line"></span><br><span class="line">#设置列宽，指定 A - F 的列宽为 25</span><br><span class="line">worksheet.set_column(&#x27;A:F&#x27;, 25)</span><br><span class="line"></span><br><span class="line">#设置行号，指定行数，高度，A1 为 0，A2 为 1，以此类推</span><br><span class="line">worksheet.set_row(0, 60)</span><br><span class="line"></span><br><span class="line">#write_row ，写行，传入参数：1：行，2：内容，3：格式</span><br><span class="line">worksheet.write_row(&#x27;A2&#x27;, Title, title_format)</span><br><span class="line">i = 3</span><br><span class="line">for ECS in data:</span><br><span class="line">+ worksheet.write_row(&#x27;A&#x27; + str(i), ECS, data_format)</span><br><span class="line">+ i += 1</span><br><span class="line"></span><br><span class="line">#将excel文件保存关闭，如果没有这一行运行代码会报错</span><br><span class="line">workbook.close()</span><br></pre></td></tr></table></figure>]]></content>
       <tags>
         <tag>python</tag>
       </tags>
   </entry>
   <entry>
-    <title>xlsxwriter新建Excel表格</title>
-    <url>/xlsxwriter%E6%96%B0%E5%BB%BAExcel%E8%A1%A8%E6%A0%BC/</url>
-    <content><![CDATA[<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import xlsxwriter</span><br><span class="line"></span><br><span class="line">#新建excel表</span><br><span class="line">workbook = xlsxwriter.Workbook(&#x27;D:/hello.xlsx&#x27;)</span><br><span class="line">&lt;!--more--&gt;</span><br><span class="line"></span><br><span class="line">#新建sheet（sheet的名称为&quot;sheet1&quot;）</span><br><span class="line">worksheet = workbook.add_worksheet()</span><br><span class="line"></span><br><span class="line">#定义表头内容</span><br><span class="line">Title = [&#x27;实例ID&#x27;, &#x27;实例配置&#x27;, &#x27;实例名&#x27;, &#x27;地域&#x27;, &#x27;安全组&#x27;, &#x27;EIP&#x27;]</span><br><span class="line"></span><br><span class="line">#定义标题格式</span><br><span class="line">merge_format = workbook.add_format(&#123;</span><br><span class="line">+ &#x27;bold&#x27;: True,</span><br><span class="line">+ &#x27;border&#x27;: 1,</span><br><span class="line">+ &#x27;align&#x27;: &#x27;center&#x27;,</span><br><span class="line">+ &#x27;valign&#x27;: &#x27;vcenter&#x27;,</span><br><span class="line">+ &#x27;fg_color&#x27;: &#x27;#E0FFFF&#x27;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">#定义表头格式</span><br><span class="line">title_format = workbook.add_format(&#123;</span><br><span class="line">+ &#x27;bold&#x27;: True,</span><br><span class="line">+ &#x27;border&#x27;: 1,</span><br><span class="line">+ &#x27;align&#x27;: &#x27;center&#x27;,</span><br><span class="line">+ &#x27;valign&#x27;: &#x27;vcenter&#x27;,</span><br><span class="line">+ &#x27;fg_color&#x27;: &#x27;#87CEFF&#x27;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">#定义内容格式</span><br><span class="line">data_format = workbook.add_format(&#123;</span><br><span class="line">+ &#x27;border&#x27;: 1,</span><br><span class="line">+ &#x27;align&#x27;: &#x27;center&#x27;,</span><br><span class="line">+ &#x27;valign&#x27;: &#x27;vcenter&#x27;,</span><br><span class="line">+ &#x27;fg_color&#x27;: &#x27;#EED8AE&#x27;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">#拟数据</span><br><span class="line">data = [[&#x27;i-1&#x27;, &#x27;1C1G&#x27;, &#x27;demo1&#x27;, &#x27;上海&#x27;, &#x27;sg-1&#x27;, &#x27;172.20.2.10&#x27;],</span><br><span class="line">+ [&#x27;i-2&#x27;, &#x27;1C1G&#x27;, &#x27;demo2&#x27;, &#x27;郑州&#x27;, &#x27;sg-2&#x27;, &#x27;172.20.2.11&#x27;],</span><br><span class="line">+ [&#x27;i-3&#x27;, &#x27;1C1G&#x27;, &#x27;demo3&#x27;, &#x27;北京&#x27;, &#x27;sg-3&#x27;, &#x27;172.20.2.12&#x27;]]</span><br><span class="line"></span><br><span class="line">#合并 A1 - F1 单元格作为标题，传入参数：1：合并单元格，2：标题文字，3：标题格式</span><br><span class="line">worksheet.merge_range(&#x27;A1:F1&#x27;, &#x27;ECS信息表&#x27;, merge_format)</span><br><span class="line"></span><br><span class="line">#设置列宽，指定 A - F 的列宽为 25</span><br><span class="line">worksheet.set_column(&#x27;A:F&#x27;, 25)</span><br><span class="line"></span><br><span class="line">#设置行号，指定行数，高度，A1 为 0，A2 为 1，以此类推</span><br><span class="line">worksheet.set_row(0, 60)</span><br><span class="line"></span><br><span class="line">#write_row ，写行，传入参数：1：行，2：内容，3：格式</span><br><span class="line">worksheet.write_row(&#x27;A2&#x27;, Title, title_format)</span><br><span class="line">i = 3</span><br><span class="line">for ECS in data:</span><br><span class="line">+ worksheet.write_row(&#x27;A&#x27; + str(i), ECS, data_format)</span><br><span class="line">+ i += 1</span><br><span class="line"></span><br><span class="line">#将excel文件保存关闭，如果没有这一行运行代码会报错</span><br><span class="line">workbook.close()</span><br></pre></td></tr></table></figure>]]></content>
+    <title>使用xlwt库将数据写入excel</title>
+    <url>/%E4%BD%BF%E7%94%A8xlwt%E5%BA%93%E5%B0%86%E6%95%B0%E6%8D%AE%E5%86%99%E5%85%A5excel/</url>
+    <content><![CDATA[<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import xlwt</span><br><span class="line">#1. 创建workbook对象</span><br><span class="line">workbook = xlwt.Workbook(encoding=&quot;utf-8&quot;)</span><br><span class="line">#2. 增加一个sheet # 设置成可以覆盖原先内容</span><br><span class="line">worksheet = workbook.add_sheet(&quot;sheet1&quot;, cell_overwrite_ok=True)</span><br><span class="line">#3. 在单元格中添加内容，第一个参数为行，第二个参数为列，第三个参数为内容</span><br><span class="line">worksheet.write(0,0, &quot;hello&quot;)</span><br><span class="line">#4. 保存数据表</span><br><span class="line">workbook.save(&quot;./student.xls&quot;)</span><br></pre></td></tr></table></figure>]]></content>
       <tags>
         <tag>python</tag>
       </tags>
@@ -1506,17 +1505,17 @@
       </tags>
   </entry>
   <entry>
-    <title>将工作薄按列拆分至工作表</title>
-    <url>/%E5%B0%86%E5%B7%A5%E4%BD%9C%E8%96%84%E6%8C%89%E5%88%97%E6%8B%86%E5%88%86%E8%87%B3%E5%B7%A5%E4%BD%9C%E8%A1%A8/</url>
-    <content><![CDATA[<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import pandas as pd</span><br><span class="line"></span><br><span class="line">data=pd.read_excel(r&quot;地址\汇总.xls&quot;)</span><br><span class="line">xlsx = pd.ExcelWriter(r&quot;地址\汇总-拆分完成.xlsx&quot;)</span><br><span class="line"></span><br><span class="line">for i in data[&quot;姓名&quot;].unique():</span><br><span class="line">	data[data[&quot;姓名&quot;]==i].to_excel(xlsx,sheet_name=i,index=False)</span><br><span class="line"></span><br><span class="line">xlsx.close()</span><br></pre></td></tr></table></figure>]]></content>
+    <title>将工作薄按列拆分至工作薄</title>
+    <url>/%E5%B0%86%E5%B7%A5%E4%BD%9C%E8%96%84%E6%8C%89%E5%88%97%E6%8B%86%E5%88%86%E8%87%B3%E5%B7%A5%E4%BD%9C%E8%96%84/</url>
+    <content><![CDATA[<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import pandas as pd</span><br><span class="line">data = pd.read_excel(r&#x27;地址\汇总.xls&#x27;,keep_default_na=False)</span><br><span class="line">unit_list = list(data[&#x27;姓名&#x27;].drop_duplicates())</span><br><span class="line">for i in unit_list:</span><br><span class="line">	data_new = data[data[&#x27;姓名&#x27;] == i]</span><br><span class="line">	if i == &#x27;&#x27;:</span><br><span class="line">		data_new.to_excel()</span><br><span class="line">	else:</span><br><span class="line">		data_new.to_excel(r&quot;地址\%s.xls&quot; % (i),index=False)</span><br></pre></td></tr></table></figure>]]></content>
       <tags>
         <tag>python</tag>
       </tags>
   </entry>
   <entry>
-    <title>将工作薄按列拆分至工作薄</title>
-    <url>/%E5%B0%86%E5%B7%A5%E4%BD%9C%E8%96%84%E6%8C%89%E5%88%97%E6%8B%86%E5%88%86%E8%87%B3%E5%B7%A5%E4%BD%9C%E8%96%84/</url>
-    <content><![CDATA[<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import pandas as pd</span><br><span class="line">data = pd.read_excel(r&#x27;地址\汇总.xls&#x27;,keep_default_na=False)</span><br><span class="line">unit_list = list(data[&#x27;姓名&#x27;].drop_duplicates())</span><br><span class="line">for i in unit_list:</span><br><span class="line">	data_new = data[data[&#x27;姓名&#x27;] == i]</span><br><span class="line">	if i == &#x27;&#x27;:</span><br><span class="line">		data_new.to_excel()</span><br><span class="line">	else:</span><br><span class="line">		data_new.to_excel(r&quot;地址\%s.xls&quot; % (i),index=False)</span><br></pre></td></tr></table></figure>]]></content>
+    <title>将工作薄按列拆分至工作表</title>
+    <url>/%E5%B0%86%E5%B7%A5%E4%BD%9C%E8%96%84%E6%8C%89%E5%88%97%E6%8B%86%E5%88%86%E8%87%B3%E5%B7%A5%E4%BD%9C%E8%A1%A8/</url>
+    <content><![CDATA[<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import pandas as pd</span><br><span class="line"></span><br><span class="line">data=pd.read_excel(r&quot;地址\汇总.xls&quot;)</span><br><span class="line">xlsx = pd.ExcelWriter(r&quot;地址\汇总-拆分完成.xlsx&quot;)</span><br><span class="line"></span><br><span class="line">for i in data[&quot;姓名&quot;].unique():</span><br><span class="line">	data[data[&quot;姓名&quot;]==i].to_excel(xlsx,sheet_name=i,index=False)</span><br><span class="line"></span><br><span class="line">xlsx.close()</span><br></pre></td></tr></table></figure>]]></content>
       <tags>
         <tag>python</tag>
       </tags>
@@ -1672,17 +1671,17 @@
       </tags>
   </entry>
   <entry>
-    <title>打印文件夹内所有Excel文件</title>
-    <url>/%E6%89%93%E5%8D%B0%E6%96%87%E4%BB%B6%E5%A4%B9%E5%86%85%E6%89%80%E6%9C%89Excel%E6%96%87%E4%BB%B6/</url>
-    <content><![CDATA[<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import os</span><br><span class="line">import win32com.client as win32</span><br><span class="line"></span><br><span class="line">def init_excel(print_file):</span><br><span class="line">    excel = win32.gencache.EnsureDispatch(&#x27;Excel.Application&#x27;)</span><br><span class="line">    wb = excel.Workbooks.Open(print_file)</span><br><span class="line">    ws = wb.Sheets(&#x27;Sheet1&#x27;)</span><br><span class="line">    ws.PrintOut()</span><br><span class="line">    wb.Close(False)</span><br><span class="line">    excel.Quit()</span><br><span class="line"></span><br><span class="line">def excel_file():</span><br><span class="line">    path = os.getcwd()</span><br><span class="line">    files = os.listdir(path)</span><br><span class="line">    excelfiles = [f for f in files if not f.startswith((&quot;~$&quot;)) and f.endswith((&quot;.xlsx&quot;))]</span><br><span class="line">    for file in excelfiles:</span><br><span class="line">        fullpath = os.path.join(path,file)</span><br><span class="line">        print(fullpath)</span><br><span class="line">        init_excel(fullpath)</span><br><span class="line"></span><br><span class="line">excel_file()</span><br></pre></td></tr></table></figure>]]></content>
+    <title>生成词云</title>
+    <url>/%E6%88%90%E8%AF%8D%E4%BA%91/</url>
+    <content><![CDATA[<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import pandas as pd</span><br><span class="line">import matplotlib.pyplot as plt</span><br><span class="line">from wordcloud import WordCloud</span><br><span class="line"></span><br><span class="line"># 读取Excel文件</span><br><span class="line">data = pd.read_excel(&#x27;index.xlsx&#x27;)</span><br><span class="line">df = pd.DataFrame(data)</span><br><span class="line"></span><br><span class="line"># 从DataFrame中提取数据</span><br><span class="line">text = df[&#x27;Name&#x27;]</span><br><span class="line">text1 = &#x27; &#x27;.join(df[&#x27;Name&#x27;])</span><br><span class="line">print(text)</span><br><span class="line">print(text1)</span><br><span class="line"></span><br><span class="line"># 创建词云对象</span><br><span class="line">wordcloud = WordCloud(background_color=&#x27;white&#x27;).generate(text1)</span><br><span class="line"></span><br><span class="line"># 展示词云</span><br><span class="line">plt.imshow(wordcloud, interpolation=&#x27;bilinear&#x27;)</span><br><span class="line">plt.axis(&#x27;off&#x27;)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>]]></content>
       <tags>
         <tag>python</tag>
       </tags>
   </entry>
   <entry>
-    <title>生成词云</title>
-    <url>/%E6%88%90%E8%AF%8D%E4%BA%91/</url>
-    <content><![CDATA[<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import pandas as pd</span><br><span class="line">import matplotlib.pyplot as plt</span><br><span class="line">from wordcloud import WordCloud</span><br><span class="line"></span><br><span class="line"># 读取Excel文件</span><br><span class="line">data = pd.read_excel(&#x27;index.xlsx&#x27;)</span><br><span class="line">df = pd.DataFrame(data)</span><br><span class="line"></span><br><span class="line"># 从DataFrame中提取数据</span><br><span class="line">text = df[&#x27;Name&#x27;]</span><br><span class="line">text1 = &#x27; &#x27;.join(df[&#x27;Name&#x27;])</span><br><span class="line">print(text)</span><br><span class="line">print(text1)</span><br><span class="line"></span><br><span class="line"># 创建词云对象</span><br><span class="line">wordcloud = WordCloud(background_color=&#x27;white&#x27;).generate(text1)</span><br><span class="line"></span><br><span class="line"># 展示词云</span><br><span class="line">plt.imshow(wordcloud, interpolation=&#x27;bilinear&#x27;)</span><br><span class="line">plt.axis(&#x27;off&#x27;)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>]]></content>
+    <title>打印文件夹内所有Excel文件</title>
+    <url>/%E6%89%93%E5%8D%B0%E6%96%87%E4%BB%B6%E5%A4%B9%E5%86%85%E6%89%80%E6%9C%89Excel%E6%96%87%E4%BB%B6/</url>
+    <content><![CDATA[<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import os</span><br><span class="line">import win32com.client as win32</span><br><span class="line"></span><br><span class="line">def init_excel(print_file):</span><br><span class="line">    excel = win32.gencache.EnsureDispatch(&#x27;Excel.Application&#x27;)</span><br><span class="line">    wb = excel.Workbooks.Open(print_file)</span><br><span class="line">    ws = wb.Sheets(&#x27;Sheet1&#x27;)</span><br><span class="line">    ws.PrintOut()</span><br><span class="line">    wb.Close(False)</span><br><span class="line">    excel.Quit()</span><br><span class="line"></span><br><span class="line">def excel_file():</span><br><span class="line">    path = os.getcwd()</span><br><span class="line">    files = os.listdir(path)</span><br><span class="line">    excelfiles = [f for f in files if not f.startswith((&quot;~$&quot;)) and f.endswith((&quot;.xlsx&quot;))]</span><br><span class="line">    for file in excelfiles:</span><br><span class="line">        fullpath = os.path.join(path,file)</span><br><span class="line">        print(fullpath)</span><br><span class="line">        init_excel(fullpath)</span><br><span class="line"></span><br><span class="line">excel_file()</span><br></pre></td></tr></table></figure>]]></content>
       <tags>
         <tag>python</tag>
       </tags>
@@ -1723,21 +1722,30 @@
       </tags>
   </entry>
   <entry>
-    <title>格式化字符串的三种方法</title>
-    <url>/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E6%B3%95/</url>
-    <content><![CDATA[<p>f’{i}*{j}&#x3D;{i*j}’<br>‘{}*{}&#x3D;{}’.format(i,j,i*j)<br>‘%d*%d&#x3D;%d’%(i,j,i*j)</p>
-]]></content>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>条件查找</title>
     <url>/%E6%9D%A1%E4%BB%B6%E6%9F%A5%E6%89%BE/</url>
     <content><![CDATA[<p>&#x3D;VLOOKUP(A1,A:C,3,1)，以此函数为例：<br>“A1”为“查找值”内容，当前需要查找的目标；<br>“A:C”为“数据表”内容，查找表中的目标起始列和结果终止列；<br>“3”为“列序数”内容，“数据表”中目标列至结果列的列数；<br>“1”为“匹配条件”内容，“0”为精确查找，“1”为模糊查找。</p>
 ]]></content>
       <tags>
         <tag>excel</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>条件求和</title>
+    <url>/%E6%9D%A1%E4%BB%B6%E6%B1%82%E5%92%8C/</url>
+    <content><![CDATA[<p>&#x3D;SUMIF(A1:A10,E4,C1:C10)<br>“A1:A10”选择求和项列<br>“E4”选择求和项<br>“C1:C10”选择数值列</p>
+]]></content>
+      <tags>
+        <tag>excel</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>格式化字符串的三种方法</title>
+    <url>/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E6%B3%95/</url>
+    <content><![CDATA[<p>f’{i}*{j}&#x3D;{i*j}’<br>‘{}*{}&#x3D;{}’.format(i,j,i*j)<br>‘%d*%d&#x3D;%d’%(i,j,i*j)</p>
+]]></content>
+      <tags>
+        <tag>python</tag>
       </tags>
   </entry>
   <entry>
@@ -1905,18 +1913,35 @@
       </tags>
   </entry>
   <entry>
-    <title>条件求和</title>
-    <url>/%E6%9D%A1%E4%BB%B6%E6%B1%82%E5%92%8C/</url>
-    <content><![CDATA[<p>&#x3D;SUMIF(A1:A10,E4,C1:C10)<br>“A1:A10”选择求和项列<br>“E4”选择求和项<br>“C1:C10”选择数值列</p>
-]]></content>
+    <title>爬取关键字写入表格</title>
+    <url>/%E7%88%AC%E5%8F%96%E5%85%B3%E9%94%AE%E5%AD%97%E5%86%99%E5%85%A5%E8%A1%A8%E6%A0%BC/</url>
+    <content><![CDATA[<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import requests</span><br><span class="line">import re</span><br><span class="line">import xlwt</span><br><span class="line"></span><br><span class="line">headers = &#123;&#x27;User-Agent&#x27;:&quot;Mozilla/5.0 (X11; Linux x86_64; rv:45.0) Gecko/20100101 Firefox/45.0&quot;&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">book = xlwt.Workbook()</span><br><span class="line">sheet = book.add_sheet(&#x27;ke_tengxun&#x27;,cell_overwrite_ok=True)</span><br><span class="line"></span><br><span class="line">rownum = 1</span><br><span class="line">def get_info(url):</span><br><span class="line">    global rownum</span><br><span class="line">    res = requests.get(url,headers = headers)</span><br><span class="line">    pattern = re.compile(&#x27;.*?rel=&quot;nofollow&quot;.*?&gt;(.*?)&lt;&#x27;,re.S)</span><br><span class="line">    ke_chupin =re.findall(pattern,res.text)</span><br><span class="line">    pattern = re.compile(&#x27;</span><br><span class="line">.*?cors-name=&quot;course&quot;&gt;(.*?)&lt;&#x27;,re.S)</span><br><span class="line">    ke_name =re.findall(pattern,res.text)</span><br><span class="line">    pattern = re.compile(&#x27;</span><br><span class="line">.*?href=&quot;(.*?)&quot;.*?target&#x27;,re.S)</span><br><span class="line">    ke_href =re.findall(pattern,res.text)</span><br><span class="line">    print(ke_chupin)</span><br><span class="line">    print(len(ke_chupin))</span><br><span class="line">    print(ke_name)</span><br><span class="line">    print(len(ke_name))</span><br><span class="line">    print(ke_href)</span><br><span class="line">    print(len(ke_href))</span><br><span class="line"></span><br><span class="line">    head = [&#x27;课程&#x27;,&#x27;链接&#x27;,&#x27;出品人&#x27;]</span><br><span class="line">    for h in range(len(head)):</span><br><span class="line">        sheet.write(0,h,head[h])</span><br><span class="line">    for l in range(len(ke_name[:24])):</span><br><span class="line">        sheet.write(rownum,0,ke_name[l])</span><br><span class="line">        sheet.write(rownum,1,ke_href[l])</span><br><span class="line">        sheet.write(rownum,2,ke_chupin[l])</span><br><span class="line">        rownum += 1</span><br><span class="line"></span><br><span class="line">    book.save(&#x27;test.xls&#x27;)</span><br><span class="line"></span><br><span class="line">if __name__ == &#x27;__main__&#x27;:</span><br><span class="line">    for i in range(1,13):</span><br><span class="line">        urls = &#x27;https://ke.qq.com/course/list?mt=1001&amp;st=2002&amp;tt=3019&amp;page=&#123;&#125;&#x27;.format(i)</span><br><span class="line">        get_info(urls)</span><br></pre></td></tr></table></figure>]]></content>
       <tags>
-        <tag>excel</tag>
+        <tag>python</tag>
       </tags>
   </entry>
   <entry>
     <title>爬虫标准框架</title>
     <url>/%E7%88%AC%E8%99%AB%E6%A0%87%E5%87%86%E6%A1%86%E6%9E%B6/</url>
     <content><![CDATA[<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import requests</span><br><span class="line">url=&quot;https://www.sogou.com/web?query=周杰伦&quot;</span><br><span class="line"></span><br><span class="line">headers=&#123; &quot;User-Agent&quot;:&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36 Edg/97.0.1072.55&quot; &#125;</span><br><span class="line">#以字典的形式设置请求头，处理反爬 resp=requests.get(url,headers=headers)</span><br><span class="line">print(resp)</span><br><span class="line">#结果：Response [200]</span><br><span class="line">print(resp.text)</span><br><span class="line">#拿到页面源代码</span><br><span class="line">resp.close()</span><br><span class="line">#关掉resp</span><br></pre></td></tr></table></figure>]]></content>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>生成SSH</title>
+    <url>/%E7%94%9F%E6%88%90SSH/</url>
+    <content><![CDATA[<ul>
+<li><p>用户名和邮箱进行初始化<br>git config –global user.name yourname<br>git config –global user.email youremail</p>
+<span id="more"></span></li>
+<li><p>检查初始化信息<br>git config user.name<br>git config user.email</p>
+</li>
+<li><p>生成密钥<br>ssh-keygen -t rsa -C youremail</p>
+</li>
+<li><p>查看公钥<br>cat ~&#x2F;.ssh&#x2F;id_rsa.pub</p>
+</li>
+</ul>
+]]></content>
       <tags>
         <tag>python</tag>
       </tags>
@@ -1954,24 +1979,6 @@
       </tags>
   </entry>
   <entry>
-    <title>生成SSH</title>
-    <url>/%E7%94%9F%E6%88%90SSH/</url>
-    <content><![CDATA[<ul>
-<li><p>用户名和邮箱进行初始化<br>git config –global user.name yourname<br>git config –global user.email youremail</p>
-<span id="more"></span></li>
-<li><p>检查初始化信息<br>git config user.name<br>git config user.email</p>
-</li>
-<li><p>生成密钥<br>ssh-keygen -t rsa -C youremail</p>
-</li>
-<li><p>查看公钥<br>cat ~&#x2F;.ssh&#x2F;id_rsa.pub</p>
-</li>
-</ul>
-]]></content>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>筛选后自动排列序号</title>
     <url>/%E7%AD%9B%E9%80%89%E5%90%8E%E8%87%AA%E5%8A%A8%E6%8E%92%E5%88%97%E5%BA%8F%E5%8F%B7/</url>
     <content><![CDATA[<p>&#x3D;subtotal(3，B$2:B2)*1<br>“3”为函数序号<br>“B$2:B2”为序号数值</p>
@@ -1990,26 +1997,18 @@
       </tags>
   </entry>
   <entry>
-    <title>爬取关键字写入表格</title>
-    <url>/%E7%88%AC%E5%8F%96%E5%85%B3%E9%94%AE%E5%AD%97%E5%86%99%E5%85%A5%E8%A1%A8%E6%A0%BC/</url>
-    <content><![CDATA[<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import requests</span><br><span class="line">import re</span><br><span class="line">import xlwt</span><br><span class="line"></span><br><span class="line">headers = &#123;&#x27;User-Agent&#x27;:&quot;Mozilla/5.0 (X11; Linux x86_64; rv:45.0) Gecko/20100101 Firefox/45.0&quot;&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">book = xlwt.Workbook()</span><br><span class="line">sheet = book.add_sheet(&#x27;ke_tengxun&#x27;,cell_overwrite_ok=True)</span><br><span class="line"></span><br><span class="line">rownum = 1</span><br><span class="line">def get_info(url):</span><br><span class="line">    global rownum</span><br><span class="line">    res = requests.get(url,headers = headers)</span><br><span class="line">    pattern = re.compile(&#x27;.*?rel=&quot;nofollow&quot;.*?&gt;(.*?)&lt;&#x27;,re.S)</span><br><span class="line">    ke_chupin =re.findall(pattern,res.text)</span><br><span class="line">    pattern = re.compile(&#x27;</span><br><span class="line">.*?cors-name=&quot;course&quot;&gt;(.*?)&lt;&#x27;,re.S)</span><br><span class="line">    ke_name =re.findall(pattern,res.text)</span><br><span class="line">    pattern = re.compile(&#x27;</span><br><span class="line">.*?href=&quot;(.*?)&quot;.*?target&#x27;,re.S)</span><br><span class="line">    ke_href =re.findall(pattern,res.text)</span><br><span class="line">    print(ke_chupin)</span><br><span class="line">    print(len(ke_chupin))</span><br><span class="line">    print(ke_name)</span><br><span class="line">    print(len(ke_name))</span><br><span class="line">    print(ke_href)</span><br><span class="line">    print(len(ke_href))</span><br><span class="line"></span><br><span class="line">    head = [&#x27;课程&#x27;,&#x27;链接&#x27;,&#x27;出品人&#x27;]</span><br><span class="line">    for h in range(len(head)):</span><br><span class="line">        sheet.write(0,h,head[h])</span><br><span class="line">    for l in range(len(ke_name[:24])):</span><br><span class="line">        sheet.write(rownum,0,ke_name[l])</span><br><span class="line">        sheet.write(rownum,1,ke_href[l])</span><br><span class="line">        sheet.write(rownum,2,ke_chupin[l])</span><br><span class="line">        rownum += 1</span><br><span class="line"></span><br><span class="line">    book.save(&#x27;test.xls&#x27;)</span><br><span class="line"></span><br><span class="line">if __name__ == &#x27;__main__&#x27;:</span><br><span class="line">    for i in range(1,13):</span><br><span class="line">        urls = &#x27;https://ke.qq.com/course/list?mt=1001&amp;st=2002&amp;tt=3019&amp;page=&#123;&#125;&#x27;.format(i)</span><br><span class="line">        get_info(urls)</span><br></pre></td></tr></table></figure>]]></content>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>设备性能确认(Qualify)</title>
-    <url>/%E8%AE%BE%E5%A4%87%E6%80%A7%E8%83%BD%E7%A1%AE%E8%AE%A4-Qualify/</url>
-    <content><![CDATA[<p>设备性能确认(Qualify)，即某个设备达到了一定的标准，可以被用来做某个预定的生产步骤。Qualify的过程一定要有”预定的标准”。<br>设备的用户需求说明(URS)和性能指标决定了设备的标准，确认就是通过实际操作、测试或试验，来收集证据，证明该设备已经达到了这些标准。</p>
+    <title>设备定义</title>
+    <url>/%E8%AE%BE%E5%A4%87%E5%AE%9A%E4%B9%89/</url>
+    <content><![CDATA[<p>1、关键设备(A):重要工序上的设备，一旦发生故障将导致流水线全线停机，如涂布机、Busbar 焊接机等。<br>2、重要设备(B):重要工序上的设备，设备故障将导致局部停机或可用其他设备代替。<br>3、 一般设备(C): 非重要工序上的设备<span id="more"></span><br>4、 OEE: 设备综合效率，OEE&#x3D;时间开动率×性能开动率×合格品率。<br>5、 MTBF: 平均故障间隔时间，是两次故障间的平均正常运行时间.<br>6、 MTTR: 平均修理时间，修理故障使设备回到正常运行的平均耗时。<br>7、 设备性能指数(CMK) : 表示仅由设备普通原因变差决定的能力。<br>8、 Qualify: 设备性能验收。</p>
 ]]></content>
       <tags>
         <tag>system</tag>
       </tags>
   </entry>
   <entry>
-    <title>设备定义</title>
-    <url>/%E8%AE%BE%E5%A4%87%E5%AE%9A%E4%B9%89/</url>
-    <content><![CDATA[<p>1、关键设备(A):重要工序上的设备，一旦发生故障将导致流水线全线停机，如涂布机、Busbar 焊接机等。<br>2、重要设备(B):重要工序上的设备，设备故障将导致局部停机或可用其他设备代替。<br>3、 一般设备(C): 非重要工序上的设备<span id="more"></span><br>4、 OEE: 设备综合效率，OEE&#x3D;时间开动率×性能开动率×合格品率。<br>5、 MTBF: 平均故障间隔时间，是两次故障间的平均正常运行时间.<br>6、 MTTR: 平均修理时间，修理故障使设备回到正常运行的平均耗时。<br>7、 设备性能指数(CMK) : 表示仅由设备普通原因变差决定的能力。<br>8、 Qualify: 设备性能验收。</p>
+    <title>设备性能确认(Qualify)</title>
+    <url>/%E8%AE%BE%E5%A4%87%E6%80%A7%E8%83%BD%E7%A1%AE%E8%AE%A4-Qualify/</url>
+    <content><![CDATA[<p>设备性能确认(Qualify)，即某个设备达到了一定的标准，可以被用来做某个预定的生产步骤。Qualify的过程一定要有”预定的标准”。<br>设备的用户需求说明(URS)和性能指标决定了设备的标准，确认就是通过实际操作、测试或试验，来收集证据，证明该设备已经达到了这些标准。</p>
 ]]></content>
       <tags>
         <tag>system</tag>
