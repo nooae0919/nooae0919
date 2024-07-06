@@ -101,7 +101,13 @@
     </div>
 </div>
         <div class="post-content">
-            <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">=IFERROR(VALUE(TRIM(MID(SUBSTITUTE(B2,&quot;|&quot;,REPT(&quot; &quot;,100)),1,100))),&quot;&quot;)</span><br></pre></td></tr></table></figure>
+            <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">=IFERROR(TRIM(MID(SUBSTITUTE(B2,&quot;|&quot;,REPT(&quot; &quot;,100)),1,100)),&quot;&quot;)</span><br></pre></td></tr></table></figure>
+<p>REPT函数用来重复空格100次</p>
+<p>SUBSTITUTE(要替换的单元格,旧文本,新文本)</p>
+<p>mid函数是用来提取字符串中间部分的字符</p>
+<p>TRIM函数去除空格</p>
+<p>IFERROR函数将错误转换空文本</p>
+
         </div>
         
         <div class="post-tag">
