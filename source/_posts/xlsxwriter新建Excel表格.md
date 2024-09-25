@@ -1,8 +1,8 @@
----
 title: xlsxwriter新建Excel表格
-date: 2023-03-27 20:14:23
 tags: python
+date: 2023-03-27 20:14:23
 ---
+~~~
 import xlsxwriter
 
 #新建excel表
@@ -64,3 +64,4 @@ for ECS in data:
 
 #将excel文件保存关闭，如果没有这一行运行代码会报错
 workbook.close()
+~~~

@@ -2,6 +2,7 @@ title: 使用xlwt库将数据写入excel
 tags: python
 date: 2023-03-27 20:14:23
 ---
+~~~
 import xlwt
 #1. 创建workbook对象
 workbook = xlwt.Workbook(encoding="utf-8")
@@ -11,3 +12,4 @@ worksheet = workbook.add_sheet("sheet1", cell_overwrite_ok=True)
 worksheet.write(0,0, "hello")
 #4. 保存数据表
 workbook.save("./student.xls")
+~~~

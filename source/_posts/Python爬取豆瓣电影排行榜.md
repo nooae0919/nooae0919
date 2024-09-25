@@ -2,6 +2,7 @@ title: Python爬取豆瓣电影排行榜
 tags: python
 date: 2023-03-27 20:14:23
 ---
+~~~
 import requests
 import re
 
@@ -21,3 +22,4 @@ print(items)
 with open('douban.txt',"w",encoding='utf-8') as f:
 + for item in items:
 	- f.write(item+'\n')
+~~~

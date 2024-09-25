@@ -4,25 +4,31 @@
 
 # Site
 title: Nooae's Blog
-subtitle: ''
-description: '一个分享常用办公工具和技术的博客'
+subtitle: 
+description: 一个分享常用办公工具和技术的博客
 keywords: nooae,excel,python,system
 author: Nooae
 language: zh
-timezone: ''
+timezone: 
 
 baidu_url_submit:
-  count: 10                           # 提交最新的多少个链接
-  host: https://nooae.gitee.io    # 在百度站长平台中添加的域名
-  token: Bw5cL9OXIINVoyl0             	  # 秘钥
+  count: 3                           # 提交最新的多少个链接
+  host: https://www.nooae.com    # 在百度站长平台中添加的域名
+  token: U3SAFwIBNcaNJcCF             	  # 秘钥
   path: baidu_urls.txt                # 文本文档的地址,新链接会保存在此文本文档里
 
+  
+sitemap:
+ path: sitemap.xml
+baidusitemap:
+ path: baidusitemap.xml
+ 
 
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
-url: https://nooae.gitee.io/docs/configuration
+url: https://www.nooae.com
 root: /
-permalink: :year/:month/:day/:title/
+permalink: :title/
 permalink_defaults:
 pretty_urls:
   trailing_index: true # Set to false to remove trailing 'index.html' from permalinks
@@ -38,6 +44,7 @@ code_dir: downloads/code
 i18n_dir: :lang
 skip_render:
 
+
 # Writing
 new_post_name: :title.md # File name of new posts
 default_layout: post
@@ -48,7 +55,7 @@ external_link:
   exclude: ''
 filename_case: 0
 render_drafts: false
-post_asset_folder: false
+post_asset_folder: true
 relative_link: false
 future: true
 highlight:
@@ -112,5 +119,5 @@ theme: sky
 deploy:
 - type: 'git'
   repo: git@github.com:nooae0919/nooae0919.git
-  branch: master
+  branch: main
 - type: baidu_url_submitter
