@@ -95,7 +95,13 @@
             </div>
             <div class="post-content">
                 
-                    <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line">import os</span><br><span class="line">import qrcode</span><br><span class="line">import openpyxl</span><br><span class="line">from openpyxl.drawing.image import Image</span><br><span class="line"></span><br><span class="line"># 制作二维码</span><br><span class="line">def gen_image(text,name):</span><br><span class="line">        img = qrcode.make(text)</span><br><span class="line">        with open(name,&quot;wb&quot;) as f:</span><br><span class="line">            img.save(f)</span><br><span class="line"></span><br><span class="line"># 写入二维码           </span><br><span class="line">def write_img(img_name,position):</span><br><span class="line">	imgsize = (720/12,720/12)</span><br><span class="line">	img = Image(img_name)</span><br><span class="line">	img.width,img.height = imgsize</span><br><span class="line">	wb[str(i)].add_image(img,position)</span><br><span class="line"></span><br><span class="line"># 查找excel文件</span><br><span class="line">def excel_file():</span><br><span class="line">        path = os.getcwd()</span><br><span class="line">        files = os.listdir(path)</span><br><span class="line">        fullpath = [f for f in files if not f.startswith((&quot;~$&quot;)) and f.endswith((&quot;.xlsx&quot;))]</span><br><span class="line">        return  os.path.join(path,fullpath[0])</span><br><span class="line">   </span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">        # 打开excel工作薄</span><br><span class="line">        wb = openpyxl.load_workbook(excel_file())</span><br><span class="line">        # 打开excel工作表清单</span><br><span class="line">        QD_sheet = wb.worksheets[0]</span><br><span class="line">        # 打开excel工作表标签模板</span><br><span class="line">        BQ_sheet = wb.worksheets[1]</span><br><span class="line">        </span><br><span class="line">        if not os.path.exists(&quot;qrcode&quot;):</span><br><span class="line">                os.mkdir(&quot;qrcode&quot;)</span><br><span class="line">		</span><br><span class="line">        for i in range(1,10):</span><br><span class="line">                # 复制模板工作表</span><br><span class="line">                new_sheet = wb.copy_worksheet(BQ_sheet)</span><br><span class="line">                # 重命名新工作表</span><br><span class="line">                new_sheet.title = str(i)</span><br><span class="line">                # 将清单中的SN复制到新工作表指定单元格</span><br><span class="line">                text = QD_sheet[&#x27;A&#x27; + str(i+1)].value</span><br><span class="line">                new_sheet[&#x27;B7&#x27;].value = text</span><br><span class="line"></span><br><span class="line">                # 指定二维码存放位置</span><br><span class="line">                text_png_name = &quot;qrcode/&quot; + &quot;A&quot; + str(i+1) + &quot;.png&quot;</span><br><span class="line">                # 指定二维码粘贴位置</span><br><span class="line">                paste = &quot;A7&quot;</span><br><span class="line">                # 按清单列表制作二维码并存放到指定位置</span><br><span class="line">                gen_image(text,text_png_name)</span><br><span class="line">                # 将二维码放置到新工作表指定单元格</span><br><span class="line">                write_img(text_png_name,paste)</span><br><span class="line">                                                               </span><br><span class="line">	#保存excel文件	</span><br><span class="line">        wb.save(excel_file())</span><br></pre></td></tr></table></figure>
+                    <p>按模板复制多个标签，并在标签中填入对应的文本及二维码</p>
+                    <div class="read-more">
+                        <a href="/%E6%89%B9%E9%87%8F%E7%94%9F%E6%88%90%E6%A0%87%E7%AD%BE%E6%A8%A1%E6%9D%BF/" class="read-more-link">
+                            阅读全文
+                            <i class="iconfont icon-readmore"></i>
+                        </a>
+                    </div>
                 
             </div>
         </article>
@@ -111,11 +117,12 @@
             <div class="post-content">
                 
                     <p>1、打开博客目录，目录下有一个“.gitignore”文件，没有就自己创建一个，该文件用于忽略指定的文件不进行同步，配置内容如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">.DS_Store</span><br><span class="line">Thumbs.db</span><br><span class="line">db.json</span><br><span class="line">*.log</span><br><span class="line">node_modules/</span><br><span class="line">public/</span><br><span class="line">.deploy*/</span><br></pre></td></tr></table></figure>
-<p>2、右键打开“git”，依次输入以下命令进行本地仓库与远程仓库对接：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"># 初始化本地仓库</span><br><span class="line">git init</span><br><span class="line"></span><br><span class="line"># 本地仓库和GitHub远程仓库对接</span><br><span class="line"># nineya/blog_source.git修改为博客界面所在仓库名</span><br><span class="line">git remote add origin git@github.com:nineya/nineya.github.io.git</span><br><span class="line"></span><br><span class="line"># 查看远程仓库地址，验证配置是否正确</span><br><span class="line">git remote -v</span><br><span class="line"></span><br><span class="line"># 新建分支blog_source</span><br><span class="line">git branch blog_source</span><br><span class="line"></span><br><span class="line"># 切换到blog_source分支</span><br><span class="line">git checkout blog_source</span><br></pre></td></tr></table></figure>
-<p>3、提交数据到远程仓库：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># 同步远程库上的数据，否则无法提交</span><br><span class="line">git pull origin hexo</span><br><span class="line"></span><br><span class="line"># 将所有文件添加到本地仓库</span><br><span class="line">git add -A</span><br><span class="line"></span><br><span class="line"># 提交到远程仓库</span><br><span class="line">git commit -m &quot;博客源文件&quot;</span><br><span class="line">git push origin hexo</span><br></pre></td></tr></table></figure>
+                    <div class="read-more">
+                        <a href="/it%E5%88%9B%E5%BB%BA%E5%88%86%E6%94%AF/" class="read-more-link">
+                            阅读全文
+                            <i class="iconfont icon-readmore"></i>
+                        </a>
+                    </div>
                 
             </div>
         </article>
@@ -130,8 +137,13 @@
             </div>
             <div class="post-content">
                 
-                    <p>1、打开网站<a target="_blank" rel="noopener" href="https://www.ipaddress.com/ip-lookup">https://www.ipaddress.com/ip-lookup</a>;<br>2、查询如下两个主机名：<br>github.com<br>github.global.ssl.fastly.net<br>3、补充到C:\Windows\System32\drivers\etc\hosts文件的末尾，该文件不可编辑，可以复制到桌面，然后再复制回去实现替换。</p>
-
+                    <p>1、打开网站<a target="_blank" rel="noopener" href="https://www.ipaddress.com/ip-lookup">https://www.ipaddress.com/ip-lookup</a>;</p>
+                    <div class="read-more">
+                        <a href="/ithub%E6%97%A0%E6%B3%95%E7%99%BB%E9%99%86/" class="read-more-link">
+                            阅读全文
+                            <i class="iconfont icon-readmore"></i>
+                        </a>
+                    </div>
                 
             </div>
         </article>
@@ -146,7 +158,13 @@
             </div>
             <div class="post-content">
                 
-                    <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line">import os</span><br><span class="line">import time</span><br><span class="line">import openpyxl</span><br><span class="line">from selenium import webdriver</span><br><span class="line">from selenium.webdriver.common.by import By</span><br><span class="line">from selenium.webdriver.common.action_chains import ActionChains</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 进入登陆界面</span><br><span class="line">driver = webdriver.Edge()</span><br><span class="line">mes =  &#x27;MES网址&#x27;</span><br><span class="line">driver.get(mes)</span><br><span class="line">time.sleep(1)</span><br><span class="line"></span><br><span class="line"># 输入用户名</span><br><span class="line">driver.find_element(By.ID,&quot;userDto_loginName&quot;).send_keys(&quot;MES账号&quot;)</span><br><span class="line">time.sleep(1)</span><br><span class="line"></span><br><span class="line"># 输入密码</span><br><span class="line">driver.find_element(By.ID,&quot;keeper&quot;).send_keys(&quot;MES密码&quot;)</span><br><span class="line">time.sleep(1)</span><br><span class="line"></span><br><span class="line"># 选择账套</span><br><span class="line">driver.find_element(By.ID,&#x27;mcDataAuthB&#x27;).click()</span><br><span class="line"></span><br><span class="line"># 空点</span><br><span class="line">ActionChains(driver).move_by_offset(200,100).click().perform()</span><br><span class="line">time.sleep(1)</span><br><span class="line"></span><br><span class="line"># 点击登陆按钮</span><br><span class="line">driver.find_element(By.ID, &quot;loginButton&quot;).click()</span><br><span class="line">time.sleep(3)</span><br><span class="line"></span><br><span class="line"># 点击快捷方式</span><br><span class="line">driver.find_element(By.ID, &quot;infoDiv&quot;).click()</span><br><span class="line">time.sleep(1)</span><br><span class="line"></span><br><span class="line"># 点击库存查询</span><br><span class="line">driver.find_element(By.XPATH, &quot;/html/body/div[1]/div[1]/div/div[2]/div[3]/div/div[1]&quot;).click()</span><br><span class="line">time.sleep(5)</span><br><span class="line"></span><br><span class="line"># 进入库存查询框架</span><br><span class="line">iframe = driver.find_element(By.ID, &quot;iframe2&quot;)</span><br><span class="line">driver.switch_to.frame(iframe)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 查找当前文件夹.xlsx文件</span><br><span class="line">path = os.getcwd()</span><br><span class="line">files = os.listdir(path)</span><br><span class="line">excelfiles = [f for f in files if not f.startswith((&quot;~$&quot;)) and f.endswith((&quot;.xlsx&quot;))]</span><br><span class="line">for file in excelfiles:</span><br><span class="line">    fullpath = os.path.join(path,file)</span><br><span class="line"></span><br><span class="line"># 打开.xlsx文件默认sheet</span><br><span class="line">wb = openpyxl.load_workbook(fullpath)</span><br><span class="line">sheet = wb.active</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 定义查找函数</span><br><span class="line">def mes_clik(num):</span><br><span class="line">    cell = sheet[&quot;B&quot; + str(num)].value</span><br><span class="line">    v = driver.find_element(By.XPATH, &#x27;/html/body/div[1]/div/div[2]/div/form/div/div[1]/div[1]/div/div[2]/div[3]/input[1]&#x27;)</span><br><span class="line">    v.clear()</span><br><span class="line">    v.send_keys(cell) </span><br><span class="line">    time.sleep(1) </span><br><span class="line"></span><br><span class="line">    # 点击查询按钮  </span><br><span class="line">    driver.find_element(By.XPATH, &quot;/html/body/div[1]/div/div[2]/div/form/div/div[1]/div[2]/div[1]/a[1]&quot;).click()</span><br><span class="line">    name = sheet[&quot;A&quot; + str(num)].value</span><br><span class="line">    num = sheet[&quot;C&quot; + str(num)].value</span><br><span class="line">    print(str(cell) + &#x27;需要&#x27; + str(num))</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line"># 循环查找物料信息</span><br><span class="line">for i in range(2,100):</span><br><span class="line">    mes_clik(i)</span><br><span class="line">    input(&quot;按Enter键继续\n&quot;)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+                    <p>用Selenium模拟点击，批量查询库存信息</p>
+                    <div class="read-more">
+                        <a href="/%E6%96%99%E6%89%B9%E9%87%8F%E6%9F%A5%E8%AF%A2/" class="read-more-link">
+                            阅读全文
+                            <i class="iconfont icon-readmore"></i>
+                        </a>
+                    </div>
                 
             </div>
         </article>
@@ -178,7 +196,13 @@
             </div>
             <div class="post-content">
                 
-                    <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">from selenium import webdriver</span><br><span class="line">from selenium.webdriver.common.by import By</span><br><span class="line">import time</span><br><span class="line"></span><br><span class="line">driver = webdriver.Chrome()  # 打开谷歌浏览器</span><br><span class="line">url = &#x27;https://www.baidu.com/&#x27;</span><br><span class="line">driver.get(url)  # 输入网址</span><br><span class="line"> </span><br><span class="line"># 输入搜索关键词并点击搜索按钮</span><br><span class="line">v = driver.find_element(By.ID, &#x27;kw&#x27;)  # 查找搜索输入框</span><br><span class="line">v.send_keys(&#x27;不想搬砖怎么办？&#x27;)  # 输入关键词</span><br><span class="line">time.sleep(3)  # 等待页面加载完成</span><br><span class="line"></span><br><span class="line">btn = driver.find_element(By.ID, &#x27;su&#x27;)  # 查找搜索按钮</span><br><span class="line">btn.click()  # 点击搜索按钮</span><br><span class="line"></span><br><span class="line">time.sleep(60)  # 等待搜索结果页面加载完成</span><br><span class="line"></span><br><span class="line">driver.quit()  # 关闭浏览器</span><br></pre></td></tr></table></figure>
+                    <p>模拟点击</p>
+                    <div class="read-more">
+                        <a href="/Selenim%E8%87%AA%E5%8A%A8%E7%82%B9%E5%87%BB/" class="read-more-link">
+                            阅读全文
+                            <i class="iconfont icon-readmore"></i>
+                        </a>
+                    </div>
                 
             </div>
         </article>
@@ -193,55 +217,13 @@
             </div>
             <div class="post-content">
                 
-                    <table>
-<thead>
-<tr>
-<th align="left">快捷键</th>
-<th align="left">作用</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">Win+E</td>
-<td align="left">打开我的电脑</td>
-</tr>
-<tr>
-<td align="left">Win+D</td>
-<td align="left">返回桌面</td>
-</tr>
-<tr>
-<td align="left">Win+L</td>
-<td align="left">锁定计算机</td>
-</tr>
-<tr>
-<td align="left">Win+R</td>
-<td align="left">开启运行对话框</td>
-</tr>
-<tr>
-<td align="left">Win+M</td>
-<td align="left">最小化所有窗口</td>
-</tr>
-<tr>
-<td align="left">Win+U</td>
-<td align="left">打开设置页面</td>
-</tr>
-<tr>
-<td align="left">Win+TAB</td>
-<td align="left">窗口切换</td>
-</tr>
-<tr>
-<td align="left">Win+Break</td>
-<td align="left">打开电脑配置窗口</td>
-</tr>
-<tr>
-<td align="left">Win+数字键</td>
-<td align="left">切换任务窗口</td>
-</tr>
-<tr>
-<td align="left">Win+方向键</td>
-<td align="left">应用分屏</td>
-</tr>
-</tbody></table>
-
+                    <p>快捷快应用</p>
+                    <div class="read-more">
+                        <a href="/Win%E7%BB%84%E5%90%88%E5%BF%AB%E6%8D%B7%E9%94%AE/" class="read-more-link">
+                            阅读全文
+                            <i class="iconfont icon-readmore"></i>
+                        </a>
+                    </div>
                 
             </div>
         </article>
@@ -257,12 +239,12 @@
             <div class="post-content">
                 
                     <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">=IFERROR(TRIM(MID(SUBSTITUTE(B2,&quot;|&quot;,REPT(&quot; &quot;,100)),1,100)),&quot;&quot;)</span><br></pre></td></tr></table></figure>
-<p>REPT函数用来重复空格100次</p>
-<p>SUBSTITUTE将字符替换为指定内容</p>
-<p>MID函数用来提取字符串中间部分的字符</p>
-<p>TRIM函数去除空格</p>
-<p>IFERROR函数将错误转换空文本</p>
-
+                    <div class="read-more">
+                        <a href="/%E5%8F%96%E6%8C%87%E5%AE%9A%E7%AC%A6%E5%8F%B7%E5%90%8E%E5%AD%97%E7%AC%A6%E4%B8%B2/" class="read-more-link">
+                            阅读全文
+                            <i class="iconfont icon-readmore"></i>
+                        </a>
+                    </div>
                 
             </div>
         </article>
@@ -277,7 +259,13 @@
             </div>
             <div class="post-content">
                 
-                    <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">from moviepy.editor import *</span><br><span class="line"></span><br><span class="line"># 打开视频文件</span><br><span class="line">video = VideoFileClip(&#x27;dark.mp4&#x27;)</span><br><span class="line"></span><br><span class="line"># 剪辑视频</span><br><span class="line">video2 = video.subclip(0,1)</span><br><span class="line"></span><br><span class="line"># 添加文字、位置、显示时间</span><br><span class="line">text = (TextClip(&quot;WPS&quot;,fontsize =20,color =&quot;white&quot;,font =&quot;黑体&quot;)</span><br><span class="line">        .set_position(&#x27;center&#x27;)</span><br><span class="line">        .set_duration(0.5))</span><br><span class="line">        </span><br><span class="line"># 在视频上加载文本</span><br><span class="line">video_with_text = CompositeVideoClip([video2,text])</span><br><span class="line"></span><br><span class="line"># 保存为新文件</span><br><span class="line">video_with_text.write_videofile(&#x27;new_1.mp4&#x27;)</span><br></pre></td></tr></table></figure>
+                    <p>Python批量剪辑视频</p>
+                    <div class="read-more">
+                        <a href="/%E9%A2%91%E5%89%AA%E8%BE%91/" class="read-more-link">
+                            阅读全文
+                            <i class="iconfont icon-readmore"></i>
+                        </a>
+                    </div>
                 
             </div>
         </article>
@@ -293,7 +281,12 @@
             <div class="post-content">
                 
                     <p>将工作薄中的Excel工作表拆分为单独的工作薄</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">import xlwings as xw</span><br><span class="line">import os</span><br><span class="line"></span><br><span class="line">def split_excel(file_path):</span><br><span class="line">    app = xw.App(visible=False, add_book=False)</span><br><span class="line">    </span><br><span class="line">    workbook = app.books.open(file_path)</span><br><span class="line">    worksheet = workbook.sheets</span><br><span class="line">    for i in worksheet:  # 遍历工作簿中所有工作表</span><br><span class="line">        new_workbook = app.books.add()  # 新建工作簿</span><br><span class="line">        new_worksheet = new_workbook.sheets[0]  # 选中新建工作簿中的第1张工作表</span><br><span class="line">        i.copy(before=new_worksheet)  # 将原来工作簿中的当前工作表复制到新建工作簿的第1张工作表之前</span><br><span class="line">        new_workbook.sheets[1].delete()  #删除空白工作表</span><br><span class="line">        new_workbook.save(&#x27;拆分\&#123;&#125;.xlsx&#x27;.format(i.name))  # 保存新工作簿</span><br><span class="line">        print(&#x27;&#123;&#125;.xlsx&#x27;.format(i.name) + &quot;拆分完成&quot;)</span><br><span class="line">        new_workbook.close()  # 关闭新工作薄</span><br><span class="line">    workbook.close()   # 关闭旧工作薄</span><br><span class="line"></span><br><span class="line">def find_excel():</span><br><span class="line">    path = os.getcwd()</span><br><span class="line">    files = os.listdir(path)</span><br><span class="line">    if not os.path.exists(&quot;拆分&quot;):   #检查如果没有“拆分”文件夹</span><br><span class="line">        os.mkdir(&quot;拆分&quot;)   #创建“拆分”文件夹</span><br><span class="line">    excelfiles = [f for f in files if not f.startswith((&quot;~$&quot;)) and f.endswith((&quot;.xlsx&quot;))]  #过滤当前所有xlsx文件</span><br><span class="line">    for file in excelfiles:   #遍历所有xlsx文件</span><br><span class="line">        fullpath = os.path.join(path,file) </span><br><span class="line">        split_excel(fullpath)   #对xlsx文件进行拆分</span><br><span class="line"></span><br><span class="line">find_excel()</span><br></pre></td></tr></table></figure>
+                    <div class="read-more">
+                        <a href="/%E5%B7%A5%E4%BD%9C%E8%96%84/" class="read-more-link">
+                            阅读全文
+                            <i class="iconfont icon-readmore"></i>
+                        </a>
+                    </div>
                 
             </div>
         </article>
