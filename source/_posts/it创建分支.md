@@ -5,7 +5,7 @@ tags:
 categories: []
 date: 2024-09-25 17:13:00
 ---
-1、打开博客目录，目录下有一个“.gitignore”文件，没有就自己创建一个，该文件用于忽略指定的文件不进行同步，根据你的要求进行配置。我的配置内容如下：
+1、打开博客目录，目录下有一个“.gitignore”文件，没有就自己创建一个，该文件用于忽略指定的文件不进行同步，配置内容如下：
 ~~~
 .DS_Store
 Thumbs.db
@@ -36,12 +36,12 @@ git checkout blog_source
 3、提交数据到远程仓库：
 ~~~
 # 同步远程库上的数据，否则无法提交
-git pull
+git pull origin hexo
 
 # 将所有文件添加到本地仓库
 git add -A
 
 # 提交到远程仓库
 git commit -m "博客源文件"
-git push
+git push origin hexo
 ~~~
