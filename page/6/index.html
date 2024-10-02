@@ -87,6 +87,167 @@
     
         <article class="post-abstract">
             <div class="post-title">
+                <h2><a class="post-title-link" href="/%E5%B0%86%E5%B7%A5%E4%BD%9C%E8%96%84%E6%8C%89%E5%88%97%E6%8B%86%E5%88%86%E8%87%B3%E5%B7%A5%E4%BD%9C%E8%A1%A8/">将工作薄按列拆分至工作表</a></h2>
+            </div>
+            <div class="post-meta">
+                <span class="post-time">2023-03-27</span>
+                
+            </div>
+            <div class="post-content">
+                
+                    <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">import pandas as pd</span><br><span class="line"></span><br><span class="line">data=pd.read_excel(r&quot;地址\汇总.xls&quot;)</span><br><span class="line">xlsx = pd.ExcelWriter(r&quot;地址\汇总-拆分完成.xlsx&quot;)</span><br><span class="line"></span><br><span class="line">for i in data[&quot;姓名&quot;].unique():</span><br><span class="line">	data[data[&quot;姓名&quot;]==i].to_excel(xlsx,sheet_name=i,index=False)</span><br><span class="line"></span><br><span class="line">xlsx.close()</span><br></pre></td></tr></table></figure>
+                
+            </div>
+        </article>
+    
+        <article class="post-abstract">
+            <div class="post-title">
+                <h2><a class="post-title-link" href="/%E5%B8%B8%E7%94%A8%E5%86%85%E7%BD%AE%E5%87%BD%E6%95%B0/">常用内置函数</a></h2>
+            </div>
+            <div class="post-meta">
+                <span class="post-time">2023-03-27</span>
+                
+            </div>
+            <div class="post-content">
+                
+                    <table>
+<thead>
+<tr>
+<th align="left">函数</th>
+<th align="left">作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">print()</td>
+<td align="left">打印输出</td>
+</tr>
+<tr>
+<td align="left">input()</td>
+<td align="left">获取用户输出的内容</td>
+</tr>
+<tr>
+<td align="left">open()</td>
+<td align="left">用于打开一个文件,创建一个文件句柄</td>
+</tr>
+<tr>
+<td align="left">list()</td>
+<td align="left">将一个可迭代对象转换成列表</td>
+</tr>
+<tr>
+<td align="left">tuple()</td>
+<td align="left">将一个可迭代对象转换成元组</td>
+</tr>
+<tr>
+<td align="left">reversed()</td>
+<td align="left">将一个序列翻转,返回翻转序列的迭代器</td>
+</tr>
+<tr>
+<td align="left">range()</td>
+<td align="left">生成数据</td>
+</tr>
+<tr>
+<td align="left">str()</td>
+<td align="left">将数据转化成字符串</td>
+</tr>
+<tr>
+<td align="left">all()</td>
+<td align="left">可迭代对象中全部是True,结果才是True</td>
+</tr>
+<tr>
+<td align="left">any()</td>
+<td align="left">可迭代对象中有一个是True,结果就是True</td>
+</tr>
+<tr>
+<td align="left">eval()</td>
+<td align="left">执行字符串类型的代码,并返回最终结果</td>
+</tr>
+<tr>
+<td align="left">dir()</td>
+<td align="left">查看对象的内置属性,访问的是对象中的__dir__()方法</td>
+</tr>
+<tr>
+<td align="left">help()</td>
+<td align="left">函数用于查看函数或模块用途的详细说明</td>
+</tr>
+</tbody></table>
+
+                
+            </div>
+        </article>
+    
+        <article class="post-abstract">
+            <div class="post-title">
+                <h2><a class="post-title-link" href="/%E5%B8%B8%E7%94%A8%E8%BF%90%E7%AE%97%E7%AC%A6/">常用运算符</a></h2>
+            </div>
+            <div class="post-meta">
+                <span class="post-time">2023-03-27</span>
+                
+            </div>
+            <div class="post-content">
+                
+                    <table>
+<thead>
+<tr>
+<th align="left">运算符</th>
+<th align="left">作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">+、-、*、&#x2F;</td>
+<td align="left">加减乘除</td>
+</tr>
+<tr>
+<td align="left">%</td>
+<td align="left">取余</td>
+</tr>
+<tr>
+<td align="left">&#x2F;&#x2F;</td>
+<td align="left">取整</td>
+</tr>
+<tr>
+<td align="left">**</td>
+<td align="left">幂（常用x**y或pow(x,y)表示）</td>
+</tr>
+<tr>
+<td align="left">&amp;</td>
+<td align="left">位运算符中的位与</td>
+</tr>
+<tr>
+<td align="left">|</td>
+<td align="left">位运算符中的位或</td>
+</tr>
+<tr>
+<td align="left">^</td>
+<td align="left">位运算符中的位异或</td>
+</tr>
+<tr>
+<td align="left">~</td>
+<td align="left">位运算符中的取反</td>
+</tr>
+<tr>
+<td align="left">abs(x)</td>
+<td align="left">取绝对值</td>
+</tr>
+<tr>
+<td align="left">int(x)</td>
+<td align="left">转为整数</td>
+</tr>
+<tr>
+<td align="left">float(x)</td>
+<td align="left">转为浮点数</td>
+</tr>
+<tr>
+<td align="left">complex(re,im)</td>
+<td align="left">将参数转化为复数,re为复数的实部,im为复数的虚部</td>
+</tr>
+</tbody></table>
+
+                
+            </div>
+        </article>
+    
+        <article class="post-abstract">
+            <div class="post-title">
                 <h2><a class="post-title-link" href="/%E6%8A%8A%E6%B1%89%E5%AD%97%E8%BD%AC%E6%8D%A2%E6%88%90%E6%8B%BC%E9%9F%B3%E9%A6%96%E5%AD%97%E6%AF%8D/">把汉字转换成拼音首字母</a></h2>
             </div>
             <div class="post-meta">
@@ -113,6 +274,22 @@
             <div class="post-content">
                 
                     <p>&#x3D;COUNTIFS（B2：B9，“男”）<br>“B2：B9”为需要计数的区域<br>“男”，计数条件</p>
+
+                
+            </div>
+        </article>
+    
+        <article class="post-abstract">
+            <div class="post-title">
+                <h2><a class="post-title-link" href="/%E6%9D%A1%E4%BB%B6%E6%B1%82%E5%92%8C/">条件求和</a></h2>
+            </div>
+            <div class="post-meta">
+                <span class="post-time">2023-03-27</span>
+                
+            </div>
+            <div class="post-content">
+                
+                    <p>&#x3D;SUMIF(A1:A10,E4,C1:C10)<br>“A1:A10”选择求和项列<br>“E4”选择求和项<br>“C1:C10”选择数值列</p>
 
                 
             </div>
@@ -150,22 +327,6 @@
             <div class="post-content">
                 
                     <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">import re</span><br><span class="line">import xlwt</span><br><span class="line"></span><br><span class="line">headers = &#123;&#x27;User-Agent&#x27;:&quot;Mozilla/5.0 (X11; Linux x86_64; rv:45.0) Gecko/20100101 Firefox/45.0&quot;&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">book = xlwt.Workbook()</span><br><span class="line">sheet = book.add_sheet(&#x27;ke_tengxun&#x27;,cell_overwrite_ok=True)</span><br><span class="line"></span><br><span class="line">rownum = 1</span><br><span class="line">def get_info(url):</span><br><span class="line">    global rownum</span><br><span class="line">    res = requests.get(url,headers = headers)</span><br><span class="line">    pattern = re.compile(&#x27;.*?rel=&quot;nofollow&quot;.*?&gt;(.*?)&lt;&#x27;,re.S)</span><br><span class="line">    ke_chupin =re.findall(pattern,res.text)</span><br><span class="line">    pattern = re.compile(&#x27;</span><br><span class="line">.*?cors-name=&quot;course&quot;&gt;(.*?)&lt;&#x27;,re.S)</span><br><span class="line">    ke_name =re.findall(pattern,res.text)</span><br><span class="line">    pattern = re.compile(&#x27;</span><br><span class="line">.*?href=&quot;(.*?)&quot;.*?target&#x27;,re.S)</span><br><span class="line">    ke_href =re.findall(pattern,res.text)</span><br><span class="line">    print(ke_chupin)</span><br><span class="line">    print(len(ke_chupin))</span><br><span class="line">    print(ke_name)</span><br><span class="line">    print(len(ke_name))</span><br><span class="line">    print(ke_href)</span><br><span class="line">    print(len(ke_href))</span><br><span class="line"></span><br><span class="line">    head = [&#x27;课程&#x27;,&#x27;链接&#x27;,&#x27;出品人&#x27;]</span><br><span class="line">    for h in range(len(head)):</span><br><span class="line">        sheet.write(0,h,head[h])</span><br><span class="line">    for l in range(len(ke_name[:24])):</span><br><span class="line">        sheet.write(rownum,0,ke_name[l])</span><br><span class="line">        sheet.write(rownum,1,ke_href[l])</span><br><span class="line">        sheet.write(rownum,2,ke_chupin[l])</span><br><span class="line">        rownum += 1</span><br><span class="line"></span><br><span class="line">    book.save(&#x27;test.xls&#x27;)</span><br><span class="line"></span><br><span class="line">if __name__ == &#x27;__main__&#x27;:</span><br><span class="line">    for i in range(1,13):</span><br><span class="line">        urls = &#x27;https://ke.qq.com/course/list?mt=1001&amp;st=2002&amp;tt=3019&amp;page=&#123;&#125;&#x27;.format(i)</span><br><span class="line">        get_info(urls)</span><br></pre></td></tr></table></figure>
-                
-            </div>
-        </article>
-    
-        <article class="post-abstract">
-            <div class="post-title">
-                <h2><a class="post-title-link" href="/%E6%9D%A1%E4%BB%B6%E6%B1%82%E5%92%8C/">条件求和</a></h2>
-            </div>
-            <div class="post-meta">
-                <span class="post-time">2023-03-27</span>
-                
-            </div>
-            <div class="post-content">
-                
-                    <p>&#x3D;SUMIF(A1:A10,E4,C1:C10)<br>“A1:A10”选择求和项列<br>“E4”选择求和项<br>“C1:C10”选择数值列</p>
-
                 
             </div>
         </article>
@@ -224,54 +385,6 @@
             </div>
         </article>
     
-        <article class="post-abstract">
-            <div class="post-title">
-                <h2><a class="post-title-link" href="/%E7%AD%9B%E9%80%89%E5%90%8E%E8%87%AA%E5%8A%A8%E6%8E%92%E5%88%97%E5%BA%8F%E5%8F%B7/">筛选后自动排列序号</a></h2>
-            </div>
-            <div class="post-meta">
-                <span class="post-time">2023-03-27</span>
-                
-            </div>
-            <div class="post-content">
-                
-                    <p>&#x3D;subtotal(3，B$2:B2)*1<br>“3”为函数序号<br>“B$2:B2”为序号数值</p>
-
-                
-            </div>
-        </article>
-    
-        <article class="post-abstract">
-            <div class="post-title">
-                <h2><a class="post-title-link" href="/%E7%AD%9B%E9%80%89%E6%B1%82%E5%92%8C/">筛选求和</a></h2>
-            </div>
-            <div class="post-meta">
-                <span class="post-time">2023-03-27</span>
-                
-            </div>
-            <div class="post-content">
-                
-                    <p>&#x3D;SUBTOTAL(9,C1:C10)<br>“9”为函数序号<br>“C1:C10”选择数值列</p>
-
-                
-            </div>
-        </article>
-    
-        <article class="post-abstract">
-            <div class="post-title">
-                <h2><a class="post-title-link" href="/%E8%BF%94%E5%9B%9E%E5%B7%A6%E8%BE%B9%E4%B8%AD%E6%96%87%E6%96%87%E6%9C%AC/">返回左边中文文本</a></h2>
-            </div>
-            <div class="post-meta">
-                <span class="post-time">2023-03-27</span>
-                
-            </div>
-            <div class="post-content">
-                
-                    <p>&#x3D;LEFTB(A1,SEARCHB(“?”,A1)-1)<br>“A1”为所选单元格</p>
-
-                
-            </div>
-        </article>
-    
 </div>
 <div class="paginator">
     
@@ -281,6 +394,11 @@
             上一页
         </a>
         
+        
+        <a class="next" href="/page/7/">
+            下一页
+            <i class="iconfont icon-next"></i>
+        </a>
         
     
 </div>

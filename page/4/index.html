@@ -87,6 +87,36 @@
     
         <article class="post-abstract">
             <div class="post-title">
+                <h2><a class="post-title-link" href="/%E5%8F%8Cfor%E6%89%93%E5%8D%B0%E4%B9%9D%E4%B9%9D%E4%B9%98%E6%B3%95%E8%A1%A8/">双for打印九九乘法表</a></h2>
+            </div>
+            <div class="post-meta">
+                <span class="post-time">2023-04-16</span>
+                
+            </div>
+            <div class="post-content">
+                
+                    <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">for i in range(1, 10):</span><br><span class="line">	for j in range(1, i + 1):</span><br><span class="line">		print(&#x27;&#123;&#125;\*&#123;&#125;=&#123;&#125;&#x27;.format(i,j,i\*j), end=&#x27;\t&#x27;)</span><br><span class="line">	print()</span><br></pre></td></tr></table></figure>
+                
+            </div>
+        </article>
+    
+        <article class="post-abstract">
+            <div class="post-title">
+                <h2><a class="post-title-link" href="/PDF%E8%BD%AC%E5%9B%BE%E7%89%87/">PDF转图片</a></h2>
+            </div>
+            <div class="post-meta">
+                <span class="post-time">2023-04-05</span>
+                
+            </div>
+            <div class="post-content">
+                
+                    <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">import os</span><br><span class="line">import fitz  # fitz就是pip install PyMuPDF</span><br><span class="line"></span><br><span class="line">def pyMuPDF_fitz(pdfPath, imagePath):</span><br><span class="line">	print(&quot;imagePath=&quot; + imagePath)</span><br><span class="line">	pdfDoc = fitz.open(pdfPath)</span><br><span class="line">	for pg in range(pdfDoc.pageCount):</span><br><span class="line">		page = pdfDoc[pg]</span><br><span class="line">		rotate = int(0)</span><br><span class="line">		\#每个尺寸的缩放系数为1.3，这将为我们生成分辨率提高2.6的图像。</span><br><span class="line">		\#此处若是不做设置，默认图片大小为：792X612, dpi=96</span><br><span class="line">		zoom_x = 1.33333333  # (1.33333333--&gt;1056x816)   (2--&gt;1584x1224)</span><br><span class="line">		zoom_y = 1.33333333</span><br><span class="line">		mat = fitz.Matrix(zoom_x, zoom_y).preRotate(rotate)</span><br><span class="line">		pix = page.getPixmap(matrix=mat, alpha=False)</span><br><span class="line"></span><br><span class="line">		if not os.path.exists(imagePath):  # 判断存放图片的文件夹是否存在</span><br><span class="line">			os.makedirs(imagePath)  # 若图片文件夹不存在就创建</span><br><span class="line"></span><br><span class="line">		pix.writePNG(imagePath + &#x27;/&#x27; + &#x27;images_%s.png&#x27; % pg)  # 将图片写入指定的文件夹内</span><br><span class="line"></span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">	pdfPath = &#x27;123.pdf&#x27;</span><br><span class="line">	imagePath = &#x27;./imgs&#x27;</span><br><span class="line">	pyMuPDF_fitz(pdfPath, imagePath)</span><br></pre></td></tr></table></figure>
+                
+            </div>
+        </article>
+    
+        <article class="post-abstract">
+            <div class="post-title">
                 <h2><a class="post-title-link" href="/16949%E8%AE%A4%E8%AF%81%E4%BD%93%E7%B3%BB/">16949认证体系</a></h2>
             </div>
             <div class="post-meta">
@@ -98,6 +128,27 @@
                     <p>16949认证体系是汽车行业质量管理认证体系的简称，是基于ISO9001的基础，加进了汽车行业的技术规范。此规范完全和ISO9000&#x2F;2008保持一致，但更着重于缺陷防范、减少在汽车零部件供应链中容易产生的质量波动和浪费。
                     <div class="read-more">
                         <a href="/16949%E8%AE%A4%E8%AF%81%E4%BD%93%E7%B3%BB/" class="read-more-link">
+                            阅读全文
+                            <i class="iconfont icon-readmore"></i>
+                        </a>
+                    </div>
+                
+            </div>
+        </article>
+    
+        <article class="post-abstract">
+            <div class="post-title">
+                <h2><a class="post-title-link" href="/16949%E8%B4%A8%E9%87%8F%E7%AE%A1%E7%90%86%E4%BD%93%E7%B3%BB%E6%A0%87%E5%87%86/">16949质量管理体系标准</a></h2>
+            </div>
+            <div class="post-meta">
+                <span class="post-time">2023-04-02</span>
+                
+            </div>
+            <div class="post-content">
+                
+                    <p>16949质量管理体系标准是对汽车生产和相关配件组织应用ISO9001:2008的特殊要求，其适用于汽车生产供应链的组织形式。国内、外各大整车厂均已要求其供应商进行ISO16949:2009认证，确保各供应商具有高质量的运行业绩，并提供持续稳定的长期合作，以实现互惠互利。
+                    <div class="read-more">
+                        <a href="/16949%E8%B4%A8%E9%87%8F%E7%AE%A1%E7%90%86%E4%BD%93%E7%B3%BB%E6%A0%87%E5%87%86/" class="read-more-link">
                             阅读全文
                             <i class="iconfont icon-readmore"></i>
                         </a>
@@ -224,63 +275,6 @@
                             <i class="iconfont icon-readmore"></i>
                         </a>
                     </div>
-                
-            </div>
-        </article>
-    
-        <article class="post-abstract">
-            <div class="post-title">
-                <h2><a class="post-title-link" href="/Excel%E5%BF%AB%E6%8D%B7%E9%94%AE/">Excel快捷键</a></h2>
-            </div>
-            <div class="post-meta">
-                <span class="post-time">2023-03-27</span>
-                
-            </div>
-            <div class="post-content">
-                
-                    <p>在Excel中合理的使用快捷键会更好的提高工作效率</p>
-                    <div class="read-more">
-                        <a href="/Excel%E5%BF%AB%E6%8D%B7%E9%94%AE/" class="read-more-link">
-                            阅读全文
-                            <i class="iconfont icon-readmore"></i>
-                        </a>
-                    </div>
-                
-            </div>
-        </article>
-    
-        <article class="post-abstract">
-            <div class="post-title">
-                <h2><a class="post-title-link" href="/Python%E5%B8%B8%E7%94%A8%E5%8D%95%E8%AF%8D%E8%A1%A8/">Python常用单词表</a></h2>
-            </div>
-            <div class="post-meta">
-                <span class="post-time">2023-03-27</span>
-                
-            </div>
-            <div class="post-content">
-                
-                    <p>学习python必须背的常见单词</p>
-                    <div class="read-more">
-                        <a href="/Python%E5%B8%B8%E7%94%A8%E5%8D%95%E8%AF%8D%E8%A1%A8/" class="read-more-link">
-                            阅读全文
-                            <i class="iconfont icon-readmore"></i>
-                        </a>
-                    </div>
-                
-            </div>
-        </article>
-    
-        <article class="post-abstract">
-            <div class="post-title">
-                <h2><a class="post-title-link" href="/Python%E7%88%AC%E5%8F%96%E8%B1%86%E7%93%A3%E7%94%B5%E5%BD%B1%E6%8E%92%E8%A1%8C%E6%A6%9C/">Python爬取豆瓣电影排行榜</a></h2>
-            </div>
-            <div class="post-meta">
-                <span class="post-time">2023-03-27</span>
-                
-            </div>
-            <div class="post-content">
-                
-                    <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">import re</span><br><span class="line"></span><br><span class="line">#1-爬取数据&lt;!--more--&gt;</span><br><span class="line">url = &#x27;https://movie.douban.com/chart&#x27;</span><br><span class="line">headers = &#123;&#x27;User-Agent&#x27;:&#x27;Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36&#x27;&#125;</span><br><span class="line">response = requests.get(url,headers = headers)</span><br><span class="line">#print(response.text)</span><br><span class="line">html_str = response.text</span><br><span class="line"></span><br><span class="line">#2-解析数据</span><br><span class="line">patten = re.compile(&#x27;&lt; a.*?nbg.*?title=&quot;(.*?)&quot;&gt;&#x27;,re.S)</span><br><span class="line">items = re.findall(patten,html_str)</span><br><span class="line">print(items)</span><br><span class="line"></span><br><span class="line">#3-存储数据</span><br><span class="line">with open(&#x27;douban.txt&#x27;,&quot;w&quot;,encoding=&#x27;utf-8&#x27;) as f:</span><br><span class="line">+ for item in items:</span><br><span class="line">	- f.write(item+&#x27;\n&#x27;)</span><br></pre></td></tr></table></figure>
                 
             </div>
         </article>

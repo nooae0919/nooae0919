@@ -87,6 +87,63 @@
     
         <article class="post-abstract">
             <div class="post-title">
+                <h2><a class="post-title-link" href="/Excel%E5%BF%AB%E6%8D%B7%E9%94%AE/">Excel快捷键</a></h2>
+            </div>
+            <div class="post-meta">
+                <span class="post-time">2023-03-27</span>
+                
+            </div>
+            <div class="post-content">
+                
+                    <p>在Excel中合理的使用快捷键会更好的提高工作效率</p>
+                    <div class="read-more">
+                        <a href="/Excel%E5%BF%AB%E6%8D%B7%E9%94%AE/" class="read-more-link">
+                            阅读全文
+                            <i class="iconfont icon-readmore"></i>
+                        </a>
+                    </div>
+                
+            </div>
+        </article>
+    
+        <article class="post-abstract">
+            <div class="post-title">
+                <h2><a class="post-title-link" href="/Python%E5%B8%B8%E7%94%A8%E5%8D%95%E8%AF%8D%E8%A1%A8/">Python常用单词表</a></h2>
+            </div>
+            <div class="post-meta">
+                <span class="post-time">2023-03-27</span>
+                
+            </div>
+            <div class="post-content">
+                
+                    <p>学习python必须背的常见单词</p>
+                    <div class="read-more">
+                        <a href="/Python%E5%B8%B8%E7%94%A8%E5%8D%95%E8%AF%8D%E8%A1%A8/" class="read-more-link">
+                            阅读全文
+                            <i class="iconfont icon-readmore"></i>
+                        </a>
+                    </div>
+                
+            </div>
+        </article>
+    
+        <article class="post-abstract">
+            <div class="post-title">
+                <h2><a class="post-title-link" href="/Python%E7%88%AC%E5%8F%96%E8%B1%86%E7%93%A3%E7%94%B5%E5%BD%B1%E6%8E%92%E8%A1%8C%E6%A6%9C/">Python爬取豆瓣电影排行榜</a></h2>
+            </div>
+            <div class="post-meta">
+                <span class="post-time">2023-03-27</span>
+                
+            </div>
+            <div class="post-content">
+                
+                    <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">import re</span><br><span class="line"></span><br><span class="line">#1-爬取数据&lt;!--more--&gt;</span><br><span class="line">url = &#x27;https://movie.douban.com/chart&#x27;</span><br><span class="line">headers = &#123;&#x27;User-Agent&#x27;:&#x27;Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36&#x27;&#125;</span><br><span class="line">response = requests.get(url,headers = headers)</span><br><span class="line">#print(response.text)</span><br><span class="line">html_str = response.text</span><br><span class="line"></span><br><span class="line">#2-解析数据</span><br><span class="line">patten = re.compile(&#x27;&lt; a.*?nbg.*?title=&quot;(.*?)&quot;&gt;&#x27;,re.S)</span><br><span class="line">items = re.findall(patten,html_str)</span><br><span class="line">print(items)</span><br><span class="line"></span><br><span class="line">#3-存储数据</span><br><span class="line">with open(&#x27;douban.txt&#x27;,&quot;w&quot;,encoding=&#x27;utf-8&#x27;) as f:</span><br><span class="line">+ for item in items:</span><br><span class="line">	- f.write(item+&#x27;\n&#x27;)</span><br></pre></td></tr></table></figure>
+                
+            </div>
+        </article>
+    
+        <article class="post-abstract">
+            <div class="post-title">
                 <h2><a class="post-title-link" href="/xlsxwriter%E6%96%B0%E5%BB%BAExcel%E8%A1%A8%E6%A0%BC/">xlsxwriter新建Excel表格</a></h2>
             </div>
             <div class="post-meta">
@@ -210,167 +267,6 @@
             <div class="post-content">
                 
                     <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">import pandas as pd</span><br><span class="line">data = pd.read_excel(r&#x27;地址\汇总.xls&#x27;,keep_default_na=False)</span><br><span class="line">unit_list = list(data[&#x27;姓名&#x27;].drop_duplicates())</span><br><span class="line">for i in unit_list:</span><br><span class="line">	data_new = data[data[&#x27;姓名&#x27;] == i]</span><br><span class="line">	if i == &#x27;&#x27;:</span><br><span class="line">		data_new.to_excel()</span><br><span class="line">	else:</span><br><span class="line">		data_new.to_excel(r&quot;地址\%s.xls&quot; % (i),index=False)</span><br></pre></td></tr></table></figure>
-                
-            </div>
-        </article>
-    
-        <article class="post-abstract">
-            <div class="post-title">
-                <h2><a class="post-title-link" href="/%E5%B8%B8%E7%94%A8%E5%86%85%E7%BD%AE%E5%87%BD%E6%95%B0/">常用内置函数</a></h2>
-            </div>
-            <div class="post-meta">
-                <span class="post-time">2023-03-27</span>
-                
-            </div>
-            <div class="post-content">
-                
-                    <table>
-<thead>
-<tr>
-<th align="left">函数</th>
-<th align="left">作用</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">print()</td>
-<td align="left">打印输出</td>
-</tr>
-<tr>
-<td align="left">input()</td>
-<td align="left">获取用户输出的内容</td>
-</tr>
-<tr>
-<td align="left">open()</td>
-<td align="left">用于打开一个文件,创建一个文件句柄</td>
-</tr>
-<tr>
-<td align="left">list()</td>
-<td align="left">将一个可迭代对象转换成列表</td>
-</tr>
-<tr>
-<td align="left">tuple()</td>
-<td align="left">将一个可迭代对象转换成元组</td>
-</tr>
-<tr>
-<td align="left">reversed()</td>
-<td align="left">将一个序列翻转,返回翻转序列的迭代器</td>
-</tr>
-<tr>
-<td align="left">range()</td>
-<td align="left">生成数据</td>
-</tr>
-<tr>
-<td align="left">str()</td>
-<td align="left">将数据转化成字符串</td>
-</tr>
-<tr>
-<td align="left">all()</td>
-<td align="left">可迭代对象中全部是True,结果才是True</td>
-</tr>
-<tr>
-<td align="left">any()</td>
-<td align="left">可迭代对象中有一个是True,结果就是True</td>
-</tr>
-<tr>
-<td align="left">eval()</td>
-<td align="left">执行字符串类型的代码,并返回最终结果</td>
-</tr>
-<tr>
-<td align="left">dir()</td>
-<td align="left">查看对象的内置属性,访问的是对象中的__dir__()方法</td>
-</tr>
-<tr>
-<td align="left">help()</td>
-<td align="left">函数用于查看函数或模块用途的详细说明</td>
-</tr>
-</tbody></table>
-
-                
-            </div>
-        </article>
-    
-        <article class="post-abstract">
-            <div class="post-title">
-                <h2><a class="post-title-link" href="/%E5%B0%86%E5%B7%A5%E4%BD%9C%E8%96%84%E6%8C%89%E5%88%97%E6%8B%86%E5%88%86%E8%87%B3%E5%B7%A5%E4%BD%9C%E8%A1%A8/">将工作薄按列拆分至工作表</a></h2>
-            </div>
-            <div class="post-meta">
-                <span class="post-time">2023-03-27</span>
-                
-            </div>
-            <div class="post-content">
-                
-                    <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">import pandas as pd</span><br><span class="line"></span><br><span class="line">data=pd.read_excel(r&quot;地址\汇总.xls&quot;)</span><br><span class="line">xlsx = pd.ExcelWriter(r&quot;地址\汇总-拆分完成.xlsx&quot;)</span><br><span class="line"></span><br><span class="line">for i in data[&quot;姓名&quot;].unique():</span><br><span class="line">	data[data[&quot;姓名&quot;]==i].to_excel(xlsx,sheet_name=i,index=False)</span><br><span class="line"></span><br><span class="line">xlsx.close()</span><br></pre></td></tr></table></figure>
-                
-            </div>
-        </article>
-    
-        <article class="post-abstract">
-            <div class="post-title">
-                <h2><a class="post-title-link" href="/%E5%B8%B8%E7%94%A8%E8%BF%90%E7%AE%97%E7%AC%A6/">常用运算符</a></h2>
-            </div>
-            <div class="post-meta">
-                <span class="post-time">2023-03-27</span>
-                
-            </div>
-            <div class="post-content">
-                
-                    <table>
-<thead>
-<tr>
-<th align="left">运算符</th>
-<th align="left">作用</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">+、-、*、&#x2F;</td>
-<td align="left">加减乘除</td>
-</tr>
-<tr>
-<td align="left">%</td>
-<td align="left">取余</td>
-</tr>
-<tr>
-<td align="left">&#x2F;&#x2F;</td>
-<td align="left">取整</td>
-</tr>
-<tr>
-<td align="left">**</td>
-<td align="left">幂（常用x**y或pow(x,y)表示）</td>
-</tr>
-<tr>
-<td align="left">&amp;</td>
-<td align="left">位运算符中的位与</td>
-</tr>
-<tr>
-<td align="left">|</td>
-<td align="left">位运算符中的位或</td>
-</tr>
-<tr>
-<td align="left">^</td>
-<td align="left">位运算符中的位异或</td>
-</tr>
-<tr>
-<td align="left">~</td>
-<td align="left">位运算符中的取反</td>
-</tr>
-<tr>
-<td align="left">abs(x)</td>
-<td align="left">取绝对值</td>
-</tr>
-<tr>
-<td align="left">int(x)</td>
-<td align="left">转为整数</td>
-</tr>
-<tr>
-<td align="left">float(x)</td>
-<td align="left">转为浮点数</td>
-</tr>
-<tr>
-<td align="left">complex(re,im)</td>
-<td align="left">将参数转化为复数,re为复数的实部,im为复数的虚部</td>
-</tr>
-</tbody></table>
-
                 
             </div>
         </article>

@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>16949质量管理体系标准</title>
-    <url>/16949%E8%B4%A8%E9%87%8F%E7%AE%A1%E7%90%86%E4%BD%93%E7%B3%BB%E6%A0%87%E5%87%86/</url>
-    <content><![CDATA[<p>16949质量管理体系标准是对汽车生产和相关配件组织应用ISO9001:2008的特殊要求，其适用于汽车生产供应链的组织形式。国内、外各大整车厂均已要求其供应商进行ISO16949:2009认证，确保各供应商具有高质量的运行业绩，并提供持续稳定的长期合作，以实现互惠互利。<span id="more"></span><br>16949质量管理体系标准实施方法：<br>运用系统化的方法开展ISO16949:2009质量体系的策划、建立和实施，以确保组织满足标准要求并提高运营绩效。<br>1、对企业现场进行差距分析。<br>2、实施QOS（质量操作系统）培训并开展QOS活动。<br>3、实施标准培训。<br>4、利用乌龟图对过程进行定义，确定过程的边界和相互关系。<br>5、讨论详细过程流程，建立过程流程图，作为程序文件编制的输入。<br>6、程序文件准备。<br>7、质量体系试运行，提供ISO16949:2009实施必需的质量工具培训（如APQP、FMEA、MSA、SPC、PPAP、8D等）。<br>8、开展内部审核，实施改进。</p>
+    <title>16949认证体系</title>
+    <url>/16949%E8%AE%A4%E8%AF%81%E4%BD%93%E7%B3%BB/</url>
+    <content><![CDATA[<p>16949认证体系是汽车行业质量管理认证体系的简称，是基于ISO9001的基础，加进了汽车行业的技术规范。此规范完全和ISO9000&#x2F;2008保持一致，但更着重于缺陷防范、减少在汽车零部件供应链中容易产生的质量波动和浪费。<span id="more"></span><br>ISO&#x2F;TS16949标准的针对性和适用性非常明确，只适用于汽车整车厂和其直接的零备件制造商，也就是说这些厂家必须是直接与生产汽车有关的，能开展加工制造活动，并通过这种活动使产品能够增值。<br>同时，对所认证公司厂家的资格也有着严格的限定，那些只具备支持功能的单位，如设计中心、公司总部等，或者那些为整车厂家或汽车零备件厂家制造设备和工具的厂家，都不能获得认证。</p>
 ]]></content>
       <tags>
         <tag>system</tag>
       </tags>
   </entry>
   <entry>
-    <title>16949认证体系</title>
-    <url>/16949%E8%AE%A4%E8%AF%81%E4%BD%93%E7%B3%BB/</url>
-    <content><![CDATA[<p>16949认证体系是汽车行业质量管理认证体系的简称，是基于ISO9001的基础，加进了汽车行业的技术规范。此规范完全和ISO9000&#x2F;2008保持一致，但更着重于缺陷防范、减少在汽车零部件供应链中容易产生的质量波动和浪费。<span id="more"></span><br>ISO&#x2F;TS16949标准的针对性和适用性非常明确，只适用于汽车整车厂和其直接的零备件制造商，也就是说这些厂家必须是直接与生产汽车有关的，能开展加工制造活动，并通过这种活动使产品能够增值。<br>同时，对所认证公司厂家的资格也有着严格的限定，那些只具备支持功能的单位，如设计中心、公司总部等，或者那些为整车厂家或汽车零备件厂家制造设备和工具的厂家，都不能获得认证。</p>
+    <title>16949质量管理体系标准</title>
+    <url>/16949%E8%B4%A8%E9%87%8F%E7%AE%A1%E7%90%86%E4%BD%93%E7%B3%BB%E6%A0%87%E5%87%86/</url>
+    <content><![CDATA[<p>16949质量管理体系标准是对汽车生产和相关配件组织应用ISO9001:2008的特殊要求，其适用于汽车生产供应链的组织形式。国内、外各大整车厂均已要求其供应商进行ISO16949:2009认证，确保各供应商具有高质量的运行业绩，并提供持续稳定的长期合作，以实现互惠互利。<span id="more"></span><br>16949质量管理体系标准实施方法：<br>运用系统化的方法开展ISO16949:2009质量体系的策划、建立和实施，以确保组织满足标准要求并提高运营绩效。<br>1、对企业现场进行差距分析。<br>2、实施QOS（质量操作系统）培训并开展QOS活动。<br>3、实施标准培训。<br>4、利用乌龟图对过程进行定义，确定过程的边界和相互关系。<br>5、讨论详细过程流程，建立过程流程图，作为程序文件编制的输入。<br>6、程序文件准备。<br>7、质量体系试运行，提供ISO16949:2009实施必需的质量工具培训（如APQP、FMEA、MSA、SPC、PPAP、8D等）。<br>8、开展内部审核，实施改进。</p>
 ]]></content>
       <tags>
         <tag>system</tag>
@@ -1185,14 +1185,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Selenium模拟点击</title>
-    <url>/Selenim%E8%87%AA%E5%8A%A8%E7%82%B9%E5%87%BB/</url>
-    <content><![CDATA[<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">from selenium import webdriver</span><br><span class="line">from selenium.webdriver.common.by import By</span><br><span class="line">import time</span><br><span class="line"></span><br><span class="line">driver = webdriver.Chrome()  # 打开谷歌浏览器</span><br><span class="line">url = &#x27;https://www.baidu.com/&#x27;</span><br><span class="line">driver.get(url)  # 输入网址</span><br><span class="line"> </span><br><span class="line"># 输入搜索关键词并点击搜索按钮</span><br><span class="line">v = driver.find_element(By.ID, &#x27;kw&#x27;)  # 查找搜索输入框</span><br><span class="line">v.send_keys(&#x27;不想搬砖怎么办？&#x27;)  # 输入关键词</span><br><span class="line">time.sleep(3)  # 等待页面加载完成</span><br><span class="line"></span><br><span class="line">btn = driver.find_element(By.ID, &#x27;su&#x27;)  # 查找搜索按钮</span><br><span class="line">btn.click()  # 点击搜索按钮</span><br><span class="line"></span><br><span class="line">time.sleep(60)  # 等待搜索结果页面加载完成</span><br><span class="line"></span><br><span class="line">driver.quit()  # 关闭浏览器</span><br></pre></td></tr></table></figure>]]></content>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>SQL命令</title>
     <url>/SQL%E5%91%BD%E4%BB%A4/</url>
     <content><![CDATA[<p>#创建一个名为“day1”的数据库<br>create database day1;</p>
@@ -1204,6 +1196,14 @@
 <p>#删除test表<br>drop table test;</p>
 <p>#删除day1数据库<br>drop database day1;</p>
 ]]></content>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Selenium模拟点击</title>
+    <url>/Selenim%E8%87%AA%E5%8A%A8%E7%82%B9%E5%87%BB/</url>
+    <content><![CDATA[<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">from selenium import webdriver</span><br><span class="line">from selenium.webdriver.common.by import By</span><br><span class="line">import time</span><br><span class="line"></span><br><span class="line">driver = webdriver.Chrome()  # 打开谷歌浏览器</span><br><span class="line">url = &#x27;https://www.baidu.com/&#x27;</span><br><span class="line">driver.get(url)  # 输入网址</span><br><span class="line"> </span><br><span class="line"># 输入搜索关键词并点击搜索按钮</span><br><span class="line">v = driver.find_element(By.ID, &#x27;kw&#x27;)  # 查找搜索输入框</span><br><span class="line">v.send_keys(&#x27;不想搬砖怎么办？&#x27;)  # 输入关键词</span><br><span class="line">time.sleep(3)  # 等待页面加载完成</span><br><span class="line"></span><br><span class="line">btn = driver.find_element(By.ID, &#x27;su&#x27;)  # 查找搜索按钮</span><br><span class="line">btn.click()  # 点击搜索按钮</span><br><span class="line"></span><br><span class="line">time.sleep(60)  # 等待搜索结果页面加载完成</span><br><span class="line"></span><br><span class="line">driver.quit()  # 关闭浏览器</span><br></pre></td></tr></table></figure>]]></content>
       <tags>
         <tag>python</tag>
       </tags>
@@ -1361,9 +1361,23 @@
       </tags>
   </entry>
   <entry>
-    <title>win32打印工作表</title>
-    <url>/win32%E6%89%93%E5%8D%B0%E5%B7%A5%E4%BD%9C%E8%A1%A8/</url>
-    <content><![CDATA[<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import win32com.client as win32</span><br><span class="line"></span><br><span class="line">excel = win32.gencache.EnsureDispatch(&#x27;Excel.Application&#x27;)</span><br><span class="line"></span><br><span class="line">wb = excel.Workbooks.Open(r&#x27;C:\123.xlsx&#x27;)</span><br><span class="line">ws = wb.Sheets(&#x27;Sheet1&#x27;) </span><br><span class="line"></span><br><span class="line">ws.PrintOut()</span><br><span class="line"></span><br><span class="line">wb.Close(False)</span><br><span class="line">excel.Quit()</span><br></pre></td></tr></table></figure>]]></content>
+    <title>github无法登陆</title>
+    <url>/ithub%E6%97%A0%E6%B3%95%E7%99%BB%E9%99%86/</url>
+    <content><![CDATA[<p>1、打开网站<a href="https://www.ipaddress.com/ip-lookup">https://www.ipaddress.com/ip-lookup</a>;<br>2、查询如下两个主机名：<br>github.com<br>github.global.ssl.fastly.net<br>3、补充到C:\Windows\System32\drivers\etc\hosts文件的末尾，该文件不可编辑，可以复制到桌面，然后再复制回去实现替换。</p>
+]]></content>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>git创建分支</title>
+    <url>/it%E5%88%9B%E5%BB%BA%E5%88%86%E6%94%AF/</url>
+    <content><![CDATA[<p>1、打开博客目录，目录下有一个“.gitignore”文件，没有就自己创建一个，该文件用于忽略指定的文件不进行同步，配置内容如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">.DS_Store</span><br><span class="line">Thumbs.db</span><br><span class="line">db.json</span><br><span class="line">*.log</span><br><span class="line">node_modules/</span><br><span class="line">public/</span><br><span class="line">.deploy*/</span><br></pre></td></tr></table></figure>
+<p>2、右键打开“git”，依次输入以下命令进行本地仓库与远程仓库对接：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 初始化本地仓库</span><br><span class="line">git init</span><br><span class="line"></span><br><span class="line"># 本地仓库和GitHub远程仓库对接</span><br><span class="line"># nineya/blog_source.git修改为博客界面所在仓库名</span><br><span class="line">git remote add origin git@github.com:nineya/nineya.github.io.git</span><br><span class="line"></span><br><span class="line"># 查看远程仓库地址，验证配置是否正确</span><br><span class="line">git remote -v</span><br><span class="line"></span><br><span class="line"># 新建分支blog_source</span><br><span class="line">git branch blog_source</span><br><span class="line"></span><br><span class="line"># 切换到blog_source分支</span><br><span class="line">git checkout blog_source</span><br></pre></td></tr></table></figure>
+<p>3、提交数据到远程仓库：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 同步远程库上的数据，否则无法提交</span><br><span class="line">git pull origin hexo</span><br><span class="line"></span><br><span class="line"># 将所有文件添加到本地仓库</span><br><span class="line">git add -A</span><br><span class="line"></span><br><span class="line"># 提交到远程仓库</span><br><span class="line">git commit -m &quot;博客源文件&quot;</span><br><span class="line">git push origin hexo</span><br></pre></td></tr></table></figure>]]></content>
       <tags>
         <tag>python</tag>
       </tags>
@@ -1376,6 +1390,14 @@
 ]]></content>
       <tags>
         <tag>excel</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>win32打印工作表</title>
+    <url>/win32%E6%89%93%E5%8D%B0%E5%B7%A5%E4%BD%9C%E8%A1%A8/</url>
+    <content><![CDATA[<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import win32com.client as win32</span><br><span class="line"></span><br><span class="line">excel = win32.gencache.EnsureDispatch(&#x27;Excel.Application&#x27;)</span><br><span class="line"></span><br><span class="line">wb = excel.Workbooks.Open(r&#x27;C:\123.xlsx&#x27;)</span><br><span class="line">ws = wb.Sheets(&#x27;Sheet1&#x27;) </span><br><span class="line"></span><br><span class="line">ws.PrintOut()</span><br><span class="line"></span><br><span class="line">wb.Close(False)</span><br><span class="line">excel.Quit()</span><br></pre></td></tr></table></figure>]]></content>
+      <tags>
+        <tag>python</tag>
       </tags>
   </entry>
   <entry>
@@ -1465,6 +1487,14 @@
       </tags>
   </entry>
   <entry>
+    <title>在单元格中显示当前工作表名称</title>
+    <url>/%E5%9C%A8%E5%8D%95%E5%85%83%E6%A0%BC%E4%B8%AD%E6%98%BE%E7%A4%BA%E5%BD%93%E5%89%8D%E5%B7%A5%E4%BD%9C%E8%A1%A8%E5%90%8D%E7%A7%B0/</url>
+    <content><![CDATA[<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">=RIGHT(CELL(&quot;filename&quot;),LEN(CELL(&quot;filename&quot;))-FIND(&quot;]&quot;,CELL(&quot;filename&quot;)))</span><br></pre></td></tr></table></figure>]]></content>
+      <tags>
+        <tag>excel</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>多条件查找</title>
     <url>/%E5%A4%9A%E6%9D%A1%E4%BB%B6%E6%9F%A5%E6%89%BE/</url>
     <content><![CDATA[<p>&#x3D;LOOKUP(1,0&#x2F;((B2:B9&#x3D;G3)*(C2:C9&#x3D;H3)),D2:D9)，以此函数为例：</p>
@@ -1475,14 +1505,6 @@
 <p>（2）当“0&#x2F;条件所在区域&#x3D;条件”这部分数据中的条件所在区域不等于条件，那么分母项是为0的，整个运算“0&#x2F;条件所在区域&#x3D;条件”就等于“0&#x2F;0”，结果就是错误值；</p>
 <p>此时，只有条件所在区域&#x3D;条件的时候，&#x3D;LOOKUP(1，0&#x2F;条件所在区域&#x3D;条件，结果所在区域）此公式才有意义，找到唯一符合的条件时，就能做出对应的结果。</p>
 ]]></content>
-      <tags>
-        <tag>excel</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>在单元格中显示当前工作表名称</title>
-    <url>/%E5%9C%A8%E5%8D%95%E5%85%83%E6%A0%BC%E4%B8%AD%E6%98%BE%E7%A4%BA%E5%BD%93%E5%89%8D%E5%B7%A5%E4%BD%9C%E8%A1%A8%E5%90%8D%E7%A7%B0/</url>
-    <content><![CDATA[<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">=RIGHT(CELL(&quot;filename&quot;),LEN(CELL(&quot;filename&quot;))-FIND(&quot;]&quot;,CELL(&quot;filename&quot;)))</span><br></pre></td></tr></table></figure>]]></content>
       <tags>
         <tag>excel</tag>
       </tags>
@@ -1537,10 +1559,27 @@
       </tags>
   </entry>
   <entry>
+    <title>将工作薄按列拆分至工作表</title>
+    <url>/%E5%B0%86%E5%B7%A5%E4%BD%9C%E8%96%84%E6%8C%89%E5%88%97%E6%8B%86%E5%88%86%E8%87%B3%E5%B7%A5%E4%BD%9C%E8%A1%A8/</url>
+    <content><![CDATA[<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import pandas as pd</span><br><span class="line"></span><br><span class="line">data=pd.read_excel(r&quot;地址\汇总.xls&quot;)</span><br><span class="line">xlsx = pd.ExcelWriter(r&quot;地址\汇总-拆分完成.xlsx&quot;)</span><br><span class="line"></span><br><span class="line">for i in data[&quot;姓名&quot;].unique():</span><br><span class="line">	data[data[&quot;姓名&quot;]==i].to_excel(xlsx,sheet_name=i,index=False)</span><br><span class="line"></span><br><span class="line">xlsx.close()</span><br></pre></td></tr></table></figure>]]></content>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>拆分工作薄</title>
     <url>/%E5%B7%A5%E4%BD%9C%E8%96%84/</url>
     <content><![CDATA[<p>将工作薄中的Excel工作表拆分为单独的工作薄</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import xlwings as xw</span><br><span class="line">import os</span><br><span class="line"></span><br><span class="line">def split_excel(file_path):</span><br><span class="line">    app = xw.App(visible=False, add_book=False)</span><br><span class="line">    </span><br><span class="line">    workbook = app.books.open(file_path)</span><br><span class="line">    worksheet = workbook.sheets</span><br><span class="line">    for i in worksheet:  # 遍历工作簿中所有工作表</span><br><span class="line">        new_workbook = app.books.add()  # 新建工作簿</span><br><span class="line">        new_worksheet = new_workbook.sheets[0]  # 选中新建工作簿中的第1张工作表</span><br><span class="line">        i.copy(before=new_worksheet)  # 将原来工作簿中的当前工作表复制到新建工作簿的第1张工作表之前</span><br><span class="line">        new_workbook.sheets[1].delete()  #删除空白工作表</span><br><span class="line">        new_workbook.save(&#x27;拆分\&#123;&#125;.xlsx&#x27;.format(i.name))  # 保存新工作簿</span><br><span class="line">        print(&#x27;&#123;&#125;.xlsx&#x27;.format(i.name) + &quot;拆分完成&quot;)</span><br><span class="line">        new_workbook.close()  # 关闭新工作薄</span><br><span class="line">    workbook.close()   # 关闭旧工作薄</span><br><span class="line"></span><br><span class="line">def find_excel():</span><br><span class="line">    path = os.getcwd()</span><br><span class="line">    files = os.listdir(path)</span><br><span class="line">    if not os.path.exists(&quot;拆分&quot;):   #检查如果没有“拆分”文件夹</span><br><span class="line">        os.mkdir(&quot;拆分&quot;)   #创建“拆分”文件夹</span><br><span class="line">    excelfiles = [f for f in files if not f.startswith((&quot;~$&quot;)) and f.endswith((&quot;.xlsx&quot;))]  #过滤当前所有xlsx文件</span><br><span class="line">    for file in excelfiles:   #遍历所有xlsx文件</span><br><span class="line">        fullpath = os.path.join(path,file) </span><br><span class="line">        split_excel(fullpath)   #对xlsx文件进行拆分</span><br><span class="line"></span><br><span class="line">find_excel()</span><br></pre></td></tr></table></figure>]]></content>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>将工作薄转换为PDF</title>
+    <url>/%E5%B7%A5%E4%BD%9C%E8%96%84%E8%BD%AC%E6%8D%A2%E4%B8%BAPDF/</url>
+    <content><![CDATA[<p>将EXCEL中的所有工作表转换为一个PDF文件</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import win32com.client,os</span><br><span class="line">  </span><br><span class="line">def excel_to_pdf(excel_path, pdf_path):  </span><br><span class="line">    excel = win32com.client.Dispatch(&quot;Excel.Application&quot;)  </span><br><span class="line">    excel.Visible = False    </span><br><span class="line">    wb = excel.Workbooks.Open(excel_path)  </span><br><span class="line">  </span><br><span class="line">    wb.ExportAsFixedFormat(  </span><br><span class="line">        Type=0,  </span><br><span class="line">        Filename=pdf_path,  </span><br><span class="line">        Quality=win32com.client.constants.xlQualityStandard,  </span><br><span class="line">        IncludeDocProperties=True,  </span><br><span class="line">        IgnorePrintAreas=False,  </span><br><span class="line">        OpenAfterPublish=False  </span><br><span class="line">    )  </span><br><span class="line">  </span><br><span class="line">    wb.Close(SaveChanges=False)</span><br><span class="line">    excel.Quit()</span><br><span class="line"></span><br><span class="line">def excel_file():</span><br><span class="line">    path = os.getcwd()</span><br><span class="line">    files = os.listdir(path)</span><br><span class="line">    if not os.path.exists(&quot;pdf&quot;):</span><br><span class="line">        os.mkdir(&quot;pdf&quot;)</span><br><span class="line">    excelfiles = [f for f in files if not f.startswith((&quot;~$&quot;)) and f.endswith((&quot;.xlsx&quot;))]</span><br><span class="line">    for file in excelfiles:</span><br><span class="line">        excel_path = os.path.join(path,file)</span><br><span class="line">        pdf_name = os.path.splitext(file)[0]</span><br><span class="line">        pdf_path = path + &quot;\\&quot; + &quot;pdf&quot; + &quot;\\&quot; + pdf_name + &quot;.pdf&quot;</span><br><span class="line">        excel_to_pdf(excel_path, pdf_path)</span><br><span class="line">        print(excel_path+&quot;格式转换完成&quot;)</span><br><span class="line">    </span><br><span class="line">excel_file()</span><br></pre></td></tr></table></figure>]]></content>
       <tags>
         <tag>python</tag>
       </tags>
@@ -1614,14 +1653,6 @@
       </tags>
   </entry>
   <entry>
-    <title>将工作薄按列拆分至工作表</title>
-    <url>/%E5%B0%86%E5%B7%A5%E4%BD%9C%E8%96%84%E6%8C%89%E5%88%97%E6%8B%86%E5%88%86%E8%87%B3%E5%B7%A5%E4%BD%9C%E8%A1%A8/</url>
-    <content><![CDATA[<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import pandas as pd</span><br><span class="line"></span><br><span class="line">data=pd.read_excel(r&quot;地址\汇总.xls&quot;)</span><br><span class="line">xlsx = pd.ExcelWriter(r&quot;地址\汇总-拆分完成.xlsx&quot;)</span><br><span class="line"></span><br><span class="line">for i in data[&quot;姓名&quot;].unique():</span><br><span class="line">	data[data[&quot;姓名&quot;]==i].to_excel(xlsx,sheet_name=i,index=False)</span><br><span class="line"></span><br><span class="line">xlsx.close()</span><br></pre></td></tr></table></figure>]]></content>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>常用运算符</title>
     <url>/%E5%B8%B8%E7%94%A8%E8%BF%90%E7%AE%97%E7%AC%A6/</url>
     <content><![CDATA[<table>
@@ -1686,18 +1717,17 @@
       </tags>
   </entry>
   <entry>
-    <title>将工作薄转换为PDF</title>
-    <url>/%E5%B7%A5%E4%BD%9C%E8%96%84%E8%BD%AC%E6%8D%A2%E4%B8%BAPDF/</url>
-    <content><![CDATA[<p>将EXCEL中的所有工作表转换为一个PDF文件</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import win32com.client,os</span><br><span class="line">  </span><br><span class="line">def excel_to_pdf(excel_path, pdf_path):  </span><br><span class="line">    excel = win32com.client.Dispatch(&quot;Excel.Application&quot;)  </span><br><span class="line">    excel.Visible = False    </span><br><span class="line">    wb = excel.Workbooks.Open(excel_path)  </span><br><span class="line">  </span><br><span class="line">    wb.ExportAsFixedFormat(  </span><br><span class="line">        Type=0,  </span><br><span class="line">        Filename=pdf_path,  </span><br><span class="line">        Quality=win32com.client.constants.xlQualityStandard,  </span><br><span class="line">        IncludeDocProperties=True,  </span><br><span class="line">        IgnorePrintAreas=False,  </span><br><span class="line">        OpenAfterPublish=False  </span><br><span class="line">    )  </span><br><span class="line">  </span><br><span class="line">    wb.Close(SaveChanges=False)</span><br><span class="line">    excel.Quit()</span><br><span class="line"></span><br><span class="line">def excel_file():</span><br><span class="line">    path = os.getcwd()</span><br><span class="line">    files = os.listdir(path)</span><br><span class="line">    if not os.path.exists(&quot;pdf&quot;):</span><br><span class="line">        os.mkdir(&quot;pdf&quot;)</span><br><span class="line">    excelfiles = [f for f in files if not f.startswith((&quot;~$&quot;)) and f.endswith((&quot;.xlsx&quot;))]</span><br><span class="line">    for file in excelfiles:</span><br><span class="line">        excel_path = os.path.join(path,file)</span><br><span class="line">        pdf_name = os.path.splitext(file)[0]</span><br><span class="line">        pdf_path = path + &quot;\\&quot; + &quot;pdf&quot; + &quot;\\&quot; + pdf_name + &quot;.pdf&quot;</span><br><span class="line">        excel_to_pdf(excel_path, pdf_path)</span><br><span class="line">        print(excel_path+&quot;格式转换完成&quot;)</span><br><span class="line">    </span><br><span class="line">excel_file()</span><br></pre></td></tr></table></figure>]]></content>
+    <title>生成词云</title>
+    <url>/%E6%88%90%E8%AF%8D%E4%BA%91/</url>
+    <content><![CDATA[<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import pandas as pd</span><br><span class="line">import matplotlib.pyplot as plt</span><br><span class="line">from wordcloud import WordCloud</span><br><span class="line"></span><br><span class="line"># 读取Excel文件</span><br><span class="line">data = pd.read_excel(&#x27;index.xlsx&#x27;)</span><br><span class="line">df = pd.DataFrame(data)</span><br><span class="line"></span><br><span class="line"># 从DataFrame中提取数据</span><br><span class="line">text = df[&#x27;Name&#x27;]</span><br><span class="line">text1 = &#x27; &#x27;.join(df[&#x27;Name&#x27;])</span><br><span class="line">print(text)</span><br><span class="line">print(text1)</span><br><span class="line"></span><br><span class="line"># 创建词云对象</span><br><span class="line">wordcloud = WordCloud(background_color=&#x27;white&#x27;).generate(text1)</span><br><span class="line"></span><br><span class="line"># 展示词云</span><br><span class="line">plt.imshow(wordcloud, interpolation=&#x27;bilinear&#x27;)</span><br><span class="line">plt.axis(&#x27;off&#x27;)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>]]></content>
       <tags>
         <tag>python</tag>
       </tags>
   </entry>
   <entry>
-    <title>生成词云</title>
-    <url>/%E6%88%90%E8%AF%8D%E4%BA%91/</url>
-    <content><![CDATA[<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import pandas as pd</span><br><span class="line">import matplotlib.pyplot as plt</span><br><span class="line">from wordcloud import WordCloud</span><br><span class="line"></span><br><span class="line"># 读取Excel文件</span><br><span class="line">data = pd.read_excel(&#x27;index.xlsx&#x27;)</span><br><span class="line">df = pd.DataFrame(data)</span><br><span class="line"></span><br><span class="line"># 从DataFrame中提取数据</span><br><span class="line">text = df[&#x27;Name&#x27;]</span><br><span class="line">text1 = &#x27; &#x27;.join(df[&#x27;Name&#x27;])</span><br><span class="line">print(text)</span><br><span class="line">print(text1)</span><br><span class="line"></span><br><span class="line"># 创建词云对象</span><br><span class="line">wordcloud = WordCloud(background_color=&#x27;white&#x27;).generate(text1)</span><br><span class="line"></span><br><span class="line"># 展示词云</span><br><span class="line">plt.imshow(wordcloud, interpolation=&#x27;bilinear&#x27;)</span><br><span class="line">plt.axis(&#x27;off&#x27;)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>]]></content>
+    <title>打印文件夹内所有Excel文件</title>
+    <url>/%E6%89%93%E5%8D%B0%E6%96%87%E4%BB%B6%E5%A4%B9%E5%86%85%E6%89%80%E6%9C%89Excel%E6%96%87%E4%BB%B6/</url>
+    <content><![CDATA[<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import os</span><br><span class="line">import win32com.client as win32</span><br><span class="line"></span><br><span class="line">def init_excel(print_file):</span><br><span class="line">    excel = win32.gencache.EnsureDispatch(&#x27;Excel.Application&#x27;)</span><br><span class="line">    wb = excel.Workbooks.Open(print_file)</span><br><span class="line">    ws = wb.Sheets(&#x27;Sheet1&#x27;)</span><br><span class="line">    ws.PrintOut()</span><br><span class="line">    wb.Close(False)</span><br><span class="line">    excel.Quit()</span><br><span class="line"></span><br><span class="line">def excel_file():</span><br><span class="line">    path = os.getcwd()</span><br><span class="line">    files = os.listdir(path)</span><br><span class="line">    excelfiles = [f for f in files if not f.startswith((&quot;~$&quot;)) and f.endswith((&quot;.xlsx&quot;))]</span><br><span class="line">    for file in excelfiles:</span><br><span class="line">        fullpath = os.path.join(path,file)</span><br><span class="line">        print(fullpath)</span><br><span class="line">        init_excel(fullpath)</span><br><span class="line"></span><br><span class="line">excel_file()</span><br></pre></td></tr></table></figure>]]></content>
       <tags>
         <tag>python</tag>
       </tags>
@@ -1711,9 +1741,9 @@
       </tags>
   </entry>
   <entry>
-    <title>打印文件夹内所有Excel文件</title>
-    <url>/%E6%89%93%E5%8D%B0%E6%96%87%E4%BB%B6%E5%A4%B9%E5%86%85%E6%89%80%E6%9C%89Excel%E6%96%87%E4%BB%B6/</url>
-    <content><![CDATA[<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import os</span><br><span class="line">import win32com.client as win32</span><br><span class="line"></span><br><span class="line">def init_excel(print_file):</span><br><span class="line">    excel = win32.gencache.EnsureDispatch(&#x27;Excel.Application&#x27;)</span><br><span class="line">    wb = excel.Workbooks.Open(print_file)</span><br><span class="line">    ws = wb.Sheets(&#x27;Sheet1&#x27;)</span><br><span class="line">    ws.PrintOut()</span><br><span class="line">    wb.Close(False)</span><br><span class="line">    excel.Quit()</span><br><span class="line"></span><br><span class="line">def excel_file():</span><br><span class="line">    path = os.getcwd()</span><br><span class="line">    files = os.listdir(path)</span><br><span class="line">    excelfiles = [f for f in files if not f.startswith((&quot;~$&quot;)) and f.endswith((&quot;.xlsx&quot;))]</span><br><span class="line">    for file in excelfiles:</span><br><span class="line">        fullpath = os.path.join(path,file)</span><br><span class="line">        print(fullpath)</span><br><span class="line">        init_excel(fullpath)</span><br><span class="line"></span><br><span class="line">excel_file()</span><br></pre></td></tr></table></figure>]]></content>
+    <title>批量生成标签模板</title>
+    <url>/%E6%89%B9%E9%87%8F%E7%94%9F%E6%88%90%E6%A0%87%E7%AD%BE%E6%A8%A1%E6%9D%BF/</url>
+    <content><![CDATA[<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import os</span><br><span class="line">import qrcode</span><br><span class="line">import openpyxl</span><br><span class="line">from openpyxl.drawing.image import Image</span><br><span class="line"></span><br><span class="line"># 制作二维码</span><br><span class="line">def gen_image(text,name):</span><br><span class="line">        img = qrcode.make(text)</span><br><span class="line">        with open(name,&quot;wb&quot;) as f:</span><br><span class="line">            img.save(f)</span><br><span class="line"></span><br><span class="line"># 写入二维码           </span><br><span class="line">def write_img(img_name,position):</span><br><span class="line">	imgsize = (720/12,720/12)</span><br><span class="line">	img = Image(img_name)</span><br><span class="line">	img.width,img.height = imgsize</span><br><span class="line">	wb[str(i)].add_image(img,position)</span><br><span class="line"></span><br><span class="line"># 查找excel文件</span><br><span class="line">def excel_file():</span><br><span class="line">        path = os.getcwd()</span><br><span class="line">        files = os.listdir(path)</span><br><span class="line">        fullpath = [f for f in files if not f.startswith((&quot;~$&quot;)) and f.endswith((&quot;.xlsx&quot;))]</span><br><span class="line">        return  os.path.join(path,fullpath[0])</span><br><span class="line">   </span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">        # 打开excel工作薄</span><br><span class="line">        wb = openpyxl.load_workbook(excel_file())</span><br><span class="line">        # 打开excel工作表清单</span><br><span class="line">        QD_sheet = wb.worksheets[0]</span><br><span class="line">        # 打开excel工作表标签模板</span><br><span class="line">        BQ_sheet = wb.worksheets[1]</span><br><span class="line">        </span><br><span class="line">        if not os.path.exists(&quot;qrcode&quot;):</span><br><span class="line">                os.mkdir(&quot;qrcode&quot;)</span><br><span class="line">		</span><br><span class="line">        for i in range(1,10):</span><br><span class="line">                # 复制模板工作表</span><br><span class="line">                new_sheet = wb.copy_worksheet(BQ_sheet)</span><br><span class="line">                # 重命名新工作表</span><br><span class="line">                new_sheet.title = str(i)</span><br><span class="line">                # 将清单中的SN复制到新工作表指定单元格</span><br><span class="line">                text = QD_sheet[&#x27;A&#x27; + str(i+1)].value</span><br><span class="line">                new_sheet[&#x27;B7&#x27;].value = text</span><br><span class="line"></span><br><span class="line">                # 指定二维码存放位置</span><br><span class="line">                text_png_name = &quot;qrcode/&quot; + &quot;A&quot; + str(i+1) + &quot;.png&quot;</span><br><span class="line">                # 指定二维码粘贴位置</span><br><span class="line">                paste = &quot;A7&quot;</span><br><span class="line">                # 按清单列表制作二维码并存放到指定位置</span><br><span class="line">                gen_image(text,text_png_name)</span><br><span class="line">                # 将二维码放置到新工作表指定单元格</span><br><span class="line">                write_img(text_png_name,paste)</span><br><span class="line">                                                               </span><br><span class="line">	#保存excel文件	</span><br><span class="line">        wb.save(excel_file())</span><br></pre></td></tr></table></figure>]]></content>
       <tags>
         <tag>python</tag>
       </tags>
@@ -1754,6 +1784,15 @@
       </tags>
   </entry>
   <entry>
+    <title>条件查找</title>
+    <url>/%E6%9D%A1%E4%BB%B6%E6%9F%A5%E6%89%BE/</url>
+    <content><![CDATA[<p>&#x3D;VLOOKUP(A1,A:C,3,1)，以此函数为例：<br>“A1”为“查找值”内容，当前需要查找的目标；<br>“A:C”为“数据表”内容，查找表中的目标起始列和结果终止列；<br>“3”为“列序数”内容，“数据表”中目标列至结果列的列数；<br>“1”为“匹配条件”内容，“0”为精确查找，“1”为模糊查找。</p>
+]]></content>
+      <tags>
+        <tag>excel</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>格式化字符串的三种方法</title>
     <url>/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E6%B3%95/</url>
     <content><![CDATA[<p>f’{i}*{j}&#x3D;{i*j}’<br>‘{}*{}&#x3D;{}’.format(i,j,i*j)<br>‘%d*%d&#x3D;%d’%(i,j,i*j)</p>
@@ -1763,9 +1802,9 @@
       </tags>
   </entry>
   <entry>
-    <title>条件查找</title>
-    <url>/%E6%9D%A1%E4%BB%B6%E6%9F%A5%E6%89%BE/</url>
-    <content><![CDATA[<p>&#x3D;VLOOKUP(A1,A:C,3,1)，以此函数为例：<br>“A1”为“查找值”内容，当前需要查找的目标；<br>“A:C”为“数据表”内容，查找表中的目标起始列和结果终止列；<br>“3”为“列序数”内容，“数据表”中目标列至结果列的列数；<br>“1”为“匹配条件”内容，“0”为精确查找，“1”为模糊查找。</p>
+    <title>条件求和</title>
+    <url>/%E6%9D%A1%E4%BB%B6%E6%B1%82%E5%92%8C/</url>
+    <content><![CDATA[<p>&#x3D;SUMIF(A1:A10,E4,C1:C10)<br>“A1:A10”选择求和项列<br>“E4”选择求和项<br>“C1:C10”选择数值列</p>
 ]]></content>
       <tags>
         <tag>excel</tag>
@@ -1944,18 +1983,27 @@
       </tags>
   </entry>
   <entry>
-    <title>条件求和</title>
-    <url>/%E6%9D%A1%E4%BB%B6%E6%B1%82%E5%92%8C/</url>
-    <content><![CDATA[<p>&#x3D;SUMIF(A1:A10,E4,C1:C10)<br>“A1:A10”选择求和项列<br>“E4”选择求和项<br>“C1:C10”选择数值列</p>
-]]></content>
-      <tags>
-        <tag>excel</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>爬虫标准框架</title>
     <url>/%E7%88%AC%E8%99%AB%E6%A0%87%E5%87%86%E6%A1%86%E6%9E%B6/</url>
     <content><![CDATA[<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import requests</span><br><span class="line">url=&quot;https://www.sogou.com/web?query=周杰伦&quot;</span><br><span class="line"></span><br><span class="line">headers=&#123; &quot;User-Agent&quot;:&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36 Edg/97.0.1072.55&quot; &#125;</span><br><span class="line">#以字典的形式设置请求头，处理反爬 resp=requests.get(url,headers=headers)</span><br><span class="line">print(resp)</span><br><span class="line">#结果：Response [200]</span><br><span class="line">print(resp.text)</span><br><span class="line">#拿到页面源代码</span><br><span class="line">resp.close()</span><br><span class="line">#关掉resp</span><br></pre></td></tr></table></figure>]]></content>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>生成SSH</title>
+    <url>/%E7%94%9F%E6%88%90SSH/</url>
+    <content><![CDATA[<ul>
+<li><p>用户名和邮箱进行初始化<br>git config –global user.name yourname<br>git config –global user.email youremail</p>
+<span id="more"></span></li>
+<li><p>检查初始化信息<br>git config user.name<br>git config user.email</p>
+</li>
+<li><p>生成密钥<br>ssh-keygen -t rsa -C youremail</p>
+</li>
+<li><p>查看公钥<br>cat ~&#x2F;.ssh&#x2F;id_rsa.pub</p>
+</li>
+</ul>
+]]></content>
       <tags>
         <tag>python</tag>
       </tags>
@@ -1987,24 +2035,6 @@
 <td align="left">pip install xlrd</td>
 </tr>
 </tbody></table>
-]]></content>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>生成SSH</title>
-    <url>/%E7%94%9F%E6%88%90SSH/</url>
-    <content><![CDATA[<ul>
-<li><p>用户名和邮箱进行初始化<br>git config –global user.name yourname<br>git config –global user.email youremail</p>
-<span id="more"></span></li>
-<li><p>检查初始化信息<br>git config user.name<br>git config user.email</p>
-</li>
-<li><p>生成密钥<br>ssh-keygen -t rsa -C youremail</p>
-</li>
-<li><p>查看公钥<br>cat ~&#x2F;.ssh&#x2F;id_rsa.pub</p>
-</li>
-</ul>
 ]]></content>
       <tags>
         <tag>python</tag>
