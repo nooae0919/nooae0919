@@ -101,7 +101,9 @@
     </div>
 </div>
         <div class="post-content">
-            <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">import pandas as pd</span><br><span class="line"></span><br><span class="line">data=pd.read_excel(r&quot;地址\汇总.xls&quot;)</span><br><span class="line">xlsx = pd.ExcelWriter(r&quot;地址\汇总-拆分完成.xlsx&quot;)</span><br><span class="line"></span><br><span class="line">for i in data[&quot;姓名&quot;].unique():</span><br><span class="line">	data[data[&quot;姓名&quot;]==i].to_excel(xlsx,sheet_name=i,index=False)</span><br><span class="line"></span><br><span class="line">xlsx.close()</span><br></pre></td></tr></table></figure>
+            <p>将工作薄按列拆分至工作表</p>
+<span id="more"></span>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">import pandas as pd</span><br><span class="line"></span><br><span class="line">data=pd.read_excel(r&quot;地址\汇总.xls&quot;)</span><br><span class="line">xlsx = pd.ExcelWriter(r&quot;地址\汇总-拆分完成.xlsx&quot;)</span><br><span class="line"></span><br><span class="line">for i in data[&quot;姓名&quot;].unique():</span><br><span class="line">	data[data[&quot;姓名&quot;]==i].to_excel(xlsx,sheet_name=i,index=False)</span><br><span class="line"></span><br><span class="line">xlsx.close()</span><br></pre></td></tr></table></figure>
         </div>
         
         <div class="post-tag">
