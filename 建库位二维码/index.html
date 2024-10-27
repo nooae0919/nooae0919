@@ -86,9 +86,9 @@
         <div class="posts">
     <article class="post-whole">
         <div class="post-title">
-            <h2 class="title">第三方库安装命令</h2>
+            <h2 class="title">创建库位二维码</h2>
             <div class="post-meta">
-                <span class="post-time">2023-03-27</span>
+                <span class="post-time">2024-10-27</span>
                 
                 <span class="post-visit"> 阅读次数：<span id="busuanzi_value_page_pv"></span></span>
             </div>
@@ -101,31 +101,9 @@
     </div>
 </div>
         <div class="post-content">
-            <table>
-<thead>
-<tr>
-<th align="left">需求</th>
-<th align="left">命令</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">更新pip命令</td>
-<td align="left">python -m pip install –upgrade pip</td>
-</tr>
-<tr>
-<td align="left">下载pandas</td>
-<td align="left">pip install pandas</td>
-</tr>
-<tr>
-<td align="left">下载xlwt</td>
-<td align="left">pip install xlwt</td>
-</tr>
-<tr>
-<td align="left">下载xlrd</td>
-<td align="left">pip install xlrd</td>
-</tr>
-</tbody></table>
-
+            <p>输入库位编码和库位名称创建二维码</p>
+<span id="more"></span>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">import qrcode</span><br><span class="line">from PIL import Image, ImageDraw, ImageFont</span><br><span class="line"></span><br><span class="line">qr_text = input(&quot;输入库位编码：&quot;)</span><br><span class="line">qr_name = input(&quot;输入库位名称：&quot;)</span><br><span class="line"> </span><br><span class="line"># 生成二维码</span><br><span class="line">qr = qrcode.QRCode(</span><br><span class="line">    version=1,</span><br><span class="line">    error_correction=qrcode.constants.ERROR_CORRECT_L,</span><br><span class="line">    box_size=30,</span><br><span class="line">    border=4,</span><br><span class="line">)</span><br><span class="line">qr.add_data(qr_text)</span><br><span class="line">qr.make(fit=True)</span><br><span class="line"></span><br><span class="line"># 创建一个图片 </span><br><span class="line">img = qr.make_image(fill=&#x27;black&#x27;, back_color=&#x27;white&#x27;)</span><br><span class="line"></span><br><span class="line"># 创建可以在图片上绘图的对象</span><br><span class="line">draw = ImageDraw.Draw(img)</span><br><span class="line"> </span><br><span class="line"># 加载字体</span><br><span class="line">font = ImageFont.truetype(&quot;arial.ttf&quot;, 80)</span><br><span class="line"></span><br><span class="line"># 计算文本宽度和高度</span><br><span class="line">width,height = draw.textsize(qr_name, font=font)</span><br><span class="line"></span><br><span class="line"># 计算文本在图片的位置</span><br><span class="line">x = (width - img.width) / 2</span><br><span class="line">y = (img.height - height) / 50</span><br><span class="line"></span><br><span class="line"># 绘制文本</span><br><span class="line">draw.text((x, y), qr_name, font=font, fill=&#x27;black&#x27;)</span><br><span class="line"> </span><br><span class="line"># 保存图片</span><br><span class="line">img.save(qr_name + &#x27;.png&#x27;)</span><br></pre></td></tr></table></figure>
         </div>
         
         <div class="post-tag">
@@ -139,15 +117,9 @@
 <div class="paginator">
     
         
-            <a class="prev" href="/%E7%88%AC%E5%8F%96%E5%85%B3%E9%94%AE%E5%AD%97%E5%86%99%E5%85%A5%E8%A1%A8%E6%A0%BC/">
-                <i class="iconfont icon-prev"></i>
-                <span class="nav-default">爬取关键字写入表格</span>
-                <span class="nav-mobile">上一篇</span>
-            </a>
         
-        
-            <a class="next" href="/%E7%AD%9B%E9%80%89%E5%90%8E%E8%87%AA%E5%8A%A8%E6%8E%92%E5%88%97%E5%BA%8F%E5%8F%B7/">
-                <span class="nav-default">筛选后自动排列序号</span>
+            <a class="next" href="/pipenv%E5%B0%81%E8%A3%85/">
+                <span class="nav-default">pipenv封装</span>
                 <span class="nav-mobile">下一篇</span>
                 <i class="iconfont icon-next"></i>
             </a>

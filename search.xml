@@ -412,16 +412,6 @@
       </tags>
   </entry>
   <entry>
-    <title>OEE组成</title>
-    <url>/OEE%E7%BB%84%E6%88%90/</url>
-    <content><![CDATA[<p>OEE&#x3D;时间稼动率×性能稼动率×良品率<br>时间稼动率&#x3D;稼动时间÷负荷时间<br>性能稼动率&#x3D;实际产能÷设计产能<span id="more"></span></p>
-<p>注：<br>A:计划停机时间 &#x3D; 非设备原因停机时间<br>B:负荷时间 &#x3D; 日历工作时间(720)-计划停机时间<br>C:停机损失时间 &#x3D; 故障时间、更换刀具、产品检测、换型&#x2F;换料<br>D:稼动时间 &#x3D; 负荷时间-停机损失时间<br>E:生产量 &#x3D; 日历工作时间内的总生产量<br>F:实际产能&#x3D;总生产量÷稼动时间<br>G:良品率 &#x3D; 合格品÷生产量<br>H:理论节拍(PPM) &#x3D; 每分钟产出数量</p>
-]]></content>
-      <tags>
-        <tag>system</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Office批量转PDF</title>
     <url>/Office%E6%89%B9%E9%87%8F%E8%BD%ACPDF/</url>
     <content><![CDATA[<p>Office批量转PDF</p>
@@ -429,6 +419,16 @@
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import os, win32com.client, gc</span><br><span class="line"></span><br><span class="line"># Word</span><br><span class="line">def word2Pdf(filePath, words):</span><br><span class="line">    # 如果没有文件则提示后直接退出</span><br><span class="line">    if(len(words)&lt;1):</span><br><span class="line">        print (&quot;\n【无 Word 文件】\n&quot;)</span><br><span class="line">        return</span><br><span class="line">    # 开始转换</span><br><span class="line">    print (&quot;\n【开始 Word -&gt; PDF 转换】&quot;)</span><br><span class="line">    try:</span><br><span class="line">        print (&quot;打开 Word 进程...&quot;)</span><br><span class="line">        word = win32com.client.Dispatch(&quot;Word.Application&quot;)</span><br><span class="line">        word.Visible = 0</span><br><span class="line">        word.DisplayAlerts = False</span><br><span class="line">        doc = None</span><br><span class="line">        for i in range(len(words)):</span><br><span class="line">            print(i)</span><br><span class="line">            fileName = words[i] # 文件名称</span><br><span class="line">            fromFile = os.path.join(filePath, fileName) # 文件地址</span><br><span class="line">            toFileName = changeSufix2Pdf(fileName) # 生成的文件名称</span><br><span class="line">            toFile = toFileJoin(filePath,toFileName) # 生成的文件地址</span><br><span class="line"></span><br><span class="line">            print (&quot;转换：&quot;+fileName+&quot;文件中...&quot;)</span><br><span class="line">            # 某文件出错不影响其他文件打印</span><br><span class="line">            try:</span><br><span class="line">                doc = word.Documents.Open(fromFile)</span><br><span class="line">                doc.SaveAs(toFile,17) # 生成的所有 PDF 都会在 PDF 文件夹中</span><br><span class="line">                print (&quot;转换到：&quot;+toFileName+&quot;完成&quot;)</span><br><span class="line">            except Exception as e:</span><br><span class="line">                print(e)</span><br><span class="line">            # 关闭 Word 进程</span><br><span class="line">        print (&quot;所有 Word 文件已打印完毕&quot;)</span><br><span class="line">        print (&quot;结束 Word 进程...\n&quot;)</span><br><span class="line">        doc.Close()</span><br><span class="line">        doc = None</span><br><span class="line">        word.Quit()</span><br><span class="line">        word = None</span><br><span class="line">    except Exception as e:</span><br><span class="line">        print(e)</span><br><span class="line">    finally:</span><br><span class="line">        gc.collect()</span><br><span class="line"></span><br><span class="line"># Excel</span><br><span class="line">def excel2Pdf(filePath, excels):</span><br><span class="line">    # 如果没有文件则提示后直接退出</span><br><span class="line">    if(len(excels)&lt;1):</span><br><span class="line">        print (&quot;\n【无 Excel 文件】\n&quot;)</span><br><span class="line">        return</span><br><span class="line">    # 开始转换</span><br><span class="line">    print (&quot;\n【开始 Excel -&gt; PDF 转换】&quot;)</span><br><span class="line">    try:</span><br><span class="line">        print (&quot;打开 Excel 进程中...&quot;)</span><br><span class="line">        excel = win32com.client.Dispatch(&quot;Excel.Application&quot;)</span><br><span class="line">        excel.Visible = 0</span><br><span class="line">        excel.DisplayAlerts = False</span><br><span class="line">        wb = None</span><br><span class="line">        ws = None</span><br><span class="line">        for i in range(len(excels)):</span><br><span class="line">            print(i)</span><br><span class="line">            fileName = excels[i] # 文件名称</span><br><span class="line">            fromFile = os.path.join(filePath, fileName) # 文件地址</span><br><span class="line">           </span><br><span class="line">            print (&quot;转换：&quot;+fileName+&quot;文件中...&quot;)</span><br><span class="line">            # 某文件出错不影响其他文件打印</span><br><span class="line">            try:</span><br><span class="line">                wb = excel.Workbooks.Open(fromFile)</span><br><span class="line">                for j in range(wb.Worksheets.Count): # 工作表数量，一个工作簿可能有多张工作表</span><br><span class="line">                    toFileName = addWorksheetsOrder(fileName, j+1) # 生成的文件名称</span><br><span class="line">                    toFile = toFileJoin(filePath,toFileName) # 生成的文件地址</span><br><span class="line">                   </span><br><span class="line">                    ws = wb.Worksheets(j+1) # 若为[0]则打包后会提示越界</span><br><span class="line">                    ws.ExportAsFixedFormat(0,toFile) # 每一张都需要打印</span><br><span class="line">                    print (&quot;转换至：&quot;+toFileName+&quot;文件完成&quot;)</span><br><span class="line">            except Exception as e:</span><br><span class="line">                print(e)</span><br><span class="line">        # 关闭 Excel 进程</span><br><span class="line">        print (&quot;所有 Excel 文件已打印完毕&quot;)</span><br><span class="line">        print (&quot;结束 Excel 进程中...\n&quot;)</span><br><span class="line">        ws = None</span><br><span class="line">        wb.Close()</span><br><span class="line">        wb = None</span><br><span class="line">        excel.Quit()</span><br><span class="line">        excel = None</span><br><span class="line">    except Exception as e:</span><br><span class="line">        print(e)</span><br><span class="line">    finally:</span><br><span class="line">        gc.collect()</span><br><span class="line"></span><br><span class="line"># PPT</span><br><span class="line">def ppt2Pdf(filePath, ppts):</span><br><span class="line">    # 如果没有文件则提示后直接退出</span><br><span class="line">    if(len(ppts)&lt;1):</span><br><span class="line">        print (&quot;\n【无 PPT 文件】\n&quot;)</span><br><span class="line">        return</span><br><span class="line">    # 开始转换</span><br><span class="line">    print (&quot;\n【开始 PPT -&gt; PDF 转换】&quot;)</span><br><span class="line">    try:</span><br><span class="line">        print (&quot;打开 PowerPoint 进程中...&quot;)</span><br><span class="line">        powerpoint = win32com.client.Dispatch(&quot;PowerPoint.Application&quot;)</span><br><span class="line">        ppt = None</span><br><span class="line">        # 某文件出错不影响其他文件打印</span><br><span class="line"></span><br><span class="line">        for i in range(len(ppts)):</span><br><span class="line">            print(i)</span><br><span class="line">            fileName = ppts[i] # 文件名称</span><br><span class="line">            fromFile = os.path.join(filePath, fileName) # 文件地址</span><br><span class="line">            toFileName = changeSufix2Pdf(fileName) # 生成的文件名称</span><br><span class="line">            toFile = toFileJoin(filePath,toFileName) # 生成的文件地址</span><br><span class="line"></span><br><span class="line">            print (&quot;转换：&quot;+fileName+&quot;文件中...&quot;)</span><br><span class="line">            try:</span><br><span class="line">                ppt = powerpoint.Presentations.Open(fromFile,WithWindow=False)</span><br><span class="line">                if ppt.Slides.Count&gt;0:</span><br><span class="line">                    ppt.SaveAs(toFile, 32) # 如果为空则会跳出提示框（暂时没有找到消除办法）</span><br><span class="line">                    print (&quot;转换至：&quot;+toFileName+&quot;文件完成&quot;)</span><br><span class="line">                else:</span><br><span class="line">                    print(&quot;（错误，发生意外：此文件为空，跳过此文件）&quot;)</span><br><span class="line">            except Exception as e:</span><br><span class="line">                print(e)</span><br><span class="line">        # 关闭 PPT 进程</span><br><span class="line">        print (&quot;所有 PPT 文件已打印完毕&quot;)</span><br><span class="line">        print (&quot;结束 PowerPoint 进程中...\n&quot;)</span><br><span class="line">        ppt.Close()</span><br><span class="line">        ppt = None</span><br><span class="line">        powerpoint.Quit()</span><br><span class="line">        powerpoint = None</span><br><span class="line">    except Exception as e:</span><br><span class="line">        print(e)</span><br><span class="line">    finally:</span><br><span class="line">        gc.collect()</span><br><span class="line"></span><br><span class="line"># 修改后缀名</span><br><span class="line">def changeSufix2Pdf(file):</span><br><span class="line">    return file[:file.rfind(&#x27;.&#x27;)]+&quot;.pdf&quot;</span><br><span class="line"># 添加工作簿序号</span><br><span class="line">def addWorksheetsOrder(file, i):</span><br><span class="line">    return file[:file.rfind(&#x27;.&#x27;)]+&quot;_工作表&quot;+str(i)+&quot;.pdf&quot;</span><br><span class="line"># 转换地址</span><br><span class="line">def toFileJoin(filePath,file):</span><br><span class="line">    return os.path.join(filePath,&#x27;pdf&#x27;,file[:file.rfind(&#x27;.&#x27;)]+&quot;.pdf&quot;)</span><br><span class="line">   </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 开始程序</span><br><span class="line">print (&quot;====================程序开始====================&quot;)</span><br><span class="line">print (&quot;【程序功能】将目标路径下内所有的 ppt、excel、word 均生成一份对应的 PDF 文件，存在新生成的 pdf 文件夹中（需已经安装office，不包括子文件夹）&quot;)</span><br><span class="line">print (&quot;注意：若某 PPT 和 Excel 文件为空，则会出错跳过此文件。若转换 PPT 时间过长，请查看是否有报错窗口等待确认，暂时无法彻底解决 PPT 的窗口问题（为空错误已解决）。在关闭进程过程中，时间可能会较长，十秒左右，请耐心等待。&quot;)</span><br><span class="line">filePath = input (&quot;输入目标路径：(若为当前路径：&quot;+os.getcwd()+&quot;，请直接回车）\n&quot;)</span><br><span class="line"></span><br><span class="line"># 目标路径，若没有输入路径则为当前路径</span><br><span class="line">if(filePath==&quot;&quot;):</span><br><span class="line">    filePath = os.getcwd()</span><br><span class="line"></span><br><span class="line"># 将目标文件夹所有文件归类，转换时只打开一个进程</span><br><span class="line">words = []</span><br><span class="line">ppts = []</span><br><span class="line">excels = []</span><br><span class="line"></span><br><span class="line">for fn in os.listdir(filePath):</span><br><span class="line">    if fn.endswith((&#x27;.doc&#x27;, &#x27;docx&#x27;)):</span><br><span class="line">        words.append(fn)</span><br><span class="line">    if fn.endswith((&#x27;.ppt&#x27;, &#x27;pptx&#x27;)):</span><br><span class="line">        ppts.append(fn)</span><br><span class="line">    if fn.endswith((&#x27;.xls&#x27;, &#x27;xlsx&#x27;)):</span><br><span class="line">        excels.append(fn)</span><br><span class="line"></span><br><span class="line"># 调用方法</span><br><span class="line">print (&quot;====================开始转换====================&quot;)</span><br><span class="line"></span><br><span class="line"># 新建 pdf 文件夹，所有生成的 PDF 文件都放在里面</span><br><span class="line">folder = filePath + &#x27;\\pdf\\&#x27;</span><br><span class="line">if not os.path.exists(folder):</span><br><span class="line">    os.makedirs(folder)</span><br><span class="line"></span><br><span class="line">word2Pdf(filePath,words)</span><br><span class="line">excel2Pdf(filePath,excels)</span><br><span class="line">ppt2Pdf(filePath,ppts)</span><br><span class="line">print (&quot;====================转换结束====================&quot;)</span><br><span class="line">print (&quot;\n====================程序结束====================&quot;)</span><br><span class="line">os.system(&quot;pause&quot;)</span><br></pre></td></tr></table></figure>]]></content>
       <tags>
         <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>OEE组成</title>
+    <url>/OEE%E7%BB%84%E6%88%90/</url>
+    <content><![CDATA[<p>OEE&#x3D;时间稼动率×性能稼动率×良品率<br>时间稼动率&#x3D;稼动时间÷负荷时间<br>性能稼动率&#x3D;实际产能÷设计产能<span id="more"></span></p>
+<p>注：<br>A:计划停机时间 &#x3D; 非设备原因停机时间<br>B:负荷时间 &#x3D; 日历工作时间(720)-计划停机时间<br>C:停机损失时间 &#x3D; 故障时间、更换刀具、产品检测、换型&#x2F;换料<br>D:稼动时间 &#x3D; 负荷时间-停机损失时间<br>E:生产量 &#x3D; 日历工作时间内的总生产量<br>F:实际产能&#x3D;总生产量÷稼动时间<br>G:良品率 &#x3D; 合格品÷生产量<br>H:理论节拍(PPM) &#x3D; 每分钟产出数量</p>
+]]></content>
+      <tags>
+        <tag>system</tag>
       </tags>
   </entry>
   <entry>
@@ -1192,6 +1192,16 @@
       </tags>
   </entry>
   <entry>
+    <title>Selenium模拟点击</title>
+    <url>/Selenim%E8%87%AA%E5%8A%A8%E7%82%B9%E5%87%BB/</url>
+    <content><![CDATA[<p>模拟点击</p>
+<span id="more"></span>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">from selenium import webdriver</span><br><span class="line">from selenium.webdriver.common.by import By</span><br><span class="line">import time</span><br><span class="line"></span><br><span class="line">driver = webdriver.Chrome()  # 打开谷歌浏览器</span><br><span class="line">url = &#x27;https://www.baidu.com/&#x27;</span><br><span class="line">driver.get(url)  # 输入网址</span><br><span class="line"> </span><br><span class="line"># 输入搜索关键词并点击搜索按钮</span><br><span class="line">v = driver.find_element(By.ID, &#x27;kw&#x27;)  # 查找搜索输入框</span><br><span class="line">v.send_keys(&#x27;不想搬砖怎么办？&#x27;)  # 输入关键词</span><br><span class="line">time.sleep(3)  # 等待页面加载完成</span><br><span class="line"></span><br><span class="line">btn = driver.find_element(By.ID, &#x27;su&#x27;)  # 查找搜索按钮</span><br><span class="line">btn.click()  # 点击搜索按钮</span><br><span class="line"></span><br><span class="line">time.sleep(60)  # 等待搜索结果页面加载完成</span><br><span class="line"></span><br><span class="line">driver.quit()  # 关闭浏览器</span><br></pre></td></tr></table></figure>]]></content>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>SQL命令</title>
     <url>/SQL%E5%91%BD%E4%BB%A4/</url>
     <content><![CDATA[<p>#创建一个名为“day1”的数据库<br>create database day1;</p>
@@ -1203,16 +1213,6 @@
 <p>#删除test表<br>drop table test;</p>
 <p>#删除day1数据库<br>drop database day1;</p>
 ]]></content>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Selenium模拟点击</title>
-    <url>/Selenim%E8%87%AA%E5%8A%A8%E7%82%B9%E5%87%BB/</url>
-    <content><![CDATA[<p>模拟点击</p>
-<span id="more"></span>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">from selenium import webdriver</span><br><span class="line">from selenium.webdriver.common.by import By</span><br><span class="line">import time</span><br><span class="line"></span><br><span class="line">driver = webdriver.Chrome()  # 打开谷歌浏览器</span><br><span class="line">url = &#x27;https://www.baidu.com/&#x27;</span><br><span class="line">driver.get(url)  # 输入网址</span><br><span class="line"> </span><br><span class="line"># 输入搜索关键词并点击搜索按钮</span><br><span class="line">v = driver.find_element(By.ID, &#x27;kw&#x27;)  # 查找搜索输入框</span><br><span class="line">v.send_keys(&#x27;不想搬砖怎么办？&#x27;)  # 输入关键词</span><br><span class="line">time.sleep(3)  # 等待页面加载完成</span><br><span class="line"></span><br><span class="line">btn = driver.find_element(By.ID, &#x27;su&#x27;)  # 查找搜索按钮</span><br><span class="line">btn.click()  # 点击搜索按钮</span><br><span class="line"></span><br><span class="line">time.sleep(60)  # 等待搜索结果页面加载完成</span><br><span class="line"></span><br><span class="line">driver.quit()  # 关闭浏览器</span><br></pre></td></tr></table></figure>]]></content>
       <tags>
         <tag>python</tag>
       </tags>
@@ -1407,16 +1407,6 @@
       </tags>
   </entry>
   <entry>
-    <title>win32打印工作表</title>
-    <url>/win32%E6%89%93%E5%8D%B0%E5%B7%A5%E4%BD%9C%E8%A1%A8/</url>
-    <content><![CDATA[<p>win32打印工作表</p>
-<span id="more"></span>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import win32com.client as win32</span><br><span class="line"></span><br><span class="line">excel = win32.gencache.EnsureDispatch(&#x27;Excel.Application&#x27;)</span><br><span class="line"></span><br><span class="line">wb = excel.Workbooks.Open(r&#x27;C:\123.xlsx&#x27;)</span><br><span class="line">ws = wb.Sheets(&#x27;Sheet1&#x27;) </span><br><span class="line"></span><br><span class="line">ws.PrintOut()</span><br><span class="line"></span><br><span class="line">wb.Close(False)</span><br><span class="line">excel.Quit()</span><br></pre></td></tr></table></figure>]]></content>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>站位表制作</title>
     <url>/titled/</url>
     <content><![CDATA[<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">=IF(ISNUMBER(VALUE(LEFT(INDIRECT(&quot;C&quot;&amp;ROW()),1))),LEFT(INDIRECT(&quot;C&quot;&amp;ROW()),1),INDIRECT(&quot;A&quot;&amp;ROW()-1))</span><br></pre></td></tr></table></figure>
@@ -1424,6 +1414,16 @@
 ]]></content>
       <tags>
         <tag>excel</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>win32打印工作表</title>
+    <url>/win32%E6%89%93%E5%8D%B0%E5%B7%A5%E4%BD%9C%E8%A1%A8/</url>
+    <content><![CDATA[<p>win32打印工作表</p>
+<span id="more"></span>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import win32com.client as win32</span><br><span class="line"></span><br><span class="line">excel = win32.gencache.EnsureDispatch(&#x27;Excel.Application&#x27;)</span><br><span class="line"></span><br><span class="line">wb = excel.Workbooks.Open(r&#x27;C:\123.xlsx&#x27;)</span><br><span class="line">ws = wb.Sheets(&#x27;Sheet1&#x27;) </span><br><span class="line"></span><br><span class="line">ws.PrintOut()</span><br><span class="line"></span><br><span class="line">wb.Close(False)</span><br><span class="line">excel.Quit()</span><br></pre></td></tr></table></figure>]]></content>
+      <tags>
+        <tag>python</tag>
       </tags>
   </entry>
   <entry>
@@ -1581,6 +1581,15 @@
       </tags>
   </entry>
   <entry>
+    <title>实施16949质量管理体系标准的益处</title>
+    <url>/%E5%AE%9E%E6%96%BD16949%E8%B4%A8%E9%87%8F%E7%AE%A1%E7%90%86%E4%BD%93%E7%B3%BB%E6%A0%87%E5%87%86%E7%9A%84%E7%9B%8A%E5%A4%84/</url>
+    <content><![CDATA[<p>1、开拓市场：ISO16949:2009作为质量保证的标志有助于企业获得顾客的信任，以获得更为广阔的市场空间。<br>2、提高顾客满意度：通过实施ISO16949:2009，关注并满足顾客要求，以提高顾客满意度。<br>3、降本增效：持续关注企业运营业绩，改进过程绩效指标，以实现降本增效。<br>4、提高产品和交付质量：运用系统的开发和改进方法，保证产品质量和交付业绩。</p>
+]]></content>
+      <tags>
+        <tag>system</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>将工作薄按列拆分至工作薄</title>
     <url>/%E5%B0%86%E5%B7%A5%E4%BD%9C%E8%96%84%E6%8C%89%E5%88%97%E6%8B%86%E5%88%86%E8%87%B3%E5%B7%A5%E4%BD%9C%E8%96%84/</url>
     <content><![CDATA[<p>拆分工作薄</p>
@@ -1588,15 +1597,6 @@
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import pandas as pd</span><br><span class="line">data = pd.read_excel(r&#x27;地址\汇总.xls&#x27;,keep_default_na=False)</span><br><span class="line">unit_list = list(data[&#x27;姓名&#x27;].drop_duplicates())</span><br><span class="line">for i in unit_list:</span><br><span class="line">	data_new = data[data[&#x27;姓名&#x27;] == i]</span><br><span class="line">	if i == &#x27;&#x27;:</span><br><span class="line">		data_new.to_excel()</span><br><span class="line">	else:</span><br><span class="line">		data_new.to_excel(r&quot;地址\%s.xls&quot; % (i),index=False)</span><br></pre></td></tr></table></figure>]]></content>
       <tags>
         <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>实施16949质量管理体系标准的益处</title>
-    <url>/%E5%AE%9E%E6%96%BD16949%E8%B4%A8%E9%87%8F%E7%AE%A1%E7%90%86%E4%BD%93%E7%B3%BB%E6%A0%87%E5%87%86%E7%9A%84%E7%9B%8A%E5%A4%84/</url>
-    <content><![CDATA[<p>1、开拓市场：ISO16949:2009作为质量保证的标志有助于企业获得顾客的信任，以获得更为广阔的市场空间。<br>2、提高顾客满意度：通过实施ISO16949:2009，关注并满足顾客要求，以提高顾客满意度。<br>3、降本增效：持续关注企业运营业绩，改进过程绩效指标，以实现降本增效。<br>4、提高产品和交付质量：运用系统的开发和改进方法，保证产品质量和交付业绩。</p>
-]]></content>
-      <tags>
-        <tag>system</tag>
       </tags>
   </entry>
   <entry>
@@ -1615,6 +1615,16 @@
     <content><![CDATA[<p>将工作薄中的Excel工作表拆分为单独的工作薄</p>
 <span id="more"></span>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import xlwings as xw</span><br><span class="line">import os</span><br><span class="line"></span><br><span class="line">def split_excel(file_path):</span><br><span class="line">    app = xw.App(visible=False, add_book=False)</span><br><span class="line">    </span><br><span class="line">    workbook = app.books.open(file_path)</span><br><span class="line">    worksheet = workbook.sheets</span><br><span class="line">    for i in worksheet:  # 遍历工作簿中所有工作表</span><br><span class="line">        new_workbook = app.books.add()  # 新建工作簿</span><br><span class="line">        new_worksheet = new_workbook.sheets[0]  # 选中新建工作簿中的第1张工作表</span><br><span class="line">        i.copy(before=new_worksheet)  # 将原来工作簿中的当前工作表复制到新建工作簿的第1张工作表之前</span><br><span class="line">        new_workbook.sheets[1].delete()  #删除空白工作表</span><br><span class="line">        new_workbook.save(&#x27;拆分\&#123;&#125;.xlsx&#x27;.format(i.name))  # 保存新工作簿</span><br><span class="line">        print(&#x27;&#123;&#125;.xlsx&#x27;.format(i.name) + &quot;拆分完成&quot;)</span><br><span class="line">        new_workbook.close()  # 关闭新工作薄</span><br><span class="line">    workbook.close()   # 关闭旧工作薄</span><br><span class="line"></span><br><span class="line">def find_excel():</span><br><span class="line">    path = os.getcwd()</span><br><span class="line">    files = os.listdir(path)</span><br><span class="line">    if not os.path.exists(&quot;拆分&quot;):   #检查如果没有“拆分”文件夹</span><br><span class="line">        os.mkdir(&quot;拆分&quot;)   #创建“拆分”文件夹</span><br><span class="line">    excelfiles = [f for f in files if not f.startswith((&quot;~$&quot;)) and f.endswith((&quot;.xlsx&quot;))]  #过滤当前所有xlsx文件</span><br><span class="line">    for file in excelfiles:   #遍历所有xlsx文件</span><br><span class="line">        fullpath = os.path.join(path,file) </span><br><span class="line">        split_excel(fullpath)   #对xlsx文件进行拆分</span><br><span class="line"></span><br><span class="line">find_excel()</span><br></pre></td></tr></table></figure>]]></content>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>将工作薄转换为PDF</title>
+    <url>/%E5%B7%A5%E4%BD%9C%E8%96%84%E8%BD%AC%E6%8D%A2%E4%B8%BAPDF/</url>
+    <content><![CDATA[<p>将EXCEL中的所有工作表转换为一个PDF文件</p>
+<span id="more"></span>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import win32com.client,os</span><br><span class="line">  </span><br><span class="line">def excel_to_pdf(excel_path, pdf_path):  </span><br><span class="line">    excel = win32com.client.Dispatch(&quot;Excel.Application&quot;)  </span><br><span class="line">    excel.Visible = False    </span><br><span class="line">    wb = excel.Workbooks.Open(excel_path)  </span><br><span class="line">  </span><br><span class="line">    wb.ExportAsFixedFormat(  </span><br><span class="line">        Type=0,  </span><br><span class="line">        Filename=pdf_path,  </span><br><span class="line">        Quality=win32com.client.constants.xlQualityStandard,  </span><br><span class="line">        IncludeDocProperties=True,  </span><br><span class="line">        IgnorePrintAreas=False,  </span><br><span class="line">        OpenAfterPublish=False  </span><br><span class="line">    )  </span><br><span class="line">  </span><br><span class="line">    wb.Close(SaveChanges=False)</span><br><span class="line">    excel.Quit()</span><br><span class="line"></span><br><span class="line">def excel_file():</span><br><span class="line">    path = os.getcwd()</span><br><span class="line">    files = os.listdir(path)</span><br><span class="line">    if not os.path.exists(&quot;pdf&quot;):</span><br><span class="line">        os.mkdir(&quot;pdf&quot;)</span><br><span class="line">    excelfiles = [f for f in files if not f.startswith((&quot;~$&quot;)) and f.endswith((&quot;.xlsx&quot;))]</span><br><span class="line">    for file in excelfiles:</span><br><span class="line">        excel_path = os.path.join(path,file)</span><br><span class="line">        pdf_name = os.path.splitext(file)[0]</span><br><span class="line">        pdf_path = path + &quot;\\&quot; + &quot;pdf&quot; + &quot;\\&quot; + pdf_name + &quot;.pdf&quot;</span><br><span class="line">        excel_to_pdf(excel_path, pdf_path)</span><br><span class="line">        print(excel_path+&quot;格式转换完成&quot;)</span><br><span class="line">    </span><br><span class="line">excel_file()</span><br></pre></td></tr></table></figure>]]></content>
       <tags>
         <tag>python</tag>
       </tags>
@@ -1690,16 +1700,6 @@
       </tags>
   </entry>
   <entry>
-    <title>将工作薄转换为PDF</title>
-    <url>/%E5%B7%A5%E4%BD%9C%E8%96%84%E8%BD%AC%E6%8D%A2%E4%B8%BAPDF/</url>
-    <content><![CDATA[<p>将EXCEL中的所有工作表转换为一个PDF文件</p>
-<span id="more"></span>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import win32com.client,os</span><br><span class="line">  </span><br><span class="line">def excel_to_pdf(excel_path, pdf_path):  </span><br><span class="line">    excel = win32com.client.Dispatch(&quot;Excel.Application&quot;)  </span><br><span class="line">    excel.Visible = False    </span><br><span class="line">    wb = excel.Workbooks.Open(excel_path)  </span><br><span class="line">  </span><br><span class="line">    wb.ExportAsFixedFormat(  </span><br><span class="line">        Type=0,  </span><br><span class="line">        Filename=pdf_path,  </span><br><span class="line">        Quality=win32com.client.constants.xlQualityStandard,  </span><br><span class="line">        IncludeDocProperties=True,  </span><br><span class="line">        IgnorePrintAreas=False,  </span><br><span class="line">        OpenAfterPublish=False  </span><br><span class="line">    )  </span><br><span class="line">  </span><br><span class="line">    wb.Close(SaveChanges=False)</span><br><span class="line">    excel.Quit()</span><br><span class="line"></span><br><span class="line">def excel_file():</span><br><span class="line">    path = os.getcwd()</span><br><span class="line">    files = os.listdir(path)</span><br><span class="line">    if not os.path.exists(&quot;pdf&quot;):</span><br><span class="line">        os.mkdir(&quot;pdf&quot;)</span><br><span class="line">    excelfiles = [f for f in files if not f.startswith((&quot;~$&quot;)) and f.endswith((&quot;.xlsx&quot;))]</span><br><span class="line">    for file in excelfiles:</span><br><span class="line">        excel_path = os.path.join(path,file)</span><br><span class="line">        pdf_name = os.path.splitext(file)[0]</span><br><span class="line">        pdf_path = path + &quot;\\&quot; + &quot;pdf&quot; + &quot;\\&quot; + pdf_name + &quot;.pdf&quot;</span><br><span class="line">        excel_to_pdf(excel_path, pdf_path)</span><br><span class="line">        print(excel_path+&quot;格式转换完成&quot;)</span><br><span class="line">    </span><br><span class="line">excel_file()</span><br></pre></td></tr></table></figure>]]></content>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>常用运算符</title>
     <url>/%E5%B8%B8%E7%94%A8%E8%BF%90%E7%AE%97%E7%AC%A6/</url>
     <content><![CDATA[<p>常用运算符</p>
@@ -1761,6 +1761,16 @@
 </tr>
 </tbody></table>
 ]]></content>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>创建库位二维码</title>
+    <url>/%E5%BB%BA%E5%BA%93%E4%BD%8D%E4%BA%8C%E7%BB%B4%E7%A0%81/</url>
+    <content><![CDATA[<p>输入库位编码和库位名称创建二维码</p>
+<span id="more"></span>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import qrcode</span><br><span class="line">from PIL import Image, ImageDraw, ImageFont</span><br><span class="line"></span><br><span class="line">qr_text = input(&quot;输入库位编码：&quot;)</span><br><span class="line">qr_name = input(&quot;输入库位名称：&quot;)</span><br><span class="line"> </span><br><span class="line"># 生成二维码</span><br><span class="line">qr = qrcode.QRCode(</span><br><span class="line">    version=1,</span><br><span class="line">    error_correction=qrcode.constants.ERROR_CORRECT_L,</span><br><span class="line">    box_size=30,</span><br><span class="line">    border=4,</span><br><span class="line">)</span><br><span class="line">qr.add_data(qr_text)</span><br><span class="line">qr.make(fit=True)</span><br><span class="line"></span><br><span class="line"># 创建一个图片 </span><br><span class="line">img = qr.make_image(fill=&#x27;black&#x27;, back_color=&#x27;white&#x27;)</span><br><span class="line"></span><br><span class="line"># 创建可以在图片上绘图的对象</span><br><span class="line">draw = ImageDraw.Draw(img)</span><br><span class="line"> </span><br><span class="line"># 加载字体</span><br><span class="line">font = ImageFont.truetype(&quot;arial.ttf&quot;, 80)</span><br><span class="line"></span><br><span class="line"># 计算文本宽度和高度</span><br><span class="line">width,height = draw.textsize(qr_name, font=font)</span><br><span class="line"></span><br><span class="line"># 计算文本在图片的位置</span><br><span class="line">x = (width - img.width) / 2</span><br><span class="line">y = (img.height - height) / 50</span><br><span class="line"></span><br><span class="line"># 绘制文本</span><br><span class="line">draw.text((x, y), qr_name, font=font, fill=&#x27;black&#x27;)</span><br><span class="line"> </span><br><span class="line"># 保存图片</span><br><span class="line">img.save(qr_name + &#x27;.png&#x27;)</span><br></pre></td></tr></table></figure>]]></content>
       <tags>
         <tag>python</tag>
       </tags>
@@ -2038,21 +2048,21 @@
       </tags>
   </entry>
   <entry>
-    <title>爬取关键字写入表格</title>
-    <url>/%E7%88%AC%E5%8F%96%E5%85%B3%E9%94%AE%E5%AD%97%E5%86%99%E5%85%A5%E8%A1%A8%E6%A0%BC/</url>
-    <content><![CDATA[<p>爬取关键字写入表格</p>
-<span id="more"></span>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import requests</span><br><span class="line">import re</span><br><span class="line">import xlwt</span><br><span class="line"></span><br><span class="line">headers = &#123;&#x27;User-Agent&#x27;:&quot;Mozilla/5.0 (X11; Linux x86_64; rv:45.0) Gecko/20100101 Firefox/45.0&quot;&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">book = xlwt.Workbook()</span><br><span class="line">sheet = book.add_sheet(&#x27;ke_tengxun&#x27;,cell_overwrite_ok=True)</span><br><span class="line"></span><br><span class="line">rownum = 1</span><br><span class="line">def get_info(url):</span><br><span class="line">    global rownum</span><br><span class="line">    res = requests.get(url,headers = headers)</span><br><span class="line">    pattern = re.compile(&#x27;.*?rel=&quot;nofollow&quot;.*?&gt;(.*?)&lt;&#x27;,re.S)</span><br><span class="line">    ke_chupin =re.findall(pattern,res.text)</span><br><span class="line">    pattern = re.compile(&#x27;</span><br><span class="line">.*?cors-name=&quot;course&quot;&gt;(.*?)&lt;&#x27;,re.S)</span><br><span class="line">    ke_name =re.findall(pattern,res.text)</span><br><span class="line">    pattern = re.compile(&#x27;</span><br><span class="line">.*?href=&quot;(.*?)&quot;.*?target&#x27;,re.S)</span><br><span class="line">    ke_href =re.findall(pattern,res.text)</span><br><span class="line">    print(ke_chupin)</span><br><span class="line">    print(len(ke_chupin))</span><br><span class="line">    print(ke_name)</span><br><span class="line">    print(len(ke_name))</span><br><span class="line">    print(ke_href)</span><br><span class="line">    print(len(ke_href))</span><br><span class="line"></span><br><span class="line">    head = [&#x27;课程&#x27;,&#x27;链接&#x27;,&#x27;出品人&#x27;]</span><br><span class="line">    for h in range(len(head)):</span><br><span class="line">        sheet.write(0,h,head[h])</span><br><span class="line">    for l in range(len(ke_name[:24])):</span><br><span class="line">        sheet.write(rownum,0,ke_name[l])</span><br><span class="line">        sheet.write(rownum,1,ke_href[l])</span><br><span class="line">        sheet.write(rownum,2,ke_chupin[l])</span><br><span class="line">        rownum += 1</span><br><span class="line"></span><br><span class="line">    book.save(&#x27;test.xls&#x27;)</span><br><span class="line"></span><br><span class="line">if __name__ == &#x27;__main__&#x27;:</span><br><span class="line">    for i in range(1,13):</span><br><span class="line">        urls = &#x27;https://ke.qq.com/course/list?mt=1001&amp;st=2002&amp;tt=3019&amp;page=&#123;&#125;&#x27;.format(i)</span><br><span class="line">        get_info(urls)</span><br></pre></td></tr></table></figure>]]></content>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>爬虫标准框架</title>
     <url>/%E7%88%AC%E8%99%AB%E6%A0%87%E5%87%86%E6%A1%86%E6%9E%B6/</url>
     <content><![CDATA[<p>爬虫标准框架</p>
 <span id="more"></span>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import requests</span><br><span class="line">url=&quot;https://www.sogou.com/web?query=周杰伦&quot;</span><br><span class="line"></span><br><span class="line">headers=&#123; &quot;User-Agent&quot;:&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36 Edg/97.0.1072.55&quot; &#125;</span><br><span class="line">#以字典的形式设置请求头，处理反爬 resp=requests.get(url,headers=headers)</span><br><span class="line">print(resp)</span><br><span class="line">#结果：Response [200]</span><br><span class="line">print(resp.text)</span><br><span class="line">#拿到页面源代码</span><br><span class="line">resp.close()</span><br><span class="line">#关掉resp</span><br></pre></td></tr></table></figure>]]></content>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>爬取关键字写入表格</title>
+    <url>/%E7%88%AC%E5%8F%96%E5%85%B3%E9%94%AE%E5%AD%97%E5%86%99%E5%85%A5%E8%A1%A8%E6%A0%BC/</url>
+    <content><![CDATA[<p>爬取关键字写入表格</p>
+<span id="more"></span>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import requests</span><br><span class="line">import re</span><br><span class="line">import xlwt</span><br><span class="line"></span><br><span class="line">headers = &#123;&#x27;User-Agent&#x27;:&quot;Mozilla/5.0 (X11; Linux x86_64; rv:45.0) Gecko/20100101 Firefox/45.0&quot;&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">book = xlwt.Workbook()</span><br><span class="line">sheet = book.add_sheet(&#x27;ke_tengxun&#x27;,cell_overwrite_ok=True)</span><br><span class="line"></span><br><span class="line">rownum = 1</span><br><span class="line">def get_info(url):</span><br><span class="line">    global rownum</span><br><span class="line">    res = requests.get(url,headers = headers)</span><br><span class="line">    pattern = re.compile(&#x27;.*?rel=&quot;nofollow&quot;.*?&gt;(.*?)&lt;&#x27;,re.S)</span><br><span class="line">    ke_chupin =re.findall(pattern,res.text)</span><br><span class="line">    pattern = re.compile(&#x27;</span><br><span class="line">.*?cors-name=&quot;course&quot;&gt;(.*?)&lt;&#x27;,re.S)</span><br><span class="line">    ke_name =re.findall(pattern,res.text)</span><br><span class="line">    pattern = re.compile(&#x27;</span><br><span class="line">.*?href=&quot;(.*?)&quot;.*?target&#x27;,re.S)</span><br><span class="line">    ke_href =re.findall(pattern,res.text)</span><br><span class="line">    print(ke_chupin)</span><br><span class="line">    print(len(ke_chupin))</span><br><span class="line">    print(ke_name)</span><br><span class="line">    print(len(ke_name))</span><br><span class="line">    print(ke_href)</span><br><span class="line">    print(len(ke_href))</span><br><span class="line"></span><br><span class="line">    head = [&#x27;课程&#x27;,&#x27;链接&#x27;,&#x27;出品人&#x27;]</span><br><span class="line">    for h in range(len(head)):</span><br><span class="line">        sheet.write(0,h,head[h])</span><br><span class="line">    for l in range(len(ke_name[:24])):</span><br><span class="line">        sheet.write(rownum,0,ke_name[l])</span><br><span class="line">        sheet.write(rownum,1,ke_href[l])</span><br><span class="line">        sheet.write(rownum,2,ke_chupin[l])</span><br><span class="line">        rownum += 1</span><br><span class="line"></span><br><span class="line">    book.save(&#x27;test.xls&#x27;)</span><br><span class="line"></span><br><span class="line">if __name__ == &#x27;__main__&#x27;:</span><br><span class="line">    for i in range(1,13):</span><br><span class="line">        urls = &#x27;https://ke.qq.com/course/list?mt=1001&amp;st=2002&amp;tt=3019&amp;page=&#123;&#125;&#x27;.format(i)</span><br><span class="line">        get_info(urls)</span><br></pre></td></tr></table></figure>]]></content>
       <tags>
         <tag>python</tag>
       </tags>
