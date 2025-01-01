@@ -86,9 +86,9 @@
         <div class="posts">
     <article class="post-whole">
         <div class="post-title">
-            <h2 class="title">Selenium模拟点击</h2>
+            <h2 class="title">Python常见错误类型</h2>
             <div class="post-meta">
-                <span class="post-time">2024-06-08</span>
+                <span class="post-time">2025-01-01</span>
                 
                 <span class="post-visit"> 阅读次数：<span id="busuanzi_value_page_pv"></span></span>
             </div>
@@ -101,9 +101,43 @@
     </div>
 </div>
         <div class="post-content">
-            <p>模拟点击</p>
-<span id="more"></span>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">from selenium import webdriver</span><br><span class="line">from selenium.webdriver.common.by import By</span><br><span class="line">import time</span><br><span class="line"></span><br><span class="line">driver = webdriver.Chrome()  # 打开谷歌浏览器</span><br><span class="line">url = &#x27;https://www.baidu.com/&#x27;</span><br><span class="line">driver.get(url)  # 输入网址</span><br><span class="line"> </span><br><span class="line"># 输入搜索关键词并点击搜索按钮</span><br><span class="line">v = driver.find_element(By.ID, &#x27;kw&#x27;)  # 查找搜索输入框</span><br><span class="line">v.send_keys(&#x27;不想搬砖怎么办？&#x27;)  # 输入关键词</span><br><span class="line">time.sleep(3)  # 等待页面加载完成</span><br><span class="line"></span><br><span class="line">btn = driver.find_element(By.ID, &#x27;su&#x27;)  # 查找搜索按钮</span><br><span class="line">btn.click()  # 点击搜索按钮</span><br><span class="line"></span><br><span class="line">time.sleep(60)  # 等待搜索结果页面加载完成</span><br><span class="line"></span><br><span class="line">driver.quit()  # 关闭浏览器</span><br></pre></td></tr></table></figure>
+            <ol>
+<li><p>NameError: name ‘xxx’ is not defined<br>名称错误:名称“xxx”未定义</p>
+</li>
+<li><p>TypeError: unsupported operand type(s) for +: ‘int’ and ‘str’<br>类型错误:不支持+的操作数类型:’int’和’str’</p>
+</li>
+<li><p>TypeError: ‘str’ object is not callable<br>类型错误:“str”对象不可调用</p>
+</li>
+<li><p>IndexError: list index out of range<br>索引错误:列表索引超出范围</p>
+</li>
+<li><p>KeyError: ‘xxx’<br>键错误:’xxx’</p>
+</li>
+<li><p>ValueError: invalid literal for int() with base 10: ‘xxx’<br>值错误:基数10为“xxx”的int（）字面值无效</p>
+</li>
+<li><p>ZeroDivisionError: division by zero<br>零除法错误:除数为零</p>
+</li>
+<li><p>AttributeError: ‘xxx’ object has no attribute ‘yyy’<br>属性错误:“xxx”对象没有属性“yyy”</p>
+</li>
+<li><p>FileNotFoundError: [Errno 2] No such file or directory: ‘xxx’<br>文件未找到错误:[错误2]没有这样的文件或目录:’xxx’</p>
+</li>
+<li><p>IndentationError: expected an indented block<br>缩进错误:期望有一个缩进块</p>
+</li>
+<li><p>SyntaxError: invalid syntax<br>语法错误:语法无效</p>
+</li>
+<li><p>TypeError: ‘list’ object cannot be interpreted as an integer<br>类型错误:“list”对象不能被解释为整数</p>
+</li>
+<li><p>TypeError: missing 1 required positional argument: ‘xxx’<br>类型错误:缺少1个必填位置参数:“xxx”</p>
+</li>
+<li><p>UnboundLocalError: local variable ‘xxx’ referenced before assignment<br>未绑定本地错误:在赋值之前引用了局部变量“xxx”</p>
+</li>
+<li><p>RecursionError: maximum recursion depth exceeded<br>递归错误:最大递归深度超过</p>
+</li>
+<li><p>ImportError: No module named ‘xxx’<br>导入错误:没有名为“xxx”的模块</p>
+</li>
+<li><p>TypeError: can only concatenate str (not “int”) to str<br>类型错误:只能将str（而不是int）连接到str</p>
+</li>
+</ol>
+
         </div>
         
         <div class="post-tag">
@@ -117,15 +151,9 @@
 <div class="paginator">
     
         
-            <a class="prev" href="/titled/">
-                <i class="iconfont icon-prev"></i>
-                <span class="nav-default">站位表制作</span>
-                <span class="nav-mobile">上一篇</span>
-            </a>
         
-        
-            <a class="next" href="/Win%E7%BB%84%E5%90%88%E5%BF%AB%E6%8D%B7%E9%94%AE/">
-                <span class="nav-default">Win组合快捷键</span>
+            <a class="next" href="/%E5%BB%BA%E5%BA%93%E4%BD%8D%E4%BA%8C%E7%BB%B4%E7%A0%81/">
+                <span class="nav-default">创建库位二维码</span>
                 <span class="nav-mobile">下一篇</span>
                 <i class="iconfont icon-next"></i>
             </a>
