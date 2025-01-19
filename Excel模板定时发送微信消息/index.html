@@ -86,9 +86,9 @@
         <div class="posts">
     <article class="post-whole">
         <div class="post-title">
-            <h2 class="title">Python常见错误类型</h2>
+            <h2 class="title">定时发送微信消息</h2>
             <div class="post-meta">
-                <span class="post-time">2025-01-01</span>
+                <span class="post-time">2025-01-19</span>
                 
                 <span class="post-visit"> 阅读次数：<span id="busuanzi_value_page_pv"></span></span>
             </div>
@@ -101,25 +101,9 @@
     </div>
 </div>
         <div class="post-content">
-            <p>1.NameError: name ‘xxx’ is not defined<br>名称错误:名称“xxx”未定义</p>
+            <p>按Excel模板定时发送微信消息</p>
 <span id="more"></span>
-<p>2.TypeError: unsupported operand type(s) for +: ‘int’ and ‘str’<br>类型错误:不支持+的操作数类型:’int’和’str’</p>
-<p>3.TypeError: ‘str’ object is not callable<br>类型错误:“str”对象不可调用</p>
-<p>4.IndexError: list index out of range<br>索引错误:列表索引超出范围</p>
-<p>5.KeyError: ‘xxx’<br>键错误:’xxx’</p>
-<p>6.ValueError: invalid literal for int() with base 10: ‘xxx’<br>值错误:基数10为“xxx”的int（）字面值无效</p>
-<p>7.ZeroDivisionError: division by zero<br>零除法错误:除数为零</p>
-<p>8.AttributeError: ‘xxx’ object has no attribute ‘yyy’<br>属性错误:“xxx”对象没有属性“yyy”</p>
-<p>9.FileNotFoundError: [Errno 2] No such file or directory: ‘xxx’<br>文件未找到错误:[错误2]没有这样的文件或目录:’xxx’</p>
-<p>10.IndentationError: expected an indented block<br>缩进错误:期望有一个缩进块</p>
-<p>11.SyntaxError: invalid syntax<br>语法错误:语法无效</p>
-<p>12.TypeError: ‘list’ object cannot be interpreted as an integer<br>类型错误:“list”对象不能被解释为整数</p>
-<p>13.TypeError: missing 1 required positional argument: ‘xxx’<br>类型错误:缺少1个必填位置参数:“xxx”</p>
-<p>14.UnboundLocalError: local variable ‘xxx’ referenced before assignment<br>未绑定本地错误:在赋值之前引用了局部变量“xxx”</p>
-<p>15.RecursionError: maximum recursion depth exceeded<br>递归错误:最大递归深度超过</p>
-<p>16.ImportError: No module named ‘xxx’<br>导入错误:没有名为“xxx”的模块</p>
-<p>17.TypeError: can only concatenate str (not “int”) to str<br>类型错误:只能将str（而不是int）连接到str</p>
-
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">import pandas as pd</span><br><span class="line">import schedule</span><br><span class="line">import time</span><br><span class="line">from wxauto import *</span><br><span class="line">import pyautogui</span><br><span class="line">import os</span><br><span class="line"></span><br><span class="line"># 定义打开Excel文件函数</span><br><span class="line">def read_excel(file_path):</span><br><span class="line">    data = pd.read_excel(file_path)</span><br><span class="line">    return data</span><br><span class="line"></span><br><span class="line"># 定义微信发送消息函数</span><br><span class="line">def job(msg,who):</span><br><span class="line">    wx = WeChat()</span><br><span class="line">    wx.SendMsg(msg,who)</span><br><span class="line">    pyautogui.hotkey(&quot;Ctrl&quot;,&quot;Alt&quot;,&quot;z&quot;)</span><br><span class="line"></span><br><span class="line"># 定义定时任务函数</span><br><span class="line">def tasks(data):</span><br><span class="line">    for index,row in data.iterrows():</span><br><span class="line">        send_time = row[&#x27;Time&#x27;]</span><br><span class="line">        who = row[&#x27;Object&#x27;]</span><br><span class="line">        msg = row[&#x27;Task&#x27;]</span><br><span class="line">        schedule.every().day.at(str(send_time)).do(job,msg,who)</span><br><span class="line"></span><br><span class="line"># 查找当前文件夹.xlsx文件</span><br><span class="line">path = os.getcwd()</span><br><span class="line">files = os.listdir(path)</span><br><span class="line">excelfiles = [f for f in files if not f.startswith((&quot;~$&quot;)) and f.endswith((&quot;.xlsx&quot;))]</span><br><span class="line">for file in excelfiles:</span><br><span class="line">    fullpath = os.path.join(path,file)</span><br><span class="line"></span><br><span class="line"># 读取Excel模板数据</span><br><span class="line">excel_data = read_excel(fullpath)</span><br><span class="line"></span><br><span class="line"># 执行定时任务</span><br><span class="line">tasks(excel_data)</span><br><span class="line"></span><br><span class="line"># 持续运行待处理任务</span><br><span class="line">while True:</span><br><span class="line">    schedule.run_pending()</span><br><span class="line">    time.sleep(1)</span><br></pre></td></tr></table></figure>
         </div>
         
         <div class="post-tag">
@@ -134,8 +118,8 @@
     
         
         
-            <a class="next" href="/%E5%BB%BA%E5%BA%93%E4%BD%8D%E4%BA%8C%E7%BB%B4%E7%A0%81/">
-                <span class="nav-default">创建库位二维码</span>
+            <a class="next" href="/pipenv%E5%B0%81%E8%A3%85/">
+                <span class="nav-default">pipenv封装</span>
                 <span class="nav-mobile">下一篇</span>
                 <i class="iconfont icon-next"></i>
             </a>
