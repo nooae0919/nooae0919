@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+
+	
+	<meta name="keywords" content="nooae,excel,python,system">
+
+	
+	<meta name="description" content="Nooae's blog，一个分享常用办公工具和技术的博客。">
+
+
+    <title>Nooae&#39;s Blog</title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<link rel="stylesheet" href="/css/gitment.css">
+
+    <link rel="stylesheet" type="text/css" href="//at.alicdn.com/t/font_859455_eaq7v6w8ktj.css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body>
+<header class="header">
+    <div class="header-inner">
+        <div class="header-title">
+
+        </div>
+        <nav class="header-nav">
+		
+
+            
+            <a href="/" class="header-nav-link" >
+                首页
+            </a>
+            
+
+            
+
+            
+            <a href="/tags" class="header-nav-link">
+                标签
+            </a>
+            
+
+            
+            <a href="/about/" class="header-nav-link">
+                关于
+            </a>
+            
+        </nav>
+    </div>
+</header>
+<header class="mobile-header">
+    <div class="mobile-nav">
+        <div class="mobile-nav-icon">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="mobile-nav-title">
+            <a href="/" class="mobile-nav-title-link">Nooae's Blog</a>
+        </div>
+
+    </div>
+    <nav class="mobile-menu">
+        <ul class="mobile-menu-list">
+            <li class="mobile-menu-item">
+                <i class="iconfont icon-home"></i>
+                <a href="/" class="mobile-nav-link">首页</a>
+            </li>
+
+            <li class="mobile-menu-item">
+                <i class="iconfont icon-tag"></i>
+                <a href="/tags" class="mobile-nav-link">标签</a>
+            </li>
+            <li class="mobile-menu-item">
+                <i class="iconfont icon-about"></i>
+                <a href="/about/" class="mobile-nav-link">关于</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<div class="main">
+    <div class="content-inner">
+        <div class="posts">
+    <article class="post-whole">
+        <div class="post-title">
+            <h2 class="title">生成库位二维码</h2>
+            <div class="post-meta">
+                <span class="post-time">2025-02-22</span>
+                
+                <span class="post-visit"> 阅读次数：<span id="busuanzi_value_page_pv"></span></span>
+            </div>
+        </div>
+        <div class="post-toc" id="post-toc">
+    <strong class="post-toc-title">目录</strong>
+    
+    <div class="back-to-top" id="back-to-top">
+        <a href="javascript:void(0);">回到顶部</a>
+    </div>
+</div>
+        <div class="post-content">
+            <p>输入库位编码及名称，自动生成二维码</p>
+<span id="more"></span>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">import qrcode</span><br><span class="line">from PIL import Image, ImageDraw, ImageFont</span><br><span class="line">import os</span><br><span class="line"></span><br><span class="line"># 输入库位编码和名称</span><br><span class="line">qr_text = input(&quot;输入库位编码：&quot;)</span><br><span class="line">qr_name = input(&quot;输入库位名称：&quot;)</span><br><span class="line"></span><br><span class="line"># 检查输入是否为空</span><br><span class="line">if not qr_text or not qr_name:</span><br><span class="line">    print(&quot;库位编码和名称不能为空！&quot;)</span><br><span class="line">    exit()</span><br><span class="line"></span><br><span class="line"># 生成二维码</span><br><span class="line">qr = qrcode.QRCode(</span><br><span class="line">    version=1,</span><br><span class="line">    error_correction=qrcode.constants.ERROR_CORRECT_L,</span><br><span class="line">    box_size=30,</span><br><span class="line">    border=4,</span><br><span class="line">)</span><br><span class="line">qr.add_data(qr_text)</span><br><span class="line">qr.make(fit=True)</span><br><span class="line"></span><br><span class="line">img = qr.make_image(fill=&#x27;black&#x27;, back_color=&#x27;white&#x27;)</span><br><span class="line"></span><br><span class="line"># 加载字体（使用系统默认字体或指定字体路径）</span><br><span class="line">try:</span><br><span class="line">    font_path = &quot;arial.ttf&quot;  # 可以替换为字体文件的完整路径</span><br><span class="line">    font = ImageFont.truetype(font_path, 80)</span><br><span class="line">except IOError:</span><br><span class="line">    print(&quot;字体文件未找到，使用默认字体。&quot;)</span><br><span class="line">    font = ImageFont.load_default()</span><br><span class="line"></span><br><span class="line"># 创建可以在图片上绘图的对象</span><br><span class="line">draw = ImageDraw.Draw(img)</span><br><span class="line"></span><br><span class="line"># 计算文本位置（居中）</span><br><span class="line"># 使用 getbbox 获取文本的边界框</span><br><span class="line">text_bbox = font.getbbox(qr_name)</span><br><span class="line">text_width = text_bbox[2] - text_bbox[0]  # 右边界 - 左边界</span><br><span class="line">text_height = text_bbox[3] - text_bbox[1]  # 下边界 - 上边界</span><br><span class="line"></span><br><span class="line">img_width, img_height = img.size</span><br><span class="line">text_x = (img_width - text_width) // 2</span><br><span class="line">text_y = 20  # 距离顶部的距离</span><br><span class="line"></span><br><span class="line"># 绘制文本</span><br><span class="line">draw.text((text_x, text_y), qr_name, font=font, fill=&#x27;black&#x27;)</span><br><span class="line"></span><br><span class="line"># 保存图片</span><br><span class="line">output_filename = f&quot;&#123;qr_name&#125;.png&quot;</span><br><span class="line">img.save(output_filename)</span><br><span class="line">print(f&quot;二维码已保存为 &#123;output_filename&#125;&quot;)</span><br></pre></td></tr></table></figure>
+        </div>
+        
+    </article>
+</div>
+<div class="paginator">
+    
+        
+        
+            <a class="next" href="/Excel%E6%A8%A1%E6%9D%BF%E5%AE%9A%E6%97%B6%E5%8F%91%E9%80%81%E5%BE%AE%E4%BF%A1%E6%B6%88%E6%81%AF/">
+                <span class="nav-default">定时发送微信消息</span>
+                <span class="nav-mobile">下一篇</span>
+                <i class="iconfont icon-next"></i>
+            </a>
+        
+    
+</div>
+<div id="comment-container"></div>
+    </div>
+</div>
+<footer class="footer-social">
+    
+
+    
+
+    
+
+    <div class="footer-copyright">
+        <p class="time-line">
+            &copy;
+            
+            
+            2025
+            &nbsp;<i class="iconfont icon-heart"></i>&nbsp;
+            <a target="_blank" href="https://github.com/iJinxin">Nooae</a>
+        </p>
+        <p class="theme-info">
+            Powered by <a target="_blank" href="https://hexo.io">Hexo</a>  |  Theme -
+            <a target="_blank" href="https://github.com/iJinxin/hexo-theme-sky">Sky</a>
+        </p>
+    </div>
+</footer>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<script src="/js/index.js"></script>
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+    
+
+</script>
+</html>
