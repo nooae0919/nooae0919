@@ -12,8 +12,7 @@ date: 2023-03-30 22:28:13
 <br>
 <br>
 <br>
-如果你有好的建议，点击下方邮箱向我发送邮件吧！
-<a href = "mailto:nooae.com">nooae@qq.com</a>
+
 
 
 <br>
