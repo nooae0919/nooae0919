@@ -1,0 +1,54 @@
+title: 定时发送微信消息
+author: Nooae
+tags:
+  - python
+categories: []
+date: 2025-01-19 13:16:00
+---
+按Excel模板定时发送微信消息
+<!--more-->
+~~~
+import pandas as pd
+import schedule
+import time
+from wxauto import *
+import pyautogui
+import os
+
+# 定义打开Excel文件函数
+def read_excel(file_path):
+    data = pd.read_excel(file_path)
+    return data
+
+# 定义微信发送消息函数
+def job(msg,who):
+    wx = WeChat()
+    wx.SendMsg(msg,who)
+    pyautogui.hotkey("Ctrl","Alt","z")
+
+# 定义定时任务函数
+def tasks(data):
+    for index,row in data.iterrows():
+        send_time = row['Time']
+        who = row['Object']
+        msg = row['Task']
+        schedule.every().day.at(str(send_time)).do(job,msg,who)
+
+# 查找当前文件夹.xlsx文件
+path = os.getcwd()
+files = os.listdir(path)
+excelfiles = [f for f in files if not f.startswith(("~$")) and f.endswith((".xlsx"))]
+for file in excelfiles:
+    fullpath = os.path.join(path,file)
+
+# 读取Excel模板数据
+excel_data = read_excel(fullpath)
+
+# 执行定时任务
+tasks(excel_data)
+
+# 持续运行待处理任务
+while True:
+    schedule.run_pending()
+    time.sleep(1)
+~~~
