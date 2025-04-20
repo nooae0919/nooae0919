@@ -1,13 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html lang=zh>
 <head>
-  <meta charset="utf-8">
-  
-
-  
-  <title>Nooae&#39;s Blog</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="一个分享常用办公工具和技术的博客">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="一个分享常用办公工具和技术的博客">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Nooae&#39;s Blog">
 <meta property="og:url" content="https://www.nooae.com/page/2/index.html">
@@ -17,558 +16,319 @@
 <meta property="article:author" content="Nooae">
 <meta property="article:tag" content="nooae,excel,python,system">
 <meta name="twitter:card" content="summary">
-  
-    <link rel="alternate" href="/atom.xml" title="Nooae&#39;s Blog" type="application/atom+xml">
-  
-  
-    <link rel="icon" href="/favicon.png">
-  
-  
-    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
-  
-  
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>Nooae&#39;s Blog</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
 <link rel="stylesheet" href="/css/style.css">
 
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
 <meta name="generator" content="Hexo 6.3.0"></head>
 
-<body>
-  <div id="container">
-    <div id="wrap">
-      <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">Nooae&#39;s Blog</a>
-      </h1>
-      
+<body class="max-width mx-auto px3 ltr">
+    
+    <div class="content index py4 h-card">
+        
+          <header id="header">
+  <a class="u-url u-uid" href="/">
+  
+    
+      <img id="logo" alt class="u-logo" src="/images/logo.png" />
+    
+  
+    <div id="title">
+      <h1 class="p-name">Nooae&#39;s Blog</h1>
     </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"></a>
-        
-          <a class="main-nav-link" href="/">Home</a>
-        
-          <a class="main-nav-link" href="/archives">Archives</a>
-        
-      </nav>
-      <nav id="sub-nav">
-        
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
-        
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://www.nooae.com"></form>
-      </div>
-    </div>
+  </a>
+  <div id="nav">
+    <ul>
+      <li class="icon">
+        <a href="#" aria-label="القائمة"><i class="fa-solid fa-bars fa-2x"></i></a>
+      </li>
+      <!--
+     --><li><a href="/">الرئيسية</a></li><!--
+   --><!--
+     --><li><a href="/about/">معلومات عنّي</a></li><!--
+   --><!--
+     --><li><a href="/archives/">منشورات</a></li><!--
+   --><!--
+     --><li><a target="_blank" rel="noopener" href="http://github.com/probberechts">مشاريع</a></li><!--
+   -->
+    </ul>
   </div>
 </header>
-      <div class="outer">
-        <section id="main">
-  
-    <article id="post-取指定符号后字符串" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/%E5%8F%96%E6%8C%87%E5%AE%9A%E7%AC%A6%E5%8F%B7%E5%90%8E%E5%AD%97%E7%AC%A6%E4%B8%B2/" class="article-date">
-  <time datetime="2024-05-19T01:14:00.000Z" itemprop="datePublished">2024-05-19</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
+
         
+        <section id="about" class="p-note">
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/%E5%8F%96%E6%8C%87%E5%AE%9A%E7%AC%A6%E5%8F%B7%E5%90%8E%E5%AD%97%E7%AC%A6%E4%B8%B2/">提取指定符号后字符串</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">=IFERROR(TRIM(MID(SUBSTITUTE(B2,&quot;|&quot;,REPT(&quot; &quot;,100)),1,100)),&quot;&quot;)</span><br></pre></td></tr></table></figure>
-<p>REPT函数用来重复空格100次</p>
-<p>SUBSTITUTE将字符替换为指定内容</p>
-<p>MID函数用来提取字符串中间部分的字符</p>
-<p>TRIM函数去除空格</p>
-<p>IFERROR函数将错误转换空文本</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://www.nooae.com/%E5%8F%96%E6%8C%87%E5%AE%9A%E7%AC%A6%E5%8F%B7%E5%90%8E%E5%AD%97%E7%AC%A6%E4%B8%B2/" data-id="cm9fitgip001dwkrg2ul9096t" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/excel/" rel="tag">excel</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
+    <p>一个分享常用办公工具和技术的博客</p>
 
   
-    <article id="post-频剪辑" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/%E9%A2%91%E5%89%AA%E8%BE%91/" class="article-date">
-  <time datetime="2024-05-11T06:13:00.000Z" itemprop="datePublished">2024-05-11</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
+  
+    <p>
+      يمكننا التواصل من خلال
+      
+      
+      
         
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/%E9%A2%91%E5%89%AA%E8%BE%91/">视频剪辑</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">from moviepy.editor import *</span><br><span class="line"></span><br><span class="line"># 打开视频文件</span><br><span class="line">video = VideoFileClip(&#x27;dark.mp4&#x27;)</span><br><span class="line"></span><br><span class="line"># 剪辑视频</span><br><span class="line">video2 = video.subclip(0,1)</span><br><span class="line"></span><br><span class="line"># 添加文字、位置、显示时间</span><br><span class="line">text = (TextClip(&quot;WPS&quot;,fontsize =20,color =&quot;white&quot;,font =&quot;黑体&quot;)</span><br><span class="line">        .set_position(&#x27;center&#x27;)</span><br><span class="line">        .set_duration(0.5))</span><br><span class="line">        </span><br><span class="line"># 在视频上加载文本</span><br><span class="line">video_with_text = CompositeVideoClip([video2,text])</span><br><span class="line"></span><br><span class="line"># 保存为新文件</span><br><span class="line">video_with_text.write_videofile(&#x27;new_1.mp4&#x27;)</span><br></pre></td></tr></table></figure>
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://www.nooae.com/%E9%A2%91%E5%89%AA%E8%BE%91/" data-id="cm9fitgk10037wkrg5gdn9bwq" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-工作薄" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/%E5%B7%A5%E4%BD%9C%E8%96%84/" class="article-date">
-  <time datetime="2024-05-11T06:11:00.000Z" itemprop="datePublished">2024-05-11</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
         
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/%E5%B7%A5%E4%BD%9C%E8%96%84/">拆分工作薄</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>将工作薄中的Excel工作表拆分为单独的工作薄</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">import xlwings as xw</span><br><span class="line">import os</span><br><span class="line"></span><br><span class="line">def split_excel(file_path):</span><br><span class="line">    app = xw.App(visible=False, add_book=False)</span><br><span class="line">    </span><br><span class="line">    workbook = app.books.open(file_path)</span><br><span class="line">    worksheet = workbook.sheets</span><br><span class="line">    for i in worksheet:  # 遍历工作簿中所有工作表</span><br><span class="line">        new_workbook = app.books.add()  # 新建工作簿</span><br><span class="line">        new_worksheet = new_workbook.sheets[0]  # 选中新建工作簿中的第1张工作表</span><br><span class="line">        i.copy(before=new_worksheet)  # 将原来工作簿中的当前工作表复制到新建工作簿的第1张工作表之前</span><br><span class="line">        new_workbook.sheets[1].delete()  #删除空白工作表</span><br><span class="line">        new_workbook.save(&#x27;拆分\&#123;&#125;.xlsx&#x27;.format(i.name))  # 保存新工作簿</span><br><span class="line">        print(&#x27;&#123;&#125;.xlsx&#x27;.format(i.name) + &quot;拆分完成&quot;)</span><br><span class="line">        new_workbook.close()  # 关闭新工作薄</span><br><span class="line">    workbook.close()   # 关闭旧工作薄</span><br><span class="line"></span><br><span class="line">def find_excel():</span><br><span class="line">    path = os.getcwd()</span><br><span class="line">    files = os.listdir(path)</span><br><span class="line">    if not os.path.exists(&quot;拆分&quot;):   #检查如果没有“拆分”文件夹</span><br><span class="line">        os.mkdir(&quot;拆分&quot;)   #创建“拆分”文件夹</span><br><span class="line">    excelfiles = [f for f in files if not f.startswith((&quot;~$&quot;)) and f.endswith((&quot;.xlsx&quot;))]  #过滤当前所有xlsx文件</span><br><span class="line">    for file in excelfiles:   #遍历所有xlsx文件</span><br><span class="line">        fullpath = os.path.join(path,file) </span><br><span class="line">        split_excel(fullpath)   #对xlsx文件进行拆分</span><br><span class="line"></span><br><span class="line">find_excel()</span><br></pre></td></tr></table></figure>
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://www.nooae.com/%E5%B7%A5%E4%BD%9C%E8%96%84/" data-id="cm9fitgj3001vwkrgbpljgakk" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-工作薄转换为PDF" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/%E5%B7%A5%E4%BD%9C%E8%96%84%E8%BD%AC%E6%8D%A2%E4%B8%BAPDF/" class="article-date">
-  <time datetime="2024-04-30T11:18:00.000Z" itemprop="datePublished">2024-04-30</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
+          <a class="icon u-url" target="_blank" rel="noopener me" href="http://github.com/probberechts/cactus-dark" aria-label="github" title="github">
+            <i class="fa-brands fa-github"></i><!--
+      ---></a><!--
+    ---><!--
+    --->, 
         
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/%E5%B7%A5%E4%BD%9C%E8%96%84%E8%BD%AC%E6%8D%A2%E4%B8%BAPDF/">将工作薄转换为PDF</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
       
-        <p>将EXCEL中的所有工作表转换为一个PDF文件</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">import win32com.client,os</span><br><span class="line">  </span><br><span class="line">def excel_to_pdf(excel_path, pdf_path):  </span><br><span class="line">    excel = win32com.client.Dispatch(&quot;Excel.Application&quot;)  </span><br><span class="line">    excel.Visible = False    </span><br><span class="line">    wb = excel.Workbooks.Open(excel_path)  </span><br><span class="line">  </span><br><span class="line">    wb.ExportAsFixedFormat(  </span><br><span class="line">        Type=0,  </span><br><span class="line">        Filename=pdf_path,  </span><br><span class="line">        Quality=win32com.client.constants.xlQualityStandard,  </span><br><span class="line">        IncludeDocProperties=True,  </span><br><span class="line">        IgnorePrintAreas=False,  </span><br><span class="line">        OpenAfterPublish=False  </span><br><span class="line">    )  </span><br><span class="line">  </span><br><span class="line">    wb.Close(SaveChanges=False)</span><br><span class="line">    excel.Quit()</span><br><span class="line"></span><br><span class="line">def excel_file():</span><br><span class="line">    path = os.getcwd()</span><br><span class="line">    files = os.listdir(path)</span><br><span class="line">    if not os.path.exists(&quot;pdf&quot;):</span><br><span class="line">        os.mkdir(&quot;pdf&quot;)</span><br><span class="line">    excelfiles = [f for f in files if not f.startswith((&quot;~$&quot;)) and f.endswith((&quot;.xlsx&quot;))]</span><br><span class="line">    for file in excelfiles:</span><br><span class="line">        excel_path = os.path.join(path,file)</span><br><span class="line">        pdf_name = os.path.splitext(file)[0]</span><br><span class="line">        pdf_path = path + &quot;\\&quot; + &quot;pdf&quot; + &quot;\\&quot; + pdf_name + &quot;.pdf&quot;</span><br><span class="line">        excel_to_pdf(excel_path, pdf_path)</span><br><span class="line">        print(excel_path+&quot;格式转换完成&quot;)</span><br><span class="line">    </span><br><span class="line">excel_file()</span><br></pre></td></tr></table></figure>
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://www.nooae.com/%E5%B7%A5%E4%BD%9C%E8%96%84%E8%BD%AC%E6%8D%A2%E4%B8%BAPDF/" data-id="cm9fitgj7001xwkrgh6zz2k7u" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-批量调整Excel表格格式" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/%E6%89%B9%E9%87%8F%E8%B0%83%E6%95%B4Excel%E8%A1%A8%E6%A0%BC%E6%A0%BC%E5%BC%8F/" class="article-date">
-  <time datetime="2024-04-21T09:18:00.000Z" itemprop="datePublished">2024-04-21</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
         
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/%E6%89%B9%E9%87%8F%E8%B0%83%E6%95%B4Excel%E8%A1%A8%E6%A0%BC%E6%A0%BC%E5%BC%8F/">批量调整Excel表格格式</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">import openpyxl</span><br><span class="line">import os</span><br><span class="line"></span><br><span class="line">def excel_col(file_name):</span><br><span class="line">    wb = openpyxl.load_workbook(file_name)</span><br><span class="line">    sheet = wb.active</span><br><span class="line"></span><br><span class="line">    for row in sheet.iter_rows():</span><br><span class="line">        for cell in row:</span><br><span class="line">            cell.font=openpyxl.styles.Font(name=&#x27;宋体&#x27;)</span><br><span class="line">            cell.font=openpyxl.styles.Font(name=&#x27;Times New Roman&#x27;,size=12)</span><br><span class="line">            </span><br><span class="line">    sheet.column_dimensions[&#x27;B&#x27;].width = 6</span><br><span class="line">    sheet.column_dimensions[&#x27;C&#x27;].width = 18</span><br><span class="line">    sheet.column_dimensions[&#x27;D&#x27;].width = 25</span><br><span class="line"></span><br><span class="line">    sheet[&#x27;A1&#x27;].font=openpyxl.styles.Font(name=&#x27;宋体&#x27;,size=20,bold=True)</span><br><span class="line">    sheet[&#x27;G1&#x27;].font=openpyxl.styles.Font(name=&#x27;宋体&#x27;,size=12,bold=True)</span><br><span class="line">    sheet[&#x27;G2&#x27;].font=openpyxl.styles.Font(name=&#x27;宋体&#x27;,size=12,bold=True)</span><br><span class="line"></span><br><span class="line">    wb.save(file_name)</span><br><span class="line"></span><br><span class="line">def excel_file():</span><br><span class="line">    path = os.getcwd()</span><br><span class="line">    files = os.listdir(path)</span><br><span class="line">    excelfiles = [f for f in files if not f.startswith((&quot;~$&quot;)) and f.endswith((&quot;.xlsx&quot;))]</span><br><span class="line">    for file in excelfiles:</span><br><span class="line">        fullpath = os.path.join(path,file)</span><br><span class="line">        excel_col(fullpath)</span><br><span class="line">        print(fullpath + &quot;格式调整完成&quot;)</span><br><span class="line"></span><br><span class="line">excel_file()</span><br></pre></td></tr></table></figure>
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://www.nooae.com/%E6%89%B9%E9%87%8F%E8%B0%83%E6%95%B4Excel%E8%A1%A8%E6%A0%BC%E6%A0%BC%E5%BC%8F/" data-id="cm9fitgjh002dwkrge927efdv" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-成词云" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/%E6%88%90%E8%AF%8D%E4%BA%91/" class="article-date">
-  <time datetime="2024-01-27T03:30:00.000Z" itemprop="datePublished">2024-01-27</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
         
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/%E6%88%90%E8%AF%8D%E4%BA%91/">生成词云</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">import pandas as pd</span><br><span class="line">import matplotlib.pyplot as plt</span><br><span class="line">from wordcloud import WordCloud</span><br><span class="line"></span><br><span class="line"># 读取Excel文件</span><br><span class="line">data = pd.read_excel(&#x27;index.xlsx&#x27;)</span><br><span class="line">df = pd.DataFrame(data)</span><br><span class="line"></span><br><span class="line"># 从DataFrame中提取数据</span><br><span class="line">text = df[&#x27;Name&#x27;]</span><br><span class="line">text1 = &#x27; &#x27;.join(df[&#x27;Name&#x27;])</span><br><span class="line">print(text)</span><br><span class="line">print(text1)</span><br><span class="line"></span><br><span class="line"># 创建词云对象</span><br><span class="line">wordcloud = WordCloud(background_color=&#x27;white&#x27;).generate(text1)</span><br><span class="line"></span><br><span class="line"># 展示词云</span><br><span class="line">plt.imshow(wordcloud, interpolation=&#x27;bilinear&#x27;)</span><br><span class="line">plt.axis(&#x27;off&#x27;)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://www.nooae.com/%E6%88%90%E8%AF%8D%E4%BA%91/" data-id="cm9fitgjb0025wkrghjvl0nzk" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-打印文件夹内所有Excel文件" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/%E6%89%93%E5%8D%B0%E6%96%87%E4%BB%B6%E5%A4%B9%E5%86%85%E6%89%80%E6%9C%89Excel%E6%96%87%E4%BB%B6/" class="article-date">
-  <time datetime="2024-01-24T11:07:00.000Z" itemprop="datePublished">2024-01-24</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
+          <a class="icon u-url" target="_blank" rel="noopener me" href="/" aria-label="twitter" title="twitter">
+            <i class="fa-brands fa-twitter"></i><!--
+      ---></a><!--
+    ---><!--
+    --->, 
         
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/%E6%89%93%E5%8D%B0%E6%96%87%E4%BB%B6%E5%A4%B9%E5%86%85%E6%89%80%E6%9C%89Excel%E6%96%87%E4%BB%B6/">打印文件夹内所有Excel文件</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
       
-        <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">import os</span><br><span class="line">import win32com.client as win32</span><br><span class="line"></span><br><span class="line">def init_excel(print_file):</span><br><span class="line">    excel = win32.gencache.EnsureDispatch(&#x27;Excel.Application&#x27;)</span><br><span class="line">    wb = excel.Workbooks.Open(print_file)</span><br><span class="line">    ws = wb.Sheets(&#x27;Sheet1&#x27;)</span><br><span class="line">    ws.PrintOut()</span><br><span class="line">    wb.Close(False)</span><br><span class="line">    excel.Quit()</span><br><span class="line"></span><br><span class="line">def excel_file():</span><br><span class="line">    path = os.getcwd()</span><br><span class="line">    files = os.listdir(path)</span><br><span class="line">    excelfiles = [f for f in files if not f.startswith((&quot;~$&quot;)) and f.endswith((&quot;.xlsx&quot;))]</span><br><span class="line">    for file in excelfiles:</span><br><span class="line">        fullpath = os.path.join(path,file)</span><br><span class="line">        print(fullpath)</span><br><span class="line">        init_excel(fullpath)</span><br><span class="line"></span><br><span class="line">excel_file()</span><br></pre></td></tr></table></figure>
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://www.nooae.com/%E6%89%93%E5%8D%B0%E6%96%87%E4%BB%B6%E5%A4%B9%E5%86%85%E6%89%80%E6%9C%89Excel%E6%96%87%E4%BB%B6/" data-id="cm9fitgjc0027wkrgeh2tbeq9" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Office批量转PDF" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/Office%E6%89%B9%E9%87%8F%E8%BD%ACPDF/" class="article-date">
-  <time datetime="2023-12-11T12:42:00.000Z" itemprop="datePublished">2023-12-11</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
         
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/Office%E6%89%B9%E9%87%8F%E8%BD%ACPDF/">Office批量转PDF</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br></pre></td><td class="code"><pre><span class="line">import os, win32com.client, gc</span><br><span class="line"></span><br><span class="line"># Word</span><br><span class="line">def word2Pdf(filePath, words):</span><br><span class="line">    # 如果没有文件则提示后直接退出</span><br><span class="line">    if(len(words)&lt;1):</span><br><span class="line">        print (&quot;\n【无 Word 文件】\n&quot;)</span><br><span class="line">        return</span><br><span class="line">    # 开始转换</span><br><span class="line">    print (&quot;\n【开始 Word -&gt; PDF 转换】&quot;)</span><br><span class="line">    try:</span><br><span class="line">        print (&quot;打开 Word 进程...&quot;)</span><br><span class="line">        word = win32com.client.Dispatch(&quot;Word.Application&quot;)</span><br><span class="line">        word.Visible = 0</span><br><span class="line">        word.DisplayAlerts = False</span><br><span class="line">        doc = None</span><br><span class="line">        for i in range(len(words)):</span><br><span class="line">            print(i)</span><br><span class="line">            fileName = words[i] # 文件名称</span><br><span class="line">            fromFile = os.path.join(filePath, fileName) # 文件地址</span><br><span class="line">            toFileName = changeSufix2Pdf(fileName) # 生成的文件名称</span><br><span class="line">            toFile = toFileJoin(filePath,toFileName) # 生成的文件地址</span><br><span class="line"></span><br><span class="line">            print (&quot;转换：&quot;+fileName+&quot;文件中...&quot;)</span><br><span class="line">            # 某文件出错不影响其他文件打印</span><br><span class="line">            try:</span><br><span class="line">                doc = word.Documents.Open(fromFile)</span><br><span class="line">                doc.SaveAs(toFile,17) # 生成的所有 PDF 都会在 PDF 文件夹中</span><br><span class="line">                print (&quot;转换到：&quot;+toFileName+&quot;完成&quot;)</span><br><span class="line">            except Exception as e:</span><br><span class="line">                print(e)</span><br><span class="line">            # 关闭 Word 进程</span><br><span class="line">        print (&quot;所有 Word 文件已打印完毕&quot;)</span><br><span class="line">        print (&quot;结束 Word 进程...\n&quot;)</span><br><span class="line">        doc.Close()</span><br><span class="line">        doc = None</span><br><span class="line">        word.Quit()</span><br><span class="line">        word = None</span><br><span class="line">    except Exception as e:</span><br><span class="line">        print(e)</span><br><span class="line">    finally:</span><br><span class="line">        gc.collect()</span><br><span class="line"></span><br><span class="line"># Excel</span><br><span class="line">def excel2Pdf(filePath, excels):</span><br><span class="line">    # 如果没有文件则提示后直接退出</span><br><span class="line">    if(len(excels)&lt;1):</span><br><span class="line">        print (&quot;\n【无 Excel 文件】\n&quot;)</span><br><span class="line">        return</span><br><span class="line">    # 开始转换</span><br><span class="line">    print (&quot;\n【开始 Excel -&gt; PDF 转换】&quot;)</span><br><span class="line">    try:</span><br><span class="line">        print (&quot;打开 Excel 进程中...&quot;)</span><br><span class="line">        excel = win32com.client.Dispatch(&quot;Excel.Application&quot;)</span><br><span class="line">        excel.Visible = 0</span><br><span class="line">        excel.DisplayAlerts = False</span><br><span class="line">        wb = None</span><br><span class="line">        ws = None</span><br><span class="line">        for i in range(len(excels)):</span><br><span class="line">            print(i)</span><br><span class="line">            fileName = excels[i] # 文件名称</span><br><span class="line">            fromFile = os.path.join(filePath, fileName) # 文件地址</span><br><span class="line">           </span><br><span class="line">            print (&quot;转换：&quot;+fileName+&quot;文件中...&quot;)</span><br><span class="line">            # 某文件出错不影响其他文件打印</span><br><span class="line">            try:</span><br><span class="line">                wb = excel.Workbooks.Open(fromFile)</span><br><span class="line">                for j in range(wb.Worksheets.Count): # 工作表数量，一个工作簿可能有多张工作表</span><br><span class="line">                    toFileName = addWorksheetsOrder(fileName, j+1) # 生成的文件名称</span><br><span class="line">                    toFile = toFileJoin(filePath,toFileName) # 生成的文件地址</span><br><span class="line">                   </span><br><span class="line">                    ws = wb.Worksheets(j+1) # 若为[0]则打包后会提示越界</span><br><span class="line">                    ws.ExportAsFixedFormat(0,toFile) # 每一张都需要打印</span><br><span class="line">                    print (&quot;转换至：&quot;+toFileName+&quot;文件完成&quot;)</span><br><span class="line">            except Exception as e:</span><br><span class="line">                print(e)</span><br><span class="line">        # 关闭 Excel 进程</span><br><span class="line">        print (&quot;所有 Excel 文件已打印完毕&quot;)</span><br><span class="line">        print (&quot;结束 Excel 进程中...\n&quot;)</span><br><span class="line">        ws = None</span><br><span class="line">        wb.Close()</span><br><span class="line">        wb = None</span><br><span class="line">        excel.Quit()</span><br><span class="line">        excel = None</span><br><span class="line">    except Exception as e:</span><br><span class="line">        print(e)</span><br><span class="line">    finally:</span><br><span class="line">        gc.collect()</span><br><span class="line"></span><br><span class="line"># PPT</span><br><span class="line">def ppt2Pdf(filePath, ppts):</span><br><span class="line">    # 如果没有文件则提示后直接退出</span><br><span class="line">    if(len(ppts)&lt;1):</span><br><span class="line">        print (&quot;\n【无 PPT 文件】\n&quot;)</span><br><span class="line">        return</span><br><span class="line">    # 开始转换</span><br><span class="line">    print (&quot;\n【开始 PPT -&gt; PDF 转换】&quot;)</span><br><span class="line">    try:</span><br><span class="line">        print (&quot;打开 PowerPoint 进程中...&quot;)</span><br><span class="line">        powerpoint = win32com.client.Dispatch(&quot;PowerPoint.Application&quot;)</span><br><span class="line">        ppt = None</span><br><span class="line">        # 某文件出错不影响其他文件打印</span><br><span class="line"></span><br><span class="line">        for i in range(len(ppts)):</span><br><span class="line">            print(i)</span><br><span class="line">            fileName = ppts[i] # 文件名称</span><br><span class="line">            fromFile = os.path.join(filePath, fileName) # 文件地址</span><br><span class="line">            toFileName = changeSufix2Pdf(fileName) # 生成的文件名称</span><br><span class="line">            toFile = toFileJoin(filePath,toFileName) # 生成的文件地址</span><br><span class="line"></span><br><span class="line">            print (&quot;转换：&quot;+fileName+&quot;文件中...&quot;)</span><br><span class="line">            try:</span><br><span class="line">                ppt = powerpoint.Presentations.Open(fromFile,WithWindow=False)</span><br><span class="line">                if ppt.Slides.Count&gt;0:</span><br><span class="line">                    ppt.SaveAs(toFile, 32) # 如果为空则会跳出提示框（暂时没有找到消除办法）</span><br><span class="line">                    print (&quot;转换至：&quot;+toFileName+&quot;文件完成&quot;)</span><br><span class="line">                else:</span><br><span class="line">                    print(&quot;（错误，发生意外：此文件为空，跳过此文件）&quot;)</span><br><span class="line">            except Exception as e:</span><br><span class="line">                print(e)</span><br><span class="line">        # 关闭 PPT 进程</span><br><span class="line">        print (&quot;所有 PPT 文件已打印完毕&quot;)</span><br><span class="line">        print (&quot;结束 PowerPoint 进程中...\n&quot;)</span><br><span class="line">        ppt.Close()</span><br><span class="line">        ppt = None</span><br><span class="line">        powerpoint.Quit()</span><br><span class="line">        powerpoint = None</span><br><span class="line">    except Exception as e:</span><br><span class="line">        print(e)</span><br><span class="line">    finally:</span><br><span class="line">        gc.collect()</span><br><span class="line"></span><br><span class="line"># 修改后缀名</span><br><span class="line">def changeSufix2Pdf(file):</span><br><span class="line">    return file[:file.rfind(&#x27;.&#x27;)]+&quot;.pdf&quot;</span><br><span class="line"># 添加工作簿序号</span><br><span class="line">def addWorksheetsOrder(file, i):</span><br><span class="line">    return file[:file.rfind(&#x27;.&#x27;)]+&quot;_工作表&quot;+str(i)+&quot;.pdf&quot;</span><br><span class="line"># 转换地址</span><br><span class="line">def toFileJoin(filePath,file):</span><br><span class="line">    return os.path.join(filePath,&#x27;pdf&#x27;,file[:file.rfind(&#x27;.&#x27;)]+&quot;.pdf&quot;)</span><br><span class="line">   </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 开始程序</span><br><span class="line">print (&quot;====================程序开始====================&quot;)</span><br><span class="line">print (&quot;【程序功能】将目标路径下内所有的 ppt、excel、word 均生成一份对应的 PDF 文件，存在新生成的 pdf 文件夹中（需已经安装office，不包括子文件夹）&quot;)</span><br><span class="line">print (&quot;注意：若某 PPT 和 Excel 文件为空，则会出错跳过此文件。若转换 PPT 时间过长，请查看是否有报错窗口等待确认，暂时无法彻底解决 PPT 的窗口问题（为空错误已解决）。在关闭进程过程中，时间可能会较长，十秒左右，请耐心等待。&quot;)</span><br><span class="line">filePath = input (&quot;输入目标路径：(若为当前路径：&quot;+os.getcwd()+&quot;，请直接回车）\n&quot;)</span><br><span class="line"></span><br><span class="line"># 目标路径，若没有输入路径则为当前路径</span><br><span class="line">if(filePath==&quot;&quot;):</span><br><span class="line">    filePath = os.getcwd()</span><br><span class="line"></span><br><span class="line"># 将目标文件夹所有文件归类，转换时只打开一个进程</span><br><span class="line">words = []</span><br><span class="line">ppts = []</span><br><span class="line">excels = []</span><br><span class="line"></span><br><span class="line">for fn in os.listdir(filePath):</span><br><span class="line">    if fn.endswith((&#x27;.doc&#x27;, &#x27;docx&#x27;)):</span><br><span class="line">        words.append(fn)</span><br><span class="line">    if fn.endswith((&#x27;.ppt&#x27;, &#x27;pptx&#x27;)):</span><br><span class="line">        ppts.append(fn)</span><br><span class="line">    if fn.endswith((&#x27;.xls&#x27;, &#x27;xlsx&#x27;)):</span><br><span class="line">        excels.append(fn)</span><br><span class="line"></span><br><span class="line"># 调用方法</span><br><span class="line">print (&quot;====================开始转换====================&quot;)</span><br><span class="line"></span><br><span class="line"># 新建 pdf 文件夹，所有生成的 PDF 文件都放在里面</span><br><span class="line">folder = filePath + &#x27;\\pdf\\&#x27;</span><br><span class="line">if not os.path.exists(folder):</span><br><span class="line">    os.makedirs(folder)</span><br><span class="line"></span><br><span class="line">word2Pdf(filePath,words)</span><br><span class="line">excel2Pdf(filePath,excels)</span><br><span class="line">ppt2Pdf(filePath,ppts)</span><br><span class="line">print (&quot;====================转换结束====================&quot;)</span><br><span class="line">print (&quot;\n====================程序结束====================&quot;)</span><br><span class="line">os.system(&quot;pause&quot;)</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://www.nooae.com/Office%E6%89%B9%E9%87%8F%E8%BD%ACPDF/" data-id="cm9fitghw000awkrg1psxh8bh" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-PPT批量转换PDF" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/PPT%E6%89%B9%E9%87%8F%E8%BD%AC%E6%8D%A2PDF/" class="article-date">
-  <time datetime="2023-12-02T14:13:00.000Z" itemprop="datePublished">2023-12-02</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
         
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/PPT%E6%89%B9%E9%87%8F%E8%BD%AC%E6%8D%A2PDF/">PPT批量转换PDF</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">import comtypes.client</span><br><span class="line">import os</span><br><span class="line"></span><br><span class="line">def init_powerpoint():</span><br><span class="line">    powerpoint=comtypes.client.CreateObject(&quot;Powerpoint.Application&quot;)</span><br><span class="line">    powerpoint.Visible=1</span><br><span class="line">    return powerpoint</span><br><span class="line"></span><br><span class="line">def ppt_to_pdf(powerpoint,inputFileName,outputFileName,formatType=32):</span><br><span class="line">    if outputFileName[-3:] != &#x27;pdf&#x27;:</span><br><span class="line">        outputFileName=outputFileName+&#x27;.pdf&#x27;</span><br><span class="line">    deck=powerpoint.Presentations.Open(inputFileName)</span><br><span class="line">    deck.SaveAs(outputFileName,formatType)</span><br><span class="line">    deck.Close()</span><br><span class="line">def convert_files_folder(powerpoint,folder):</span><br><span class="line">    files=os.listdir(folder)</span><br><span class="line">    pptfiles=[f for f in files if f.endswith((&quot;.ppt&quot;,&quot;.pptx&quot;))]</span><br><span class="line">    for pptfile in pptfiles:</span><br><span class="line">        fullpath=os.path.join(folder,pptfile)</span><br><span class="line">        ppt_to_pdf(powerpoint,fullpath,fullpath)</span><br><span class="line"></span><br><span class="line">if __name__ == &#x27;__main__&#x27;:</span><br><span class="line">    powerpoint=init_powerpoint()</span><br><span class="line">    cwd=os.getcwd()</span><br><span class="line">    convert_files_folder(powerpoint,cwd)</span><br><span class="line">    powerpoint.Quit()</span><br></pre></td></tr></table></figure>
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://www.nooae.com/PPT%E6%89%B9%E9%87%8F%E8%BD%AC%E6%8D%A2PDF/" data-id="cm9fitgi1000fwkrgad7v95ur" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-win32打印工作表" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/win32%E6%89%93%E5%8D%B0%E5%B7%A5%E4%BD%9C%E8%A1%A8/" class="article-date">
-  <time datetime="2023-10-27T13:57:00.000Z" itemprop="datePublished">2023-10-27</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
+          <a class="icon u-url" target="_blank" rel="noopener me" href="/" aria-label="facebook" title="facebook">
+            <i class="fa-brands fa-facebook"></i><!--
+      ---></a><!--
+    ---><!--
+    --->, 
         
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/win32%E6%89%93%E5%8D%B0%E5%B7%A5%E4%BD%9C%E8%A1%A8/">win32打印工作表</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
       
-        <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">import win32com.client as win32</span><br><span class="line"></span><br><span class="line">excel = win32.gencache.EnsureDispatch(&#x27;Excel.Application&#x27;)</span><br><span class="line"></span><br><span class="line">wb = excel.Workbooks.Open(r&#x27;C:\123.xlsx&#x27;)</span><br><span class="line">ws = wb.Sheets(&#x27;Sheet1&#x27;) </span><br><span class="line"></span><br><span class="line">ws.PrintOut()</span><br><span class="line"></span><br><span class="line">wb.Close(False)</span><br><span class="line">excel.Quit()</span><br></pre></td></tr></table></figure>
+        
+        
+          <a class="icon u-email" target="_blank" rel="noopener" href="mailto:name@email.com" aria-label="mail" title="mail">
+            <i class="fa-solid fa-envelope"></i><!--
+      ---></a>
+        <!--
+    --->, 
+        
       
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://www.nooae.com/win32%E6%89%93%E5%8D%B0%E5%B7%A5%E4%BD%9C%E8%A1%A8/" data-id="cm9fitgii0011wkrg6w4jfw8k" class="article-share-link">Share</a>
+        
+        
+          <a class="icon u-url" target="_blank" rel="noopener me" href="https://mastodon.social/@alice" aria-label="mastodon.social" title="mastodon.social">
+            <i class="fa-brands fa-mastodon"></i><!--
+      ---></a><!--
+    ---><!--
+    ---> و 
+        
       
+        
+        
+          <a class="icon u-url" target="_blank" rel="noopener me" href="https://fosstodon.org/@alice" aria-label="fosstodon.org" title="fosstodon.org">
+            <i class="fa-brands fa-mastodon"></i><!--
+      ---></a><!--
+    ---><!--
+    --->.
+        
       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
-
-    </footer>
-  </div>
+    </p>
   
-</article>
-
-
-  
-
-
-  <nav id="page-nav">
-    
-    <a class="extend prev" rel="prev" href="/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/3/">Next &amp;raquo;</a>
-  </nav>
-
 </section>
+
+<section id="writing">
+  <span class="h1"><a href="/archives/">منشورات</a></span>
+  
+  <ul class="post-list">
+    
+    
+      
+    
+    
+      <li class="post-item">
         
-          <aside id="sidebar">
-  
-    
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tags</h3>
-    <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/excel/" rel="tag">excel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
+    <div class="meta">
+      
+        
+          <time datetime="2025-01-19T05:16:00.000Z" class="dt-published" itemprop="datePublished">2025-01-19</time>
+        
+      
     </div>
-  </div>
 
 
-  
+        <span>
     
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tag Cloud</h3>
-    <div class="widget tagcloud">
-      <a href="/tags/excel/" style="font-size: 10px;">excel</a> <a href="/tags/python/" style="font-size: 20px;">python</a>
+        <a class="" href="/Excel%E6%A8%A1%E6%9D%BF%E5%AE%9A%E6%97%B6%E5%8F%91%E9%80%81%E5%BE%AE%E4%BF%A1%E6%B6%88%E6%81%AF/">定时发送微信消息</a>
+    
+
+
+</span>
+      </li>
+    
+      <li class="post-item">
+        
+    <div class="meta">
+      
+        
+          <time datetime="2025-01-01T11:40:00.000Z" class="dt-published" itemprop="datePublished">2025-01-01</time>
+        
+      
     </div>
-  </div>
 
-  
+
+        <span>
     
-  <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/01/">January 2025</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/10/">October 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/09/">September 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/07/">July 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/06/">June 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/05/">May 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/04/">April 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/01/">January 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/12/">December 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/10/">October 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/09/">September 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/07/">July 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/06/">June 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/04/">April 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/03/">March 2023</a></li></ul>
+        <a class="" href="/ython%E5%B8%B8%E8%A7%81%E9%94%99%E8%AF%AF%E7%B1%BB%E5%9E%8B/">Python常见错误类型</a>
+    
+
+
+</span>
+      </li>
+    
+      <li class="post-item">
+        
+    <div class="meta">
+      
+        
+          <time datetime="2024-10-27T12:31:00.000Z" class="dt-published" itemprop="datePublished">2024-10-27</time>
+        
+      
     </div>
-  </div>
 
 
-  
+        <span>
     
-  <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
-    <div class="widget">
+        <a class="" href="/%E5%BB%BA%E5%BA%93%E4%BD%8D%E4%BA%8C%E7%BB%B4%E7%A0%81/">创建库位二维码</a>
+    
+
+
+</span>
+      </li>
+    
+      <li class="post-item">
+        
+    <div class="meta">
+      
+        
+          <time datetime="2024-10-02T10:34:00.000Z" class="dt-published" itemprop="datePublished">2024-10-02</time>
+        
+      
+    </div>
+
+
+        <span>
+    
+        <a class="" href="/%E6%89%B9%E9%87%8F%E7%94%9F%E6%88%90%E6%A0%87%E7%AD%BE%E6%A8%A1%E6%9D%BF/">批量生成标签模板</a>
+    
+
+
+</span>
+      </li>
+    
+      <li class="post-item">
+        
+    <div class="meta">
+      
+        
+          <time datetime="2024-09-25T09:13:00.000Z" class="dt-published" itemprop="datePublished">2024-09-25</time>
+        
+      
+    </div>
+
+
+        <span>
+    
+        <a class="" href="/it%E5%88%9B%E5%BB%BA%E5%88%86%E6%94%AF/">git创建分支</a>
+    
+
+
+</span>
+      </li>
+    
+  </ul>
+  
+</section>
+
+
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    حقوق النشر &copy;
+    
+    
+    2016-2025
+    Nooae
+  </div>
+  <div class="footer-right">
+    <nav>
       <ul>
-        
-          <li>
-            <a href="/Excel%E6%A8%A1%E6%9D%BF%E5%AE%9A%E6%97%B6%E5%8F%91%E9%80%81%E5%BE%AE%E4%BF%A1%E6%B6%88%E6%81%AF/">定时发送微信消息</a>
-          </li>
-        
-          <li>
-            <a href="/ython%E5%B8%B8%E8%A7%81%E9%94%99%E8%AF%AF%E7%B1%BB%E5%9E%8B/">Python常见错误类型</a>
-          </li>
-        
-          <li>
-            <a href="/%E5%BB%BA%E5%BA%93%E4%BD%8D%E4%BA%8C%E7%BB%B4%E7%A0%81/">创建库位二维码</a>
-          </li>
-        
-          <li>
-            <a href="/%E6%89%B9%E9%87%8F%E7%94%9F%E6%88%90%E6%A0%87%E7%AD%BE%E6%A8%A1%E6%9D%BF/">批量生成标签模板</a>
-          </li>
-        
-          <li>
-            <a href="/it%E5%88%9B%E5%BB%BA%E5%88%86%E6%94%AF/">git创建分支</a>
-          </li>
-        
+        <!--
+       --><li><a href="/">الرئيسية</a></li><!--
+     --><!--
+       --><li><a href="/about/">معلومات عنّي</a></li><!--
+     --><!--
+       --><li><a href="/archives/">منشورات</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/probberechts">مشاريع</a></li><!--
+     -->
       </ul>
-    </div>
-  </div>
-
-  
-</aside>
-        
-      </div>
-      <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      &copy; 2025 Nooae<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
-    </div>
+    </nav>
   </div>
 </footer>
+
     </div>
-    <nav id="mobile-nav">
-  
-    <a href="/" class="mobile-nav-link">Home</a>
-  
-    <a href="/archives" class="mobile-nav-link">Archives</a>
-  
-</nav>
-    
-
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <!-- styles -->
 
 
-  
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
 
-  
-<script src="/fancybox/jquery.fancybox.pack.js"></script>
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
 
 
 
 
-<script src="/js/script.js"></script>
+<!-- clipboard -->
 
 
+<script src="/js/main.js"></script>
 
+<!-- search -->
 
-  </div>
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
 </body>
 </html>
