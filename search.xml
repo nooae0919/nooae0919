@@ -726,25 +726,6 @@
     
     
     <entry>
-      <title>使用xlwt库将数据写入excel</title>
-      <link href="/5acc25f815ef/"/>
-      <url>/5acc25f815ef/</url>
-      
-        <content type="html"><![CDATA[<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">import xlwt</span><br><span class="line">#1. 创建workbook对象</span><br><span class="line">workbook = xlwt.Workbook(encoding=&quot;utf-8&quot;)</span><br><span class="line">#2. 增加一个sheet # 设置成可以覆盖原先内容</span><br><span class="line">worksheet = workbook.add_sheet(&quot;sheet1&quot;, cell_overwrite_ok=True)</span><br><span class="line">#3. 在单元格中添加内容，第一个参数为行，第二个参数为列，第三个参数为内容</span><br><span class="line">worksheet.write(0,0, &quot;hello&quot;)</span><br><span class="line">#4. 保存数据表</span><br><span class="line">workbook.save(&quot;./student.xls&quot;)</span><br></pre></td></tr></table></figure>]]></content>
-      
-      
-      
-        <tags>
-            
-            <tag> python </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>保留表头拆分数据为若干新工作簿</title>
       <link href="/f824c6539974/"/>
       <url>/f824c6539974/</url>
@@ -756,6 +737,25 @@
         <tags>
             
             <tag> excel </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>使用xlwt库将数据写入excel</title>
+      <link href="/5acc25f815ef/"/>
+      <url>/5acc25f815ef/</url>
+      
+        <content type="html"><![CDATA[<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">import xlwt</span><br><span class="line">#1. 创建workbook对象</span><br><span class="line">workbook = xlwt.Workbook(encoding=&quot;utf-8&quot;)</span><br><span class="line">#2. 增加一个sheet # 设置成可以覆盖原先内容</span><br><span class="line">worksheet = workbook.add_sheet(&quot;sheet1&quot;, cell_overwrite_ok=True)</span><br><span class="line">#3. 在单元格中添加内容，第一个参数为行，第二个参数为列，第三个参数为内容</span><br><span class="line">worksheet.write(0,0, &quot;hello&quot;)</span><br><span class="line">#4. 保存数据表</span><br><span class="line">workbook.save(&quot;./student.xls&quot;)</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> python </tag>
             
         </tags>
       
