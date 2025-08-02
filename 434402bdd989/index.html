@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="按表格数据批量生成二维码，每10个换行">
+<meta property="og:type" content="article">
+<meta property="og:title" content="批量生成二维码">
+<meta property="og:url" content="https://www.nooae.com/434402bdd989/index.html">
+<meta property="og:site_name" content="Nooae&#39;s Blog">
+<meta property="og:description" content="按表格数据批量生成二维码，每10个换行">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-08-02T03:10:00.000Z">
+<meta property="article:modified_time" content="2025-08-02T03:14:10.060Z">
+<meta property="article:author" content="Nooae">
+<meta property="article:tag" content="python">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>批量生成二维码</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="顶部" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/search/">搜索</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="上一篇" href="/6570fd7e95a2/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/a6e0b81c8f73/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://www.nooae.com/434402bdd989/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://www.nooae.com/434402bdd989/&text=批量生成二维码"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://www.nooae.com/434402bdd989/&title=批量生成二维码"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://www.nooae.com/434402bdd989/&is_video=false&description=批量生成二维码"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=批量生成二维码&body=Check out this article: https://www.nooae.com/434402bdd989/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://www.nooae.com/434402bdd989/&title=批量生成二维码"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://www.nooae.com/434402bdd989/&title=批量生成二维码"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://www.nooae.com/434402bdd989/&title=批量生成二维码"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://www.nooae.com/434402bdd989/&title=批量生成二维码"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://www.nooae.com/434402bdd989/&name=批量生成二维码&description=&lt;p&gt;按表格数据批量生成二维码，每10个换行&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://www.nooae.com/434402bdd989/&t=批量生成二维码"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        批量生成二维码
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Nooae</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2025-08-02T03:10:00.000Z" class="dt-published" itemprop="datePublished">2025-08-02</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/python/" rel="tag">python</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <p>按表格数据批量生成二维码，每10个换行</p>
+<span id="more"></span>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br></pre></td><td class="code"><pre><span class="line">import os</span><br><span class="line">import qrcode</span><br><span class="line">import openpyxl</span><br><span class="line">from openpyxl.drawing.image import Image</span><br><span class="line">from openpyxl.utils import get_column_letter</span><br><span class="line">from openpyxl.styles import Alignment</span><br><span class="line"></span><br><span class="line"># 配置参数</span><br><span class="line">QR_SIZE_MM = 6       # 固定二维码大小6×6mm</span><br><span class="line">QR_PER_ROW = 10      # 每行10个二维码（可根据需要调整）</span><br><span class="line">MM_TO_PX = 6     # 毫米到像素的转换系数（96dpi）</span><br><span class="line"></span><br><span class="line">def generate_qr_sheet():</span><br><span class="line">    # 打开工作簿</span><br><span class="line">    wb = openpyxl.load_workbook(excel_file())</span><br><span class="line">    </span><br><span class="line">    # 准备二维码工作表（第二个sheet）</span><br><span class="line">    if len(wb.worksheets) &gt;= 2:</span><br><span class="line">        qr_sheet = wb.worksheets[1]</span><br><span class="line">        qr_sheet.title = &quot;二维码&quot;</span><br><span class="line">        # 清空现有内容</span><br><span class="line">        qr_sheet.delete_rows(1, qr_sheet.max_row)</span><br><span class="line">        # 移除所有图片</span><br><span class="line">        qr_sheet._images = []</span><br><span class="line">    else:</span><br><span class="line">        qr_sheet = wb.create_sheet(&quot;二维码&quot;)</span><br><span class="line">    </span><br><span class="line">    # 数据源工作表</span><br><span class="line">    data_sheet = wb.worksheets[0]</span><br><span class="line">    total_qr = data_sheet.max_row - 1  # 减去标题行</span><br><span class="line">    </span><br><span class="line">    # 创建临时目录</span><br><span class="line">    os.makedirs(&quot;temp_qr&quot;, exist_ok=True)</span><br><span class="line">    </span><br><span class="line">    current_row = 1</span><br><span class="line">    for i in range(1, total_qr + 1):</span><br><span class="line">        # 获取数据</span><br><span class="line">        text = data_sheet[f&#x27;A&#123;i+1&#125;&#x27;].value</span><br><span class="line">        </span><br><span class="line">        # 生成二维码（临时文件）</span><br><span class="line">        qr_name = f&quot;temp_qr/QR_&#123;current_row&#125;_&#123;i%QR_PER_ROW or QR_PER_ROW&#125;.png&quot;</span><br><span class="line">        generate_qr_image(text, qr_name, QR_SIZE_MM)</span><br><span class="line">        </span><br><span class="line">        # 计算插入位置</span><br><span class="line">        col_num = (i - 1) % QR_PER_ROW + 1</span><br><span class="line">        cell = f&quot;&#123;get_column_letter(col_num)&#125;&#123;current_row&#125;&quot;</span><br><span class="line">        </span><br><span class="line">        # 插入图片</span><br><span class="line">        img = Image(qr_name)</span><br><span class="line">        img.anchor = cell</span><br><span class="line">        qr_sheet.add_image(img)</span><br><span class="line">        </span><br><span class="line">        </span><br><span class="line">        # 换行处理</span><br><span class="line">        if i % QR_PER_ROW == 0:</span><br><span class="line">            current_row += 1</span><br><span class="line">    </span><br><span class="line">   </span><br><span class="line">    # 保存文件</span><br><span class="line">    wb.save(excel_file())</span><br><span class="line">    print(f&quot;成功生成&#123;total_qr&#125;个&#123;QR_SIZE_MM&#125;×&#123;QR_SIZE_MM&#125;mm二维码，排列在&#123;current_row&#125;行×&#123;QR_PER_ROW&#125;列的表格中&quot;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def generate_qr_image(text, filename, size_mm):</span><br><span class="line">    &quot;&quot;&quot;生成固定6×6mm尺寸的二维码&quot;&quot;&quot;</span><br><span class="line">    size_px = int(size_mm * MM_TO_PX)</span><br><span class="line">    qr = qrcode.QRCode(</span><br><span class="line">        version=None,</span><br><span class="line">        error_correction=qrcode.constants.ERROR_CORRECT_Q,</span><br><span class="line">        box_size=6,  # 较小的box_size以适应小尺寸</span><br><span class="line">        border=1      # 较小的边框</span><br><span class="line">    )</span><br><span class="line">    qr.add_data(text)</span><br><span class="line">    qr.make(fit=True)</span><br><span class="line">    img = qr.make_image(fill_color=&quot;black&quot;, back_color=&quot;white&quot;)</span><br><span class="line">    img = img.resize((size_px, size_px))</span><br><span class="line">    img.save(filename, &quot;PNG&quot;, dpi=(96, 96))</span><br><span class="line"></span><br><span class="line">def excel_file():</span><br><span class="line">    &quot;&quot;&quot;自动查找Excel文件&quot;&quot;&quot;</span><br><span class="line">    for f in os.listdir():</span><br><span class="line">        if f.endswith(&#x27;.xlsx&#x27;) and not f.startswith(&#x27;~$&#x27;):</span><br><span class="line">            return f</span><br><span class="line">    raise FileNotFoundError(&quot;未找到Excel文件&quot;)</span><br><span class="line"></span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    generate_qr_sheet()</span><br><span class="line">    # 清理临时文件</span><br><span class="line">    if os.path.exists(&quot;temp_qr&quot;):</span><br><span class="line">        for f in os.listdir(&quot;temp_qr&quot;):</span><br><span class="line">            os.remove(os.path.join(&quot;temp_qr&quot;, f))</span><br><span class="line">        os.rmdir(&quot;temp_qr&quot;)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">首页</a></li>
+        
+          <li><a href="/archives/">归档</a></li>
+        
+          <li><a href="/about/">关于</a></li>
+        
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://www.nooae.com/434402bdd989/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://www.nooae.com/434402bdd989/&text=批量生成二维码"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://www.nooae.com/434402bdd989/&title=批量生成二维码"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://www.nooae.com/434402bdd989/&is_video=false&description=批量生成二维码"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=批量生成二维码&body=Check out this article: https://www.nooae.com/434402bdd989/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://www.nooae.com/434402bdd989/&title=批量生成二维码"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://www.nooae.com/434402bdd989/&title=批量生成二维码"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://www.nooae.com/434402bdd989/&title=批量生成二维码"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://www.nooae.com/434402bdd989/&title=批量生成二维码"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://www.nooae.com/434402bdd989/&name=批量生成二维码&description=&lt;p&gt;按表格数据批量生成二维码，每10个换行&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://www.nooae.com/434402bdd989/&t=批量生成二维码"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2025
+    Nooae
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/search/">搜索</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板！\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功！");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

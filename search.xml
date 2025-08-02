@@ -4,6 +4,63 @@
   
     
     <entry>
+      <title>快速生成语音视频</title>
+      <link href="/6570fd7e95a2/"/>
+      <url>/6570fd7e95a2/</url>
+      
+        <content type="html"><![CDATA[<p>根据图片、文本生成语音视频</p><span id="more"></span><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><span class="line">from moviepy import ImageClip, AudioFileClip, concatenate_audioclips, AudioArrayClip</span><br><span class="line">import numpy as np</span><br><span class="line">from gtts import gTTS</span><br><span class="line">import os</span><br><span class="line">import time</span><br><span class="line"></span><br><span class="line"># 1. 设置参数</span><br><span class="line">image_path = &quot;input.png&quot;  # 替换为你的图片路径</span><br><span class="line">output_video = &quot;output.mp4&quot;  # 输出视频路径</span><br><span class="line">text_lines = [</span><br><span class="line">    &quot;缺陷警示卡之物料绕反，问题描述：料带绕反，导致生产时，物料反向。&quot;,</span><br><span class="line">    &quot;根本原因：物料脱离料盘，料带两边开孔的物料无法区分正反，导致料带绕反。&quot;,</span><br><span class="line">    &quot;工位上对策：物料脱离料盘，必须找质量确认，料带低于1米的物料必须用料带膜将物料与料盘系上。&quot;</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"># 2. 为每行文本生成单独的语音并添加停顿</span><br><span class="line">audio_clips = []</span><br><span class="line">silence_duration = 2  # 2秒停顿</span><br><span class="line">sample_rate = 44100  # 音频采样率</span><br><span class="line"></span><br><span class="line"># 确保临时目录存在</span><br><span class="line">temp_dir = &quot;temp_audio&quot;</span><br><span class="line">os.makedirs(temp_dir, exist_ok=True)</span><br><span class="line"></span><br><span class="line">try:</span><br><span class="line">    for i, line in enumerate(text_lines):</span><br><span class="line">        # 生成当前行的语音</span><br><span class="line">        temp_audio_path = os.path.join(temp_dir, f&quot;temp_line_&#123;i&#125;.mp3&quot;)</span><br><span class="line">        tts = gTTS(line, lang=&#x27;zh-cn&#x27;)</span><br><span class="line">        tts.save(temp_audio_path)</span><br><span class="line"></span><br><span class="line">        # 确保文件写入完成</span><br><span class="line">        time.sleep(0.5)</span><br><span class="line"></span><br><span class="line">        # 加载音频文件并立即读取内容</span><br><span class="line">        with AudioFileClip(temp_audio_path) as clip:</span><br><span class="line">            audio_data = clip.to_soundarray()</span><br><span class="line">            audio_clip = AudioArrayClip(audio_data, fps=sample_rate)</span><br><span class="line">            audio_clips.append(audio_clip)</span><br><span class="line"></span><br><span class="line">        # 添加2秒静音（停顿）</span><br><span class="line">        if i != len(text_lines) - 1:  # 不在最后一行后添加停顿</span><br><span class="line">            silence_array = np.zeros((int(silence_duration * sample_rate), 2))</span><br><span class="line">            silence = AudioArrayClip(silence_array, fps=sample_rate)</span><br><span class="line">            audio_clips.append(silence)</span><br><span class="line"></span><br><span class="line">        # 删除临时文件</span><br><span class="line">        try:</span><br><span class="line">            os.remove(temp_audio_path)</span><br><span class="line">        except PermissionError:</span><br><span class="line">            pass</span><br><span class="line"></span><br><span class="line">    # 合并所有音频片段</span><br><span class="line">    if audio_clips:</span><br><span class="line">        final_audio = concatenate_audioclips(audio_clips)</span><br><span class="line">        temp_audio_path = os.path.join(temp_dir, &quot;final_audio.mp3&quot;)</span><br><span class="line">        final_audio.write_audiofile(temp_audio_path, logger=None)</span><br><span class="line"></span><br><span class="line">        # 创建视频</span><br><span class="line">        with AudioFileClip(temp_audio_path) as audio:</span><br><span class="line">            video = ImageClip(image_path).with_duration(audio.duration)</span><br><span class="line">            video = video.with_audio(audio)</span><br><span class="line">            video.write_videofile(output_video, fps=24, codec=&#x27;libx264&#x27;, audio_codec=&#x27;aac&#x27;)</span><br><span class="line"></span><br><span class="line">finally:</span><br><span class="line">    # 清理临时文件</span><br><span class="line">    for filename in os.listdir(temp_dir):</span><br><span class="line">        try:</span><br><span class="line">            os.remove(os.path.join(temp_dir, filename))</span><br><span class="line">        except:</span><br><span class="line">            pass</span><br><span class="line">    try:</span><br><span class="line">        os.rmdir(temp_dir)</span><br><span class="line">    except:</span><br><span class="line">        pass</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> python </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>批量生成二维码</title>
+      <link href="/434402bdd989/"/>
+      <url>/434402bdd989/</url>
+      
+        <content type="html"><![CDATA[<p>按表格数据批量生成二维码，每10个换行</p><span id="more"></span><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br></pre></td><td class="code"><pre><span class="line">import os</span><br><span class="line">import qrcode</span><br><span class="line">import openpyxl</span><br><span class="line">from openpyxl.drawing.image import Image</span><br><span class="line">from openpyxl.utils import get_column_letter</span><br><span class="line">from openpyxl.styles import Alignment</span><br><span class="line"></span><br><span class="line"># 配置参数</span><br><span class="line">QR_SIZE_MM = 6       # 固定二维码大小6×6mm</span><br><span class="line">QR_PER_ROW = 10      # 每行10个二维码（可根据需要调整）</span><br><span class="line">MM_TO_PX = 6     # 毫米到像素的转换系数（96dpi）</span><br><span class="line"></span><br><span class="line">def generate_qr_sheet():</span><br><span class="line">    # 打开工作簿</span><br><span class="line">    wb = openpyxl.load_workbook(excel_file())</span><br><span class="line">    </span><br><span class="line">    # 准备二维码工作表（第二个sheet）</span><br><span class="line">    if len(wb.worksheets) &gt;= 2:</span><br><span class="line">        qr_sheet = wb.worksheets[1]</span><br><span class="line">        qr_sheet.title = &quot;二维码&quot;</span><br><span class="line">        # 清空现有内容</span><br><span class="line">        qr_sheet.delete_rows(1, qr_sheet.max_row)</span><br><span class="line">        # 移除所有图片</span><br><span class="line">        qr_sheet._images = []</span><br><span class="line">    else:</span><br><span class="line">        qr_sheet = wb.create_sheet(&quot;二维码&quot;)</span><br><span class="line">    </span><br><span class="line">    # 数据源工作表</span><br><span class="line">    data_sheet = wb.worksheets[0]</span><br><span class="line">    total_qr = data_sheet.max_row - 1  # 减去标题行</span><br><span class="line">    </span><br><span class="line">    # 创建临时目录</span><br><span class="line">    os.makedirs(&quot;temp_qr&quot;, exist_ok=True)</span><br><span class="line">    </span><br><span class="line">    current_row = 1</span><br><span class="line">    for i in range(1, total_qr + 1):</span><br><span class="line">        # 获取数据</span><br><span class="line">        text = data_sheet[f&#x27;A&#123;i+1&#125;&#x27;].value</span><br><span class="line">        </span><br><span class="line">        # 生成二维码（临时文件）</span><br><span class="line">        qr_name = f&quot;temp_qr/QR_&#123;current_row&#125;_&#123;i%QR_PER_ROW or QR_PER_ROW&#125;.png&quot;</span><br><span class="line">        generate_qr_image(text, qr_name, QR_SIZE_MM)</span><br><span class="line">        </span><br><span class="line">        # 计算插入位置</span><br><span class="line">        col_num = (i - 1) % QR_PER_ROW + 1</span><br><span class="line">        cell = f&quot;&#123;get_column_letter(col_num)&#125;&#123;current_row&#125;&quot;</span><br><span class="line">        </span><br><span class="line">        # 插入图片</span><br><span class="line">        img = Image(qr_name)</span><br><span class="line">        img.anchor = cell</span><br><span class="line">        qr_sheet.add_image(img)</span><br><span class="line">        </span><br><span class="line">        </span><br><span class="line">        # 换行处理</span><br><span class="line">        if i % QR_PER_ROW == 0:</span><br><span class="line">            current_row += 1</span><br><span class="line">    </span><br><span class="line">   </span><br><span class="line">    # 保存文件</span><br><span class="line">    wb.save(excel_file())</span><br><span class="line">    print(f&quot;成功生成&#123;total_qr&#125;个&#123;QR_SIZE_MM&#125;×&#123;QR_SIZE_MM&#125;mm二维码，排列在&#123;current_row&#125;行×&#123;QR_PER_ROW&#125;列的表格中&quot;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def generate_qr_image(text, filename, size_mm):</span><br><span class="line">    &quot;&quot;&quot;生成固定6×6mm尺寸的二维码&quot;&quot;&quot;</span><br><span class="line">    size_px = int(size_mm * MM_TO_PX)</span><br><span class="line">    qr = qrcode.QRCode(</span><br><span class="line">        version=None,</span><br><span class="line">        error_correction=qrcode.constants.ERROR_CORRECT_Q,</span><br><span class="line">        box_size=6,  # 较小的box_size以适应小尺寸</span><br><span class="line">        border=1      # 较小的边框</span><br><span class="line">    )</span><br><span class="line">    qr.add_data(text)</span><br><span class="line">    qr.make(fit=True)</span><br><span class="line">    img = qr.make_image(fill_color=&quot;black&quot;, back_color=&quot;white&quot;)</span><br><span class="line">    img = img.resize((size_px, size_px))</span><br><span class="line">    img.save(filename, &quot;PNG&quot;, dpi=(96, 96))</span><br><span class="line"></span><br><span class="line">def excel_file():</span><br><span class="line">    &quot;&quot;&quot;自动查找Excel文件&quot;&quot;&quot;</span><br><span class="line">    for f in os.listdir():</span><br><span class="line">        if f.endswith(&#x27;.xlsx&#x27;) and not f.startswith(&#x27;~$&#x27;):</span><br><span class="line">            return f</span><br><span class="line">    raise FileNotFoundError(&quot;未找到Excel文件&quot;)</span><br><span class="line"></span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    generate_qr_sheet()</span><br><span class="line">    # 清理临时文件</span><br><span class="line">    if os.path.exists(&quot;temp_qr&quot;):</span><br><span class="line">        for f in os.listdir(&quot;temp_qr&quot;):</span><br><span class="line">            os.remove(os.path.join(&quot;temp_qr&quot;, f))</span><br><span class="line">        os.rmdir(&quot;temp_qr&quot;)</span><br><span class="line"></span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> python </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>汇总多表格数据</title>
+      <link href="/a6e0b81c8f73/"/>
+      <url>/a6e0b81c8f73/</url>
+      
+        <content type="html"><![CDATA[<p>汇总工作薄内多个表格数据</p><span id="more"></span><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">import pandas as pd</span><br><span class="line">import os</span><br><span class="line"></span><br><span class="line"># 查找当前文件夹.xlsx文件</span><br><span class="line">path = os.getcwd()</span><br><span class="line">files = os.listdir(path)</span><br><span class="line">excelfiles = [f for f in files if not f.startswith((&quot;~$&quot;)) and f.endswith((&quot;.xlsx&quot;))]</span><br><span class="line">for file in excelfiles:</span><br><span class="line">    file_path = os.path.join(path,file)</span><br><span class="line"></span><br><span class="line"># 读取Sheet3，包含工单和产品料号信息</span><br><span class="line">sheet3 = pd.read_excel(file_path, sheet_name=&#x27;Sheet3&#x27;)</span><br><span class="line"># 读取Sheet2，包含入库单号和产品料号及数量信息</span><br><span class="line">sheet2 = pd.read_excel(file_path, sheet_name=&#x27;Sheet2&#x27;)</span><br><span class="line"></span><br><span class="line"># 从Sheet3中提取工单号和产品料号的对应关系</span><br><span class="line"># 注意：根据实际数据，可能需要去重，因为同一工单和料号可能有多个记录</span><br><span class="line">order_material = sheet3[[&#x27;工单&#x27;, &#x27;产品料号&#x27;]].drop_duplicates()</span><br><span class="line"></span><br><span class="line"># 从Sheet2中汇总每个产品料号的入库数量</span><br><span class="line">material_summary = sheet2.groupby(&#x27;产品料号&#x27;)[&#x27;入库数量&#x27;].sum().reset_index()</span><br><span class="line"></span><br><span class="line"># 合并两个表，将工单号与汇总的入库数量关联起来</span><br><span class="line">result = pd.merge(order_material, material_summary, on=&#x27;产品料号&#x27;, how=&#x27;right&#x27;)</span><br><span class="line"></span><br><span class="line"># 按产品料号排序</span><br><span class="line">result = result.sort_values(&#x27;产品料号&#x27;)</span><br><span class="line"></span><br><span class="line"># 重置索引</span><br><span class="line">result = result.reset_index(drop=True)</span><br><span class="line"></span><br><span class="line"># 重命名列名</span><br><span class="line">result.columns = [&#x27;工单号&#x27;, &#x27;产品料号&#x27;, &#x27;入库数量汇总&#x27;]</span><br><span class="line"></span><br><span class="line"># 保存结果到新的Excel文件</span><br><span class="line">result.to_excel(&#x27;产品料号入库汇总.xlsx&#x27;, index=False)</span><br><span class="line"></span><br><span class="line">print(&quot;处理完成，结果已保存到&#x27;产品料号入库汇总.xlsx&#x27;&quot;)</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> python </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>定时发送微信消息</title>
       <link href="/a8d69ab8d30a/"/>
       <url>/a8d69ab8d30a/</url>
@@ -631,25 +688,6 @@
     
     
     <entry>
-      <title>Excel库对比</title>
-      <link href="/6f2943a0f333/"/>
-      <url>/6f2943a0f333/</url>
-      
-        <content type="html"><![CDATA[<p>Excel库对应的各种版本<span id="more"></span></p><table><thead><tr><th align="left"></th><th align="center">WIN</th><th align="center">MAC</th><th align="center">PY2</th><th align="center">PY3</th><th align="center">.xls</th><th align="center">.xlsx</th><th align="center">读</th><th align="center">写</th><th align="center">修改</th></tr></thead><tbody><tr><td align="left">xlrd</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">×</td><td align="center">×</td></tr><tr><td align="left">xlwt</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">×</td><td align="center">×</td><td align="center">√</td><td align="center">√</td></tr><tr><td align="left">xlutils</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">×</td><td align="center">×</td><td align="center">×</td><td align="center">√</td></tr><tr><td align="left">xlwings</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">√</td></tr><tr><td align="left">openpyxl</td><td align="center">√</td><td align="center">×</td><td align="center">√</td><td align="center">√</td><td align="center">×</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">√</td></tr><tr><td align="left">xlswriter</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">×</td><td align="center">√</td><td align="center">×</td><td align="center">√</td><td align="center">×</td></tr><tr><td align="left">win32com</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">√</td></tr><tr><td align="left">DataNitro</td><td align="center">√</td><td align="center">×</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">-</td><td align="center">-</td><td align="center">-</td></tr><tr><td align="left">pandas</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">×</td></tr></tbody></table>]]></content>
-      
-      
-      
-        <tags>
-            
-            <tag> python </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>Excel快捷键</title>
       <link href="/5ce07f64fbc7/"/>
       <url>/5ce07f64fbc7/</url>
@@ -661,6 +699,25 @@
         <tags>
             
             <tag> excel </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Excel库对比</title>
+      <link href="/6f2943a0f333/"/>
+      <url>/6f2943a0f333/</url>
+      
+        <content type="html"><![CDATA[<p>Excel库对应的各种版本<span id="more"></span></p><table><thead><tr><th align="left"></th><th align="center">WIN</th><th align="center">MAC</th><th align="center">PY2</th><th align="center">PY3</th><th align="center">.xls</th><th align="center">.xlsx</th><th align="center">读</th><th align="center">写</th><th align="center">修改</th></tr></thead><tbody><tr><td align="left">xlrd</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">×</td><td align="center">×</td></tr><tr><td align="left">xlwt</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">×</td><td align="center">×</td><td align="center">√</td><td align="center">√</td></tr><tr><td align="left">xlutils</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">×</td><td align="center">×</td><td align="center">×</td><td align="center">√</td></tr><tr><td align="left">xlwings</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">√</td></tr><tr><td align="left">openpyxl</td><td align="center">√</td><td align="center">×</td><td align="center">√</td><td align="center">√</td><td align="center">×</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">√</td></tr><tr><td align="left">xlswriter</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">×</td><td align="center">√</td><td align="center">×</td><td align="center">√</td><td align="center">×</td></tr><tr><td align="left">win32com</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">√</td></tr><tr><td align="left">DataNitro</td><td align="center">√</td><td align="center">×</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">-</td><td align="center">-</td><td align="center">-</td></tr><tr><td align="left">pandas</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">√</td><td align="center">×</td></tr></tbody></table>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> python </tag>
             
         </tags>
       
@@ -726,25 +783,6 @@
     
     
     <entry>
-      <title>保留表头拆分数据为若干新工作簿</title>
-      <link href="/f824c6539974/"/>
-      <url>/f824c6539974/</url>
-      
-        <content type="html"><![CDATA[<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">Sub 保留表头拆分数据为若干新工作簿()</span><br><span class="line">Dim arr, d As Object, k, t, i&amp;, lc%, rng As Range, c%</span><br><span class="line">c = Application.InputBox(&quot;请输入拆分列号&quot;, , 4, , , , , 1)</span><br><span class="line"></span><br><span class="line">If c = 0 Then Exit Sub</span><br><span class="line">Application.ScreenUpdating = False</span><br><span class="line">Application.DisplayAlerts = False</span><br><span class="line">arr = [a1].CurrentRegion</span><br><span class="line">lc = UBound(arr, 2)</span><br><span class="line">Set rng = [a1].Resize(, lc)</span><br><span class="line">Set d = CreateObject(&quot;scripting.dictionary&quot;)</span><br><span class="line">For i = 2 To UBound(arr)</span><br><span class="line">If Not d.Exists(arr(i, c)) Then</span><br><span class="line">Set d(arr(i, c)) = Cells(i, 1).Resize(1, lc)</span><br><span class="line">Else</span><br><span class="line">Set d(arr(i, c)) = Union(d(arr(i, c)), Cells(i, 1).Resize(1, lc))</span><br><span class="line">End If</span><br><span class="line">Next</span><br><span class="line">k = d.Keys</span><br><span class="line">t = d.Items</span><br><span class="line">For i = 0 To d.Count - 1</span><br><span class="line">With Workbooks.Add(xlWBATWorksheet)</span><br><span class="line">rng.Copy .Sheets(1).[a1]</span><br><span class="line">t(i).Copy .Sheets(1).[a2]</span><br><span class="line">.SaveAs Filename:=ThisWorkbook.Path &amp; &quot;\&quot; &amp; k(i) &amp; &quot;.xls&quot;</span><br><span class="line">.Close</span><br><span class="line">End With</span><br><span class="line">Next</span><br><span class="line">Application.DisplayAlerts = True</span><br><span class="line">Application.ScreenUpdating = True</span><br><span class="line">MsgBox &quot;完毕&quot;</span><br><span class="line">End Sub</span><br></pre></td></tr></table></figure>]]></content>
-      
-      
-      
-        <tags>
-            
-            <tag> excel </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>使用xlwt库将数据写入excel</title>
       <link href="/5acc25f815ef/"/>
       <url>/5acc25f815ef/</url>
@@ -756,6 +794,25 @@
         <tags>
             
             <tag> python </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>保留表头拆分数据为若干新工作簿</title>
+      <link href="/f824c6539974/"/>
+      <url>/f824c6539974/</url>
+      
+        <content type="html"><![CDATA[<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">Sub 保留表头拆分数据为若干新工作簿()</span><br><span class="line">Dim arr, d As Object, k, t, i&amp;, lc%, rng As Range, c%</span><br><span class="line">c = Application.InputBox(&quot;请输入拆分列号&quot;, , 4, , , , , 1)</span><br><span class="line"></span><br><span class="line">If c = 0 Then Exit Sub</span><br><span class="line">Application.ScreenUpdating = False</span><br><span class="line">Application.DisplayAlerts = False</span><br><span class="line">arr = [a1].CurrentRegion</span><br><span class="line">lc = UBound(arr, 2)</span><br><span class="line">Set rng = [a1].Resize(, lc)</span><br><span class="line">Set d = CreateObject(&quot;scripting.dictionary&quot;)</span><br><span class="line">For i = 2 To UBound(arr)</span><br><span class="line">If Not d.Exists(arr(i, c)) Then</span><br><span class="line">Set d(arr(i, c)) = Cells(i, 1).Resize(1, lc)</span><br><span class="line">Else</span><br><span class="line">Set d(arr(i, c)) = Union(d(arr(i, c)), Cells(i, 1).Resize(1, lc))</span><br><span class="line">End If</span><br><span class="line">Next</span><br><span class="line">k = d.Keys</span><br><span class="line">t = d.Items</span><br><span class="line">For i = 0 To d.Count - 1</span><br><span class="line">With Workbooks.Add(xlWBATWorksheet)</span><br><span class="line">rng.Copy .Sheets(1).[a1]</span><br><span class="line">t(i).Copy .Sheets(1).[a2]</span><br><span class="line">.SaveAs Filename:=ThisWorkbook.Path &amp; &quot;\&quot; &amp; k(i) &amp; &quot;.xls&quot;</span><br><span class="line">.Close</span><br><span class="line">End With</span><br><span class="line">Next</span><br><span class="line">Application.DisplayAlerts = True</span><br><span class="line">Application.ScreenUpdating = True</span><br><span class="line">MsgBox &quot;完毕&quot;</span><br><span class="line">End Sub</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> excel </tag>
             
         </tags>
       
@@ -897,11 +954,11 @@
     
     
     <entry>
-      <title>把汉字转换成拼音首字母</title>
-      <link href="/01f593f543c5/"/>
-      <url>/01f593f543c5/</url>
+      <title>指定条件单元格计数</title>
+      <link href="/7c9d41d76f4b/"/>
+      <url>/7c9d41d76f4b/</url>
       
-        <content type="html"><![CDATA[<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">Function pinyin(p As String) As String</span><br><span class="line">i = Asc(p)</span><br><span class="line">Select Case i</span><br><span class="line">Case -20319 To -20284: pinyin = &quot;A&quot;</span><br><span class="line">Case -20283 To -19776: pinyin = &quot;B&quot;</span><br><span class="line">Case -19775 To -19219: pinyin = &quot;C&quot;</span><br><span class="line">Case -19218 To -18711: pinyin = &quot;D&quot;</span><br><span class="line">Case -18710 To -18527: pinyin = &quot;E&quot;</span><br><span class="line">Case -18526 To -18240: pinyin = &quot;F&quot;</span><br><span class="line">Case -18239 To -17923: pinyin = &quot;G&quot;</span><br><span class="line">Case -17922 To -17418: pinyin = &quot;H&quot;</span><br><span class="line">Case -17417 To -16475: pinyin = &quot;J&quot;</span><br><span class="line">Case -16474 To -16213: pinyin = &quot;K&quot;</span><br><span class="line">Case -16212 To -15641: pinyin = &quot;L&quot;</span><br><span class="line">Case -15640 To -15166: pinyin = &quot;M&quot;</span><br><span class="line">Case -15165 To -14923: pinyin = &quot;N&quot;</span><br><span class="line">Case -14922 To -14915: pinyin = &quot;O&quot;</span><br><span class="line">Case -14914 To -14631: pinyin = &quot;P&quot;</span><br><span class="line">Case -14630 To -14150: pinyin = &quot;Q&quot;</span><br><span class="line">Case -14149 To -14091: pinyin = &quot;R&quot;</span><br><span class="line">Case -14090 To -13319: pinyin = &quot;S&quot;</span><br><span class="line">Case -13318 To -12839: pinyin = &quot;T&quot;</span><br><span class="line">Case -12838 To -12557: pinyin = &quot;W&quot;</span><br><span class="line">Case -12556 To -11848: pinyin = &quot;X&quot;</span><br><span class="line">Case -11847 To -11056: pinyin = &quot;Y&quot;</span><br><span class="line">Case -11055 To -2050: pinyin = &quot;Z&quot;</span><br><span class="line">Case Else: pinyin = p</span><br><span class="line">End Select</span><br><span class="line">End Function</span><br><span class="line">Function getpy(str)</span><br><span class="line">For i = 1 To Len(str)</span><br><span class="line">getpy = getpy &amp; pinyin(Mid(str, i, 1))</span><br><span class="line">Next i</span><br><span class="line">End Function</span><br><span class="line"></span><br></pre></td></tr></table></figure><p>在单元格输入公式”&#x3D;getpy()”</p>]]></content>
+        <content type="html"><![CDATA[<p>&#x3D;COUNTIFS（B2：B9，“男”）<br>“B2：B9”为需要计数的区域<br>“男”，计数条件</p>]]></content>
       
       
       
@@ -916,11 +973,11 @@
     
     
     <entry>
-      <title>指定条件单元格计数</title>
-      <link href="/7c9d41d76f4b/"/>
-      <url>/7c9d41d76f4b/</url>
+      <title>把汉字转换成拼音首字母</title>
+      <link href="/01f593f543c5/"/>
+      <url>/01f593f543c5/</url>
       
-        <content type="html"><![CDATA[<p>&#x3D;COUNTIFS（B2：B9，“男”）<br>“B2：B9”为需要计数的区域<br>“男”，计数条件</p>]]></content>
+        <content type="html"><![CDATA[<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">Function pinyin(p As String) As String</span><br><span class="line">i = Asc(p)</span><br><span class="line">Select Case i</span><br><span class="line">Case -20319 To -20284: pinyin = &quot;A&quot;</span><br><span class="line">Case -20283 To -19776: pinyin = &quot;B&quot;</span><br><span class="line">Case -19775 To -19219: pinyin = &quot;C&quot;</span><br><span class="line">Case -19218 To -18711: pinyin = &quot;D&quot;</span><br><span class="line">Case -18710 To -18527: pinyin = &quot;E&quot;</span><br><span class="line">Case -18526 To -18240: pinyin = &quot;F&quot;</span><br><span class="line">Case -18239 To -17923: pinyin = &quot;G&quot;</span><br><span class="line">Case -17922 To -17418: pinyin = &quot;H&quot;</span><br><span class="line">Case -17417 To -16475: pinyin = &quot;J&quot;</span><br><span class="line">Case -16474 To -16213: pinyin = &quot;K&quot;</span><br><span class="line">Case -16212 To -15641: pinyin = &quot;L&quot;</span><br><span class="line">Case -15640 To -15166: pinyin = &quot;M&quot;</span><br><span class="line">Case -15165 To -14923: pinyin = &quot;N&quot;</span><br><span class="line">Case -14922 To -14915: pinyin = &quot;O&quot;</span><br><span class="line">Case -14914 To -14631: pinyin = &quot;P&quot;</span><br><span class="line">Case -14630 To -14150: pinyin = &quot;Q&quot;</span><br><span class="line">Case -14149 To -14091: pinyin = &quot;R&quot;</span><br><span class="line">Case -14090 To -13319: pinyin = &quot;S&quot;</span><br><span class="line">Case -13318 To -12839: pinyin = &quot;T&quot;</span><br><span class="line">Case -12838 To -12557: pinyin = &quot;W&quot;</span><br><span class="line">Case -12556 To -11848: pinyin = &quot;X&quot;</span><br><span class="line">Case -11847 To -11056: pinyin = &quot;Y&quot;</span><br><span class="line">Case -11055 To -2050: pinyin = &quot;Z&quot;</span><br><span class="line">Case Else: pinyin = p</span><br><span class="line">End Select</span><br><span class="line">End Function</span><br><span class="line">Function getpy(str)</span><br><span class="line">For i = 1 To Len(str)</span><br><span class="line">getpy = getpy &amp; pinyin(Mid(str, i, 1))</span><br><span class="line">Next i</span><br><span class="line">End Function</span><br><span class="line"></span><br></pre></td></tr></table></figure><p>在单元格输入公式”&#x3D;getpy()”</p>]]></content>
       
       
       
@@ -1049,11 +1106,11 @@
     
     
     <entry>
-      <title>筛选求和</title>
-      <link href="/ec0a477c9754/"/>
-      <url>/ec0a477c9754/</url>
+      <title>返回左边中文文本</title>
+      <link href="/7d55381ee989/"/>
+      <url>/7d55381ee989/</url>
       
-        <content type="html"><![CDATA[<p>&#x3D;SUBTOTAL(9,C1:C10)<br>“9”为函数序号<br>“C1:C10”选择数值列</p>]]></content>
+        <content type="html"><![CDATA[<p>&#x3D;LEFTB(A1,SEARCHB(“?”,A1)-1)<br>“A1”为所选单元格</p>]]></content>
       
       
       
@@ -1068,11 +1125,11 @@
     
     
     <entry>
-      <title>返回左边中文文本</title>
-      <link href="/7d55381ee989/"/>
-      <url>/7d55381ee989/</url>
+      <title>筛选求和</title>
+      <link href="/ec0a477c9754/"/>
+      <url>/ec0a477c9754/</url>
       
-        <content type="html"><![CDATA[<p>&#x3D;LEFTB(A1,SEARCHB(“?”,A1)-1)<br>“A1”为所选单元格</p>]]></content>
+        <content type="html"><![CDATA[<p>&#x3D;SUBTOTAL(9,C1:C10)<br>“9”为函数序号<br>“C1:C10”选择数值列</p>]]></content>
       
       
       
