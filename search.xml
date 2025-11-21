@@ -1087,25 +1087,6 @@
     
     
     <entry>
-      <title>第三方库安装命令</title>
-      <link href="/5aad0388be5d/"/>
-      <url>/5aad0388be5d/</url>
-      
-        <content type="html"><![CDATA[<table><thead><tr><th align="left">需求</th><th align="left">命令</th></tr></thead><tbody><tr><td align="left">更新pip命令</td><td align="left">python -m pip install –upgrade pip</td></tr><tr><td align="left">下载pandas</td><td align="left">pip install pandas</td></tr><tr><td align="left">下载xlwt</td><td align="left">pip install xlwt</td></tr><tr><td align="left">下载xlrd</td><td align="left">pip install xlrd</td></tr></tbody></table>]]></content>
-      
-      
-      
-        <tags>
-            
-            <tag> python </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>筛选后自动排列序号</title>
       <link href="/d2a6daf0b923/"/>
       <url>/d2a6daf0b923/</url>
@@ -1117,6 +1098,25 @@
         <tags>
             
             <tag> excel </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>第三方库安装命令</title>
+      <link href="/5aad0388be5d/"/>
+      <url>/5aad0388be5d/</url>
+      
+        <content type="html"><![CDATA[<table><thead><tr><th align="left">需求</th><th align="left">命令</th></tr></thead><tbody><tr><td align="left">更新pip命令</td><td align="left">python -m pip install –upgrade pip</td></tr><tr><td align="left">下载pandas</td><td align="left">pip install pandas</td></tr><tr><td align="left">下载xlwt</td><td align="left">pip install xlwt</td></tr><tr><td align="left">下载xlrd</td><td align="left">pip install xlrd</td></tr></tbody></table>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> python </tag>
             
         </tags>
       
