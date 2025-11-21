@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273import osimport pandas as pdfrom selenium import webdriverfrom">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据采集">
+<meta property="og:url" content="https://www.nooae.com/b7fb6a2b698c/index.html">
+<meta property="og:site_name" content="Nooae&#39;s Blog">
+<meta property="og:description" content="12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273import osimport pandas as pdfrom selenium import webdriverfrom">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-11-21T11:25:00.000Z">
+<meta property="article:modified_time" content="2025-11-21T11:26:59.416Z">
+<meta property="article:author" content="Nooae">
+<meta property="article:tag" content="python">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>数据采集</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="顶部" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/search/">搜索</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/6570fd7e95a2/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://www.nooae.com/b7fb6a2b698c/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://www.nooae.com/b7fb6a2b698c/&text=数据采集"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://www.nooae.com/b7fb6a2b698c/&title=数据采集"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://www.nooae.com/b7fb6a2b698c/&is_video=false&description=数据采集"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=数据采集&body=Check out this article: https://www.nooae.com/b7fb6a2b698c/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://www.nooae.com/b7fb6a2b698c/&title=数据采集"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://www.nooae.com/b7fb6a2b698c/&title=数据采集"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://www.nooae.com/b7fb6a2b698c/&title=数据采集"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://www.nooae.com/b7fb6a2b698c/&title=数据采集"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://www.nooae.com/b7fb6a2b698c/&name=数据采集&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://www.nooae.com/b7fb6a2b698c/&t=数据采集"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        数据采集
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Nooae</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2025-11-21T11:25:00.000Z" class="dt-published" itemprop="datePublished">2025-11-21</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/python/" rel="tag">python</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line">import os</span><br><span class="line">import pandas as pd</span><br><span class="line">from selenium import webdriver</span><br><span class="line">from selenium.webdriver.common.by import By</span><br><span class="line">from selenium.webdriver.common.keys import Keys</span><br><span class="line">from selenium.webdriver.support.ui import WebDriverWait</span><br><span class="line">from selenium.webdriver.support import expected_conditions as EC</span><br><span class="line"></span><br><span class="line">user = input(&quot;请输入用户名：&quot;)</span><br><span class="line">psw = input(&quot;请输入密码：&quot;)</span><br><span class="line"># 进入登陆界面</span><br><span class="line">driver = webdriver.Edge()</span><br><span class="line">mes =  &#x27;MES网址&#x27;</span><br><span class="line">driver.get(mes)</span><br><span class="line">WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, &quot;userDto_loginName&quot;)))</span><br><span class="line"></span><br><span class="line"># 输入用户名</span><br><span class="line">driver.find_element(By.ID,&quot;userDto_loginName&quot;).send_keys(user)</span><br><span class="line"></span><br><span class="line"># 输入密码</span><br><span class="line">driver.find_element(By.ID,&quot;keeper&quot;).send_keys(psw)</span><br><span class="line"></span><br><span class="line"># 选择账套 - 添加等待确保下拉框加载</span><br><span class="line">driver.find_element(By.ID, &#x27;mcDataAuthB&#x27;).click()</span><br><span class="line">WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, &quot;//div[text()=&#x27;海微智造技术（武汉）有限公司&#x27;]&quot;)))</span><br><span class="line">option = driver.find_element(By.XPATH, &quot;//div[text()=&#x27;海微智造技术（武汉）有限公司&#x27;]&quot;)</span><br><span class="line">option.click()</span><br><span class="line"></span><br><span class="line"># 点击登陆按钮</span><br><span class="line">driver.find_element(By.ID, &quot;loginButton&quot;).click()</span><br><span class="line">WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, &quot;//p[text()=&#x27;配置中心&#x27;]&quot;)))</span><br><span class="line"></span><br><span class="line"># 点击配置中心</span><br><span class="line">driver.find_element(By.XPATH, &quot;//p[text()=&#x27;配置中心&#x27;]&quot;).click()</span><br><span class="line">WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, &quot;//a[contains(text(), &#x27;PC端数据采集&#x27;)]&quot;)))</span><br><span class="line"></span><br><span class="line"># 点击PC端数据采集</span><br><span class="line">driver.find_element(By.XPATH, &quot;//a[contains(text(), &#x27;PC端数据采集&#x27;)]&quot;).click()</span><br><span class="line">WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, &quot;//a[text()=&#x27;数据采集&#x27;]&quot;)))</span><br><span class="line"></span><br><span class="line"># 使用JavaScript点击数据采集链接</span><br><span class="line">data_collection_link = driver.find_element(By.XPATH, &quot;//a[text()=&#x27;数据采集&#x27;]&quot;)</span><br><span class="line">driver.execute_script(&quot;arguments[0].click();&quot;, data_collection_link)</span><br><span class="line"></span><br><span class="line"># 进入数据采集框架</span><br><span class="line">WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, &quot;iframe3&quot;)))</span><br><span class="line">iframe = driver.find_element(By.ID, &quot;iframe3&quot;)</span><br><span class="line">driver.switch_to.frame(iframe)</span><br><span class="line"></span><br><span class="line">input(&quot;请设置指令相关信息，按Enter键继续\n&quot;)</span><br><span class="line"></span><br><span class="line"># 查找当前文件夹.xlsx文件</span><br><span class="line">path = os.getcwd()</span><br><span class="line">files = os.listdir(path)</span><br><span class="line">excelfiles = [f for f in files if not f.startswith((&quot;~$&quot;)) and f.endswith((&quot;.xlsx&quot;))]</span><br><span class="line"></span><br><span class="line"># 打开.xlsx文件默认sheet</span><br><span class="line">wb = pd.read_excel(excelfiles[0])</span><br><span class="line"></span><br><span class="line"># 定义查找函数</span><br><span class="line">def mes_click(sn):</span><br><span class="line">    v = driver.find_element(By.XPATH, &quot;//input[@id=&#x27;input_box&#x27;]&quot;)</span><br><span class="line">    v.clear()</span><br><span class="line">    v.send_keys(sn)</span><br><span class="line">    v.send_keys(Keys.RETURN)</span><br><span class="line">    print(f&#x27;&#123;xh&#125;、&#123;sn&#125;已录入&#x27;)</span><br><span class="line"></span><br><span class="line"># 循环录入信息</span><br><span class="line">for index,row in wb.iterrows():</span><br><span class="line">    xh = row[&quot;序号&quot;]</span><br><span class="line">    sn = row[&quot;物料SN&quot;]</span><br><span class="line">    mes_click(sn)</span><br><span class="line">    WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, &quot;//input[@id=&#x27;input_box&#x27;]&quot;)))</span><br></pre></td></tr></table></figure>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">首页</a></li>
+        
+          <li><a href="/archives/">归档</a></li>
+        
+          <li><a href="/about/">关于</a></li>
+        
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://www.nooae.com/b7fb6a2b698c/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://www.nooae.com/b7fb6a2b698c/&text=数据采集"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://www.nooae.com/b7fb6a2b698c/&title=数据采集"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://www.nooae.com/b7fb6a2b698c/&is_video=false&description=数据采集"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=数据采集&body=Check out this article: https://www.nooae.com/b7fb6a2b698c/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://www.nooae.com/b7fb6a2b698c/&title=数据采集"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://www.nooae.com/b7fb6a2b698c/&title=数据采集"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://www.nooae.com/b7fb6a2b698c/&title=数据采集"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://www.nooae.com/b7fb6a2b698c/&title=数据采集"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://www.nooae.com/b7fb6a2b698c/&name=数据采集&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://www.nooae.com/b7fb6a2b698c/&t=数据采集"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2025
+    Nooae
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/search/">搜索</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板！\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功！");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
