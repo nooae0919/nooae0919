@@ -1,5 +1,13 @@
 # 主题设置
-THEME = 'themes/subtle'
+THEME = 'themes/buruma'
+
+# 启用 i18n 插件
+PLUGINS = ['i18n_subsites']  # 或 'i18n'
+
+# 配置 i18n
+JINJA_ENVIRONMENT = {
+    'extensions': ['jinja2.ext.i18n']
+}
 
 AUTHOR = 'nooae'
 SITENAME = "Nooae's blog"
@@ -9,7 +17,7 @@ PATH = "content"
 
 TIMEZONE = 'Asia/Shanghai'
 
-DEFAULT_LANG = 'Chinese (Simplified)'
+DEFAULT_LANG = 'zh'
 
 # Feed generation is usually not desired when developing
 FEED_ALL_ATOM = None
@@ -18,14 +26,7 @@ TRANSLATION_FEED_ATOM = None
 AUTHOR_FEED_ATOM = None
 AUTHOR_FEED_RSS = None
 
-# 自定义菜单项（显示在最前面）
-MENUITEMS = [
-    ('🏠 首页', '/'),
-    ('📚 归档', '/archives.html'),
-    ('📂 分类', '/categories.html'),
-    ('🏷️ 标签', '/tags.html'),
-    ('📖 系列', '/series.html'),
-]
+
 
 # Blogroll
 LINKS = (
@@ -45,3 +46,6 @@ DEFAULT_PAGINATION = False
 
 # Uncomment following line if you want document-relative URLs when developing
 # RELATIVE_URLS = True
+
+
+
