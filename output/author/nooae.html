@@ -1,199 +1,115 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-        <title>Nooae's blog - nooae</title>
-        <meta charset="utf-8" />
-        <link rel="stylesheet" href="/theme/css/main.css" type="text/css" />
-   
+<html lang="zh">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE-edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+			<meta name="author" content="nooae" />
+		<title>Articles by nooae
+</title>
+		<link rel="stylesheet" type="text/css" href="/theme/css/style.min.css">
+		<script src="/theme/js/menu.js"></script>
+		<!-- Pending to improve -->
+	</head>
+	<body>
+		<nav class="navbar is-info" role="navigation" aria-label="main navigation">
+				<div class="navbar-brand">
+						<a class="navbar-item" href="">
+							<img src="/theme/images/buruma_logo.png" width="112" height="28">
+						</a>
+					<a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarMain">
+						<span aria-hidden="true"></span>
+						<span aria-hidden="true"></span>
+						<span aria-hidden="true"></span>
+					</a>
+				</div>
+				<div id="navbarMain" class="navbar-menu">
+					<div class="navbar-start">
+						<div class="navbar-item has-dropdown is-hoverable">
+							<a class="navbar-link" href="/categories">
+Categories							</a>
+							<div class="navbar-dropdown">
+								<a class="navbar-item" href="/category/python.html">
+									Python
+								</a>
+							</div>
+						</div>
+				</div>
+				<div class="navbar-end">
+					<div class="navbar-item">
+						<div class="buttons">
+						</div>
+					</div>
+				</div>
+			</div>
+			</nav>
+		<section class="section">
+			<div class="container">
+	<h1 class="title">Articles by nooae</h1>
 
-        <!--[if IE]>
-                <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
-
-        <!--[if lte IE 7]>
-                <link rel="stylesheet" type="text/css" media="all" href="/css/ie.css"/>
-                <script src="/js/IE8.js" type="text/javascript"></script><![endif]-->
-
-        <!--[if lt IE 7]>
-                <link rel="stylesheet" type="text/css" media="all" href="/css/ie6.css"/><![endif]-->
-
-</head>
-
-<body id="index" class="home">
-        <header id="banner" class="body">
-                <h1><a href="">Nooae's blog </a></h1>
-                <nav><ul>
-                    <li><a href="/">🏠 首页</a></li>
-                    <li><a href="/archives.html">📚 归档</a></li>
-                    <li><a href="/categories.html">📂 分类</a></li>
-                    <li><a href="/tags.html">🏷️ 标签</a></li>
-                    <li><a href="/series.html">📖 系列</a></li>
-                    <li ><a href="/category/python.html">Python</a></li>
-                </ul></nav>
-        </header><!-- /#banner -->
-        
-        
-
-            <aside id="featured" class="body">
-                <article>
-                    <h1 class="entry-title"><a href="/my-2-post.html">批量查询</a></h1> 
-<footer class="post-info">
-        <abbr class="published" title="2025-12-21T10:20:00+08:00">
-                周日 21 十二月 2025
-        </abbr>
-
-        <address class="vcard author">
-                By <a class="url fn" href="/author/nooae.html">nooae</a>
-        </address>
-<p>In <a href="/category/python.html">Python</a>. </p>
-<p>tags: <a href="/tag/chu-xue.html">初学</a><a href="/tag/pelican.html">Pelican</a></p></footer><!-- /.post-info --><!-- 以下是正文，使用 Markdown 语法 -->
-
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">openpyxl</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">selenium</span><span class="w"> </span><span class="kn">import</span><span class="w"> </span><span class="n">webdriver</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">selenium.webdriver.common.by</span><span class="w"> </span><span class="kn">import</span><span class="w"> </span><span class="n">By</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">selenium.webdriver.common.keys</span><span class="w"> </span><span class="kn">import</span><span class="w"> </span><span class="n">Keys</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">selenium.webdriver.support.ui</span><span class="w"> </span><span class="kn">import</span><span class="w"> </span><span class="n">WebDriverWait</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">selenium.webdriver.support</span><span class="w"> </span><span class="kn">import</span><span class="w"> </span><span class="n">expected_conditions</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">EC</span>
-
-<span class="n">user</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">input</span><span class="o">=</span><span class="s2">&quot;请输入账号：&quot;</span>
-<span class="n">psw</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;请输入密码：&quot;</span>
-<span class="c1"># 进入登陆界面</span>
-<span class="n">driver</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">webdriver</span><span class="o">.</span><span class="n">Edge</span><span class="p">()</span>
-<span class="n">mes</span><span class="w"> </span><span class="o">=</span><span class="w">  </span><span class="s1">&#39;网址&#39;</span>
-<span class="n">driver</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">mes</span><span class="p">)</span>
-<span class="n">WebDriverWait</span><span class="p">(</span><span class="n">driver</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">until</span><span class="p">(</span><span class="n">EC</span><span class="o">.</span><span class="n">presence_of_element_located</span><span class="p">((</span><span class="n">By</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;userDto_loginName&quot;</span><span class="p">)))</span>
-
-<span class="c1"># 输入用户名</span>
-<span class="n">driver</span><span class="o">.</span><span class="n">find_element</span><span class="p">(</span><span class="n">By</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span><span class="s2">&quot;userDto_loginName&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">send_keys</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
-
-<span class="c1"># 输入密码</span>
-<span class="n">driver</span><span class="o">.</span><span class="n">find_element</span><span class="p">(</span><span class="n">By</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span><span class="s2">&quot;keeper&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">send_keys</span><span class="p">(</span><span class="n">psw</span><span class="p">)</span>
-
-<span class="c1"># 选择账套 - 添加等待确保下拉框加载</span>
-<span class="n">driver</span><span class="o">.</span><span class="n">find_element</span><span class="p">(</span><span class="n">By</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;mcDataAuthB&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">click</span><span class="p">()</span>
-<span class="n">WebDriverWait</span><span class="p">(</span><span class="n">driver</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">until</span><span class="p">(</span><span class="n">EC</span><span class="o">.</span><span class="n">presence_of_element_located</span><span class="p">((</span><span class="n">By</span><span class="o">.</span><span class="n">XPATH</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;//div[text()=&#39;海微智造技术（武汉）有限公司&#39;]&quot;</span><span class="p">)))</span>
-<span class="n">option</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">driver</span><span class="o">.</span><span class="n">find_element</span><span class="p">(</span><span class="n">By</span><span class="o">.</span><span class="n">XPATH</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;//div[text()=&#39;海微智造技术（武汉）有限公司&#39;]&quot;</span><span class="p">)</span>
-<span class="n">option</span><span class="o">.</span><span class="n">click</span><span class="p">()</span>
-
-<span class="c1"># 点击登陆按钮</span>
-<span class="n">driver</span><span class="o">.</span><span class="n">find_element</span><span class="p">(</span><span class="n">By</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;loginButton&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">click</span><span class="p">()</span>
-
-<span class="c1"># 点击库存查询</span>
-<span class="n">element</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">WebDriverWait</span><span class="p">(</span><span class="n">driver</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">until</span><span class="p">(</span><span class="n">EC</span><span class="o">.</span><span class="n">presence_of_element_located</span><span class="p">((</span><span class="n">By</span><span class="o">.</span><span class="n">XPATH</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;//a[text()=&#39;库存查询&#39;]&quot;</span><span class="p">)))</span>
-<span class="n">driver</span><span class="o">.</span><span class="n">execute_script</span><span class="p">(</span><span class="s2">&quot;arguments[0].click();&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">element</span><span class="p">)</span>
-
-<span class="c1"># 进入库存查询框架</span>
-<span class="n">iframe</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">driver</span><span class="o">.</span><span class="n">find_element</span><span class="p">(</span><span class="n">By</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;iframe2&quot;</span><span class="p">)</span>
-<span class="n">driver</span><span class="o">.</span><span class="n">switch_to</span><span class="o">.</span><span class="n">frame</span><span class="p">(</span><span class="n">iframe</span><span class="p">)</span>
-
-<span class="c1"># 查找当前文件夹.xlsx文件</span>
-<span class="c1"># path = os.getcwd()</span>
-<span class="c1"># files = os.listdir(path)</span>
-<span class="c1"># excelfiles = [f for f in files if not f.startswith((&quot;~$&quot;)) and f.endswith((&quot;.xlsx&quot;))]</span>
-<span class="c1"># fullpath = os.path.join(path, excelfiles[0])</span>
-
-<span class="c1"># 打开.xlsx文件默认sheet</span>
-<span class="n">wb</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">openpyxl</span><span class="o">.</span><span class="n">load_workbook</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;C:\Users\jiey3\Desktop\批量查询（料号）\0988备料清单.xlsx&#39;</span><span class="p">,</span><span class="n">data_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">sheet</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">wb</span><span class="p">[</span><span class="s1">&#39;备料清单（模板）&#39;</span><span class="p">]</span>
-<span class="n">sheet1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">wb</span><span class="p">[</span><span class="s1">&#39;料车位置&#39;</span><span class="p">]</span>
-
-
-
-<span class="c1"># 定义查找函数</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">mes_clik</span><span class="p">(</span><span class="n">num</span><span class="p">):</span>
-<span class="w">    </span><span class="n">cell</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sheet</span><span class="p">[</span><span class="s2">&quot;B&quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span><span class="o">.</span><span class="n">value</span>
-<span class="w">    </span><span class="n">WebDriverWait</span><span class="p">(</span><span class="n">driver</span><span class="p">,</span><span class="w"> </span><span class="mi">30</span><span class="p">)</span><span class="o">.</span><span class="n">until</span><span class="p">(</span><span class="n">EC</span><span class="o">.</span><span class="n">presence_of_element_located</span><span class="p">((</span><span class="n">By</span><span class="o">.</span><span class="n">NAME</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;searchParaList[1]._PAGE_SEARCH_VALUE&quot;</span><span class="p">)))</span>
-<span class="w">    </span><span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">driver</span><span class="o">.</span><span class="n">find_element</span><span class="p">(</span><span class="n">By</span><span class="o">.</span><span class="n">NAME</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;searchParaList[1]._PAGE_SEARCH_VALUE&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="n">v</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
-<span class="w">    </span><span class="n">v</span><span class="o">.</span><span class="n">send_keys</span><span class="p">(</span><span class="n">cell</span><span class="p">)</span>
-
-<span class="w">    </span><span class="c1"># 点击查询按钮</span>
-<span class="w">    </span><span class="n">driver</span><span class="o">.</span><span class="n">find_element</span><span class="p">(</span><span class="n">By</span><span class="o">.</span><span class="n">CLASS_NAME</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;query-btn-sure&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">click</span><span class="p">()</span>
-<span class="w">    </span><span class="n">idx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sheet</span><span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span><span class="o">.</span><span class="n">value</span>
-<span class="w">    </span><span class="n">num</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sheet</span><span class="p">[</span><span class="s2">&quot;I&quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span><span class="o">.</span><span class="n">value</span>
-<span class="w">    </span><span class="n">pos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sheet1</span><span class="p">[</span><span class="s2">&quot;C&quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="mi">2</span><span class="p">)]</span><span class="o">.</span><span class="n">value</span>
-<span class="w">    </span><span class="nb">print</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s1">&#39;、&#39;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">str</span><span class="p">(</span><span class="n">cell</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s1">&#39;需要&#39;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">str</span><span class="p">(</span><span class="n">num</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s1">&#39;，&#39;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">str</span><span class="p">(</span><span class="n">pos</span><span class="p">))</span>
-
-
-<span class="c1"># 循环查找物料信息</span>
-<span class="k">for</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">200</span><span class="p">):</span>
-<span class="w">    </span><span class="n">mes_clik</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-<span class="w">    </span><span class="nb">input</span><span class="p">(</span><span class="s2">&quot;按Enter键继续</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-</code></pre></div>                </article>
-            </aside><!-- /#featured -->
-                <section id="content" class="body">
-                    <h1>Other articles</h1>
-                    <hr />
-                    <ol id="posts-list" class="hfeed">
-        
-
- 
-            <li><article class="hentry">    
-                <header>
-                        <h1><a href="/my-3-post.html" rel="bookmark" title="Permalink to 批量生成标签">批量生成标签</a></h1>
-                </header>
-                
-                <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2025-12-02T10:30:00+08:00">
-                周二 02 十二月 2025
-        </abbr>
-
-        <address class="vcard author">
-                By <a class="url fn" href="/author/nooae.html">nooae</a>
-        </address>
-<p>In <a href="/category/python.html">Python</a>. </p>
-<p>tags: <a href="/tag/chu-xue.html">初学</a><a href="/tag/pelican.html">Pelican</a></p></footer><!-- /.post-info -->                <p>批量生成标签</p>
-                <a class="readmore" href="/my-3-post.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-        
-
- 
-            <li><article class="hentry">    
-                <header>
-                        <h1><a href="/my-1-post.html" rel="bookmark" title="Permalink to 数据采集">数据采集</a></h1>
-                </header>
-                
-                <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2025-12-02T10:20:00+08:00">
-                周二 02 十二月 2025
-        </abbr>
-
-        <address class="vcard author">
-                By <a class="url fn" href="/author/nooae.html">nooae</a>
-        </address>
-<p>In <a href="/category/python.html">Python</a>. </p>
-<p>tags: <a href="/tag/chu-xue.html">初学</a><a href="/tag/pelican.html">Pelican</a></p></footer><!-- /.post-info -->                <p>数据采集</p>
-                <a class="readmore" href="/my-1-post.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-            </ol><!-- /#posts-list -->
-            </section><!-- /#content -->
-        <section id="extras" class="body">
-                <div class="blogroll">
-                        <h2>blogroll</h2>
-                        <ul>
-                            <li><a href="https://getpelican.com/">Pelican</a></li>
-                            <li><a href="https://www.python.org/">Python.org</a></li>
-                            <li><a href="https://palletsprojects.com/p/jinja/">Jinja2</a></li>
-                            <li><a href="#">You can modify those links in your config file</a></li>
-                        </ul>
-                </div><!-- /.blogroll -->
-                <div class="social">
-                        <h2>social</h2>
-                        <ul>
-                            
-                            <li><a href="#">You can add links in your config file</a></li>
-                            <li><a href="#">Another social link</a></li>
-                        </ul>
-                </div><!-- /.social -->
-        </section><!-- /#extras -->
-
-        <footer id="contentinfo" class="body">
-
-        </footer><!-- /#contentinfo -->
-
-</body>
+<article class="message ">
+	<div class="message-header">
+		<p>Python</p>
+	</div>
+	<div class="message-body">
+		<div class="columns is-multiline">
+			<div class="column is-one-quarter has-text-centered">
+				<p><time itemprop="dateCreated" datetime="2025-12-21T10:20:00+08:00">周日 21 十二月 2025</time></p>
+				<p><a href="/tag/chu-xue.html"><span class="tag is-link">初学</span></a> <a href="/tag/pelican.html"><span class="tag is-link">Pelican</span></a> </p>
+			</div>
+			<div class="column">
+				<h2 class="is-size-5"><a href="/my-2-post.html">批量查询</a></h2>
+			</div>
+		</div>
+	</div>
+</article>
+<article class="message ">
+	<div class="message-header">
+		<p>Python</p>
+	</div>
+	<div class="message-body">
+		<div class="columns is-multiline">
+			<div class="column is-one-quarter has-text-centered">
+				<p><time itemprop="dateCreated" datetime="2025-12-02T10:30:00+08:00">周二 02 十二月 2025</time></p>
+				<p><a href="/tag/chu-xue.html"><span class="tag is-link">初学</span></a> <a href="/tag/pelican.html"><span class="tag is-link">Pelican</span></a> </p>
+			</div>
+			<div class="column">
+				<h2 class="is-size-5"><a href="/my-3-post.html">批量生成标签</a></h2>
+			</div>
+		</div>
+	</div>
+</article>
+<article class="message ">
+	<div class="message-header">
+		<p>Python</p>
+	</div>
+	<div class="message-body">
+		<div class="columns is-multiline">
+			<div class="column is-one-quarter has-text-centered">
+				<p><time itemprop="dateCreated" datetime="2025-12-02T10:20:00+08:00">周二 02 十二月 2025</time></p>
+				<p><a href="/tag/chu-xue.html"><span class="tag is-link">初学</span></a> <a href="/tag/pelican.html"><span class="tag is-link">Pelican</span></a> </p>
+			</div>
+			<div class="column">
+				<h2 class="is-size-5"><a href="/my-1-post.html">数据采集</a></h2>
+			</div>
+		</div>
+	</div>
+</article>
+			</div>
+		</section>
+		<footer class="footer">
+			<div class="container has-text-centered">
+				<div class="columns">
+					<div class="column">
+							<p>Website generated with <a href="https://getpelican.com">Pelican</a>. <a href="https://github.com/ivanhercaz/buruma">Buruma</a> theme by <a href="https://ivanhercaz.com">Ivanhercaz</a></p>
+						<p><a href="https://bulma.io">
+							<img src="/theme/images/made_with_bulma.png" alt="Made with Bulma" width="128" height="24">
+						</a></p>
+					</div>
+					<div class="column">
+							<p>All rights reserved © nooae</p>
+				</div>
+			</div>
+		</footer>
+	</body>
 </html>
