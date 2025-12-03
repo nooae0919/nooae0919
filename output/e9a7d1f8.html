@@ -93,13 +93,11 @@ Categories							</a>
 <span class="n">driver</span><span class="o">.</span><span class="n">switch_to</span><span class="o">.</span><span class="n">frame</span><span class="p">(</span><span class="n">iframe</span><span class="p">)</span>
 
 <span class="c1"># 查找当前文件夹.xlsx文件</span>
-<span class="c1"># path = os.getcwd()</span>
-<span class="c1"># files = os.listdir(path)</span>
-<span class="c1"># excelfiles = [f for f in files if not f.startswith((&quot;~$&quot;)) and f.endswith((&quot;.xlsx&quot;))]</span>
-<span class="c1"># fullpath = os.path.join(path, excelfiles[0])</span>
+<span class="n">excelfiles</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">f</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">f</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="n">f</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;~$&quot;</span><span class="p">)</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="n">f</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.xlsx&quot;</span><span class="p">)]</span>
+
 
 <span class="c1"># 打开.xlsx文件默认sheet</span>
-<span class="n">wb</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">openpyxl</span><span class="o">.</span><span class="n">load_workbook</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;C:\Users\jiey3\Desktop\批量查询（料号）\0988备料清单.xlsx&#39;</span><span class="p">,</span><span class="n">data_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">wb</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">openpyxl</span><span class="o">.</span><span class="n">load_workbook</span><span class="p">(</span><span class="n">excelfiles</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">data_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">sheet</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">wb</span><span class="p">[</span><span class="s1">&#39;备料清单（模板）&#39;</span><span class="p">]</span>
 <span class="n">sheet1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">wb</span><span class="p">[</span><span class="s1">&#39;料车位置&#39;</span><span class="p">]</span>
 
