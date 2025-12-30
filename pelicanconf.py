@@ -18,6 +18,7 @@ JINJA_ENVIRONMENT = {
 AUTHOR = 'nooae'
 SITENAME = "Nooae's blog"
 SITEURL = "https://www.nooae.com"
+FAVICON = '/themes/storm/favicon.ico'    # 浏览器图标
 
 PATH = "content"
 
