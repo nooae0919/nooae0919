@@ -1,5 +1,11 @@
 # 主题设置
-THEME = 'themes/buruma'
+THEME = 'themes/storm'
+
+# 导航栏设置
+MENUITEMS = [
+    ('Home', '/'),
+    ('Archives', '/archives.html'),
+]
 
 # 启用 i18n 插件
 PLUGINS = ['i18n_subsites']  # 或 'i18n'
@@ -11,7 +17,7 @@ JINJA_ENVIRONMENT = {
 
 AUTHOR = 'nooae'
 SITENAME = "Nooae's blog"
-SITEURL = ""
+SITEURL = "https://www.nooae.com"
 
 PATH = "content"
 
@@ -37,10 +43,7 @@ LINKS = (
 )
 
 # Social widget
-SOCIAL = (
-    ("You can add links in your config file", "#"),
-    ("Another social link", "#"),
-)
+SOCIAL = ()
 
 DEFAULT_PAGINATION = False
 
