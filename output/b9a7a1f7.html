@@ -1,57 +1,35 @@
 <!DOCTYPE html>
-<html lang="zh">
-	<head>
-		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE-edge">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-			<meta name="author" content="nooae" />
-		<title>合并表格汇总  - Nooae&#39;s blog
-</title>
-		<link rel="stylesheet" type="text/css" href="/theme/css/style.min.css">
-		<script src="/theme/js/menu.js"></script>
-		<!-- Pending to improve -->
-	</head>
-	<body>
-		<nav class="navbar is-info" role="navigation" aria-label="main navigation">
-				<div class="navbar-brand">
-						<a class="navbar-item" href="">
-							<img src="/theme/images/buruma_logo.png" width="112" height="28">
-						</a>
-					<a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarMain">
-						<span aria-hidden="true"></span>
-						<span aria-hidden="true"></span>
-						<span aria-hidden="true"></span>
-					</a>
-				</div>
-				<div id="navbarMain" class="navbar-menu">
-					<div class="navbar-start">
-						<div class="navbar-item has-dropdown is-hoverable">
-							<a class="navbar-link" href="/categories">
-Categories							</a>
-							<div class="navbar-dropdown">
-								<a class="navbar-item" href="/category/python.html">
-									Python
-								</a>
-							</div>
-						</div>
-				</div>
-				<div class="navbar-end">
-					<div class="navbar-item">
-						<div class="buttons">
-						</div>
-					</div>
-				</div>
-			</div>
-			</nav>
-		<section class="section">
-			<div class="container">
-<article class="message is-info">
-	<div class="message-header">
-		<h2>合并表格汇总</h2>
-		<p><time itemprop="dateCreated" datetime="2025-12-03T00:00:00+08:00">周三 03 十二月 2025</time></p>
-	</div>
-	<div class="message-body has-text-dark">
-		<!-- 以下是正文，使用 Markdown 语法 -->
+<html lang="en">
+<head>
+  <title>合并表格汇总 | Nooae's blog</title>
+  <meta charset="utf-8">
+<meta name="description" content="import pandas as pd import os # 查找当前文件夹.xlsx文件 fullpath = [f for f in os.listdir('.') if not f.startswith("~$") and f.endswith(".xlsx")] # 读取表格信息 sheet2 = pd.read_excel(fullpath,sheet_name='Sheet2') sheet3 = pd.read_excel(fullpath,sheet_name='Sheet3') # 提取工 …"><meta name="author" content="nooae">  <meta name="viewport" content="initial-scale=1, maximum-scale=1" />
+  <meta http-equiv="Cache-Control" content="max-age=604800, must-revalidate" />
+  <link href="/theme/css/screen.css" rel="stylesheet" type="text/css" />
+  <link rel="icon" href="/favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+  <link href="/" type="application/atom+xml" rel="alternate" title="Nooae's blog ATOM Feed" />
+</head>
+<body>
+<div id="outer-wrapper">
+<div id="header-wrapper">
+  <div class="logo"><a href="">Nooae's blog</a></div>
+  <div class="small"></div>
+    <div class="nav">
+    </div>
+    <div class="nav social">
+<ul>
+    <li><a href="#">You can add links in your config file</a></li>
+    <li><a href="#">Another social link</a></li>
+</ul>    </div>
+</div>    <div id="main">
+<h2><a href="/b9a7a1f7.html">合并表格汇总</a></h2>
+<h5><i class="icon-feather"></i> 周三 03 十二月 2025
+<i class="icon-bookmarks"></i>
+<span><a href="/tag/pandas.html">pandas</a> / </span>
+</h5>
+
+<!-- 以下是正文，使用 Markdown 语法 -->
 
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
@@ -82,23 +60,22 @@ Categories							</a>
 <span class="k">with</span><span class="w"> </span><span class="n">pd</span><span class="o">.</span><span class="n">ExcelWriter</span><span class="p">(</span><span class="n">fullpath</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">writer</span><span class="p">:</span>
 <span class="w">    </span><span class="n">result</span><span class="o">.</span><span class="n">to_excel</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span><span class="n">sheet_name</span><span class="o">=</span><span class="s1">&#39;Sheet4&#39;</span><span class="p">,</span><span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="w"> </span>
 </code></pre></div>
-	</div>
-</article>
-			</div>
-		</section>
-		<footer class="footer">
-			<div class="container has-text-centered">
-				<div class="columns">
-					<div class="column">
-							<p>Website generated with <a href="https://getpelican.com">Pelican</a>. <a href="https://github.com/ivanhercaz/buruma">Buruma</a> theme by <a href="https://ivanhercaz.com">Ivanhercaz</a></p>
-						<p><a href="https://bulma.io">
-							<img src="/theme/images/made_with_bulma.png" alt="Made with Bulma" width="128" height="24">
-						</a></p>
-					</div>
-					<div class="column">
-							<p>All rights reserved © nooae</p>
-				</div>
-			</div>
-		</footer>
-	</body>
+
+<p align="center"><a href="#">on the top</a></p>
+    </div>
+</div>
+<div id="footer-wrapper">
+<ul class="footer">
+     <li class="footer"><a href="/tag/pandas.html">pandas&nbsp;&bull;&nbsp;</a></li>
+     <li class="footer"><a href="/tag/pyautogui.html">pyautogui&nbsp;&bull;&nbsp;</a></li>
+     <li class="footer"><a href="/tag/qrcode.html">qrcode&nbsp;&bull;&nbsp;</a></li>
+     <li class="footer"><a href="/tag/selenium.html">selenium&nbsp;&bull;&nbsp;</a></li>
+     <li class="footer"><a href="/tag/tkinter.html">tkinter</a></li>
+</ul><ul class="footer">
+    <li class="footer">&copy;&nbsp;2014&nbsp;::</li>
+    <li class="footer"><a href="">Nooae's blog </a>&nbsp;::</li>
+    <li class="footer">powered by <a href="https://github.com/getpelican">pelican</a>&nbsp;::</li>
+    <li class="footer"><a href="http://creativecommons.org/licenses/by-nc/3.0/deed.ru">CC BY-NC</a></li>
+</ul>
+</div></body>
 </html>
