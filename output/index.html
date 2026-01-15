@@ -24,9 +24,9 @@
 <h2><a href="https://www.nooae.com/f9a7d1f1.html">生成备料清单</a></h2>
 <h5><i class="icon-feather"></i> 周四 15 一月 2026 </h5>
 import openpyxl from openpyxl.styles import Alignment, PatternFill, Font, Border, Side from openpyxl.utils import get_column_letter # 创建新的工作簿 wb = openpyxl.Workbook() # ========== 1. 创建备料清单（模板）工作表 ========== ws1 = wb.active ws1.title = "备料清单（模板）" # 设 …
-<h2><a href="https://www.nooae.com/a9a7d1f7.html">生成站位查询表</a></h2>
-<h5><i class="icon-feather"></i> 周二 13 一月 2026 </h5>
-import openpyxl from openpyxl.styles import numbers import re import os # 查找当前xlsx文件 excelfiles = [f for f in os.listdir('.') if not f.startswith("~$") and f.endswith(".xlsx")] # 加载工作簿 wb = openpyxl.load_workbook(excelfiles[0]) ws = wb.active # 1. 将D列转换为文本格式，并将该 …
+<h2><a href="https://www.nooae.com/f9a7d2f1.html">生成锡膏标签</a></h2>
+<h5><i class="icon-feather"></i> 周六 03 一月 2026 </h5>
+from openpyxl import Workbook from openpyxl.styles import Font, Border,Side, Alignment from openpyxl.utils import get_column_letter def create_solder_paste_label(): # 创建新的工作簿 wb = Workbook() ws = wb.active ws.title = "Sheet1" # 设置打印区域为A1:C6 ws.print_area = 'A1:D7' # 定义边 …
 <h2><a href="https://www.nooae.com/b9a7d1f3.html">温馨提示弹窗</a></h2>
 <h5><i class="icon-feather"></i> 周四 04 十二月 2025 </h5>
 import tkinter as tk import random import time import threading class TipWindowManager: """温馨提示窗口管理器""" def __init__(self): self.root = tk.Tk() self.root.withdraw() # 使用列表存储活跃窗口，避免额外数据结构占 …
@@ -34,20 +34,23 @@ import tkinter as tk import random import time import threading class TipWindowM
 <h5><i class="icon-feather"></i> 周三 03 十二月 2025 </h5>
 import pandas as pd import os # 查找当前文件夹.xlsx文件 fullpath = [f for f in os.listdir('.') if not f.startswith("~$") and f.endswith(".xlsx")] # 读取表格信息 sheet2 = pd.read_excel(fullpath,sheet_name='Sheet2') sheet3 = pd.read_excel(fullpath,sheet_name='Sheet3') # 提取工 …
 <h2><a href="https://www.nooae.com/b9a7d1f7.html">微信定时消息</a></h2>
-<h5><i class="icon-feather"></i> 周三 03 十二月 2025 </h5>
+<h5><i class="icon-feather"></i> 周日 03 八月 2025 </h5>
 import pandas as pd import schedule import time import pyautogui import os import pyperclip # 定义打开Excel文件函数 def read_excel(file_path): data = pd.read_excel(file_path) return data # 定义微信发送消息函数 def job(msg,who): # 打开微信 os.system("start weixin …
 <h2><a href="https://www.nooae.com/e9a7d1f1.html">生成库位二维码</a></h2>
-<h5><i class="icon-feather"></i> 周三 03 十二月 2025 </h5>
+<h5><i class="icon-feather"></i> 周二 03 六月 2025 </h5>
 import qrcode from PIL import Image, ImageDraw, ImageFont import os # 输入库位编码和名称 qr_text = input("输入库位编码：") qr_name = input("输入库位名称：") # 检查输入是否为空 if not qr_text or not qr_name: print …
+<h2><a href="https://www.nooae.com/a9a7d1f7.html">生成站位查询表</a></h2>
+<h5><i class="icon-feather"></i> 周四 13 三月 2025 </h5>
+import openpyxl from openpyxl.styles import numbers import re import os # 查找当前xlsx文件 excelfiles = [f for f in os.listdir('.') if not f.startswith("~$") and f.endswith(".xlsx")] # 加载工作簿 wb = openpyxl.load_workbook(excelfiles[0]) ws = wb.active # 1. 将D列转换为文本格式，并将该 …
 <h2><a href="https://www.nooae.com/e9a7d1f7.html">数据采集</a></h2>
-<h5><i class="icon-feather"></i> 周一 01 十二月 2025 </h5>
+<h5><i class="icon-feather"></i> 周六 01 三月 2025 </h5>
 import os import pandas as pd from selenium import webdriver from selenium.webdriver.common.by import By from selenium.webdriver.common.action_chains import ActionChains from selenium.webdriver.common.keys import Keys from selenium.webdriver.support.ui import WebDriverWait from selenium.webdriver.support import expected_conditions as EC user = input("请输 …
-<h2><a href="https://www.nooae.com/e9a7d1f8.html">批量查询</a></h2>
-<h5><i class="icon-feather"></i> 周一 01 十二月 2025 </h5>
-import os import openpyxl from selenium import webdriver from selenium.webdriver.common.by import By from selenium.webdriver.common.keys import Keys from selenium.webdriver.support.ui import WebDriverWait from selenium.webdriver.support import expected_conditions as EC user = input="请输入账号：" psw = "请输入密码 …
-<h2><a href="https://www.nooae.com/e9a7d1f9.html">批量生成标签</a></h2>
-<h5><i class="icon-feather"></i> 周一 01 十二月 2025 </h5>
+<h2><a href="https://www.nooae.com/e9a7d1f9.html">批量复制标签</a></h2>
+<h5><i class="icon-feather"></i> 周日 01 十二月 2024 </h5>
 import os import qrcode import openpyxl from openpyxl.drawing.image import Image # 制作二维码 def gen_image(text,name): img = qrcode.make(text) with open(name,"wb") as f: img.save(f) # 写入二维码 def write_img(img_name,position): imgsize = (720/12,720/12) img = Image …
+<h2><a href="https://www.nooae.com/e9a7d1f8.html">批量查询</a></h2>
+<h5><i class="icon-feather"></i> 周二 08 十月 2024 </h5>
+import os import openpyxl from selenium import webdriver from selenium.webdriver.common.by import By from selenium.webdriver.common.keys import Keys from selenium.webdriver.support.ui import WebDriverWait from selenium.webdriver.support import expected_conditions as EC user = input="请输入账号：" psw = "请输入密码 …
 <div class="pagination">
     page 1 of 1.
 </div>    </div>
