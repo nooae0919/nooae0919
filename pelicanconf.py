@@ -17,6 +17,7 @@ JINJA_ENVIRONMENT = {
 
 AUTHOR = 'nooae'
 SITENAME = "Nooae's blog"
+SITESUBTITLE = 'Good good study, day day up!'
 SITEURL = "https://www.nooae.com"
 FAVICON = '/themes/storm/favicon.ico'    # 浏览器图标
 
@@ -50,6 +51,5 @@ DEFAULT_PAGINATION = False
 
 # Uncomment following line if you want document-relative URLs when developing
 # RELATIVE_URLS = True
-
 
 

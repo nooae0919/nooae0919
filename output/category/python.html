@@ -21,6 +21,9 @@
     </div>
 </div>
     <div id="main">
+<h2><a href="https://www.nooae.com/f9a7d1f1.html">生成备料清单</a></h2>
+<h5><i class="icon-feather"></i> 周四 15 一月 2026 </h5>
+import openpyxl from openpyxl.styles import Alignment, PatternFill, Font, Border, Side from openpyxl.utils import get_column_letter # 创建新的工作簿 wb = openpyxl.Workbook() # ========== 1. 创建备料清单（模板）工作表 ========== ws1 = wb.active ws1.title = "备料清单（模板）" # 设 …
 <h2><a href="https://www.nooae.com/a9a7d1f7.html">生成站位查询表</a></h2>
 <h5><i class="icon-feather"></i> 周二 13 一月 2026 </h5>
 import openpyxl from openpyxl.styles import numbers import re import os # 查找当前xlsx文件 excelfiles = [f for f in os.listdir('.') if not f.startswith("~$") and f.endswith(".xlsx")] # 加载工作簿 wb = openpyxl.load_workbook(excelfiles[0]) ws = wb.active # 1. 将D列转换为文本格式，并将该 …
