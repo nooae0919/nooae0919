@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>音乐搜索</title>
+  <meta charset="utf-8">
+<meta name="description" content=""><meta name="author" content="nooae">  <meta name="viewport" content="initial-scale=1, maximum-scale=1" />
+  <meta http-equiv="Cache-Control" content="max-age=604800, must-revalidate" />
+  <link href="https://www.nooae.com/theme/css/screen.css" rel="stylesheet" type="text/css" />
+  <link rel="icon" href="https://www.nooae.com/favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="https://www.nooae.com/favicon.ico" type="image/x-icon">
+  <link href="https://www.nooae.com/" type="application/atom+xml" rel="alternate" title="Nooae's blog ATOM Feed" />
+</head>
+<body>
+<div id="outer-wrapper">
+<div id="header-wrapper">
+  <div class="logo"><a href="https://www.nooae.com">Nooae's blog</a></div>
+  <div class="small">Good good study, day day up!</div>
+    <div class="nav">
+  <li><a href="https://www.nooae.com//">Home</a></li>
+  <li><a href="https://www.nooae.com//archives.html">Archives</a></li>
+    </div>
+</div>
+    <div id="main">
+<h2><a href="https://www.nooae.com/./pages/yin-le-sou-suo.html">音乐搜索</a></h2>
+
+    <div class="container">
+        <h1>🎵 音乐搜索</h1>
+        
+        <div class="search-section">
+            <div class="search-box">
+                <input type="text" class="search-input" id="searchInput" placeholder="输入歌曲名称...">
+                <button class="search-btn" id="searchBtn">搜索</button>
+            </div>
+            
+            <div class="predefined-searches">
+                <span style="color: #7f8c8d; margin-right: 10px;">快速搜索：</span>
+<button class="predefined-btn" data-query="周杰伦">周杰伦</button>
+<button class="predefined-btn" data-query="Taylor Swift">Taylor Swift</button>
+<button class="predefined-btn" data-query="古典音乐">古典音乐</button>
+<button class="predefined-btn" data-query="流行歌曲">流行歌曲</button>
+<button class="predefined-btn" data-query="K-pop">K-pop</button>
+            </div>
+        </div>
+        
+        <div class="results-section" id="resultsSection">
+            <div class="results-header">
+                <h2 id="resultsTitle">搜索结果</h2>
+                <div id="resultsCount"></div>
+            </div>
+            <div class="song-list" id="songList">
+                <!-- 歌曲列表将在这里动态显示 -->
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 预加载的数据
+        const preloadedData = {"周杰伦": [{"artist": "周杰伦", "title": "反方向的钟", "url": "https://track.pinkamuz.pro/download/3336b3b0303436b0348c3731353332b63430310400/7a8941058aaf4df5147042ce104568da/%E5%91%A8%E6%9D%B0%E4%BC%A6%20-%20%E5%8F%8D%E6%96%B9%E5%90%91%E7%9A%84%E9%92%9F.mp3"}, {"artist": "周杰伦", "title": "夜曲", "url": "https://track.pinkamuz.pro/download/333336333636b330b2883731353332b63430360100/7a8941058aaf4df5147042ce104568da/%E5%91%A8%E6%9D%B0%E4%BC%A6%20-%20%E5%A4%9C%E6%9B%B2.mp3"}, {"artist": "周杰倫", "title": "稻香(спасительная)))", "url": "https://track.pinkamuz.pro/download/333134b33435313731893731353332b63430360300/7a8941058aaf4df5147042ce104568da/%E5%91%A8%E6%9D%B0%E5%80%AB%20-%20%E7%A8%BB%E9%A6%99%28%D1%81%D0%BF%D0%B0%D1%81%D0%B8%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D0%B0%D1%8F%29%29%29.mp3"}, {"artist": "周杰伦", "title": "七里香", "url": "https://track.pinkamuz.pro/download/33363737b2b03433348d3731353332b63430370200/7a8941058aaf4df5147042ce104568da/%E5%91%A8%E6%9D%B0%E4%BC%A6%20-%20%E4%B8%83%E9%87%8C%E9%A6%99.mp3"}, {"artist": "周杰伦", "title": "不能说的秘密", "url": "https://track.pinkamuz.pro/download/33313535b0343634b28c3731353332b63434310600/7a8941058aaf4df5147042ce104568da/%E5%91%A8%E6%9D%B0%E4%BC%A6%20-%20%E4%B8%8D%E8%83%BD%E8%AF%B4%E7%9A%84%E7%A7%98%E5%AF%86.mp3"}], "Taylor Swift": [{"artist": "Taylor Swift", "title": "Cruel Summer", "url": "https://track.pinkamuz.pro/download/33313731b1b43432348b37313533b6303436300000/28239d6140b4b5d6e1a8d8d4b3a05751/Taylor%20Swift%20-%20Cruel%20Summer.mp3"}, {"artist": "Taylor Swift", "title": "You Belong With Me", "url": "https://track.pinkamuz.pro/download/3336373437313531318e3731353336333137330400/28239d6140b4b5d6e1a8d8d4b3a05751/Taylor%20Swift%20-%20You%20Belong%20With%20Me.mp3"}, {"artist": "Taylor Swift", "title": "Daylight", "url": "https://track.pinkamuz.pro/download/33313731b1b43432358c37313533b6303435320300/28239d6140b4b5d6e1a8d8d4b3a05751/Taylor%20Swift%20-%20Daylight.mp3"}, {"artist": "Taylor Swift", "title": "august", "url": "https://track.pinkamuz.pro/download/33313731b1b43432b48c3731353335b23037b60000/28239d6140b4b5d6e1a8d8d4b3a05751/Taylor%20Swift%20-%20august.mp3"}, {"artist": "Taylor Swift", "title": "Karma", "url": "https://track.pinkamuz.pro/download/3334343033373636308f3731353332313237320000/28239d6140b4b5d6e1a8d8d4b3a05751/Taylor%20Swift%20-%20Karma.mp3"}], "古典音乐": [{"artist": "赖琳", "title": "古典音乐", "url": "https://track.pinkamuz.pro/download/33313731b1b43434b68c3731353336333437b20400/9949600a0dbf198669c81e8542269c43/%E8%B5%96%E7%90%B3%20-%20%E5%8F%A4%E5%85%B8%E9%9F%B3%E4%B9%90.mp3"}, {"artist": "古典音乐", "title": "好听 (美女图)", "url": "https://track.pinkamuz.pro/download/33b33032b33033318a3731353332b634b0340600/9949600a0dbf198669c81e8542269c43/%E5%8F%A4%E5%85%B8%E9%9F%B3%E4%B9%90%20-%20%E5%A5%BD%E5%90%AC%20%28%E7%BE%8E%E5%A5%B3%E5%9B%BE%29.mp3"}, {"artist": "自学, 唐白月, 大脑发育", "title": "古典音乐", "url": "https://track.pinkamuz.pro/download/33313731b1b434b2308e3731353337373633360600/9949600a0dbf198669c81e8542269c43/%E8%87%AA%E5%AD%A6%2C%20%E5%94%90%E7%99%BD%E6%9C%88%2C%20%E5%A4%A7%E8%84%91%E5%8F%91%E8%82%B2%20-%20%E5%8F%A4%E5%85%B8%E9%9F%B3%E4%B9%90.mp3"}, {"artist": "考试", "title": "古典音乐", "url": "https://track.pinkamuz.pro/download/33313731b1b434b230883731353333313036b00400/9949600a0dbf198669c81e8542269c43/%E8%80%83%E8%AF%95%20-%20%E5%8F%A4%E5%85%B8%E9%9F%B3%E4%B9%90.mp3"}, {"artist": "宝贝歌曲", "title": "古典音乐", "url": "https://track.pinkamuz.pro/download/33313731b1b434b2308a373135333330b734360200/9949600a0dbf198669c81e8542269c43/%E5%AE%9D%E8%B4%9D%E6%AD%8C%E6%9B%B2%20-%20%E5%8F%A4%E5%85%B8%E9%9F%B3%E4%B9%90.mp3"}], "流行歌曲": [{"artist": "李榮浩 (Ronghao Li)", "title": "流行歌曲", "url": "https://track.pinkamuz.pro/download/33343532b5303135378c3731353332b63433350700/2699607511a9225591d1db22a7d2b045/%E6%9D%8E%E6%A6%AE%E6%B5%A9%20%28Ronghao%20Li%29%20-%20%E6%B5%81%E8%A1%8C%E6%AD%8C%E6%9B%B2.mp3"}, {"artist": "安静的轻音乐", "title": "流行歌曲", "url": "https://track.pinkamuz.pro/download/33313731b1b43432348837313533b6b03034300300/2699607511a9225591d1db22a7d2b045/%E5%AE%89%E9%9D%99%E7%9A%84%E8%BD%BB%E9%9F%B3%E4%B9%90%20-%20%E6%B5%81%E8%A1%8C%E6%AD%8C%E6%9B%B2.mp3"}, {"artist": "顏黎明 feat. 洪劭軒", "title": "流行歌曲", "url": "https://track.pinkamuz.pro/download/d33532303034b6343131358fb784d000/2699607511a9225591d1db22a7d2b045/%E9%A1%8F%E9%BB%8E%E6%98%8E%20feat.%20%E6%B4%AA%E5%8A%AD%E8%BB%92%20-%20%E6%B5%81%E8%A1%8C%E6%AD%8C%E6%9B%B2.mp3"}, {"artist": "李荣浩", "title": "流行歌曲", "url": "https://track.pinkamuz.pro/download/d33537b030b73035368937313631b03434b5300200/2699607511a9225591d1db22a7d2b045/%E6%9D%8E%E8%8D%A3%E6%B5%A9%20-%20%E6%B5%81%E8%A1%8C%E6%AD%8C%E6%9B%B2.mp3"}, {"artist": "我的SPA时刻", "title": "流行歌曲", "url": "https://track.pinkamuz.pro/download/33313731b1b43434358837313533b6343736360700/2699607511a9225591d1db22a7d2b045/%E6%88%91%E7%9A%84SPA%E6%97%B6%E5%88%BB%20-%20%E6%B5%81%E8%A1%8C%E6%AD%8C%E6%9B%B2.mp3"}], "K-pop": [{"artist": "BTS, Stray kids, Blackpink,Twice", "title": "kpop флешмоб", "url": "https://track.pinkamuz.pro/download/333631b1343636b7b48c3731353332b63433330200/ea6a3a12af878a2dce0c635c81a826a3/BTS%2C%20Stray%20kids%2C%20Blackpink%2CTwice%20-%20kpop%20%D1%84%D0%BB%D0%B5%D1%88%D0%BC%D0%BE%D0%B1.mp3"}, {"artist": "MAMA RUSSIA", "title": "K-pop", "url": "https://track.pinkamuz.pro/download/33313731b1b434b2b488373135b3b034b030310600/ea6a3a12af878a2dce0c635c81a826a3/MAMA%20RUSSIA%20-%20K-pop.mp3"}, {"artist": "bts somi", "title": "kpop", "url": "https://track.pinkamuz.pro/download/333633b630343033328b3731353332313034b30000/ea6a3a12af878a2dce0c635c81a826a3/bts%20somi%20-%20kpop.mp3"}, {"artist": "kpop", "title": "Random dance 2020-2023", "url": "https://track.pinkamuz.pro/download/3334313631373537378a3731353332b6b434b70000/ea6a3a12af878a2dce0c635c81a826a3/kpop%20-%20Random%20dance%202020-2023.mp3"}, {"artist": "SUPER JUNIOR", "title": "05. Super Girl (Korean Ver.)", "url": "https://track.pinkamuz.pro/download/d335353135323634318d37313533323130b0b40000/ea6a3a12af878a2dce0c635c81a826a3/SUPER%20JUNIOR%20-%2005.%20Super%20Girl%20%28Korean%20Ver.%29.mp3"}]}
+;
+        
+        // DOM元素
+        const searchInput = document.getElementById('searchInput');
+        const searchBtn = document.getElementById('searchBtn');
+        const resultsSection = document.getElementById('resultsSection');
+        const resultsTitle = document.getElementById('resultsTitle');
+        const resultsCount = document.getElementById('resultsCount');
+        const songList = document.getElementById('songList');
+        
+        // 搜索函数
+        function searchSongs(query) {
+            query = query.trim();
+            if (!query) return;
+            
+            // 显示加载状态
+            songList.innerHTML = '<div class="loading">搜索中...</div>';
+            resultsSection.classList.add('active');
+            resultsTitle.textContent = `"${query}" 的搜索结果`;
+            
+            // 模拟延迟，让用户体验更好
+            setTimeout(() => {
+                displayResults(query);
+            }, 300);
+        }
+        
+        // 显示结果
+        function displayResults(query) {
+            let results = [];
+            
+            // 如果查询匹配预加载的数据
+            if (preloadedData[query]) {
+                results = preloadedData[query];
+            } else {
+                // 尝试模糊匹配
+                for (const [key, value] of Object.entries(preloadedData)) {
+                    if (key.includes(query) || query.includes(key)) {
+                        results = results.concat(value);
+                    }
+                }
+            }
+            
+            // 更新计数
+            resultsCount.textContent = `找到 ${results.length} 首歌曲`;
+            
+            // 显示结果
+            if (results.length === 0) {
+                songList.innerHTML = '<div class="empty-results">未找到相关歌曲</div>';
+                return;
+            }
+            
+            let html = '';
+            results.forEach((song, index) => {
+                const m3uLine = `#EXTINF:-1,${song.title} - ${song.artist}\n${song.url}`;
+                html += `
+                    <div class="song-item">
+                        <div class="song-title">${song.title}</div>
+                        <div class="song-artist">👤 ${song.artist}</div>
+                        <a href="${song.url}" class="song-url" target="_blank">
+                            🔗 ${song.url}
+                        </a>
+                        <div class="m3u-format">
+                            ${m3uLine.replace(/\n/g, '<br>')}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            songList.innerHTML = html;
+        }
+        
+        // 事件监听
+        searchBtn.addEventListener('click', () => {
+            searchSongs(searchInput.value);
+        });
+        
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                searchSongs(searchInput.value);
+            }
+        });
+        
+        // 预定义搜索按钮事件
+        document.querySelectorAll('.predefined-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const query = btn.getAttribute('data-query');
+                searchInput.value = query;
+                searchSongs(query);
+            });
+        });
+        
+        // 页面加载时显示第一个预定义搜索的结果
+        window.addEventListener('DOMContentLoaded', () => {
+            const firstQuery = Object.keys(preloadedData)[0];
+            if (firstQuery) {
+                searchInput.value = firstQuery;
+                searchSongs(firstQuery);
+            }
+        });
+    </script>
+
+
+    </div>
+</div>
+<div id="footer-wrapper">
+<ul class="footer">
+     <li class="footer"><a href="https://www.nooae.com/tag/openpyxl.html">openpyxl&nbsp;&bull;&nbsp;</a></li>
+     <li class="footer"><a href="https://www.nooae.com/tag/pandas.html">pandas&nbsp;&bull;&nbsp;</a></li>
+     <li class="footer"><a href="https://www.nooae.com/tag/pyautogui.html">pyautogui&nbsp;&bull;&nbsp;</a></li>
+     <li class="footer"><a href="https://www.nooae.com/tag/qrcode.html">qrcode&nbsp;&bull;&nbsp;</a></li>
+     <li class="footer"><a href="https://www.nooae.com/tag/selenium.html">selenium&nbsp;&bull;&nbsp;</a></li>
+     <li class="footer"><a href="https://www.nooae.com/tag/tkinter.html">tkinter</a></li>
+</ul><ul class="footer">
+    <li class="footer">&copy;&nbsp;2014&nbsp;::</li>
+    <li class="footer"><a href="https://www.nooae.com">Nooae's blog </a>&nbsp;::</li>
+    <li class="footer">powered by <a href="https://github.com/getpelican">pelican</a>&nbsp;::</li>
+    <li class="footer"><a href="http://creativecommons.org/licenses/by-nc/3.0/deed.ru">CC BY-NC</a></li>
+</ul>
+</div></body>
+</html>
