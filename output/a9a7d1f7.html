@@ -3,7 +3,7 @@
 <head>
   <title>生成站位查询表 | Nooae's blog</title>
   <meta charset="utf-8">
-<meta name="description" content="import pandas as pd import openpyxl from openpyxl.styles import numbers import re import os import csv # 查找当前csv文件 excelfiles1 = [f for f in os.listdir('.') if not f.startswith("~$") and f.endswith(".csv")] # 创建xlsx空白文件 wb1 = openpyxl.Workbook() ws1 = wb1.active # 修改默认 …"><meta name="author" content="nooae">  <meta name="viewport" content="initial-scale=1, maximum-scale=1" />
+<meta name="description" content="import openpyxl from openpyxl.styles import numbers import re import os import csv # 查找当前csv文件 excelfiles1 = [f for f in os.listdir('.') if not f.startswith("~$") and f.endswith(".csv")] # 创建xlsx空白文件 wb1 = openpyxl.Workbook() ws1 = wb1.active # 修改默认工作表的 …"><meta name="author" content="nooae">  <meta name="viewport" content="initial-scale=1, maximum-scale=1" />
   <meta http-equiv="Cache-Control" content="max-age=604800, must-revalidate" />
   <link href="https://www.nooae.com/theme/css/screen.css" rel="stylesheet" type="text/css" />
   <link rel="icon" href="https://www.nooae.com/favicon.ico" type="image/x-icon">
@@ -29,8 +29,7 @@
 
 <!-- 以下是正文，使用 Markdown 语法 -->
 
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">openpyxl</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">openpyxl</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">openpyxl.styles</span><span class="w"> </span><span class="kn">import</span><span class="w"> </span><span class="n">numbers</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
