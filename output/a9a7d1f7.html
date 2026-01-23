@@ -3,7 +3,7 @@
 <head>
   <title>生成站位查询表 | Nooae's blog</title>
   <meta charset="utf-8">
-<meta name="description" content="import openpyxl from openpyxl.styles import numbers import re import os # 查找当前xlsx文件 excelfiles = [f for f in os.listdir('.') if not f.startswith("~$") and f.endswith(".xlsx")] # 加载工作簿 wb = openpyxl.load_workbook(excelfiles[0]) ws = wb.active # 1. 将D列转换为文本格式，并将该 …"><meta name="author" content="nooae">  <meta name="viewport" content="initial-scale=1, maximum-scale=1" />
+<meta name="description" content="import pandas as pd import openpyxl from openpyxl.styles import numbers import re import os import csv # 查找当前csv文件 excelfiles1 = [f for f in os.listdir('.') if not f.startswith("~$") and f.endswith(".csv")] # 创建xlsx空白文件 wb1 = openpyxl.Workbook() ws1 = wb1.active # 修改默认 …"><meta name="author" content="nooae">  <meta name="viewport" content="initial-scale=1, maximum-scale=1" />
   <meta http-equiv="Cache-Control" content="max-age=604800, must-revalidate" />
   <link href="https://www.nooae.com/theme/css/screen.css" rel="stylesheet" type="text/css" />
   <link rel="icon" href="https://www.nooae.com/favicon.ico" type="image/x-icon">
@@ -29,16 +29,35 @@
 
 <!-- 以下是正文，使用 Markdown 语法 -->
 
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">openpyxl</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">openpyxl</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">openpyxl.styles</span><span class="w"> </span><span class="kn">import</span><span class="w"> </span><span class="n">numbers</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">csv</span>
 
-<span class="c1"># 查找当前xlsx文件</span>
-<span class="n">excelfiles</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">f</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">f</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="n">f</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;~$&quot;</span><span class="p">)</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="n">f</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.xlsx&quot;</span><span class="p">)]</span>
+<span class="c1"># 查找当前csv文件</span>
+<span class="n">excelfiles1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">f</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">f</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="n">f</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;~$&quot;</span><span class="p">)</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="n">f</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.csv&quot;</span><span class="p">)]</span>
+
+<span class="c1"># 创建xlsx空白文件</span>
+<span class="n">wb1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">openpyxl</span><span class="o">.</span><span class="n">Workbook</span><span class="p">()</span>
+<span class="n">ws1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">wb1</span><span class="o">.</span><span class="n">active</span>
+
+<span class="c1"># 修改默认工作表的标题为&quot;站位表&quot;</span>
+<span class="n">ws1</span><span class="o">.</span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;站位表&quot;</span>
+
+<span class="c1"># 将csv文件内容填充到xlsx文件</span>
+<span class="k">with</span><span class="w"> </span><span class="nb">open</span><span class="p">(</span><span class="n">excelfiles1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="w"> </span><span class="s1">&#39;r&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;gbk&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">f</span><span class="p">:</span>
+<span class="w">    </span><span class="n">reader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">row</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">reader</span><span class="p">:</span>
+<span class="w">        </span><span class="n">ws1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+
+<span class="c1"># 存储为xlsx文件</span>
+<span class="n">outfile</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;modified_&quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">excelfiles1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;.csv&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;.xlsx&#39;</span><span class="p">)</span>
+<span class="n">wb1</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">outfile</span><span class="p">)</span>
 
 <span class="c1"># 加载工作簿</span>
-<span class="n">wb</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">openpyxl</span><span class="o">.</span><span class="n">load_workbook</span><span class="p">(</span><span class="n">excelfiles</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">wb</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">openpyxl</span><span class="o">.</span><span class="n">load_workbook</span><span class="p">(</span><span class="n">outfile</span><span class="p">)</span>
 <span class="n">ws</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">wb</span><span class="o">.</span><span class="n">active</span>
 
 <span class="c1"># 1. 将D列转换为文本格式，并将该列中的&#39;00&#39;替换为&#39;-&#39;</span>
@@ -99,19 +118,23 @@
 <span class="w">    </span><span class="c1"># 设置为常规格式</span>
 <span class="w">    </span><span class="n">cell</span><span class="o">.</span><span class="n">number_format</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;General&#39;</span>
 
-<span class="c1"># 保存工作簿</span>
-<span class="n">output_path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;modified_&quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">excelfiles</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="n">wb</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">output_path</span><span class="p">)</span>
+<span class="c1"># 创建站位查询工作表</span>
+<span class="n">ws2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">wb</span><span class="o">.</span><span class="n">create_sheet</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;站位查询&#39;</span><span class="p">)</span>
+<span class="n">ws2</span><span class="p">[</span><span class="s1">&#39;A1&#39;</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;SN编码&#39;</span>
+<span class="n">ws2</span><span class="p">[</span><span class="s1">&#39;B1&#39;</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;子件编码&#39;</span>
+<span class="n">ws2</span><span class="p">[</span><span class="s1">&#39;C1&#39;</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;站位&#39;</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;处理完成，文件已保存为: </span><span class="si">{</span><span class="n">output_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">操作总结：&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;1. D列已转换为文本格式，并将&#39;00&#39;替换为&#39;-&#39;&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;2. E列处理：&#39;L&#39;→&#39;1&#39;，&#39;R&#39;→&#39;2&#39;，空值→&#39;1&#39;&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;3. F列已设置为数值格式，保留4位小数&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;4. H列已设置为常规格式，并输入公式&#39;=Dn&amp;</span><span class="se">\&quot;</span><span class="s2">-</span><span class="se">\&quot;</span><span class="s2">&amp;En&#39;（n为行号）&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">详细统计：&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- 共处理了 </span><span class="si">{</span><span class="n">ws</span><span class="o">.</span><span class="n">max_row</span><span class="si">}</span><span class="s2"> 行数据&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- 共处理了 </span><span class="si">{</span><span class="n">ws</span><span class="o">.</span><span class="n">max_column</span><span class="si">}</span><span class="s2"> 列数据&quot;</span><span class="p">)</span>
+<span class="c1"># 填充查询公式</span>
+<span class="k">for</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">200</span><span class="p">):</span>
+<span class="w">    </span><span class="n">cell2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ws2</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;B</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span>
+<span class="w">    </span><span class="n">cell3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ws2</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;C</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span>
+<span class="w">    </span><span class="n">cell2</span><span class="o">.</span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sa">f</span><span class="s1">&#39;=IFERROR(VALUE(TRIM(MID(SUBSTITUTE(A</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">,&quot;|&quot;,REPT(&quot; &quot;,100)),1,100))),&quot;&quot;)&#39;</span>
+<span class="w">    </span><span class="n">cell3</span><span class="o">.</span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sa">f</span><span class="s1">&#39;=IF(LEN(B</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">)=10,VLOOKUP(B</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">,站位表!F:H,3,0),&quot;&quot;)&#39;</span>
+<span class="w">    </span><span class="n">cell2</span><span class="o">.</span><span class="n">number_format</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;General&#39;</span>
+<span class="w">    </span><span class="n">cell3</span><span class="o">.</span><span class="n">number_format</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;General&#39;</span>
+
+<span class="c1"># 保存工作簿</span>
+<span class="n">wb</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">outfile</span><span class="p">)</span><span class="w">    </span>
 </code></pre></div>
 
 <p align="center"><a href="#">on the top</a></p>
