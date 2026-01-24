@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>PDF转图片 | Nooae's blog</title>
+  <meta charset="utf-8">
+<meta name="description" content="import os import fitz # fitz就是pip install PyMuPDF def pyMuPDF_fitz(pdfPath, imagePath): print("imagePath=" + imagePath) pdfDoc = fitz.open(pdfPath) for pg in range(pdfDoc.pageCount): page = pdfDoc[pg] rotate = int(0) \#每个尺寸的缩放系数为1.3，这将为我们生成分 …"><meta name="author" content="nooae">  <meta name="viewport" content="initial-scale=1, maximum-scale=1" />
+  <meta http-equiv="Cache-Control" content="max-age=604800, must-revalidate" />
+  <link href="https://www.nooae.com/theme/css/screen.css" rel="stylesheet" type="text/css" />
+  <link rel="icon" href="https://www.nooae.com/favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="https://www.nooae.com/favicon.ico" type="image/x-icon">
+  <link href="https://www.nooae.com/" type="application/atom+xml" rel="alternate" title="Nooae's blog ATOM Feed" />
+</head>
+<body>
+<div id="outer-wrapper">
+<div id="header-wrapper">
+  <div class="logo"><a href="https://www.nooae.com">Nooae's blog</a></div>
+  <div class="small">Good good study, day day up!</div>
+    <div class="nav">
+  <li><a href="https://www.nooae.com//">Home</a></li>
+  <li><a href="https://www.nooae.com//archives.html">Archives</a></li>
+    </div>
+</div>
+    <div id="main">
+<h2><a href="https://www.nooae.com/b9b8d1f5.html">PDF转图片</a></h2>
+<h5><i class="icon-feather"></i> 周二 10 六月 2025
+<i class="icon-bookmarks"></i>
+<span><a href="https://www.nooae.com/tag/pymupdf.html">PyMuPDF</a> / </span>
+</h5>
+
+<!-- 以下是正文，使用 Markdown 语法 -->
+
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">fitz</span><span class="w">  </span><span class="c1"># fitz就是pip install PyMuPDF</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">pyMuPDF_fitz</span><span class="p">(</span><span class="n">pdfPath</span><span class="p">,</span><span class="w"> </span><span class="n">imagePath</span><span class="p">):</span>
+<span class="w">    </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;imagePath=&quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">imagePath</span><span class="p">)</span>
+<span class="w">    </span><span class="n">pdfDoc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fitz</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">pdfPath</span><span class="p">)</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">pg</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="nb">range</span><span class="p">(</span><span class="n">pdfDoc</span><span class="o">.</span><span class="n">pageCount</span><span class="p">):</span>
+<span class="w">        </span><span class="n">page</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pdfDoc</span><span class="p">[</span><span class="n">pg</span><span class="p">]</span>
+<span class="w">        </span><span class="n">rotate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">int</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="w">        \</span><span class="c1">#每个尺寸的缩放系数为1.3，这将为我们生成分辨率提高2.6的图像。</span>
+<span class="w">        \</span><span class="c1">#此处若是不做设置，默认图片大小为：792X612, dpi=96</span>
+<span class="w">        </span><span class="n">zoom_x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.33333333</span><span class="w">  </span><span class="c1"># (1.33333333--&gt;1056x816)   (2--&gt;1584x1224)</span>
+<span class="w">        </span><span class="n">zoom_y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.33333333</span>
+<span class="w">        </span><span class="n">mat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fitz</span><span class="o">.</span><span class="n">Matrix</span><span class="p">(</span><span class="n">zoom_x</span><span class="p">,</span><span class="w"> </span><span class="n">zoom_y</span><span class="p">)</span><span class="o">.</span><span class="n">preRotate</span><span class="p">(</span><span class="n">rotate</span><span class="p">)</span>
+<span class="w">        </span><span class="n">pix</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">page</span><span class="o">.</span><span class="n">getPixmap</span><span class="p">(</span><span class="n">matrix</span><span class="o">=</span><span class="n">mat</span><span class="p">,</span><span class="w"> </span><span class="n">alpha</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">imagePath</span><span class="p">):</span><span class="w">  </span><span class="c1"># 判断存放图片的文件夹是否存在</span>
+<span class="w">            </span><span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">imagePath</span><span class="p">)</span><span class="w">  </span><span class="c1"># 若图片文件夹不存在就创建</span>
+
+<span class="w">        </span><span class="n">pix</span><span class="o">.</span><span class="n">writePNG</span><span class="p">(</span><span class="n">imagePath</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s1">&#39;/&#39;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s1">&#39;images_</span><span class="si">%s</span><span class="s1">.png&#39;</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="n">pg</span><span class="p">)</span><span class="w">  </span><span class="c1"># 将图片写入指定的文件夹内</span>
+
+<span class="k">if</span><span class="w"> </span><span class="vm">__name__</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="n">pdfPath</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;123.pdf&#39;</span>
+<span class="w">    </span><span class="n">imagePath</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;./imgs&#39;</span>
+<span class="w">    </span><span class="n">pyMuPDF_fitz</span><span class="p">(</span><span class="n">pdfPath</span><span class="p">,</span><span class="w"> </span><span class="n">imagePath</span><span class="p">)</span>
+</code></pre></div>
+
+<p align="center"><a href="#">on the top</a></p>
+    </div>
+</div>
+<div id="footer-wrapper">
+<ul class="footer">
+     <li class="footer"><a href="https://www.nooae.com/tag/openpyxl.html">openpyxl&nbsp;&bull;&nbsp;</a></li>
+     <li class="footer"><a href="https://www.nooae.com/tag/pandas.html">pandas&nbsp;&bull;&nbsp;</a></li>
+     <li class="footer"><a href="https://www.nooae.com/tag/pyautogui.html">pyautogui&nbsp;&bull;&nbsp;</a></li>
+     <li class="footer"><a href="https://www.nooae.com/tag/pymupdf.html">PyMuPDF&nbsp;&bull;&nbsp;</a></li>
+     <li class="footer"><a href="https://www.nooae.com/tag/qrcode.html">qrcode&nbsp;&bull;&nbsp;</a></li>
+     <li class="footer"><a href="https://www.nooae.com/tag/requests.html">requests&nbsp;&bull;&nbsp;</a></li>
+     <li class="footer"><a href="https://www.nooae.com/tag/selenium.html">selenium&nbsp;&bull;&nbsp;</a></li>
+     <li class="footer"><a href="https://www.nooae.com/tag/tkinter.html">tkinter</a></li>
+</ul><ul class="footer">
+    <li class="footer">&copy;&nbsp;2014&nbsp;::</li>
+    <li class="footer"><a href="https://www.nooae.com">Nooae's blog </a>&nbsp;::</li>
+    <li class="footer">powered by <a href="https://github.com/getpelican">pelican</a>&nbsp;::</li>
+    <li class="footer"><a href="http://creativecommons.org/licenses/by-nc/3.0/deed.ru">CC BY-NC</a></li>
+</ul>
+</div></body>
+</html>
