@@ -54,6 +54,9 @@ import os import openpyxl from selenium import webdriver from selenium.webdriver
 <h2><a href="https://www.nooae.com/b9a8d1f3.html">搜索歌曲播放地址</a></h2>
 <h5><i class="icon-feather"></i> 周六 10 八月 2024 </h5>
 import requests import re def music(): song_name = input("请输入歌曲名称：") # 直接拼接URL（requests会自动编码） url = f"https://pinkamuz.pro/search/{song_name}" # 获取HTML response = requests.get(url) html = response.text # 查找歌曲信息 pattern = r'<span class="artist __adv_artist …
+<h2><a href="https://www.nooae.com/b9a8d1f4.html">PDF转图片</a></h2>
+<h5><i class="icon-feather"></i> 周六 10 八月 2024 </h5>
+import os import fitz # fitz就是pip install PyMuPDF def pyMuPDF_fitz(pdfPath, imagePath): print("imagePath=" + imagePath) pdfDoc = fitz.open(pdfPath) for pg in range(pdfDoc.pageCount): page = pdfDoc[pg] rotate = int(0) \#每个尺寸的缩放系数为1.3，这将为我们生成分 …
 <div class="pagination">
     page 1 of 1.
 </div>    </div>
@@ -63,6 +66,7 @@ import requests import re def music(): song_name = input("请输入歌曲名称�
      <li class="footer"><a href="https://www.nooae.com/tag/openpyxl.html">openpyxl&nbsp;&bull;&nbsp;</a></li>
      <li class="footer"><a href="https://www.nooae.com/tag/pandas.html">pandas&nbsp;&bull;&nbsp;</a></li>
      <li class="footer"><a href="https://www.nooae.com/tag/pyautogui.html">pyautogui&nbsp;&bull;&nbsp;</a></li>
+     <li class="footer"><a href="https://www.nooae.com/tag/pymupdf.html">PyMuPDF&nbsp;&bull;&nbsp;</a></li>
      <li class="footer"><a href="https://www.nooae.com/tag/qrcode.html">qrcode&nbsp;&bull;&nbsp;</a></li>
      <li class="footer"><a href="https://www.nooae.com/tag/requests.html">requests&nbsp;&bull;&nbsp;</a></li>
      <li class="footer"><a href="https://www.nooae.com/tag/selenium.html">selenium&nbsp;&bull;&nbsp;</a></li>
