@@ -3,7 +3,7 @@
 <head>
   <title>同步更新博客 | Nooae's blog</title>
   <meta charset="utf-8">
-<meta name="description" content="# 1.初始化仓库 git init # 2.先设置远程仓库 git remote add origin git@github.com:nooae0919/nooae0919.git # 3.配置用户信息 git config user.email "nooae0919@gmail.com" git config user.name "nooae0919" # 4.直接创建 …"><meta name="author" content="nooae">  <meta name="viewport" content="initial-scale=1, maximum-scale=1" />
+<meta name="description" content="# 1.初始化仓库 git init # 2.先设置远程仓库 git remote add origin git@github.com:***/***.git # 3.配置用户信息 git config user.email "***@gmail.com" git config user.name "***" # 4.直接创建并切换到 …"><meta name="author" content="nooae">  <meta name="viewport" content="initial-scale=1, maximum-scale=1" />
   <meta http-equiv="Cache-Control" content="max-age=604800, must-revalidate" />
   <link href="https://www.nooae.com/theme/css/screen.css" rel="stylesheet" type="text/css" />
   <link rel="icon" href="https://www.nooae.com/favicon.ico" type="image/x-icon">
@@ -33,28 +33,28 @@
 <span class="n">git</span><span class="w"> </span><span class="n">init</span>
 
 <span class="err">#</span><span class="w"> </span><span class="mf">2.</span><span class="n">先设置远程仓库</span>
-<span class="n">git</span><span class="w"> </span><span class="n">remote</span><span class="w"> </span><span class="k">add</span><span class="w"> </span><span class="n">origin</span><span class="w"> </span><span class="n">git</span><span class="nv">@github</span><span class="p">.</span><span class="nl">com</span><span class="p">:</span><span class="n">nooae0919</span><span class="o">/</span><span class="n">nooae0919</span><span class="p">.</span><span class="n">git</span>
+<span class="n">git</span><span class="w"> </span><span class="n">remote</span><span class="w"> </span><span class="k">add</span><span class="w"> </span><span class="n">origin</span><span class="w"> </span><span class="n">git</span><span class="nv">@github</span><span class="p">.</span><span class="nl">com</span><span class="p">:</span><span class="o">***</span><span class="cm">/***.git</span>
 
-<span class="err">#</span><span class="w"> </span><span class="mf">3.</span><span class="n">配置用户信息</span>
-<span class="n">git</span><span class="w"> </span><span class="n">config</span><span class="w"> </span><span class="k">user</span><span class="p">.</span><span class="n">email</span><span class="w"> </span><span class="ss">&quot;nooae0919@gmail.com&quot;</span>
-<span class="n">git</span><span class="w"> </span><span class="n">config</span><span class="w"> </span><span class="k">user</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="ss">&quot;nooae0919&quot;</span>
+<span class="cm"># 3.配置用户信息</span>
+<span class="cm">git config user.email &quot;***@gmail.com&quot;</span>
+<span class="cm">git config user.name &quot;***&quot;</span>
 
-<span class="err">#</span><span class="w"> </span><span class="mf">4.</span><span class="n">直接创建并切换到</span><span class="w"> </span><span class="n">main</span><span class="w"> </span><span class="n">分支</span>
-<span class="n">git</span><span class="w"> </span><span class="n">checkout</span><span class="w"> </span><span class="o">-</span><span class="n">b</span><span class="w"> </span><span class="n">main</span>
+<span class="cm"># 4.直接创建并切换到 main 分支</span>
+<span class="cm">git checkout -b main</span>
 
-<span class="err">#</span><span class="w"> </span><span class="mf">5.</span><span class="n">查看本地状态</span>
-<span class="n">git</span><span class="w"> </span><span class="n">status</span>
-<span class="n">git</span><span class="w"> </span><span class="n">branch</span>
+<span class="cm"># 5.查看本地状态</span>
+<span class="cm">git status</span>
+<span class="cm">git branch</span>
 
-<span class="err">#</span><span class="w"> </span><span class="mf">6.</span><span class="n">拉取远程仓库内容</span>
-<span class="n">git</span><span class="w"> </span><span class="n">pull</span>
+<span class="cm"># 6.拉取远程仓库内容</span>
+<span class="cm">git pull</span>
 
-<span class="err">#</span><span class="w"> </span><span class="mf">7.</span><span class="n">如果有内容需要提交</span><span class="err">，</span><span class="n">先提交</span>
-<span class="n">git</span><span class="w"> </span><span class="k">add</span><span class="w"> </span><span class="k">output</span>
-<span class="n">git</span><span class="w"> </span><span class="k">commit</span><span class="w"> </span><span class="o">-</span><span class="n">m</span><span class="w"> </span><span class="ss">&quot;更新内容&quot;</span>
+<span class="cm"># 7.如果有内容需要提交，先提交</span>
+<span class="cm">git add output</span>
+<span class="cm">git commit -m &quot;更新内容&quot;</span>
 
-<span class="err">#</span><span class="w"> </span><span class="mf">8.</span><span class="n">推送到远程仓库</span>
-<span class="n">git</span><span class="w"> </span><span class="n">push</span><span class="w"> </span><span class="o">-</span><span class="n">u</span><span class="w"> </span><span class="n">origin</span><span class="w"> </span><span class="n">main</span>
+<span class="cm"># 8.推送到远程仓库</span>
+<span class="cm">git push -u origin main</span>
 </code></pre></div>
 
 <p align="center"><a href="#">on the top</a></p>

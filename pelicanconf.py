@@ -8,13 +8,7 @@ MENUITEMS = [
     ('Archives', '/archives.html'),
 ]
 
-# 启用 i18n 插件
-PLUGINS = ['i18n_subsites']  # 或 'i18n'
 
-# 配置 i18n
-JINJA_ENVIRONMENT = {
-    'extensions': ['jinja2.ext.i18n']
-}
 
 AUTHOR = 'nooae'
 SITENAME = "Nooae's blog"
@@ -26,7 +20,7 @@ PATH = "content"
 
 TIMEZONE = 'Asia/Shanghai'
 
-DEFAULT_LANG = 'zh'
+DEFAULT_LANG = 'en'
 
 # Feed generation is usually not desired when developing
 FEED_ALL_ATOM = None
