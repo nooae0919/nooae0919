@@ -8,19 +8,14 @@ MENUITEMS = [
     ('Archives', '/archives.html'),
 ]
 
-# 启用 i18n 插件
-PLUGINS = ['i18n_subsites']  # 或 'i18n'
 
-# 配置 i18n
-JINJA_ENVIRONMENT = {
-    'extensions': ['jinja2.ext.i18n']
-}
 
 AUTHOR = 'nooae'
 SITENAME = "Nooae's blog"
 SITESUBTITLE = 'Good good study, day day up!'
 SITEURL = "https://www.nooae.com"
-FAVICON = '/themes/storm/favicon.ico'    # 浏览器图标
+STATIC_PATHS = ['extra']
+EXTRA_PATH_METADATA = {'extra/favicon.ico': {'path': 'favicon.ico'}}
 
 PATH = "content"
 
