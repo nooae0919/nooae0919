@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>搜索歌曲播放地址 | Nooae's blog</title>
+  <meta charset="utf-8">
+<meta name="description" content="import requests import re def music(): song_name = input("请输入歌曲名称：") # 直接拼接URL（requests会自动编码） url = f"https://pinkamuz.pro/search/{song_name}" # 获取HTML response = requests.get(url) html = response.text # 查找歌曲信息 pattern = r'<span class="artist __adv_artist …"><meta name="author" content="nooae">  <meta name="viewport" content="initial-scale=1, maximum-scale=1" />
+  <meta http-equiv="Cache-Control" content="max-age=604800, must-revalidate" />
+  <link href="https://www.nooae.com/theme/css/screen.css" rel="stylesheet" type="text/css" />
+  <link rel="icon" href="https://www.nooae.com/favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="https://www.nooae.com/favicon.ico" type="image/x-icon">
+  <link href="https://www.nooae.com/" type="application/atom+xml" rel="alternate" title="Nooae's blog ATOM Feed" />
+</head>
+<body>
+<div id="outer-wrapper">
+<div id="header-wrapper">
+  <div class="logo"><a href="https://www.nooae.com">Nooae's blog</a></div>
+  <div class="small">Good good study, day day up!</div>
+    <div class="nav">
+  <li><a href="https://www.nooae.com//">Home</a></li>
+  <li><a href="https://www.nooae.com//archives.html">Archives</a></li>
+    </div>
+</div>
+    <div id="main">
+<h2><a href="https://www.nooae.com/b9a8d1f9.html">搜索歌曲播放地址</a></h2>
+<h5><i class="icon-feather"></i> 周六 10 八月 2024
+<i class="icon-bookmarks"></i>
+<span><a href="https://www.nooae.com/tag/requests.html">requests</a> / </span>
+</h5>
+
+<!-- 以下是正文，使用 Markdown 语法 -->
+
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">music</span><span class="p">():</span>
+<span class="w">    </span><span class="n">song_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">input</span><span class="p">(</span><span class="s2">&quot;请输入歌曲名称：&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="c1"># 直接拼接URL（requests会自动编码）</span>
+<span class="w">    </span><span class="n">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sa">f</span><span class="s2">&quot;https://pinkamuz.pro/search/</span><span class="si">{</span><span class="n">song_name</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="w">    </span><span class="c1"># 获取HTML</span>
+<span class="w">    </span><span class="n">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+<span class="w">    </span><span class="n">html</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">response</span><span class="o">.</span><span class="n">text</span>
+<span class="w">    </span><span class="c1"># 查找歌曲信息</span>
+<span class="w">    </span><span class="n">pattern</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sa">r</span><span class="s1">&#39;&lt;span class=&quot;artist __adv_artist&quot;&gt;.*?&lt;a[^&gt;]*&gt;([^&lt;]+)&lt;/a&gt;.*?&lt;span class=&quot;title __adv_name&quot;&gt;([^&lt;]+)&lt;/span&gt;.*?&lt;a class=&quot;link&quot;[^&gt;]*href=&quot;([^&quot;]+)&quot;&#39;</span>
+<span class="w">    </span><span class="n">results</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span><span class="w"> </span><span class="n">html</span><span class="p">,</span><span class="w"> </span><span class="n">re</span><span class="o">.</span><span class="n">DOTALL</span><span class="p">)</span>
+<span class="w">    </span><span class="c1"># 只取前5条结果</span>
+<span class="w">    </span><span class="n">results</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">results</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span>
+<span class="w">    </span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;找到 </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">)</span><span class="si">}</span><span class="s2"> 首歌曲：</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">artist</span><span class="p">,</span><span class="w"> </span><span class="n">title</span><span class="p">,</span><span class="w"> </span><span class="n">play_url</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">results</span><span class="p">:</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="n">play_url</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;//&#39;</span><span class="p">):</span>
+<span class="w">            </span><span class="n">play_url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;https:&#39;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">play_url</span>
+<span class="w">        </span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;#EXTINF:-1,</span><span class="si">{</span><span class="n">title</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">artist</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="nb">print</span><span class="p">(</span><span class="n">play_url</span><span class="p">)</span>
+<span class="w">        </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">40</span><span class="p">)</span>
+
+<span class="k">while</span><span class="w"> </span><span class="kc">True</span><span class="p">:</span>
+<span class="w">    </span><span class="n">music</span><span class="p">()</span><span class="w"> </span>
+</code></pre></div>
+
+<p align="center"><a href="#">on the top</a></p>
+    </div>
+</div>
+<div id="footer-wrapper">
+<ul class="footer">
+     <li class="footer"><a href="https://www.nooae.com/tag/openpyxl.html">openpyxl&nbsp;&bull;&nbsp;</a></li>
+     <li class="footer"><a href="https://www.nooae.com/tag/pandas.html">pandas&nbsp;&bull;&nbsp;</a></li>
+     <li class="footer"><a href="https://www.nooae.com/tag/pelican.html">pelican&nbsp;&bull;&nbsp;</a></li>
+     <li class="footer"><a href="https://www.nooae.com/tag/pyautogui.html">pyautogui&nbsp;&bull;&nbsp;</a></li>
+     <li class="footer"><a href="https://www.nooae.com/tag/pymupdf.html">PyMuPDF&nbsp;&bull;&nbsp;</a></li>
+     <li class="footer"><a href="https://www.nooae.com/tag/qrcode.html">qrcode&nbsp;&bull;&nbsp;</a></li>
+     <li class="footer"><a href="https://www.nooae.com/tag/requests.html">requests&nbsp;&bull;&nbsp;</a></li>
+     <li class="footer"><a href="https://www.nooae.com/tag/selenium.html">selenium&nbsp;&bull;&nbsp;</a></li>
+     <li class="footer"><a href="https://www.nooae.com/tag/tkinter.html">tkinter</a></li>
+</ul><ul class="footer">
+    <li class="footer">&copy;&nbsp;2014&nbsp;::</li>
+    <li class="footer"><a href="https://www.nooae.com">Nooae's blog </a>&nbsp;::</li>
+    <li class="footer">powered by <a href="https://github.com/getpelican">pelican</a>&nbsp;::</li>
+    <li class="footer"><a href="http://creativecommons.org/licenses/by-nc/3.0/deed.ru">CC BY-NC</a></li>
+</ul>
+</div></body>
+</html>

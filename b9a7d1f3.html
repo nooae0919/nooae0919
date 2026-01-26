@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>温馨提示弹窗 | Nooae's blog</title>
+  <meta charset="utf-8">
+<meta name="description" content="import tkinter as tk import random import time import threading class TipWindowManager: """温馨提示窗口管理器""" def __init__(self): self.root = tk.Tk() self.root.withdraw() # 使用列表存储活跃窗口，避免额外数据结构占 …"><meta name="author" content="nooae">  <meta name="viewport" content="initial-scale=1, maximum-scale=1" />
+  <meta http-equiv="Cache-Control" content="max-age=604800, must-revalidate" />
+  <link href="https://www.nooae.com/theme/css/screen.css" rel="stylesheet" type="text/css" />
+  <link rel="icon" href="https://www.nooae.com/favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="https://www.nooae.com/favicon.ico" type="image/x-icon">
+  <link href="https://www.nooae.com/" type="application/atom+xml" rel="alternate" title="Nooae's blog ATOM Feed" />
+</head>
+<body>
+<div id="outer-wrapper">
+<div id="header-wrapper">
+  <div class="logo"><a href="https://www.nooae.com">Nooae's blog</a></div>
+  <div class="small">Good good study, day day up!</div>
+    <div class="nav">
+  <li><a href="https://www.nooae.com//">Home</a></li>
+  <li><a href="https://www.nooae.com//archives.html">Archives</a></li>
+    </div>
+</div>
+    <div id="main">
+<h2><a href="https://www.nooae.com/b9a7d1f3.html">温馨提示弹窗</a></h2>
+<h5><i class="icon-feather"></i> 周四 04 十二月 2025
+<i class="icon-bookmarks"></i>
+<span><a href="https://www.nooae.com/tag/tkinter.html">tkinter</a> / </span>
+</h5>
+
+<!-- 以下是正文，使用 Markdown 语法 -->
+
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">tkinter</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tk</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">threading</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">TipWindowManager</span><span class="p">:</span>
+<span class="w">    </span><span class="s2">&quot;&quot;&quot;温馨提示窗口管理器&quot;&quot;&quot;</span>
+
+<span class="w">    </span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tk</span><span class="o">.</span><span class="n">Tk</span><span class="p">()</span>
+<span class="w">        </span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">withdraw</span><span class="p">()</span>
+<span class="w">        </span><span class="c1"># 使用列表存储活跃窗口，避免额外数据结构占用内存</span>
+<span class="w">        </span><span class="bp">self</span><span class="o">.</span><span class="n">active_windows</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[]</span>
+<span class="w">        </span><span class="bp">self</span><span class="o">.</span><span class="n">windows_created</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
+
+<span class="w">        </span><span class="c1"># 配置参数（保持核心功能，移除打印相关逻辑）</span>
+<span class="w">        </span><span class="bp">self</span><span class="o">.</span><span class="n">window_count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">150</span>
+<span class="w">        </span><span class="bp">self</span><span class="o">.</span><span class="n">create_interval</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.05</span>
+
+<span class="w">        </span><span class="c1"># 仅获取必要的屏幕尺寸，不存储冗余信息</span>
+<span class="w">        </span><span class="bp">self</span><span class="o">.</span><span class="n">screen_width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">winfo_screenwidth</span><span class="p">()</span>
+<span class="w">        </span><span class="bp">self</span><span class="o">.</span><span class="n">screen_height</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">winfo_screenheight</span><span class="p">()</span>
+
+<span class="w">        </span><span class="c1"># 提示内容与颜色库（使用元组存储，比列表更节省内存）</span>
+<span class="w">        </span><span class="bp">self</span><span class="o">.</span><span class="n">tips</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span>
+<span class="w">            </span><span class="s1">&#39;多喝水哦~💧&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;保持微笑呀😊&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;每天都要元气满满✨&#39;</span><span class="p">,</span>
+<span class="w">            </span><span class="s1">&#39;记得吃水果🍎&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;保持好心情🌞&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;好好爱自己❤️&#39;</span><span class="p">,</span>
+<span class="w">            </span><span class="s1">&#39;期待下一次见面👋&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;顺顺利利🎯&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;早点休息🌙&#39;</span><span class="p">,</span>
+<span class="w">            </span><span class="s1">&#39;愿所有烦恼都消失🌈&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;别熬夜⏰&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;今天过得开心嘛🎉&#39;</span><span class="p">,</span>
+<span class="w">            </span><span class="s1">&#39;天冷了，多穿衣服🧥&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;保护眼睛哦👀&#39;</span><span class="p">,</span>
+<span class="w">            </span><span class="s1">&#39;深呼吸放松一下🌬️&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;你真棒！🎊&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;一切都会好的🌻&#39;</span><span class="p">,</span>
+<span class="w">            </span><span class="s1">&#39;保持积极心态⚡&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;加油！🚀&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;相信自己💪&#39;</span><span class="p">,</span>
+<span class="w">            </span><span class="s1">&#39;今天也是美好的一天🌞&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;保持耐心⏳&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;慢慢来比较快🐢&#39;</span><span class="p">,</span>
+<span class="w">            </span><span class="s1">&#39;你很特别🌟&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;世界因你而美丽🌍&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;放松一下🎵&#39;</span><span class="p">,</span>
+<span class="w">            </span><span class="s1">&#39;享受当下🎯&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;感恩生活🙏&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;保持好奇心🔍&#39;</span><span class="p">,</span>
+<span class="w">            </span><span class="s1">&#39;勇敢做自己🦁&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;进步一点点📈&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;温暖如春🌺&#39;</span><span class="p">,</span>
+<span class="w">            </span><span class="s1">&#39;心平气和🍃&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;梦想成真🎠&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;快乐很简单😄&#39;</span><span class="p">,</span>
+<span class="w">            </span><span class="s1">&#39;阳光总在风雨后🌦️&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;坚持就是胜利🏆&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;你是最棒的⭐&#39;</span><span class="p">,</span>
+<span class="w">            </span><span class="s1">&#39;生活很美好🌷&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;向前看👣&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;温柔待人💝&#39;</span><span class="p">,</span>
+<span class="w">            </span><span class="s1">&#39;珍惜当下🎁&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;幸福在身边🎈&#39;</span>
+<span class="w">        </span><span class="p">)</span>
+
+<span class="w">        </span><span class="bp">self</span><span class="o">.</span><span class="n">bg_colors</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span>
+<span class="w">            </span><span class="s1">&#39;#FFF0F5&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;#F0FFFF&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;#F5FFFA&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;#FFF8DC&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;#F0F8FF&#39;</span><span class="p">,</span>
+<span class="w">            </span><span class="s1">&#39;#F8F8FF&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;#F5F5F5&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;#FAFAD2&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;#E6E6FA&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;#FFE4E1&#39;</span><span class="p">,</span>
+<span class="w">            </span><span class="s1">&#39;#FFFAF0&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;#FDF5E6&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;#FAF0E6&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;#FFF5EE&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;#F0FFF0&#39;</span><span class="p">,</span>
+<span class="w">            </span><span class="s1">&#39;#F5F5DC&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;#FFEFD5&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;#FFE4B5&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;#FAF0E6&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;#F8F8FF&#39;</span><span class="p">,</span>
+<span class="w">            </span><span class="s1">&#39;#F0F8FF&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;#E0FFFF&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;#E6E6FA&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;#FFF0F5&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;#FFE4E1&#39;</span><span class="p">,</span>
+<span class="w">            </span><span class="s1">&#39;#FFFAFA&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;#F5F5F5&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;#F0F0F0&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;#FFF8DC&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;#FFE4C4&#39;</span><span class="p">,</span>
+<span class="w">            </span><span class="s1">&#39;#FFDAB9&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;#FFEFD5&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;#FFFACD&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;#F0E68C&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;#E6E6FA&#39;</span><span class="p">,</span>
+<span class="w">            </span><span class="s1">&#39;#D8BFD8&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;#DDA0DD&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;#EE82EE&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;#DA70D6&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;#FFB6C1&#39;</span>
+<span class="w">        </span><span class="p">)</span>
+
+<span class="w">    </span><span class="k">def</span><span class="w"> </span><span class="nf">create_random_window</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="s2">&quot;&quot;&quot;随机创建一个对话框（优化内存占用：减少局部变量、及时清理无效引用）&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">windows_created</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">window_count</span><span class="p">:</span>
+<span class="w">            </span><span class="k">return</span>
+
+<span class="w">        </span><span class="k">try</span><span class="p">:</span>
+<span class="w">            </span><span class="n">window</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tk</span><span class="o">.</span><span class="n">Toplevel</span><span class="p">()</span>
+<span class="w">            </span><span class="bp">self</span><span class="o">.</span><span class="n">active_windows</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">window</span><span class="p">)</span>
+<span class="w">            </span><span class="bp">self</span><span class="o">.</span><span class="n">windows_created</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">1</span>
+
+<span class="w">            </span><span class="c1"># 随机窗口尺寸</span>
+<span class="w">            </span><span class="n">window_width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">220</span><span class="p">,</span><span class="w"> </span><span class="mi">300</span><span class="p">)</span>
+<span class="w">            </span><span class="n">window_height</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="w"> </span><span class="mi">130</span><span class="p">)</span>
+
+<span class="w">            </span><span class="c1"># 计算屏幕内随机位置，避免边界溢出</span>
+<span class="w">            </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">screen_width</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">window_width</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">10</span><span class="p">)</span>
+<span class="w">            </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">screen_height</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">window_height</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">10</span><span class="p">)</span>
+
+<span class="w">            </span><span class="c1"># 窗口基础配置</span>
+<span class="w">            </span><span class="n">window</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;温馨提示&#39;</span><span class="p">)</span>
+<span class="w">            </span><span class="n">window</span><span class="o">.</span><span class="n">geometry</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">window_width</span><span class="si">}</span><span class="s2">x</span><span class="si">{</span><span class="n">window_height</span><span class="si">}</span><span class="s2">+</span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">+</span><span class="si">{</span><span class="n">y</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="w">            </span><span class="n">window</span><span class="o">.</span><span class="n">resizable</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span><span class="w"> </span><span class="kc">False</span><span class="p">)</span>
+<span class="w">            </span><span class="n">window</span><span class="o">.</span><span class="n">attributes</span><span class="p">(</span><span class="s1">&#39;-topmost&#39;</span><span class="p">,</span><span class="w"> </span><span class="kc">True</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;-alpha&#39;</span><span class="p">,</span><span class="w"> </span><span class="mf">0.95</span><span class="p">)</span>
+
+<span class="w">            </span><span class="c1"># 标签创建</span>
+<span class="w">            </span><span class="n">label</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tk</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span>
+<span class="w">                </span><span class="n">window</span><span class="p">,</span>
+<span class="w">                </span><span class="n">text</span><span class="o">=</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tips</span><span class="p">),</span>
+<span class="w">                </span><span class="n">bg</span><span class="o">=</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bg_colors</span><span class="p">),</span>
+<span class="w">                </span><span class="n">fg</span><span class="o">=</span><span class="s1">&#39;#2F4F4F&#39;</span><span class="p">,</span>
+<span class="w">                </span><span class="n">font</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;微软雅黑&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span><span class="w"> </span><span class="mi">13</span><span class="p">)),</span>
+<span class="w">                </span><span class="n">padx</span><span class="o">=</span><span class="mi">18</span><span class="p">,</span>
+<span class="w">                </span><span class="n">pady</span><span class="o">=</span><span class="mi">22</span><span class="p">,</span>
+<span class="w">                </span><span class="n">wraplength</span><span class="o">=</span><span class="n">window_width</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">36</span><span class="p">,</span>
+<span class="w">                </span><span class="n">justify</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span>
+<span class="w">                </span><span class="n">relief</span><span class="o">=</span><span class="s1">&#39;flat&#39;</span><span class="p">,</span>
+<span class="w">                </span><span class="n">bd</span><span class="o">=</span><span class="mi">1</span>
+<span class="w">            </span><span class="p">)</span>
+<span class="w">            </span><span class="n">label</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">expand</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="w"> </span><span class="n">fill</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">)</span>
+
+<span class="w">            </span><span class="c1"># 关闭时间与淡出逻辑</span>
+<span class="w">            </span><span class="n">close_time</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">2000</span><span class="p">,</span><span class="w"> </span><span class="mi">4000</span><span class="p">)</span>
+
+<span class="w">            </span><span class="k">def</span><span class="w"> </span><span class="nf">close_window</span><span class="p">():</span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="n">window</span><span class="o">.</span><span class="n">winfo_exists</span><span class="p">():</span>
+<span class="w">                    </span><span class="k">return</span>
+<span class="w">                </span><span class="c1"># 简化淡出循环，减少循环次数</span>
+<span class="w">                </span><span class="k">for</span><span class="w"> </span><span class="n">alpha</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="nb">range</span><span class="p">(</span><span class="mi">95</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">15</span><span class="p">):</span>
+<span class="w">                    </span><span class="k">if</span><span class="w"> </span><span class="n">window</span><span class="o">.</span><span class="n">winfo_exists</span><span class="p">():</span>
+<span class="w">                        </span><span class="n">window</span><span class="o">.</span><span class="n">attributes</span><span class="p">(</span><span class="s1">&#39;-alpha&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">alpha</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">100</span><span class="p">)</span>
+<span class="w">                        </span><span class="n">window</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+<span class="w">                        </span><span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
+<span class="w">                </span><span class="c1"># 关闭后立即从活跃列表移除，释放内存</span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="n">window</span><span class="o">.</span><span class="n">winfo_exists</span><span class="p">():</span>
+<span class="w">                    </span><span class="n">window</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="n">window</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">active_windows</span><span class="p">:</span>
+<span class="w">                    </span><span class="bp">self</span><span class="o">.</span><span class="n">active_windows</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">window</span><span class="p">)</span>
+
+<span class="w">            </span><span class="n">window</span><span class="o">.</span><span class="n">after</span><span class="p">(</span><span class="n">close_time</span><span class="p">,</span><span class="w"> </span><span class="n">close_window</span><span class="p">)</span>
+
+<span class="w">            </span><span class="c1"># 点击关闭逻辑（复用close_window，减少代码冗余）</span>
+<span class="w">            </span><span class="k">def</span><span class="w"> </span><span class="nf">on_click</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+<span class="w">                </span><span class="n">close_window</span><span class="p">()</span>
+
+<span class="w">            </span><span class="n">window</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s1">&#39;&lt;Button-1&gt;&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">on_click</span><span class="p">)</span>
+<span class="w">            </span><span class="n">label</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s1">&#39;&lt;Button-1&gt;&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">on_click</span><span class="p">)</span>
+
+<span class="w">        </span><span class="k">except</span><span class="w"> </span><span class="n">Exception</span><span class="p">:</span>
+<span class="w">            </span><span class="c1"># 异常时清理无效窗口引用，避免内存泄漏</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="s1">&#39;window&#39;</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="nb">locals</span><span class="p">()</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="n">window</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">active_windows</span><span class="p">:</span>
+<span class="w">                </span><span class="bp">self</span><span class="o">.</span><span class="n">active_windows</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">window</span><span class="p">)</span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="n">window</span><span class="o">.</span><span class="n">winfo_exists</span><span class="p">():</span>
+<span class="w">                    </span><span class="n">window</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span>
+
+<span class="w">    </span><span class="k">def</span><span class="w"> </span><span class="nf">check_completion</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="s2">&quot;&quot;&quot;检查是否所有窗口关闭（简化判断逻辑，减少资源查询）&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">active_windows</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">windows_created</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">window_count</span><span class="p">:</span>
+<span class="w">            </span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
+<span class="w">        </span><span class="k">else</span><span class="p">:</span>
+<span class="w">            </span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">after</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">check_completion</span><span class="p">)</span>
+
+<span class="w">    </span><span class="k">def</span><span class="w"> </span><span class="nf">start_random_creation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="s2">&quot;&quot;&quot;开始随机创建窗口&quot;&quot;&quot;</span>
+
+<span class="w">        </span><span class="k">def</span><span class="w"> </span><span class="nf">create_loop</span><span class="p">():</span>
+<span class="w">            </span><span class="c1"># 循环创建窗口，直到达到目标数量</span>
+<span class="w">            </span><span class="k">while</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">windows_created</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">window_count</span><span class="p">:</span>
+<span class="w">                </span><span class="c1"># 使用after确保UI操作在主线程，避免线程安全问题</span>
+<span class="w">                </span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">after</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">create_random_window</span><span class="p">)</span>
+<span class="w">                </span><span class="c1"># 随机间隔，平衡弹出效果与性能</span>
+<span class="w">                </span><span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">0.03</span><span class="p">,</span><span class="w"> </span><span class="mf">0.08</span><span class="p">))</span>
+
+<span class="w">            </span><span class="c1"># 所有窗口创建完成后，启动完成检查</span>
+<span class="w">            </span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">after</span><span class="p">(</span><span class="mi">2000</span><span class="p">,</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">check_completion</span><span class="p">)</span>
+
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">create_loop</span>
+
+<span class="w">    </span><span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="s2">&quot;&quot;&quot;主程序（优化线程管理，确保资源正确释放）&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="c1"># 启动创建线程，设置守护线程确保程序退出时自动关闭</span>
+<span class="w">        </span><span class="n">thread</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">start_random_creation</span><span class="p">(),</span><span class="w"> </span><span class="n">daemon</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="w">        </span><span class="n">thread</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+<span class="w">        </span><span class="k">try</span><span class="p">:</span>
+<span class="w">            </span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">mainloop</span><span class="p">()</span>
+<span class="w">        </span><span class="k">finally</span><span class="p">:</span>
+<span class="w">            </span><span class="c1"># 强制清理所有剩余窗口，避免内存泄漏</span>
+<span class="w">            </span><span class="k">for</span><span class="w"> </span><span class="n">window</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">active_windows</span><span class="p">:</span>
+<span class="w">                </span><span class="k">try</span><span class="p">:</span>
+<span class="w">                    </span><span class="k">if</span><span class="w"> </span><span class="n">window</span><span class="o">.</span><span class="n">winfo_exists</span><span class="p">():</span>
+<span class="w">                        </span><span class="n">window</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span>
+<span class="w">                </span><span class="k">except</span><span class="w"> </span><span class="n">Exception</span><span class="p">:</span>
+<span class="w">                    </span><span class="k">pass</span>
+<span class="w">            </span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+<span class="w">    </span><span class="s2">&quot;&quot;&quot;主函数（简化调用，减少中间变量）&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="n">TipWindowManager</span><span class="p">()</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
+
+
+<span class="k">if</span><span class="w"> </span><span class="vm">__name__</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="n">main</span><span class="p">()</span>
+</code></pre></div>
+
+<p align="center"><a href="#">on the top</a></p>
+    </div>
+</div>
+<div id="footer-wrapper">
+<ul class="footer">
+     <li class="footer"><a href="https://www.nooae.com/tag/openpyxl.html">openpyxl&nbsp;&bull;&nbsp;</a></li>
+     <li class="footer"><a href="https://www.nooae.com/tag/pandas.html">pandas&nbsp;&bull;&nbsp;</a></li>
+     <li class="footer"><a href="https://www.nooae.com/tag/pelican.html">pelican&nbsp;&bull;&nbsp;</a></li>
+     <li class="footer"><a href="https://www.nooae.com/tag/pyautogui.html">pyautogui&nbsp;&bull;&nbsp;</a></li>
+     <li class="footer"><a href="https://www.nooae.com/tag/pymupdf.html">PyMuPDF&nbsp;&bull;&nbsp;</a></li>
+     <li class="footer"><a href="https://www.nooae.com/tag/qrcode.html">qrcode&nbsp;&bull;&nbsp;</a></li>
+     <li class="footer"><a href="https://www.nooae.com/tag/requests.html">requests&nbsp;&bull;&nbsp;</a></li>
+     <li class="footer"><a href="https://www.nooae.com/tag/selenium.html">selenium&nbsp;&bull;&nbsp;</a></li>
+     <li class="footer"><a href="https://www.nooae.com/tag/tkinter.html">tkinter</a></li>
+</ul><ul class="footer">
+    <li class="footer">&copy;&nbsp;2014&nbsp;::</li>
+    <li class="footer"><a href="https://www.nooae.com">Nooae's blog </a>&nbsp;::</li>
+    <li class="footer">powered by <a href="https://github.com/getpelican">pelican</a>&nbsp;::</li>
+    <li class="footer"><a href="http://creativecommons.org/licenses/by-nc/3.0/deed.ru">CC BY-NC</a></li>
+</ul>
+</div></body>
+</html>

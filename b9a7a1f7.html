@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>合并表格汇总 | Nooae's blog</title>
+  <meta charset="utf-8">
+<meta name="description" content="import pandas as pd import os # 查找当前文件夹.xlsx文件 fullpath = [f for f in os.listdir('.') if not f.startswith("~$") and f.endswith(".xlsx")] # 读取表格信息 sheet2 = pd.read_excel(fullpath,sheet_name='Sheet2') sheet3 = pd.read_excel(fullpath,sheet_name='Sheet3') # 提取工 …"><meta name="author" content="nooae">  <meta name="viewport" content="initial-scale=1, maximum-scale=1" />
+  <meta http-equiv="Cache-Control" content="max-age=604800, must-revalidate" />
+  <link href="https://www.nooae.com/theme/css/screen.css" rel="stylesheet" type="text/css" />
+  <link rel="icon" href="https://www.nooae.com/favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="https://www.nooae.com/favicon.ico" type="image/x-icon">
+  <link href="https://www.nooae.com/" type="application/atom+xml" rel="alternate" title="Nooae's blog ATOM Feed" />
+</head>
+<body>
+<div id="outer-wrapper">
+<div id="header-wrapper">
+  <div class="logo"><a href="https://www.nooae.com">Nooae's blog</a></div>
+  <div class="small">Good good study, day day up!</div>
+    <div class="nav">
+  <li><a href="https://www.nooae.com//">Home</a></li>
+  <li><a href="https://www.nooae.com//archives.html">Archives</a></li>
+    </div>
+</div>
+    <div id="main">
+<h2><a href="https://www.nooae.com/b9a7a1f7.html">合并表格汇总</a></h2>
+<h5><i class="icon-feather"></i> 周三 03 十二月 2025
+<i class="icon-bookmarks"></i>
+<span><a href="https://www.nooae.com/tag/pandas.html">pandas</a> / </span>
+</h5>
+
+<!-- 以下是正文，使用 Markdown 语法 -->
+
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+
+<span class="c1"># 查找当前文件夹.xlsx文件</span>
+<span class="n">fullpath</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">f</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">f</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="n">f</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;~$&quot;</span><span class="p">)</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="n">f</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.xlsx&quot;</span><span class="p">)]</span>
+
+<span class="c1"># 读取表格信息</span>
+<span class="n">sheet2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">fullpath</span><span class="p">,</span><span class="n">sheet_name</span><span class="o">=</span><span class="s1">&#39;Sheet2&#39;</span><span class="p">)</span>
+<span class="n">sheet3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">fullpath</span><span class="p">,</span><span class="n">sheet_name</span><span class="o">=</span><span class="s1">&#39;Sheet3&#39;</span><span class="p">)</span>
+
+<span class="c1"># 提取工单号和产品料号的对应关系，并进行去重</span>
+<span class="n">order_material</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sheet3</span><span class="p">[[</span><span class="s1">&#39;工单&#39;</span><span class="p">,</span><span class="s1">&#39;产品料号&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">()</span>
+
+<span class="c1"># 汇总每个料号的入库数量，重新排序</span>
+<span class="n">material_summary</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sheet2</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;产品料号&#39;</span><span class="p">)[</span><span class="s1">&#39;入库数量&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+
+<span class="c1"># 合并两个表，并按产品料号排序</span>
+<span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">order_material</span><span class="p">,</span><span class="n">material_summary</span><span class="p">,</span><span class="n">on</span><span class="o">=</span><span class="s1">&#39;产品料号&#39;</span><span class="p">,</span><span class="n">how</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">)</span>
+
+<span class="c1"># 重置索引</span>
+<span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">result</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;产品料号&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># 重命名列名</span>
+<span class="n">result</span><span class="o">.</span><span class="n">columns</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39;工单号&#39;</span><span class="p">,</span><span class="s1">&#39;产品料号&#39;</span><span class="p">,</span><span class="s1">&#39;入库数量&#39;</span><span class="p">]</span>
+
+<span class="c1"># 将结果追加保存到新表</span>
+<span class="k">with</span><span class="w"> </span><span class="n">pd</span><span class="o">.</span><span class="n">ExcelWriter</span><span class="p">(</span><span class="n">fullpath</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">writer</span><span class="p">:</span>
+<span class="w">    </span><span class="n">result</span><span class="o">.</span><span class="n">to_excel</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span><span class="n">sheet_name</span><span class="o">=</span><span class="s1">&#39;Sheet4&#39;</span><span class="p">,</span><span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+
+<p align="center"><a href="#">on the top</a></p>
+    </div>
+</div>
+<div id="footer-wrapper">
+<ul class="footer">
+     <li class="footer"><a href="https://www.nooae.com/tag/openpyxl.html">openpyxl&nbsp;&bull;&nbsp;</a></li>
+     <li class="footer"><a href="https://www.nooae.com/tag/pandas.html">pandas&nbsp;&bull;&nbsp;</a></li>
+     <li class="footer"><a href="https://www.nooae.com/tag/pelican.html">pelican&nbsp;&bull;&nbsp;</a></li>
+     <li class="footer"><a href="https://www.nooae.com/tag/pyautogui.html">pyautogui&nbsp;&bull;&nbsp;</a></li>
+     <li class="footer"><a href="https://www.nooae.com/tag/pymupdf.html">PyMuPDF&nbsp;&bull;&nbsp;</a></li>
+     <li class="footer"><a href="https://www.nooae.com/tag/qrcode.html">qrcode&nbsp;&bull;&nbsp;</a></li>
+     <li class="footer"><a href="https://www.nooae.com/tag/requests.html">requests&nbsp;&bull;&nbsp;</a></li>
+     <li class="footer"><a href="https://www.nooae.com/tag/selenium.html">selenium&nbsp;&bull;&nbsp;</a></li>
+     <li class="footer"><a href="https://www.nooae.com/tag/tkinter.html">tkinter</a></li>
+</ul><ul class="footer">
+    <li class="footer">&copy;&nbsp;2014&nbsp;::</li>
+    <li class="footer"><a href="https://www.nooae.com">Nooae's blog </a>&nbsp;::</li>
+    <li class="footer">powered by <a href="https://github.com/getpelican">pelican</a>&nbsp;::</li>
+    <li class="footer"><a href="http://creativecommons.org/licenses/by-nc/3.0/deed.ru">CC BY-NC</a></li>
+</ul>
+</div></body>
+</html>
