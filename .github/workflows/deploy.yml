@@ -3,62 +3,74 @@ name: Deploy Pelican Site
 on:
   push:
     branches:
-      - pelican  # 当 pelican 分支有推送时触发
+      - pelican
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     
     steps:
-    # 1. 检出 pelican 分支的源代码
     - name: Checkout source
       uses: actions/checkout@v4
       with:
         ref: pelican
         fetch-depth: 0
     
-    # 2. 设置 Python 环境
     - name: Setup Python
       uses: actions/setup-python@v5
       with:
         python-version: '3.11'
     
-    # 3. 安装依赖
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install pelican markdown
-        # 如果你有 requirements.txt，取消下面这行的注释
-        # pip install -r requirements.txt
+        
+        # 如果有 requirements.txt
+        if [ -f requirements.txt ]; then
+          pip install -r requirements.txt
+        fi
     
-    # 4. 构建静态网站
     - name: Build site
       run: |
+        # 先清理 output 目录（如果有）
+        rm -rf output
+        # 构建
         pelican content -s pelicanconf.py -o output
     
-    # 5. 部署到 main 分支
     - name: Deploy to main branch
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        # 配置 Git
         git config --global user.name "github-actions[bot]"
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
         
-        # 切换到 main 分支
+        # 删除所有未跟踪的文件和目录（包括 output）
+        git clean -fd
+        
+        # 或更激进：重置工作目录
+        git reset --hard HEAD
+        
+        # 获取 main 分支
         git fetch origin main
+        
+        # 切换到 main 分支
         git checkout main
         
-        # 删除所有旧文件（保留 .git 目录）
+        # 清空 main 分支（保留 .git）
         find . -maxdepth 1 ! -name '.git' ! -name '.' -exec rm -rf {} \;
         
-        # 复制新构建的文件
-        cp -r ../output/* .
+        # 复制构建结果
+        cp -r ../output/* . 2>/dev/null || cp -r output/* . 2>/dev/null
         
-        # 创建 .nojekyll 文件（如果使用 GitHub Pages）
+        # 为 GitHub Pages 添加 .nojekyll
         touch .nojekyll
         
-        # 提交并推送
+        # 提交
         git add .
         git commit -m "Deploy from pelican branch: $(date -u '+%Y-%m-%d %H:%M:%S UTC')" || echo "No changes to commit"
+        
+        # 推送
         git push origin main
