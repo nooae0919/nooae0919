@@ -8,6 +8,10 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
     
     steps:
     - name: Checkout source
@@ -28,36 +32,12 @@ jobs:
       run: |
         pelican content -s pelicanconf.py -o output
     
-    - name: Deploy to main branch
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        # 配置 Git
-        git config --global user.name "nooae0919"
-        git config --global user.email "nooae0919@gmail.com"
-        
-        # 检查 main 分支是否存在
-        git ls-remote --heads origin main
-        
-        # 创建临时目录
-        mkdir deploy_temp
-        cp -r output/* deploy_temp/
-        
-        # 切换到 main 分支
-        git checkout main || git checkout --orphan main
-        
-        # 删除所有文件（保留 .git）
-        git rm -rf . || true
-        
-        # 复制构建文件
-        cp -r deploy_temp/* .
-        
-        # 添加 .nojekyll
-        touch .nojekyll
-        
-        # 添加并提交
-        git add .
-        git commit -m "Deploy: $(date -u '+%Y-%m-%d %H:%M:%S UTC')" || echo "No changes"
-        
-        # 推送到 main
-        git push origin main --force
+    - name: Upload artifact
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: ./output
+    
+    - name: Deploy to GitHub Pages
+      uses: actions/deploy-pages@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
