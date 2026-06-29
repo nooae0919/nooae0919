@@ -8,15 +8,12 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     
     steps:
     - name: Checkout source
       uses: actions/checkout@v4
       with:
         ref: pelican
-        fetch-depth: 0
     
     - name: Setup Python
       uses: actions/setup-python@v5
@@ -25,52 +22,42 @@ jobs:
     
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip
         pip install pelican markdown
-        
-        # 如果有 requirements.txt
-        if [ -f requirements.txt ]; then
-          pip install -r requirements.txt
-        fi
     
     - name: Build site
       run: |
-        # 先清理 output 目录（如果有）
-        rm -rf output
-        # 构建
         pelican content -s pelicanconf.py -o output
     
     - name: Deploy to main branch
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
+        # 配置 Git
         git config --global user.name "github-actions[bot]"
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
         
-        # 删除所有未跟踪的文件和目录（包括 output）
-        git clean -fd
+        # 检查 main 分支是否存在
+        git ls-remote --heads origin main
         
-        # 或更激进：重置工作目录
-        git reset --hard HEAD
-        
-        # 获取 main 分支
-        git fetch origin main
+        # 创建临时目录
+        mkdir deploy_temp
+        cp -r output/* deploy_temp/
         
         # 切换到 main 分支
-        git checkout main
+        git checkout main || git checkout --orphan main
         
-        # 清空 main 分支（保留 .git）
-        find . -maxdepth 1 ! -name '.git' ! -name '.' -exec rm -rf {} \;
+        # 删除所有文件（保留 .git）
+        git rm -rf . || true
         
-        # 复制构建结果
-        cp -r ../output/* . 2>/dev/null || cp -r output/* . 2>/dev/null
+        # 复制构建文件
+        cp -r deploy_temp/* .
         
-        # 为 GitHub Pages 添加 .nojekyll
+        # 添加 .nojekyll
         touch .nojekyll
         
-        # 提交
+        # 添加并提交
         git add .
-        git commit -m "Deploy from pelican branch: $(date -u '+%Y-%m-%d %H:%M:%S UTC')" || echo "No changes to commit"
+        git commit -m "Deploy: $(date -u '+%Y-%m-%d %H:%M:%S UTC')" || echo "No changes"
         
-        # 推送
-        git push origin main
+        # 推送到 main
+        git push origin main --force
