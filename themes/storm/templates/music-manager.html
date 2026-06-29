@@ -1,0 +1,397 @@
+{% extends "base.html" %}
+
+{% block title %}{{ page.title }} - {{ SITENAME }}{% endblock %}
+
+{% block content %}
+<article class="page">
+    <header>
+        <h1>{{ page.title }}</h1>
+        <p class="page-description">提示：由于技术限制，无法直接爬取外部网站。请您从其他渠道获取歌曲链接后，在此进行管理和复制。</p>
+    </header>
+
+    <div class="music-manager-container">
+        <!-- 手动添加歌曲区域 -->
+        <section class="input-section card">
+            <h2>添加歌曲信息</h2>
+            <div class="form-group">
+                <label for="songName">歌曲名称：</label>
+                <input type="text" id="songName" placeholder="例如：万能青年旅店 - 在这颗行星所有的酒馆">
+            </div>
+            <div class="form-group">
+                <label for="songUrl">下载链接：</label>
+                <input type="text" id="songUrl" placeholder="请粘贴从其他渠道获取的.mp3或下载链接">
+            </div>
+            <button id="addButton" class="btn btn-primary">添加到列表</button>
+        </section>
+
+        <!-- 歌曲列表展示区域 -->
+        <section class="list-section card">
+            <h2>歌曲列表 <small>(共 <span id="songCount">0</span> 首)</small></h2>
+            <div id="emptyTip" class="empty-tip">
+                <p>列表为空，请先添加歌曲。</p>
+            </div>
+            <ul id="songList" class="song-list">
+                <!-- 歌曲条目将通过JS动态插入到这里 -->
+            </ul>
+            <div class="list-actions">
+                <button id="clearAllButton" class="btn btn-secondary">清空列表</button>
+                <button id="exportM3uButton" class="btn btn-success">导出为M3U播放列表</button>
+            </div>
+        </section>
+
+        <!-- 固定提示区，替代爬取功能 -->
+        <section class="notice-section card card-notice">
+            <h2>关于获取歌曲链接的说明</h2>
+            <p>当前页面 <strong>无法自动从 pinkamuz.pro 爬取</strong>，原因如下：</p>
+            <ol>
+                <li>该网站没有提供公开的搜索API接口。</li>
+                <li>浏览器出于安全考虑，禁止前端脚本直接抓取其他网站内容（跨域限制）。</li>
+            </ol>
+            <p><strong>建议操作流程：</strong></p>
+            <ol>
+                <li>手动访问 <a href="https://pinkamuz.pro" target="_blank">pinkamuz.pro</a> 或其他音乐网站。</li>
+                <li>找到想要的歌曲，通过浏览器开发者工具等方式获取其<strong>实际.mp3文件地址</strong>。</li>
+                <li>将“歌曲名”和“链接”复制回来，粘贴到本页上方的表单中进行管理。</li>
+            </ol>
+        </section>
+    </div>
+
+    <style>
+    /* 基础容器样式 */
+    .music-manager-container {
+        max-width: 900px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+    }
+    .card {
+        background: #fff;
+        border-radius: 12px;
+        padding: 1.5rem 2rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        border: 1px solid #eaeaea;
+    }
+    .card-notice {
+        border-left: 5px solid #ff9800;
+        background-color: #fffaf0;
+    }
+
+    /* 标题和段落 */
+    .page-description {
+        color: #666;
+        font-size: 1.05rem;
+        margin-top: 0.5rem;
+    }
+    h2 {
+        color: #333;
+        border-bottom: 2px solid #f0f0f0;
+        padding-bottom: 0.75rem;
+        margin-top: 0;
+        margin-bottom: 1.5rem;
+    }
+    .notice-section ol {
+        padding-left: 1.5rem;
+        line-height: 1.7;
+    }
+    .notice-section li {
+        margin-bottom: 0.5rem;
+    }
+
+    /* 表单样式 */
+    .form-group {
+        margin-bottom: 1.2rem;
+    }
+    .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+        color: #555;
+    }
+    .form-group input {
+        width: 100%;
+        padding: 0.85rem 1rem;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        font-size: 1rem;
+        box-sizing: border-box;
+        transition: border-color 0.3s;
+    }
+    .form-group input:focus {
+        outline: none;
+        border-color: #4a90e2;
+    }
+
+    /* 按钮样式 */
+    .btn {
+        display: inline-block;
+        padding: 0.85rem 1.8rem;
+        border: none;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-align: center;
+        margin-right: 0.75rem;
+        margin-bottom: 0.5rem;
+    }
+    .btn-primary {
+        background-color: #4a90e2;
+        color: white;
+    }
+    .btn-primary:hover {
+        background-color: #3a7bc8;
+    }
+    .btn-secondary {
+        background-color: #6c757d;
+        color: white;
+    }
+    .btn-secondary:hover {
+        background-color: #5a6268;
+    }
+    .btn-success {
+        background-color: #28a745;
+        color: white;
+    }
+    .btn-success:hover {
+        background-color: #218838;
+    }
+
+    /* 歌曲列表样式 */
+    .song-list {
+        list-style: none;
+        padding: 0;
+    }
+    .song-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.2rem;
+        margin-bottom: 0.85rem;
+        background: #f9f9f9;
+        border-radius: 10px;
+        border: 1px solid #eee;
+        transition: background-color 0.2s;
+    }
+    .song-item:hover {
+        background-color: #f1f7ff;
+    }
+    .song-info {
+        flex-grow: 1;
+        margin-right: 1.5rem;
+        overflow-wrap: break-word;
+    }
+    .song-name {
+        font-weight: bold;
+        color: #222;
+        margin-bottom: 0.4rem;
+        font-size: 1.1rem;
+    }
+    .song-url {
+        color: #666;
+        font-size: 0.95rem;
+        font-family: monospace;
+        word-break: break-all;
+    }
+    .song-actions {
+        flex-shrink: 0;
+        display: flex;
+        gap: 0.75rem;
+    }
+    .copy-btn {
+        padding: 0.6rem 1.2rem;
+        background-color: #17a2b8;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.95rem;
+        white-space: nowrap;
+    }
+    .copy-btn:hover {
+        background-color: #138496;
+    }
+    .delete-btn {
+        padding: 0.6rem 1.2rem;
+        background-color: #dc3545;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.95rem;
+        white-space: nowrap;
+    }
+    .delete-btn:hover {
+        background-color: #c82333;
+    }
+
+    /* 空列表提示 */
+    .empty-tip {
+        text-align: center;
+        padding: 3rem 2rem;
+        color: #999;
+        font-style: italic;
+        border: 2px dashed #ddd;
+        border-radius: 12px;
+        background: #fcfcfc;
+        margin-bottom: 1.5rem;
+    }
+    .list-actions {
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid #eee;
+        text-align: center;
+    }
+    </style>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 获取DOM元素
+        const songNameInput = document.getElementById('songName');
+        const songUrlInput = document.getElementById('songUrl');
+        const addButton = document.getElementById('addButton');
+        const songList = document.getElementById('songList');
+        const emptyTip = document.getElementById('emptyTip');
+        const songCount = document.getElementById('songCount');
+        const clearAllButton = document.getElementById('clearAllButton');
+        const exportM3uButton = document.getElementById('exportM3uButton');
+
+        // 从本地存储加载歌曲列表，如果没有则初始化为空数组
+        let songs = JSON.parse(localStorage.getItem('myMusicList')) || [];
+
+        // 更新列表显示和计数
+        function updateListDisplay() {
+            songList.innerHTML = '';
+            if (songs.length === 0) {
+                emptyTip.style.display = 'block';
+            } else {
+                emptyTip.style.display = 'none';
+                songs.forEach((song, index) => {
+                    const li = document.createElement('li');
+                    li.className = 'song-item';
+                    li.innerHTML = `
+                        <div class="song-info">
+                            <div class="song-name">${index + 1}. ${song.name}</div>
+                            <div class="song-url">${song.url}</div>
+                        </div>
+                        <div class="song-actions">
+                            <button class="copy-btn" onclick="copySongInfo('${song.name}', '${song.url}')">复制信息</button>
+                            <button class="delete-btn" onclick="deleteSong(${index})">删除</button>
+                        </div>
+                    `;
+                    songList.appendChild(li);
+                });
+            }
+            songCount.textContent = songs.length;
+            // 保存到本地存储
+            localStorage.setItem('myMusicList', JSON.stringify(songs));
+        }
+
+        // 添加歌曲函数
+        function addSong() {
+            const name = songNameInput.value.trim();
+            const url = songUrlInput.value.trim();
+
+            if (!name || !url) {
+                alert('请填写完整的歌曲名称和链接！');
+                return;
+            }
+
+            // 简单的URL格式校验
+            if (!url.startsWith('http://') && !url.startsWith('https://') && !url.startsWith('/') && !url.startsWith('.')) {
+                if (!confirm('您输入的链接不是标准的HTTP/HTTPS格式，确定要添加吗？')) {
+                    return;
+                }
+            }
+
+            songs.push({ name: name, url: url });
+            updateListDisplay();
+
+            // 清空输入框
+            songNameInput.value = '';
+            songUrlInput.value = '';
+            songNameInput.focus();
+        }
+
+        // 复制歌曲信息函数
+        window.copySongInfo = function(name, url) {
+            const textToCopy = `歌曲：${name}\n链接：${url}`;
+            navigator.clipboard.writeText(textToCopy)
+                .then(() => {
+                    alert('复制成功！\n\n' + textToCopy);
+                })
+                .catch(err => {
+                    console.error('复制失败:', err);
+                    // 降级方案：使用旧的execCommand方法
+                    const textArea = document.createElement('textarea');
+                    textArea.value = textToCopy;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    try {
+                        document.execCommand('copy');
+                        alert('复制成功！\n\n' + textToCopy);
+                    } catch (e) {
+                        alert('复制失败，请手动选择复制。');
+                    }
+                    document.body.removeChild(textArea);
+                });
+        };
+
+        // 删除歌曲函数
+        window.deleteSong = function(index) {
+            if (confirm(`确定要删除歌曲：“${songs[index].name}” 吗？`)) {
+                songs.splice(index, 1);
+                updateListDisplay();
+            }
+        };
+
+        // 清空列表函数
+        function clearAllSongs() {
+            if (songs.length === 0) {
+                alert('列表已经是空的。');
+                return;
+            }
+            if (confirm(`确定要清空全部 ${songs.length} 首歌曲吗？此操作不可撤销。`)) {
+                songs = [];
+                updateListDisplay();
+            }
+        }
+
+        // 导出为M3U文件函数
+        function exportToM3U() {
+            if (songs.length === 0) {
+                alert('列表为空，无法导出。');
+                return;
+            }
+            let m3uContent = '#EXTM3U\n';
+            songs.forEach(song => {
+                m3uContent += `#EXTINF:-1,${song.name}\n`;
+                m3uContent += `${song.url}\n`;
+            });
+
+            const blob = new Blob([m3uContent], { type: 'audio/x-mpegurl' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = '我的播放列表.m3u';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            alert(`M3U播放列表已导出，包含 ${songs.length} 首歌曲。`);
+        }
+
+        // 绑定按钮事件
+        addButton.addEventListener('click', addSong);
+        // 允许按回车键添加歌曲
+        songNameInput.addEventListener('keypress', e => { if (e.key === 'Enter') addSong(); });
+        songUrlInput.addEventListener('keypress', e => { if (e.key === 'Enter') addSong(); });
+        clearAllButton.addEventListener('click', clearAllSongs);
+        exportM3uButton.addEventListener('click', exportToM3U);
+
+        // 页面加载时初始化显示
+        updateListDisplay();
+    });
+    </script>
+</article>
+{% endblock %}
