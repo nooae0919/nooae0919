@@ -5,7 +5,6 @@ THEME = 'themes/storm'
 MENUITEMS = [
     ('Home', '/'),
     ('Archives', '/archives.html'),
-    ('Music search', '/pages/music_js.md')
 ]
 
 # 启用 i18n 插件
