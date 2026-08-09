@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>物料超期预警 | Nooae's blog</title>
+  <meta charset="utf-8">
+<meta name="description" content="import requests from datetime import datetime import time # 配置 API_URL = "" TOKEN_URL = "" X_USER_TOKEN = "" FEISHU_WEBHOOK = "" # 获取Token resp = requests.get(TOKEN_URL, headers={"X-User-Token": X_USER_TOKEN}) token = resp.json()["data"].replace("Bearer ", "") headers = { "Authorization": f"Bearer {token}", "Accept": "application/json", "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8" } def main(DATA_AUTH,WH_CODE,DAY_NUM): # 查询 …"><meta name="author" content="nooae">  <meta name="viewport" content="initial-scale=1, maximum-scale=1" />
+  <meta http-equiv="Cache-Control" content="max-age=604800, must-revalidate" />
+  <link href="https://www.nooae.com/theme/css/screen.css" rel="stylesheet" type="text/css" />
+  <link rel="icon" href="https://www.nooae.com/favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="https://www.nooae.com/favicon.ico" type="image/x-icon">
+  <link href="https://www.nooae.com/" type="application/atom+xml" rel="alternate" title="Nooae's blog ATOM Feed" />
+</head>
+<body>
+<div id="outer-wrapper">
+<div id="header-wrapper">
+  <div class="logo"><a href="https://www.nooae.com">Nooae's blog</a></div>
+  <div class="small">Good good study, day day up!</div>
+    <div class="nav">
+  <li><a href="https://www.nooae.com//">Home</a></li>
+  <li><a href="https://www.nooae.com//archives.html">Archives</a></li>
+    </div>
+</div>
+    <div id="main">
+<h2><a href="https://www.nooae.com/1d44dff6.html">物料超期预警</a></h2>
+<h5><i class="icon-feather"></i> Mon 01 June 2026
+<i class="icon-bookmarks"></i>
+<span><a href="https://www.nooae.com/tag/requests.html">requests</a> / </span>
+</h5>
+
+<!-- 以下是正文，使用 Markdown 语法 -->
+
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+
+<span class="c1"># 配置</span>
+<span class="n">API_URL</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+<span class="n">TOKEN_URL</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+<span class="n">X_USER_TOKEN</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+<span class="n">FEISHU_WEBHOOK</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+<span class="c1"># 获取Token</span>
+<span class="n">resp</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">TOKEN_URL</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;X-User-Token&quot;</span><span class="p">:</span> <span class="n">X_USER_TOKEN</span><span class="p">})</span>
+<span class="n">token</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;Bearer &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;Authorization&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Bearer </span><span class="si">{</span><span class="n">token</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Accept&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/x-www-form-urlencoded; charset=UTF-8&quot;</span>
+<span class="p">}</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">DATA_AUTH</span><span class="p">,</span><span class="n">WH_CODE</span><span class="p">,</span><span class="n">DAY_NUM</span><span class="p">):</span>
+
+    <span class="c1"># 查询数据</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;data_auth&quot;</span><span class="p">:</span> <span class="n">DATA_AUTH</span><span class="p">,</span> <span class="s2">&quot;wh_code&quot;</span><span class="p">:</span> <span class="n">WH_CODE</span><span class="p">,</span> <span class="s2">&quot;day_num&quot;</span><span class="p">:</span> <span class="n">DAY_NUM</span><span class="p">}</span>
+    <span class="n">resp</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">API_URL</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span>
+    <span class="n">records</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+    <span class="n">records</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;有效期&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">x</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;expiry_date&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+<span class="c1">#    构建卡片</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">records</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">content</span> <span class="o">=</span> <span class="s2">&quot;✅ **当前没有超期或临近超期的物料**&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;| 物料 | 数量 | 有效期 |&quot;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">records</span><span class="p">:</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;| </span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;物料&#39;</span><span class="p">)</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="n">r</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;material&#39;</span><span class="p">)</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="s1">&#39;-&#39;</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;数量&#39;</span><span class="p">)</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="n">r</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;quantity&#39;</span><span class="p">)</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="s1">&#39;0&#39;</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;有效期&#39;</span><span class="p">)</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="n">r</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;expiry_date&#39;</span><span class="p">)</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="s1">&#39;-&#39;</span><span class="si">}</span><span class="s2"> |&quot;</span><span class="p">)</span>
+        <span class="n">content</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
+
+    <span class="n">card</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;msg_type&quot;</span><span class="p">:</span> <span class="s2">&quot;interactive&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;card&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;config&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;wide_screen_mode&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;enable_forward&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
+            <span class="s2">&quot;header&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;tag&quot;</span><span class="p">:</span> <span class="s2">&quot;plain_text&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;📋 超期/临期物料库存预警&quot;</span><span class="p">},</span>
+                <span class="s2">&quot;template&quot;</span><span class="p">:</span> <span class="s2">&quot;red&quot;</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">records</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="s2">&quot;green&quot;</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;elements&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span><span class="s2">&quot;tag&quot;</span><span class="p">:</span> <span class="s2">&quot;div&quot;</span><span class="p">,</span> <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;tag&quot;</span><span class="p">:</span> <span class="s2">&quot;lark_md&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;**查询时间：** </span><span class="si">{</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S&#39;</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">**组织：** </span><span class="si">{</span><span class="n">DATA_AUTH</span><span class="si">}</span><span class="se">\n</span><span class="s2">**仓库：** </span><span class="si">{</span><span class="n">WH_CODE</span><span class="si">}</span><span class="se">\n</span><span class="s2">**天数阈值：** </span><span class="si">{</span><span class="n">DAY_NUM</span><span class="si">}</span><span class="s2"> 天</span><span class="se">\n</span><span class="s2">**物料总数：** </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">records</span><span class="p">)</span><span class="si">}</span><span class="s2"> 条&quot;</span><span class="p">}},</span>
+                <span class="p">{</span><span class="s2">&quot;tag&quot;</span><span class="p">:</span> <span class="s2">&quot;hr&quot;</span><span class="p">},</span>
+                <span class="p">{</span><span class="s2">&quot;tag&quot;</span><span class="p">:</span> <span class="s2">&quot;div&quot;</span><span class="p">,</span> <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;tag&quot;</span><span class="p">:</span> <span class="s2">&quot;lark_md&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">content</span><span class="p">}},</span>
+                <span class="p">{</span><span class="s2">&quot;tag&quot;</span><span class="p">:</span> <span class="s2">&quot;hr&quot;</span><span class="p">},</span>
+            <span class="p">{</span><span class="s2">&quot;tag&quot;</span><span class="p">:</span> <span class="s2">&quot;div&quot;</span><span class="p">,</span> <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;tag&quot;</span><span class="p">:</span> <span class="s2">&quot;plain_text&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;🔔 请及时关注并处理超期物料，避免库存损失&quot;</span><span class="p">}}</span>
+            <span class="p">]</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="c1"># 发送到飞书</span>
+    <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">FEISHU_WEBHOOK</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">},</span> <span class="n">json</span><span class="o">=</span><span class="n">card</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">(</span><span class="s2">&quot;组织&quot;</span><span class="p">,</span><span class="s2">&quot;仓库&quot;</span><span class="p">,</span><span class="mi">180</span><span class="p">)</span>
+</code></pre></div>
+
+<p align="center"><a href="#">on the top</a></p>
+    </div>
+</div>
+<div id="footer-wrapper">
+<ul class="footer">
+     <li class="footer"><a href="https://www.nooae.com/tag/openpyxl.html">openpyxl&nbsp;&bull;&nbsp;</a></li>
+     <li class="footer"><a href="https://www.nooae.com/tag/pandas.html">pandas&nbsp;&bull;&nbsp;</a></li>
+     <li class="footer"><a href="https://www.nooae.com/tag/pelican.html">pelican&nbsp;&bull;&nbsp;</a></li>
+     <li class="footer"><a href="https://www.nooae.com/tag/pyautogui.html">pyautogui&nbsp;&bull;&nbsp;</a></li>
+     <li class="footer"><a href="https://www.nooae.com/tag/pymupdf.html">PyMuPDF&nbsp;&bull;&nbsp;</a></li>
+     <li class="footer"><a href="https://www.nooae.com/tag/qrcode.html">qrcode&nbsp;&bull;&nbsp;</a></li>
+     <li class="footer"><a href="https://www.nooae.com/tag/requests.html">requests&nbsp;&bull;&nbsp;</a></li>
+     <li class="footer"><a href="https://www.nooae.com/tag/selenium.html">selenium&nbsp;&bull;&nbsp;</a></li>
+     <li class="footer"><a href="https://www.nooae.com/tag/tkinter.html">tkinter</a></li>
+</ul><ul class="footer">
+    <li class="footer">&copy;&nbsp;2014&nbsp;::</li>
+    <li class="footer"><a href="https://www.nooae.com">Nooae's blog </a>&nbsp;::</li>
+    <li class="footer">powered by <a href="https://github.com/getpelican">pelican</a>&nbsp;::</li>
+    <li class="footer"><a href="http://creativecommons.org/licenses/by-nc/3.0/deed.ru">CC BY-NC</a></li>
+</ul>
+</div></body>
+</html>
