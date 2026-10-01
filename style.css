@@ -60,3 +60,69 @@ table { width: 100%; border-collapse: collapse; background: #fff; border-radius:
 th, td { padding: 10px 14px; text-align: left; border-bottom: 1px solid #eef0f2; font-size: 14px; }
 th { background: #fafbfc; font-weight: 600; }
 tr.danger td { background: #fff1f0; }
+
+/* 弹窗 */
+.modal-mask {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.modal-box {
+  background: #fff;
+  padding: 24px 28px;
+  border-radius: 10px;
+  width: 360px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+.modal-box h3 {
+  margin: 0 0 18px;
+  font-size: 17px;
+}
+.modal-box label {
+  display: block;
+  margin-bottom: 14px;
+  font-size: 13px;
+  color: #555;
+}
+.modal-box input,
+.modal-box select {
+  display: block;
+  width: 100%;
+  margin-top: 6px;
+  padding: 9px 11px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+.modal-box input:focus,
+.modal-box select:focus {
+  outline: none;
+  border-color: #2563eb;
+}
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 18px;
+}
+.btn-cancel {
+  background: #fff;
+  border: 1px solid #d1d5db;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.btn-save {
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.btn-save:hover { background: #1d4ed8; }
