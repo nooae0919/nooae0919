@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SMT线边仓管理系统</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/appwrite@16.0.0/dist/iife/sdk.js"></script>
+  <script src="lib/xlsx.full.min.js"></script>
+  <script src="config.js"></script>
+</head>
+<body>
+
+  <!-- 登录层：未登录时显示 -->
+  <div id="login-view" class="hidden">
+    <div class="login-card">
+      <h1>SMT 线边仓管理系统</h1>
+      <p>请使用授权的 GitHub 账号登录</p>
+      <button id="github-login">使用 GitHub 登录</button>
+      <p id="login-error" class="error"></p>
+    </div>
+  </div>
+
+  <!-- 主界面：登录后显示 -->
+  <div id="app-view" class="hidden">
+    <header>
+      <h1>SMT 线边仓管理系统</h1>
+      <div class="user-info">
+        <img id="user-avatar" alt="">
+        <span id="user-name"></span>
+        <button id="logout">退出</button>
+      </div>
+    </header>
+
+    <nav>
+      <button data-tab="wo" class="active">工单管理</button>
+      <button data-tab="bom">BOM管理</button>
+      <button data-tab="issue">工单发料</button>
+      <button data-tab="return">工单退料</button>
+      <button data-tab="loss">损耗计算</button>
+    </nav>
+
+    <main>
+      <!-- 工单 -->
+      <section id="tab-wo" class="tab-panel active">
+        <div class="toolbar">
+          <button id="wo-add">新增工单</button>
+          <button id="wo-import">导入CSV</button>
+          <button id="wo-export">导出CSV</button>
+          <input type="file" id="wo-file-input" accept=".csv" hidden>
+        </div>
+        <table id="wo-table">
+          <thead>
+            <tr><th>工单号</th><th>产品名称</th><th>计划数量</th><th>状态</th><th>操作</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
+
+      <!-- BOM -->
+      <section id="tab-bom" class="tab-panel">
+        <div class="toolbar">
+          <button id="bom-import">导入CSV</button>
+          <button id="bom-export">导出CSV</button>
+          <input type="file" id="bom-file-input" accept=".csv" hidden>
+        </div>
+        <table id="bom-table">
+          <thead>
+            <tr><th>工单号</th><th>料号</th><th>物料名称</th><th>单板用量</th><th>损耗率</th><th>操作</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
+
+      <!-- 发料 -->
+      <section id="tab-issue" class="tab-panel">
+        <div class="toolbar">
+          <button id="issue-import">导入CSV</button>
+          <button id="issue-export">导出CSV</button>
+          <input type="file" id="issue-file-input" accept=".csv" hidden>
+        </div>
+        <table id="issue-table">
+          <thead>
+            <tr><th>工单号</th><th>料号</th><th>发料数量</th><th>发料人</th><th>发料时间</th><th>操作</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
+
+      <!-- 退料 -->
+      <section id="tab-return" class="tab-panel">
+        <div class="toolbar">
+          <button id="return-import">导入CSV</button>
+          <button id="return-export">导出CSV</button>
+          <input type="file" id="return-file-input" accept=".csv" hidden>
+        </div>
+        <table id="return-table">
+          <thead>
+            <tr><th>工单号</th><th>料号</th><th>退料数量</th><th>退料人</th><th>退料时间</th><th>操作</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
+
+      <!-- 损耗 -->
+      <section id="tab-loss" class="tab-panel">
+        <div class="toolbar">
+          <button id="loss-calc">计算损耗</button>
+          <button id="loss-export">导出报表</button>
+        </div>
+        <table id="loss-table">
+          <thead></thead>
+          <tbody></tbody>
+        </table>
+      </section>
+    </main>
+  </div>
+
+  <script src="login.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
