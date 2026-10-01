@@ -1,10 +1,26 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif; background: #f5f6f8; color: #222; }
+body {
+  font-family: -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif;
+  background: #f5f6f8;
+  color: #222;
+}
 .hidden { display: none !important; }
 
 /* 登录层 */
-#login-view { display: flex; align-items: center; justify-content: center; min-height: 100vh; }
-.login-card { background: #fff; padding: 40px; border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,.08); text-align: center; }
+#login-view {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+.login-card {
+  background: #fff;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0,0,0,.08);
+  text-align: center;
+  width: 360px;
+}
 .login-card h1 { font-size: 22px; margin-bottom: 12px; }
 .login-card p { color: #666; margin-bottom: 20px; }
 .login-card input {
@@ -15,12 +31,8 @@ body { font-family: -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif; ba
   border: 1px solid #d1d5db;
   border-radius: 6px;
   font-size: 14px;
-  box-sizing: border-box;
 }
-.login-card input:focus {
-  outline: none;
-  border-color: #2563eb;
-}
+.login-card input:focus { outline: none; border-color: #2563eb; }
 #login-btn {
   width: 100%;
   background: #2563eb;
@@ -31,35 +43,86 @@ body { font-family: -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif; ba
   cursor: pointer;
   font-size: 15px;
 }
-#login-btn:hover {
-  background: #1d4ed8;
-}
-#github-login { background: #24292e; color: #fff; border: none; padding: 12px 24px; border-radius: 6px; cursor: pointer; font-size: 15px; }
-#github-login:hover { background: #000; }
-.error { color: #d33; margin-top: 12px; }
+#login-btn:hover { background: #1d4ed8; }
+.error { color: #d33; margin-top: 12px; font-size: 13px; }
 
 /* 主界面 */
-header { display: flex; justify-content: space-between; align-items: center; padding: 14px 24px; background: #fff; border-bottom: 1px solid #e5e7eb; }
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 24px;
+  background: #fff;
+  border-bottom: 1px solid #e5e7eb;
+}
 header h1 { font-size: 18px; }
 .user-info { display: flex; align-items: center; gap: 10px; }
-.user-info img { width: 32px; height: 32px; border-radius: 50%; }
-#logout { background: none; border: 1px solid #ccc; padding: 6px 12px; border-radius: 6px; cursor: pointer; }
+#logout {
+  background: none;
+  border: 1px solid #ccc;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
 
-nav { display: flex; gap: 4px; padding: 0 24px; background: #fff; border-bottom: 1px solid #e5e7eb; }
-nav button { background: none; border: none; padding: 12px 18px; cursor: pointer; border-bottom: 2px solid transparent; font-size: 14px; }
-nav button.active { border-bottom-color: #2563eb; color: #2563eb; font-weight: 600; }
+nav {
+  display: flex;
+  gap: 4px;
+  padding: 0 24px;
+  background: #fff;
+  border-bottom: 1px solid #e5e7eb;
+}
+nav button {
+  background: none;
+  border: none;
+  padding: 12px 18px;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  font-size: 14px;
+}
+nav button.active {
+  border-bottom-color: #2563eb;
+  color: #2563eb;
+  font-weight: 600;
+}
 
 main { padding: 24px; }
 .tab-panel { display: none; }
 .tab-panel.active { display: block; }
 .toolbar { margin-bottom: 14px; display: flex; gap: 8px; }
-.toolbar button { padding: 8px 14px; border: 1px solid #d1d5db; background: #fff; border-radius: 6px; cursor: pointer; }
+.toolbar button {
+  padding: 8px 14px;
+  border: 1px solid #d1d5db;
+  background: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+}
 .toolbar button:hover { background: #f3f4f6; }
 
-table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 8px; overflow: hidden; }
-th, td { padding: 10px 14px; text-align: left; border-bottom: 1px solid #eef0f2; font-size: 14px; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+}
+th, td {
+  padding: 10px 14px;
+  text-align: left;
+  border-bottom: 1px solid #eef0f2;
+  font-size: 14px;
+}
 th { background: #fafbfc; font-weight: 600; }
 tr.danger td { background: #fff1f0; }
+td button {
+  padding: 4px 10px;
+  border: 1px solid #d1d5db;
+  background: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+}
+td button:hover { background: #f3f4f6; }
 
 /* 弹窗 */
 .modal-mask {
@@ -78,10 +141,7 @@ tr.danger td { background: #fff1f0; }
   width: 360px;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
 }
-.modal-box h3 {
-  margin: 0 0 18px;
-  font-size: 17px;
-}
+.modal-box h3 { margin: 0 0 18px; font-size: 17px; }
 .modal-box label {
   display: block;
   margin-bottom: 14px;
@@ -97,13 +157,9 @@ tr.danger td { background: #fff1f0; }
   border: 1px solid #d1d5db;
   border-radius: 6px;
   font-size: 14px;
-  box-sizing: border-box;
 }
 .modal-box input:focus,
-.modal-box select:focus {
-  outline: none;
-  border-color: #2563eb;
-}
+.modal-box select:focus { outline: none; border-color: #2563eb; }
 .modal-actions {
   display: flex;
   justify-content: flex-end;
