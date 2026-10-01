@@ -61,8 +61,8 @@ async function onLoggedIn(user) {
 document.getElementById('github-login').onclick = () => {
   account.createOAuth2Session(
     OAuthProvider.Github,
-    location.origin + location.pathname,
-    location.origin + location.pathname + '?failed=1'
+    location.origin,          // 成功跳回首页，不带斜杠
+    location.origin           // 失败也跳回首页
   );
 };
 
