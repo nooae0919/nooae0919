@@ -4,9 +4,9 @@ const CONFIG = {
   DATABASE_ID: '6abe1ae300017fc5be34',
 
   TABLES: {
-    wo: 'work_orders',
-    bom: 'bom_items',
-    issue: 'issue_records',
-    return: 'return_records'
+    wo: '6abe1b0b00014120947e',
+    bom: '6abe1b190000662cb45a',
+    issue: '6abe1b26003e19e2587f',
+    return: '6abe1b34000ba978b5f2'
   }
 };
