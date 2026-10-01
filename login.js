@@ -54,11 +54,7 @@ async function onLoggedIn(user) {
 }
 
 document.getElementById('github-login').onclick = () => {
-  account.createOAuth2Session(
-    OAuthProvider.Github,
-    'https://www.nooae.com',
-    'https://www.nooae.com'
-  );
+  account.createOAuth2Session(OAuthProvider.Github);
 };
 
 document.getElementById('logout').onclick = async () => {
