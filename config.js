@@ -1,3 +1,4 @@
+// 所有配置集中在这里，方便统一修改
 const CONFIG = {
   APPWRITE_ENDPOINT: 'https://sgp.cloud.appwrite.io/v1',
   PROJECT_ID: '6abd523c001544279ca8',
