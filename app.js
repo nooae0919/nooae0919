@@ -9,10 +9,20 @@ window.onAuthReady = function () {
 /* ==================== 通用工具 ==================== */
 
 function exportCSV(headers, rows, filename) {
-  const ws = XLSX.utils.aoa_to_sheet([headers, ...rows]);
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-  XLSX.writeFile(wb, `${filename}_${new Date().toISOString().slice(0,10)}.csv`);
+  const wsData = [headers, ...rows];
+  // 关键：在 CSV 内容最前面加 UTF-8 BOM
+  const csv = '\uFEFF' + XLSX.utils.sheet_to_csv(
+    XLSX.utils.aoa_to_sheet(wsData)
+  );
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${filename}_${new Date().toISOString().slice(0,10)}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
 }
 
 function readCSV(file) {
