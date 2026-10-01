@@ -1,4 +1,4 @@
-const { Client, Account, OAuthProvider } = Appwrite;
+const { Client, Account } = Appwrite;
 
 const client = new Client()
   .setEndpoint(CONFIG.APPWRITE_ENDPOINT)
@@ -12,17 +12,10 @@ const appView = document.getElementById('app-view');
 const loginError = document.getElementById('login-error');
 
 async function initAuth() {
-  const params = new URLSearchParams(location.search);
-  if (params.get('error')) {
-    loginError.textContent = 'GitHub 登录失败，请重试。';
-    history.replaceState({}, '', location.pathname);
-  }
-
   try {
     const user = await account.get();
     await onLoggedIn(user);
-  } catch (e) {
-    console.log('未登录，显示登录页:', e.message);
+  } catch {
     showLogin();
   }
 }
@@ -33,19 +26,7 @@ function showLogin() {
 }
 
 async function onLoggedIn(user) {
-  const githubName = user.name || user.email;
-  const allowed = CONFIG.ALLOWED_GITHUB_USERS || [];
-
-  if (allowed.length && !allowed.includes(githubName)) {
-    await account.deleteSession('current');
-    loginError.textContent = `账号 ${githubName} 未被授权访问。`;
-    showLogin();
-    return;
-  }
-
-  document.getElementById('user-name').textContent = githubName;
-  const avatar = document.getElementById('user-avatar');
-  if (user.prefs?.avatar) avatar.src = user.prefs.avatar;
+  document.getElementById('user-name').textContent = user.name || user.email;
 
   loginView.classList.add('hidden');
   appView.classList.remove('hidden');
@@ -53,8 +34,23 @@ async function onLoggedIn(user) {
   if (window.onAuthReady) window.onAuthReady();
 }
 
-document.getElementById('github-login').onclick = () => {
-  account.createOAuth2Session(OAuthProvider.Github);
+document.getElementById('login-btn').onclick = async () => {
+  const email = document.getElementById('login-email').value.trim();
+  const password = document.getElementById('login-password').value;
+
+  if (!email || !password) {
+    loginError.textContent = '请输入邮箱和密码';
+    return;
+  }
+
+  loginError.textContent = '';
+  try {
+    await account.createEmailPasswordSession(email, password);
+    const user = await account.get();
+    await onLoggedIn(user);
+  } catch (e) {
+    loginError.textContent = '登录失败：' + (e.message || '邮箱或密码错误');
+  }
 };
 
 document.getElementById('logout').onclick = async () => {
