@@ -59,14 +59,20 @@ const WO_HEADERS = ['wo_number', 'product_name', 'plan_qty', 'status'];
 
 async function loadWorkOrders() {
   const res = await db.listDocuments(CONFIG.DATABASE_ID, CONFIG.TABLES.wo);
-  document.querySelector('#wo-table tbody').innerHTML = res.documents.map(d => `
-    <tr>
-      <td>${d.wo_number}</td>
-      <td>${d.product_name}</td>
-      <td>${d.plan_qty}</td>
-      <td>${d.status}</td>
-      <td><button onclick="deleteRow('${CONFIG.TABLES.wo}','${d.$id}')">删除</button></td>
-    </tr>`).join('');
+  document.querySelector('#wo-table tbody').innerHTML = res.documents.map(d => {
+    const isCompleted = d.status === 'completed';
+    const actionCell = isCompleted
+      ? `<span style="color:#999;font-size:13px;">已完成（不可修改）</span>`
+      : `<button onclick="openEditWO('${d.$id}')">编辑</button>`;
+    return `
+      <tr>
+        <td>${d.wo_number}</td>
+        <td>${d.product_name}</td>
+        <td>${d.plan_qty}</td>
+        <td>${d.status}</td>
+        <td>${actionCell}</td>
+      </tr>`;
+  }).join('');
 }
 
 document.getElementById('wo-import').onclick = () => document.getElementById('wo-file-input').click();
