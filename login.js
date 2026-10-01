@@ -13,21 +13,6 @@ const loginView = document.getElementById('login-view');
 const appView = document.getElementById('app-view');
 const loginError = document.getElementById('login-error');
 
-async function initAuth() {
-  const params = new URLSearchParams(location.search);
-  if (params.get('error')) {
-    loginError.textContent = 'GitHub 登录失败，请重试。';
-    history.replaceState({}, '', location.pathname);
-  }
-
-  try {
-    const user = await account.get();
-    await onLoggedIn(user);
-  } catch {
-    showLogin();
-  }
-}
-
 function showLogin() {
   loginView.classList.remove('hidden');
   appView.classList.add('hidden');
@@ -58,11 +43,7 @@ async function onLoggedIn(user) {
 }
 
 document.getElementById('github-login').onclick = () => {
-  account.createOAuth2Session(
-    OAuthProvider.Github,
-    'https://www.nooae.com/index.html',
-    'https://www.nooae.com/index.html'
-  );
+  account.createOAuth2Session(OAuthProvider.Github);
 };
 
 document.getElementById('logout').onclick = async () => {
