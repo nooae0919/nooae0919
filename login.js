@@ -27,10 +27,8 @@ function showLogin() {
 
 async function onLoggedIn(user) {
   document.getElementById('user-name').textContent = user.name || user.email;
-
   loginView.classList.add('hidden');
   appView.classList.remove('hidden');
-
   if (window.onAuthReady) window.onAuthReady();
 }
 
