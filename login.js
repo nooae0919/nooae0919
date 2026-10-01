@@ -60,8 +60,8 @@ async function onLoggedIn(user) {
 document.getElementById('github-login').onclick = () => {
   account.createOAuth2Session(
     OAuthProvider.Github,
-    'https://www.nooae.com/',   // 注意尾部斜杠
-    'https://www.nooae.com/'    // 注意尾部斜杠
+    'www.nooae.com',   // ✅ 纯 hostname，不带 https://，不带 /
+    'www.nooae.com'
   );
 };
 
