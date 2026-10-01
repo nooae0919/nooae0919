@@ -56,8 +56,8 @@ async function onLoggedIn(user) {
 document.getElementById('github-login').onclick = () => {
   account.createOAuth2Session(
     OAuthProvider.Github,
-    'www.nooae.com',
-    'www.nooae.com'
+    'https://www.nooae.com',
+    'https://www.nooae.com'
   );
 };
 
