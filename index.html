@@ -125,5 +125,33 @@
 
   <script src="login.js"></script>
   <script src="app.js"></script>
+<!-- 新增工单弹窗 -->
+<div id="wo-modal" class="modal-mask hidden">
+  <div class="modal-box">
+    <h3>新增工单</h3>
+    <label>工单号
+      <input id="wo-form-number" type="text" placeholder="如 WO-2024-0001">
+    </label>
+    <label>产品名称
+      <input id="wo-form-product" type="text" placeholder="如 iPhone主板">
+    </label>
+    <label>计划数量
+      <input id="wo-form-qty" type="number" placeholder="如 500">
+    </label>
+    <label>状态
+      <select id="wo-form-status">
+        <option value="pending">待生产</option>
+        <option value="in_progress">生产中</option>
+        <option value="completed">已完成</option>
+      </select>
+    </label>
+    <p id="wo-form-error" class="error"></p>
+    <div class="modal-actions">
+      <button id="wo-form-cancel" class="btn-cancel">取消</button>
+      <button id="wo-form-save" class="btn-save">保存</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
