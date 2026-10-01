@@ -60,8 +60,8 @@ async function onLoggedIn(user) {
 document.getElementById('github-login').onclick = () => {
   account.createOAuth2Session(
     OAuthProvider.Github,
-    'https://sgp.cloud.appwrite.io/v1/account/sessions/oauth2/callback/github/6abd523c001544279ca8',
-    'https://sgp.cloud.appwrite.io/v1/account/sessions/oauth2/callback/github/6abd523c001544279ca8'
+    'https://www.nooae.com/index.html',
+    'https://www.nooae.com/index.html'
   );
 };
 
