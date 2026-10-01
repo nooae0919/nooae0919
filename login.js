@@ -58,11 +58,7 @@ async function onLoggedIn(user) {
 }
 
 document.getElementById('github-login').onclick = () => {
-  account.createOAuth2Session(
-    OAuthProvider.Github,
-    'https://www.nooae.com/index.html',   // 完整 URL，且带具体路径
-    'https://www.nooae.com/index.html'
-  );
+  account.createOAuth2Session(OAuthProvider.Github);
 };
 
 document.getElementById('logout').onclick = async () => {
