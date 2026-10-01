@@ -4,36 +4,31 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SMT线边仓管理系统</title>
+  <link rel="icon" href="data:,">
   <link rel="stylesheet" href="style.css">
-
-  <!-- 1. Appwrite SDK（必须最先加载） -->
-<script src="https://cdn.jsdelivr.net/npm/appwrite@17.0.0/dist/iife/sdk.js"></script>
-  <!-- 2. SheetJS（导入导出用） -->
+  <script src="https://cdn.jsdelivr.net/npm/appwrite@17.0.0/dist/iife/sdk.js"></script>
   <script src="lib/xlsx.full.min.js"></script>
-  <!-- 3. 配置 -->
   <script src="config.js"></script>
 </head>
-
 <body>
 
-  <!-- 登录层：未登录时显示 -->
-<div id="login-view" class="hidden">
-  <div class="login-card">
-    <h1>SMT 线边仓管理系统</h1>
-    <p>请登录</p>
-    <input type="email" id="login-email" placeholder="邮箱" autocomplete="username">
-    <input type="password" id="login-password" placeholder="密码" autocomplete="current-password">
-    <button id="login-btn">登录</button>
-    <p id="login-error" class="error"></p>
+  <!-- 登录层 -->
+  <div id="login-view" class="hidden">
+    <div class="login-card">
+      <h1>SMT 线边仓管理系统</h1>
+      <p>请登录</p>
+      <input type="email" id="login-email" placeholder="邮箱" autocomplete="username">
+      <input type="password" id="login-password" placeholder="密码" autocomplete="current-password">
+      <button id="login-btn">登录</button>
+      <p id="login-error" class="error"></p>
+    </div>
   </div>
-</div>
 
-  <!-- 主界面：登录后显示 -->
+  <!-- 主界面 -->
   <div id="app-view" class="hidden">
     <header>
       <h1>SMT 线边仓管理系统</h1>
       <div class="user-info">
-        <img id="user-avatar" alt="">
         <span id="user-name"></span>
         <button id="logout">退出</button>
       </div>
@@ -48,7 +43,7 @@
     </nav>
 
     <main>
-      <!-- 工单 -->
+      <!-- 工单管理 -->
       <section id="tab-wo" class="tab-panel active">
         <div class="toolbar">
           <button id="wo-add">新增工单</button>
@@ -64,7 +59,7 @@
         </table>
       </section>
 
-      <!-- BOM -->
+      <!-- BOM管理 -->
       <section id="tab-bom" class="tab-panel">
         <div class="toolbar">
           <button id="bom-import">导入CSV</button>
@@ -73,13 +68,20 @@
         </div>
         <table id="bom-table">
           <thead>
-            <tr><th>工单号</th><th>料号</th><th>物料名称</th><th>单板用量</th><th>损耗率</th><th>操作</th></tr>
+            <tr>
+              <th>成品料号</th>
+              <th>版本号</th>
+              <th>物料料号</th>
+              <th>物料名称</th>
+              <th>单板用量</th>
+              <th>操作</th>
+            </tr>
           </thead>
           <tbody></tbody>
         </table>
       </section>
 
-      <!-- 发料 -->
+      <!-- 工单发料 -->
       <section id="tab-issue" class="tab-panel">
         <div class="toolbar">
           <button id="issue-import">导入CSV</button>
@@ -88,13 +90,13 @@
         </div>
         <table id="issue-table">
           <thead>
-            <tr><th>工单号</th><th>料号</th><th>发料数量</th><th>发料人</th><th>发料时间</th><th>操作</th></tr>
+            <tr><th>工单号</th><th>物料料号</th><th>发料数量</th><th>发料人</th><th>发料时间</th><th>操作</th></tr>
           </thead>
           <tbody></tbody>
         </table>
       </section>
 
-      <!-- 退料 -->
+      <!-- 工单退料 -->
       <section id="tab-return" class="tab-panel">
         <div class="toolbar">
           <button id="return-import">导入CSV</button>
@@ -103,13 +105,13 @@
         </div>
         <table id="return-table">
           <thead>
-            <tr><th>工单号</th><th>料号</th><th>退料数量</th><th>退料人</th><th>退料时间</th><th>操作</th></tr>
+            <tr><th>工单号</th><th>物料料号</th><th>退料数量</th><th>退料人</th><th>退料时间</th><th>操作</th></tr>
           </thead>
           <tbody></tbody>
         </table>
       </section>
 
-      <!-- 损耗 -->
+      <!-- 损耗计算 -->
       <section id="tab-loss" class="tab-panel">
         <div class="toolbar">
           <button id="loss-calc">计算损耗</button>
@@ -122,66 +124,65 @@
       </section>
     </main>
   </div>
-<!-- 新增工单弹窗 -->
-<div id="wo-modal" class="modal-mask hidden">
-  <div class="modal-box">
-    <h3>新增工单</h3>
-    <label>工单号
-      <input id="wo-form-number" type="text" placeholder="如 WO-2024-0001">
-    </label>
-    <label>产品名称
-      <input id="wo-form-product" type="text" placeholder="如 iPhone主板">
-    </label>
-    <label>计划数量
-      <input id="wo-form-qty" type="number" placeholder="如 500">
-    </label>
-    <label>状态
-      <select id="wo-form-status">
-        <option value="pending">待生产</option>
-        <option value="in_progress">生产中</option>
-        <option value="completed">已完成</option>
-      </select>
-    </label>
-    <p id="wo-form-error" class="error"></p>
-    <div class="modal-actions">
-      <button id="wo-form-cancel" class="btn-cancel">取消</button>
-      <button id="wo-form-save" class="btn-save">保存</button>
+
+  <!-- 新增工单弹窗 -->
+  <div id="wo-modal" class="modal-mask hidden">
+    <div class="modal-box">
+      <h3>新增工单</h3>
+      <label>工单号
+        <input id="wo-form-number" type="text" placeholder="如 WO-2024-0001">
+      </label>
+      <label>产品名称
+        <input id="wo-form-product" type="text" placeholder="如 iPhone主板">
+      </label>
+      <label>计划数量
+        <input id="wo-form-qty" type="number" placeholder="如 500">
+      </label>
+      <label>状态
+        <select id="wo-form-status">
+          <option value="pending">待生产</option>
+          <option value="in_progress">生产中</option>
+          <option value="completed">已完成</option>
+        </select>
+      </label>
+      <p id="wo-form-error" class="error"></p>
+      <div class="modal-actions">
+        <button id="wo-form-cancel" class="btn-cancel">取消</button>
+        <button id="wo-form-save" class="btn-save">保存</button>
+      </div>
     </div>
   </div>
-</div>
 
-  
-  <script src="login.js"></script>
-
+  <!-- 编辑工单弹窗 -->
   <div id="wo-edit-modal" class="modal-mask hidden">
-  <div class="modal-box">
-    <h3>编辑工单</h3>
-    <input type="hidden" id="wo-edit-id">
-    <label>工单号
-      <input id="wo-edit-number" type="text" disabled>
-    </label>
-    <label>产品名称
-      <input id="wo-edit-product" type="text">
-    </label>
-    <label>计划数量
-      <input id="wo-edit-qty" type="number">
-    </label>
-    <label>状态
-      <select id="wo-edit-status">
-        <option value="pending">待生产</option>
-        <option value="in_progress">生产中</option>
-        <option value="completed">已完成</option>
-      </select>
-    </label>
-    <p id="wo-edit-error" class="error"></p>
-    <div class="modal-actions">
-      <button id="wo-edit-cancel" class="btn-cancel">取消</button>
-      <button id="wo-edit-save" class="btn-save">保存</button>
+    <div class="modal-box">
+      <h3>编辑工单</h3>
+      <input type="hidden" id="wo-edit-id">
+      <label>工单号
+        <input id="wo-edit-number" type="text" disabled>
+      </label>
+      <label>产品名称
+        <input id="wo-edit-product" type="text">
+      </label>
+      <label>计划数量
+        <input id="wo-edit-qty" type="number">
+      </label>
+      <label>状态
+        <select id="wo-edit-status">
+          <option value="pending">待生产</option>
+          <option value="in_progress">生产中</option>
+          <option value="completed">已完成</option>
+        </select>
+      </label>
+      <p id="wo-edit-error" class="error"></p>
+      <div class="modal-actions">
+        <button id="wo-edit-cancel" class="btn-cancel">取消</button>
+        <button id="wo-edit-save" class="btn-save">保存</button>
+      </div>
     </div>
   </div>
-</div>
+
+  <script src="login.js"></script>
   <script src="app.js"></script>
-
-
 </body>
 </html>
