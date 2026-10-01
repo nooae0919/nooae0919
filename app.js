@@ -260,3 +260,46 @@ document.querySelectorAll('nav button').forEach(btn => {
     loadCurrentTab();
   };
 });
+
+// ==================== 新增工单弹窗 ====================
+
+const woModal = document.getElementById('wo-modal');
+const woErr = document.getElementById('wo-form-error');
+
+document.getElementById('wo-add').onclick = () => {
+  document.getElementById('wo-form-number').value = '';
+  document.getElementById('wo-form-product').value = '';
+  document.getElementById('wo-form-qty').value = '';
+  document.getElementById('wo-form-status').value = 'pending';
+  woErr.textContent = '';
+  woModal.classList.remove('hidden');
+};
+
+document.getElementById('wo-form-cancel').onclick = () => {
+  woModal.classList.add('hidden');
+};
+
+document.getElementById('wo-form-save').onclick = async () => {
+  const wo_number = document.getElementById('wo-form-number').value.trim();
+  const product_name = document.getElementById('wo-form-product').value.trim();
+  const plan_qty = parseInt(document.getElementById('wo-form-qty').value, 10);
+  const status = document.getElementById('wo-form-status').value;
+
+  if (!wo_number || !product_name || !plan_qty) {
+    woErr.textContent = '工单号、产品名称、计划数量必填';
+    return;
+  }
+
+  try {
+    await db.createDocument(CONFIG.DATABASE_ID, CONFIG.TABLES.wo, ID.unique(), {
+      wo_number,
+      product_name,
+      plan_qty,
+      status
+    });
+    woModal.classList.add('hidden');
+    loadWorkOrders();
+  } catch (e) {
+    woErr.textContent = '保存失败：' + (e.message || e);
+  }
+};
