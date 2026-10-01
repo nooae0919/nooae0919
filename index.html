@@ -152,6 +152,34 @@
 
   
   <script src="login.js"></script>
+
+  <div id="wo-edit-modal" class="modal-mask hidden">
+  <div class="modal-box">
+    <h3>编辑工单</h3>
+    <input type="hidden" id="wo-edit-id">
+    <label>工单号
+      <input id="wo-edit-number" type="text" disabled>
+    </label>
+    <label>产品名称
+      <input id="wo-edit-product" type="text">
+    </label>
+    <label>计划数量
+      <input id="wo-edit-qty" type="number">
+    </label>
+    <label>状态
+      <select id="wo-edit-status">
+        <option value="pending">待生产</option>
+        <option value="in_progress">生产中</option>
+        <option value="completed">已完成</option>
+      </select>
+    </label>
+    <p id="wo-edit-error" class="error"></p>
+    <div class="modal-actions">
+      <button id="wo-edit-cancel" class="btn-cancel">取消</button>
+      <button id="wo-edit-save" class="btn-save">保存</button>
+    </div>
+  </div>
+</div>
   <script src="app.js"></script>
 
 
