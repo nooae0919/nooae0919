@@ -5,9 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SMT线边仓管理系统</title>
   <link rel="stylesheet" href="style.css">
+
+  <!-- 1. Appwrite SDK（必须最先加载） -->
+  <script src="https://cdn.jsdelivr.net/npm/appwrite@17.0.0/dist/iife/sdk.js"></script>
+  <!-- 2. SheetJS（导入导出用） -->
   <script src="lib/xlsx.full.min.js"></script>
+  <!-- 3. 配置 -->
   <script src="config.js"></script>
 </head>
+
 <body>
 
   <!-- 登录层：未登录时显示 -->
