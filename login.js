@@ -14,9 +14,8 @@ const appView = document.getElementById('app-view');
 const loginError = document.getElementById('login-error');
 
 async function initAuth() {
-  // 处理 OAuth 回调失败
   const params = new URLSearchParams(location.search);
-  if (params.get('failed')) {
+  if (params.get('error')) {
     loginError.textContent = 'GitHub 登录失败，请重试。';
     history.replaceState({}, '', location.pathname);
   }
@@ -61,8 +60,8 @@ async function onLoggedIn(user) {
 document.getElementById('github-login').onclick = () => {
   account.createOAuth2Session(
     OAuthProvider.Github,
-    location.origin,          // 成功跳回首页，不带斜杠
-    location.origin           // 失败也跳回首页
+    location.origin,   // success: https://www.nooae.com
+    location.origin    // failure: https://www.nooae.com  ← 这里也要干净
   );
 };
 
