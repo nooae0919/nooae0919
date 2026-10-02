@@ -66,11 +66,35 @@ function readCSV(file) {
   });
 }
 
+// 各表里的数字字段
+const NUMERIC_FIELDS = {
+  work_orders: ['plan_qty'],
+  bom_items: ['unit_qty'],
+  issue_records: ['issue_qty'],
+  return_records: ['return_qty']
+};
+
 async function batchImport(tableId, headers, rows) {
+  const numericKeys = NUMERIC_FIELDS[tableId] || [];
   let ok = 0, fail = 0;
+
   for (const row of rows) {
     const data = {};
-    headers.forEach((h, i) => { if (row[i] !== undefined) data[h] = row[i]; });
+    headers.forEach((h, i) => {
+      const v = row[i];
+      if (v === undefined || v === null || v === '') return;
+
+      if (numericKeys.includes(h)) {
+        // 数字字段：转成 Number
+        const n = Number(v);
+        if (isNaN(n)) return;
+        data[h] = n;
+      } else {
+        // 其他字段：字符串
+        data[h] = String(v).trim();
+      }
+    });
+
     try {
       await db.createDocument(CONFIG.DATABASE_ID, tableId, ID.unique(), data);
       ok++;
