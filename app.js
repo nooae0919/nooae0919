@@ -68,10 +68,10 @@ function readCSV(file) {
 
 // 各表里的数字字段
 const NUMERIC_FIELDS = {
-  work_orders: ['plan_qty'],
-  bom_items: ['unit_qty'],
-  issue_records: ['issue_qty'],
-  return_records: ['return_qty']
+  [CONFIG.TABLES.wo]: ['plan_qty'],
+  [CONFIG.TABLES.bom]: ['unit_qty'],
+  [CONFIG.TABLES.issue]: ['issue_qty'],
+  [CONFIG.TABLES.return]: ['return_qty']
 };
 
 async function batchImport(tableId, headers, rows) {
