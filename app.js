@@ -340,6 +340,28 @@ document.getElementById('issue-export').onclick = async () => {
   exportCSV(ISSUE_HEADERS, rows, 'issue_records');
 };
 
+async function loadMaterials() {
+  let all = [];
+  let offset = 0;
+  const limit = 100;
+  while (true) {
+    const res = await db.listDocuments(CONFIG.DATABASE_ID, CONFIG.TABLES.material, [
+      Query.limit(limit),
+      Query.offset(offset)
+    ]);
+    all = all.concat(res.documents);
+    if (res.documents.length < limit) break;
+    offset += limit;
+  }
+  document.querySelector('#material-table tbody').innerHTML = all.map(d => `
+    <tr>
+      <td>${d.part_number || ''}</td>
+      <td>${d.part_name || ''}</td>
+      <td>${d.spec || ''}</td>
+      <td><button onclick="deleteRow('${CONFIG.TABLES.material}','${d.$id}')">删除</button></td>
+    </tr>`).join('');
+}
+
 /* ==================== 工单退料 ==================== */
 
 const RETURN_HEADERS = ['wo_number', 'part_number', 'return_qty', 'operator', 'returned_at'];
