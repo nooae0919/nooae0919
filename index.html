@@ -81,6 +81,25 @@
           <tbody></tbody>
         </table>
       </section>
+      <!-- 物料信息 -->
+<section id="tab-material" class="tab-panel">
+  <div class="toolbar">
+    <button id="material-import">导入CSV</button>
+    <button id="material-export">导出CSV</button>
+    <input type="file" id="material-file-input" accept=".csv" hidden>
+  </div>
+  <table id="material-table">
+    <thead>
+      <tr>
+        <th>物料料号</th>
+        <th>物料名称</th>
+        <th>物料规格</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</section>
 
       <!-- 工单发料 -->
       <section id="tab-issue" class="tab-panel">
