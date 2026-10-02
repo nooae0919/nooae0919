@@ -8,6 +8,7 @@ const CONFIG = {
     wo: '6abe1b0b00014120947e',
     bom: '6abe1b190000662cb45a',
     issue: '6abe1b26003e19e2587f',
-    return: '6abe1b34000ba978b5f2'
+    return: '6abe1b34000ba978b5f2',
+    material: '6abf3b21000ea74819fc'
   }
 };
