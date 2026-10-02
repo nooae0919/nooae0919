@@ -29,13 +29,40 @@ function readCSV(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = (e) => {
-      const wb = XLSX.read(new Uint8Array(e.target.result), { type: 'array' });
-      const ws = wb.Sheets[wb.SheetNames[0]];
-      const data = XLSX.utils.sheet_to_json(ws, { header: 1 });
-      resolve({ headers: data[0], rows: data.slice(1) });
+      let text = e.target.result;
+
+      // 去掉 UTF-8 BOM（如果有）
+      if (text.charCodeAt(0) === 0xFEFF) text = text.slice(1);
+
+      // 按行拆分（兼容 \r\n 和 \n）
+      const lines = text.split(/\r?\n/).filter(l => l.trim() !== '');
+
+      // 简单 CSV 解析（支持双引号包围）
+      const parseRow = (line) => {
+        const cells = [];
+        let cur = '', inQuote = false;
+        for (let i = 0; i < line.length; i++) {
+          const ch = line[i];
+          if (inQuote) {
+            if (ch === '"' && line[i + 1] === '"') { cur += '"'; i++; }
+            else if (ch === '"') { inQuote = false; }
+            else { cur += ch; }
+          } else {
+            if (ch === '"') { inQuote = true; }
+            else if (ch === ',') { cells.push(cur); cur = ''; }
+            else { cur += ch; }
+          }
+        }
+        cells.push(cur);
+        return cells;
+      };
+
+      const headers = parseRow(lines[0]);
+      const rows = lines.slice(1).map(parseRow);
+      resolve({ headers, rows });
     };
     reader.onerror = reject;
-    reader.readAsArrayBuffer(file);   // ← 关键：改用 ArrayBuffer
+    reader.readAsText(file, 'UTF-8');   // ← 关键：强制 UTF-8
   });
 }
 
