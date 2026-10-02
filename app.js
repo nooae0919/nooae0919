@@ -278,6 +278,37 @@ document.getElementById('bom-export').onclick = async () => {
   exportCSV(BOM_HEADERS, rows, 'bom_items');
 };
 
+/* ==================== 物料信息 ==================== */
+
+const MATERIAL_HEADERS = ['part_number', 'part_name', 'spec'];
+
+async function loadMaterials() {
+  const res = await db.listDocuments(CONFIG.DATABASE_ID, CONFIG.TABLES.material);
+  document.querySelector('#material-table tbody').innerHTML = res.documents.map(d => `
+    <tr>
+      <td>${d.part_number || ''}</td>
+      <td>${d.part_name || ''}</td>
+      <td>${d.spec || ''}</td>
+      <td><button onclick="deleteRow('${CONFIG.TABLES.material}','${d.$id}')">删除</button></td>
+    </tr>`).join('');
+}
+
+document.getElementById('material-import').onclick = () => {
+  document.getElementById('material-file-input').click();
+};
+document.getElementById('material-file-input').onchange = async (e) => {
+  const f = e.target.files[0]; if (!f) return;
+  const { headers, rows } = await readCSV(f);
+  await batchImport(CONFIG.TABLES.material, headers, rows);
+  loadMaterials();
+  e.target.value = '';
+};
+document.getElementById('material-export').onclick = async () => {
+  const res = await db.listDocuments(CONFIG.DATABASE_ID, CONFIG.TABLES.material);
+  const rows = res.documents.map(d => MATERIAL_HEADERS.map(h => d[h] ?? ''));
+  exportCSV(MATERIAL_HEADERS, rows, 'materials');
+};
+
 /* ==================== 工单发料 ==================== */
 
 const ISSUE_HEADERS = ['wo_number', 'part_number', 'issue_qty', 'operator', 'issued_at'];
@@ -411,6 +442,7 @@ document.getElementById('loss-export').onclick = async () => {
 const loaders = {
   wo: loadWorkOrders,
   bom: loadBOM,
+  material: loadMaterials, 
   issue: loadIssues,
   return: loadReturns
 };
