@@ -5,7 +5,7 @@ window.onAuthReady = function () {
   loadReturns();
 };
 
-const RETURN_HEADERS = ['wo_number', 'part_number', 'return_qty', 'operator', 'returned_at'];
+const RETURN_HEADERS = ['wo_number', 'part_number', 'part_name', 'return_qty', 'operator', 'return_time'];
 
 async function loadReturns() {
   const res = await db.listDocuments(CONFIG.DATABASE_ID, CONFIG.TABLES.return);
@@ -22,13 +22,4 @@ document.getElementById('return-import').onclick = () => document.getElementById
 document.getElementById('return-file-input').onchange = async (e) => {
   const f = e.target.files[0]; if (!f) return;
   const { headers, rows } = await readCSV(f);
-  await batchImport(db, CONFIG.TABLES.return, headers, rows);
-  loadReturns();
-  e.target.value = '';
-};
-
-document.getElementById('return-export').onclick = async () => {
-  const res = await db.listDocuments(CONFIG.DATABASE_ID, CONFIG.TABLES.return);
-  const rows = res.documents.map(d => RETURN_HEADERS.map(h => d[h] ?? ''));
-  exportCSV(RETURN_HEADERS, rows, 'return_records');
-};
+  await batchImport(db, CONFIG.TABLES.return, headers, rows
