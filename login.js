@@ -11,18 +11,15 @@ const loginView = document.getElementById('login-view');
 const appView = document.getElementById('app-view');
 const loginError = document.getElementById('login-error');
 
-// 判断当前是不是登录页
 function isLoginPage() {
   return !!document.getElementById('login-email');
 }
 
 async function initAuth() {
   try {
-    const user = await account.get();
-    // 已登录状态，访问登录页 → 直接跳转
-    window.location.href = 'wo.html';
+    await account.get();
+    window.location.href = 'wo.html';     // 已登录 → 跳转
   } catch {
-    // 未登录 → 显示登录层
     showLogin();
   }
 }
@@ -40,22 +37,19 @@ async function onLoggedIn(user) {
   if (window.onAuthReady) window.onAuthReady();
 }
 
-// 登录页：登录按钮
+/* 登录按钮 */
 const loginBtn = document.getElementById('login-btn');
 if (loginBtn) {
   loginBtn.onclick = async () => {
     const email = document.getElementById('login-email').value.trim();
     const password = document.getElementById('login-password').value;
-
     if (!email || !password) {
       loginError.textContent = '请输入邮箱和密码';
       return;
     }
-
     loginError.textContent = '';
     try {
       await account.createEmailPasswordSession(email, password);
-      // 登录成功 → 跳转到工单管理
       window.location.href = 'wo.html';
     } catch (e) {
       loginError.textContent = '登录失败：' + (e.message || '邮箱或密码错误');
@@ -63,7 +57,7 @@ if (loginBtn) {
   };
 }
 
-// 退出按钮
+/* 登出按钮 */
 const logoutBtn = document.getElementById('logout');
 if (logoutBtn) {
   logoutBtn.onclick = async () => {
@@ -72,7 +66,7 @@ if (logoutBtn) {
   };
 }
 
-// 其它页面：检查登录状态
+/* 非登录页检查登录状态 */
 async function checkAuth() {
   try {
     const user = await account.get();
@@ -86,7 +80,7 @@ async function checkAuth() {
   }
 }
 
-// 页面初始化
+/* 页面初始化 */
 if (isLoginPage()) {
   initAuth();
 } else if (document.getElementById('app-view')) {
