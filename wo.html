@@ -37,7 +37,15 @@
       </div>
       <table id="wo-table">
         <thead>
-          <tr><th>工单号</th><th>产品名称</th><th>计划数量</th><th>状态</th><th>操作</th></tr>
+          <tr>
+            <th>工单号</th>
+            <th>成品料号</th>
+            <th>产品名称</th>
+            <th>计划数量</th>
+            <th>生产日期</th>
+            <th>状态</th>
+            <th>操作</th>
+          </tr>
         </thead>
         <tbody></tbody>
       </table>
@@ -51,11 +59,17 @@
       <label>工单号
         <input id="wo-form-number" type="text" placeholder="如 WO-2024-0001">
       </label>
+      <label>成品料号
+        <input id="wo-form-part" type="text" placeholder="如 P-1001">
+      </label>
       <label>产品名称
         <input id="wo-form-product" type="text" placeholder="如 iPhone主板">
       </label>
       <label>计划数量
         <input id="wo-form-qty" type="number" placeholder="如 500">
+      </label>
+      <label>生产日期
+        <input id="wo-form-date" type="date">
       </label>
       <label>状态
         <select id="wo-form-status">
@@ -80,11 +94,17 @@
       <label>工单号
         <input id="wo-edit-number" type="text" disabled>
       </label>
+      <label>成品料号
+        <input id="wo-edit-part" type="text">
+      </label>
       <label>产品名称
         <input id="wo-edit-product" type="text">
       </label>
       <label>计划数量
         <input id="wo-edit-qty" type="number">
+      </label>
+      <label>生产日期
+        <input id="wo-edit-date" type="date">
       </label>
       <label>状态
         <select id="wo-edit-status">
