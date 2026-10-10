@@ -1,6 +1,4 @@
 const { Client, Account, ID } = Appwrite;
-window.AppwriteClient = client;
-window.ID = ID;
 
 const client = new Client()
   .setEndpoint(CONFIG.APPWRITE_ENDPOINT)
@@ -8,6 +6,7 @@ const client = new Client()
 
 const account = new Account(client);
 window.AppwriteClient = client;
+window.ID = ID;
 
 const loginView = document.getElementById('login-view');
 const appView = document.getElementById('app-view');
@@ -20,7 +19,7 @@ function isLoginPage() {
 async function initAuth() {
   try {
     await account.get();
-    window.location.href = 'wo.html';     // 已登录 → 跳转
+    window.location.href = 'wo.html';
   } catch {
     showLogin();
   }
@@ -39,7 +38,6 @@ async function onLoggedIn(user) {
   if (window.onAuthReady) window.onAuthReady();
 }
 
-/* 登录按钮 */
 const loginBtn = document.getElementById('login-btn');
 if (loginBtn) {
   loginBtn.onclick = async () => {
@@ -59,7 +57,6 @@ if (loginBtn) {
   };
 }
 
-/* 登出按钮 */
 const logoutBtn = document.getElementById('logout');
 if (logoutBtn) {
   logoutBtn.onclick = async () => {
@@ -68,7 +65,6 @@ if (logoutBtn) {
   };
 }
 
-/* 非登录页检查登录状态 */
 async function checkAuth() {
   try {
     const user = await account.get();
@@ -76,27 +72,12 @@ async function checkAuth() {
     if (userNameEl) userNameEl.textContent = user.name || user.email;
     if (loginView) loginView.classList.add('hidden');
     if (appView) appView.classList.remove('hidden');
-
-    // 关键：确保 onAuthReady 一定被调用
-    if (typeof window.onAuthReady === 'function') {
-      window.onAuthReady();
-    } else {
-      // 如果还没有定义，延迟再试一次
-      setTimeout(() => {
-        if (typeof window.onAuthReady === 'function') {
-          window.onAuthReady();
-        } else {
-          console.warn('onAuthReady 未定义，请检查业务脚本是否加载');
-        }
-      }, 100);
-    }
-  } catch (e) {
-    console.error('checkAuth 失败:', e);
+    if (window.onAuthReady) window.onAuthReady();
+  } catch {
     window.location.href = 'index.html';
   }
 }
 
-/* 页面初始化 */
 if (isLoginPage()) {
   initAuth();
 } else if (document.getElementById('app-view')) {
