@@ -36,16 +36,24 @@ document.getElementById('finish-export').onclick = async () => {
 /* 新增入库 */
 const finishModal = document.getElementById('finish-modal');
 const finishErr = document.getElementById('finish-form-error');
+let finishWoMap = {};   // ← 新增：工单号 → 工单对象 的映射
 
 document.getElementById('finish-add').onclick = async () => {
   const woSel = document.getElementById('finish-form-wo');
   woSel.innerHTML = '<option value="">-- 请选择工单 --</option>';
+  finishWoMap = {};
+
   const res = await db.listDocuments(CONFIG.DATABASE_ID, CONFIG.TABLES.wo);
   res.documents.forEach(d => {
+    // 只显示未完成的工单
+    if (d.status === 'completed') return;
+
     const opt = document.createElement('option');
     opt.value = d.wo_number;
     opt.textContent = `${d.wo_number} - ${d.product_name}（计划 ${d.plan_qty}）`;
     woSel.appendChild(opt);
+
+    finishWoMap[d.wo_number] = d;   // 建立映射，方便后面取料号
   });
 
   document.getElementById('finish-form-part').value = '';
@@ -53,6 +61,17 @@ document.getElementById('finish-add').onclick = async () => {
   document.getElementById('finish-form-operator').value = '';
   finishErr.textContent = '';
   finishModal.classList.remove('hidden');
+};
+
+// 新增：选择工单后自动填充成品料号
+document.getElementById('finish-form-wo').onchange = (e) => {
+  const woNum = e.target.value;
+  const partInput = document.getElementById('finish-form-part');
+  if (woNum && finishWoMap[woNum]) {
+    partInput.value = finishWoMap[woNum].product_number || '';
+  } else {
+    partInput.value = '';
+  }
 };
 
 document.getElementById('finish-form-cancel').onclick = () => finishModal.classList.add('hidden');
@@ -64,7 +83,7 @@ document.getElementById('finish-form-save').onclick = async () => {
   const operator = document.getElementById('finish-form-operator').value.trim();
 
   if (!product_number || !wo_number || !finish_qty) {
-    finishErr.textContent = '成品料号、关联工单、入库数量必填';
+    finishErr.textContent = '请先选择工单、填写入库数量';
     return;
   }
 
@@ -79,6 +98,12 @@ document.getElementById('finish-form-save').onclick = async () => {
     }
     const wo = woList.documents[0];
 
+    /* ★ 关键校验：成品料号必须与工单一致 */
+    if (product_number !== (wo.product_number || '')) {
+      finishErr.textContent = `成品料号与工单不一致！工单料号为 ${wo.product_number}`;
+      return;
+    }
+
     /* 已入库数量 */
     const existing = await db.listDocuments(CONFIG.DATABASE_ID, CONFIG.TABLES.finish, [
       Appwrite.Query.equal('wo_number', wo_number)
@@ -91,7 +116,10 @@ document.getElementById('finish-form-save').onclick = async () => {
     }
 
     await db.createDocument(CONFIG.DATABASE_ID, CONFIG.TABLES.finish, ID.unique(), {
-      wo_number, product_number, finish_qty, operator,
+      wo_number,
+      product_number,
+      finish_qty,
+      operator,
       finished_at: new Date().toISOString()
     });
 
