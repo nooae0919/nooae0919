@@ -3,9 +3,9 @@ const CONFIG = {
   PROJECT_ID: '6abd523c001544279ca8',
   DATABASE_ID: '6abe1ae300017fc5be34',
   TABLES: {
-    wo: '6abe1b0b00014120947e',
-    issue: '6abe1b26003e19e2587f',
-    return: '6abe1b34000ba978b5f2',
-    finish: 'finish_table_id'   // ← 成品入库表 ID 需替换
+    wo: '6aca498c0009307f9ba7',
+    issue: '6aca4995002a3b9415d5',
+    return: '6aca499e0030db6f91ed',
+    finish: '6aca49a6001fafc443a6'   // ← 成品入库表 ID 需替换
   }
 };
