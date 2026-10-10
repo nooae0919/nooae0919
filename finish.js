@@ -18,7 +18,6 @@ window.deleteFinishRow = function (docId) {
   deleteRow(db, CONFIG.TABLES.finish, docId, loadFinish);
 };
 
-// 导入
 document.getElementById('finish-import').onclick = () => document.getElementById('finish-file-input').click();
 document.getElementById('finish-file-input').onchange = async (e) => {
   const f = e.target.files[0]; if (!f) return;
@@ -28,19 +27,17 @@ document.getElementById('finish-file-input').onchange = async (e) => {
   e.target.value = '';
 };
 
-// 导出
 document.getElementById('finish-export').onclick = async () => {
   const res = await db.listDocuments(CONFIG.DATABASE_ID, CONFIG.TABLES.finish);
   const rows = res.documents.map(d => FINISH_HEADERS.map(h => d[h] ?? ''));
   exportCSV(FINISH_HEADERS, rows, 'finish_records');
 };
 
-// 新增入库
+/* 新增入库 */
 const finishModal = document.getElementById('finish-modal');
 const finishErr = document.getElementById('finish-form-error');
 
 document.getElementById('finish-add').onclick = async () => {
-  // 载入工单下拉框
   const woSel = document.getElementById('finish-form-wo');
   woSel.innerHTML = '<option value="">-- 请选择工单 --</option>';
   const res = await db.listDocuments(CONFIG.DATABASE_ID, CONFIG.TABLES.wo);
@@ -72,7 +69,7 @@ document.getElementById('finish-form-save').onclick = async () => {
   }
 
   try {
-    // 校验：入库数量不能大于工单计划数量
+    /* 校验工单 */
     const woList = await db.listDocuments(CONFIG.DATABASE_ID, CONFIG.TABLES.wo, [
       Appwrite.Query.equal('wo_number', wo_number)
     ]);
@@ -82,7 +79,7 @@ document.getElementById('finish-form-save').onclick = async () => {
     }
     const wo = woList.documents[0];
 
-    // 已入库总量
+    /* 已入库数量 */
     const existing = await db.listDocuments(CONFIG.DATABASE_ID, CONFIG.TABLES.finish, [
       Appwrite.Query.equal('wo_number', wo_number)
     ]);
@@ -94,14 +91,11 @@ document.getElementById('finish-form-save').onclick = async () => {
     }
 
     await db.createDocument(CONFIG.DATABASE_ID, CONFIG.TABLES.finish, ID.unique(), {
-      wo_number,
-      product_number,
-      finish_qty,
-      operator,
+      wo_number, product_number, finish_qty, operator,
       finished_at: new Date().toISOString()
     });
 
-    // 若累计入库 == 计划数量，则自动关结工单
+    /* 累计入库 == 计划数量 → 自动关结工单 */
     if (alreadyQty + finish_qty === wo.plan_qty) {
       await db.updateDocument(CONFIG.DATABASE_ID, CONFIG.TABLES.wo, wo.$id, {
         status: 'completed'
