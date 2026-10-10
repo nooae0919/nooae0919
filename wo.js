@@ -5,7 +5,7 @@ window.onAuthReady = function () {
   loadWorkOrders();
 };
 
-const WO_HEADERS = ['wo_number', 'product_name', 'plan_qty', 'status'];
+const WO_HEADERS = ['wo_number', 'product_number', 'product_name', 'plan_qty', 'produce_date', 'status'];
 
 async function loadWorkOrders() {
   const res = await db.listDocuments(CONFIG.DATABASE_ID, CONFIG.TABLES.wo);
@@ -17,7 +17,6 @@ async function loadWorkOrders() {
   });
 }
 
-// 导入
 document.getElementById('wo-import').onclick = () => document.getElementById('wo-file-input').click();
 document.getElementById('wo-file-input').onchange = async (e) => {
   const f = e.target.files[0]; if (!f) return;
@@ -27,21 +26,22 @@ document.getElementById('wo-file-input').onchange = async (e) => {
   e.target.value = '';
 };
 
-// 导出
 document.getElementById('wo-export').onclick = async () => {
   const res = await db.listDocuments(CONFIG.DATABASE_ID, CONFIG.TABLES.wo);
   const rows = res.documents.map(d => WO_HEADERS.map(h => d[h] ?? ''));
   exportCSV(WO_HEADERS, rows, 'work_orders');
 };
 
-// 新增工单
+/* 新增工单 */
 const woModal = document.getElementById('wo-modal');
 const woErr = document.getElementById('wo-form-error');
 
 document.getElementById('wo-add').onclick = () => {
   document.getElementById('wo-form-number').value = '';
+  document.getElementById('wo-form-part').value = '';
   document.getElementById('wo-form-product').value = '';
   document.getElementById('wo-form-qty').value = '';
+  document.getElementById('wo-form-date').value = '';
   document.getElementById('wo-form-status').value = 'pending';
   woErr.textContent = '';
   woModal.classList.remove('hidden');
@@ -51,8 +51,10 @@ document.getElementById('wo-form-cancel').onclick = () => woModal.classList.add(
 
 document.getElementById('wo-form-save').onclick = async () => {
   const wo_number = document.getElementById('wo-form-number').value.trim();
+  const product_number = document.getElementById('wo-form-part').value.trim();
   const product_name = document.getElementById('wo-form-product').value.trim();
   const plan_qty = parseInt(document.getElementById('wo-form-qty').value, 10);
+  const produce_date = document.getElementById('wo-form-date').value;
   const status = document.getElementById('wo-form-status').value;
 
   if (!wo_number || !product_name || !plan_qty) {
@@ -62,7 +64,7 @@ document.getElementById('wo-form-save').onclick = async () => {
 
   try {
     await db.createDocument(CONFIG.DATABASE_ID, CONFIG.TABLES.wo, ID.unique(), {
-      wo_number, product_name, plan_qty, status
+      wo_number, product_number, product_name, plan_qty, produce_date, status
     });
     woModal.classList.add('hidden');
     loadWorkOrders();
@@ -71,7 +73,7 @@ document.getElementById('wo-form-save').onclick = async () => {
   }
 };
 
-// 编辑工单
+/* 编辑工单 */
 const woEditModal = document.getElementById('wo-edit-modal');
 const woEditErr = document.getElementById('wo-edit-error');
 
@@ -84,8 +86,10 @@ window.openEditWO = async function (docId) {
     }
     document.getElementById('wo-edit-id').value = doc.$id;
     document.getElementById('wo-edit-number').value = doc.wo_number || '';
+    document.getElementById('wo-edit-part').value = doc.product_number || '';
     document.getElementById('wo-edit-product').value = doc.product_name || '';
     document.getElementById('wo-edit-qty').value = doc.plan_qty || '';
+    document.getElementById('wo-edit-date').value = doc.produce_date || '';
     document.getElementById('wo-edit-status').value = doc.status || 'pending';
     woEditErr.textContent = '';
     woEditModal.classList.remove('hidden');
@@ -98,8 +102,10 @@ document.getElementById('wo-edit-cancel').onclick = () => woEditModal.classList.
 
 document.getElementById('wo-edit-save').onclick = async () => {
   const docId = document.getElementById('wo-edit-id').value;
+  const product_number = document.getElementById('wo-edit-part').value.trim();
   const product_name = document.getElementById('wo-edit-product').value.trim();
   const plan_qty = parseInt(document.getElementById('wo-edit-qty').value, 10);
+  const produce_date = document.getElementById('wo-edit-date').value;
   const status = document.getElementById('wo-edit-status').value;
 
   if (!product_name || !plan_qty) {
@@ -119,7 +125,7 @@ document.getElementById('wo-edit-save').onclick = async () => {
     }
 
     await db.updateDocument(CONFIG.DATABASE_ID, CONFIG.TABLES.wo, docId, {
-      product_name, plan_qty, status
+      product_number, product_name, plan_qty, produce_date, status
     });
     woEditModal.classList.add('hidden');
     loadWorkOrders();
