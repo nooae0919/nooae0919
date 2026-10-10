@@ -76,8 +76,22 @@ async function checkAuth() {
     if (userNameEl) userNameEl.textContent = user.name || user.email;
     if (loginView) loginView.classList.add('hidden');
     if (appView) appView.classList.remove('hidden');
-    if (window.onAuthReady) window.onAuthReady();
-  } catch {
+
+    // 关键：确保 onAuthReady 一定被调用
+    if (typeof window.onAuthReady === 'function') {
+      window.onAuthReady();
+    } else {
+      // 如果还没有定义，延迟再试一次
+      setTimeout(() => {
+        if (typeof window.onAuthReady === 'function') {
+          window.onAuthReady();
+        } else {
+          console.warn('onAuthReady 未定义，请检查业务脚本是否加载');
+        }
+      }, 100);
+    }
+  } catch (e) {
+    console.error('checkAuth 失败:', e);
     window.location.href = 'index.html';
   }
 }
