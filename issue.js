@@ -5,7 +5,7 @@ window.onAuthReady = function () {
   loadIssues();
 };
 
-const ISSUE_HEADERS = ['wo_number', 'part_number', 'issue_qty', 'operator', 'issued_at'];
+const ISSUE_HEADERS = ['wo_number', 'part_number', 'part_name', 'issue_qty', 'operator', 'issue_time'];
 
 async function loadIssues() {
   const res = await db.listDocuments(CONFIG.DATABASE_ID, CONFIG.TABLES.issue);
