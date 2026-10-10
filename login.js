@@ -1,4 +1,6 @@
-const { Client, Account } = Appwrite;
+const { Client, Account, ID } = Appwrite;
+window.AppwriteClient = client;
+window.ID = ID;
 
 const client = new Client()
   .setEndpoint(CONFIG.APPWRITE_ENDPOINT)
