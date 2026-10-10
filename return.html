@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>生产退料 - SMT线边仓管理系统</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/appwrite@17.0.0/dist/iife/sdk.js"></script>
+  <script src="lib/xlsx.full.min.js"></script>
+  <script src="config.js"></script>
+</head>
+<body>
+
+  <div id="app-view">
+    <header>
+      <h1>SMT 线边仓管理系统</h1>
+      <div class="user-info">
+        <span id="user-name"></span>
+        <button id="logout">退出</button>
+      </div>
+    </header>
+
+    <nav>
+      <a href="wo.html">工单管理</a>
+      <a href="issue.html">生产领料</a>
+      <a href="return.html" class="active">生产退料</a>
+      <a href="finish.html">成品入库</a>
+    </nav>
+
+    <main>
+      <div class="toolbar">
+        <button id="return-import">导入CSV</button>
+        <button id="return-export">导出CSV</button>
+        <input type="file" id="return-file-input" accept=".csv" hidden>
+      </div>
+      <table id="return-table">
+        <thead>
+          <tr><th>工单号</th><th>物料料号</th><th>退料数量</th><th>退料人</th><th>退料时间</th><th>操作</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+  <script src="login.js"></script>
+  <script src="return.js"></script>
+</body>
+</html>
