@@ -203,3 +203,63 @@ td button:hover { background: #f3f4f6; }
 .wo-meta b {
   color: #222;
 }
+/* 搜索框 */
+.search-bar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+  align-items: center;
+}
+.search-bar input {
+  flex: 1;
+  max-width: 320px;
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+}
+.search-bar input:focus {
+  outline: none;
+  border-color: #2563eb;
+}
+
+/* 库存数量徽标 */
+.qty-badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 12px;
+  background: #eff6ff;
+  color: #2563eb;
+  font-weight: 600;
+  font-size: 13px;
+}
+.qty-badge.warn {
+  background: #fef3c7;
+  color: #b45309;
+}
+.qty-badge.danger {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+/* 汇总表中的料号链接 */
+.part-link {
+  color: #2563eb;
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: 500;
+}
+.part-link:hover {
+  text-decoration: underline;
+}
+
+/* 提示条 */
+.notice {
+  background: #eff6ff;
+  border-left: 3px solid #2563eb;
+  padding: 10px 14px;
+  border-radius: 6px;
+  margin-bottom: 14px;
+  font-size: 13px;
+  color: #1e40af;
+}
