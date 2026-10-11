@@ -6,7 +6,7 @@ const CONFIG = {
     wo: '6aca498c0009307f9ba7',
     issue: '6aca4995002a3b9415d5',
     return: '6aca499e0030db6f91ed',
-    finish: '6aca49a6001fafc443a6'   // ← 成品入库表 ID 需替换
+    finish: '6aca49a6001fafc443a6',   // ← 成品入库表 ID 需替换
     inventory: '6acafa1c002842294f67'
   }
 };
