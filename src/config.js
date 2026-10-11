@@ -7,6 +7,8 @@ export const CONFIG = {
     issue: '6aca4995002a3b9415d5',
     return: '6aca499e0030db6f91ed',
     finish: '6aca49a6001fafc443a6',
-    inventory: '6acafa1c002842294f67'
+    inventory: '6acafa1c002842294f67',
+    bom: '6acb5b010038c2f875ef',
+    bomItem: '6acb5b5b000f35cd0447'
   }
 };
