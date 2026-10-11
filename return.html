@@ -30,19 +30,20 @@
 
     <main>
       <div class="toolbar">
-        <button id="return-import">导入CSV</button>
-        <button id="return-export">导出CSV</button>
-        <input type="file" id="return-file-input" accept=".csv" hidden>
+        <button id="return-export-all">导出全部退料记录</button>
+        <button id="return-refresh">刷新</button>
       </div>
+
       <table id="return-table">
         <thead>
           <tr>
             <th>工单号</th>
-            <th>物料料号</th>
-            <th>物料名称</th>
-            <th>退料数量</th>
-            <th>退料人</th>
-            <th>退料时间</th>
+            <th>成品料号</th>
+            <th>产品名称</th>
+            <th>计划数量</th>
+            <th>已退料种类</th>
+            <th>已退料总数</th>
+            <th>状态</th>
             <th>操作</th>
           </tr>
         </thead>
@@ -52,7 +53,7 @@
   </div>
 
   <script src="app.js"></script>
-  <script src="login.js"></script>
   <script src="return.js"></script>
+  <script src="login.js"></script>
 </body>
 </html>
