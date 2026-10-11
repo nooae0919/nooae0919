@@ -73,11 +73,12 @@ function applyFilters() {
 function renderTable(docs) {
   const tbody = document.querySelector('#inv-table tbody');
   if (!docs.length) {
-    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#999;">暂无库存数据</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#999;">暂无库存数据</td></tr>';
     return;
   }
-  tbody.innerHTML = docs.map(d => `
+  tbody.innerHTML = docs.map((d, idx) => `
     <tr>
+      <td>${idx + 1}</td>
       <td>${d.part_number || ''}</td>
       <td>${d.part_name || ''}</td>
       <td><span class="qty-badge">${d.quantity ?? 0}</span></td>
