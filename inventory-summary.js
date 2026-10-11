@@ -79,11 +79,12 @@ function applyFilters() {
 function renderTable(rows) {
   const tbody = document.querySelector('#sum-table tbody');
   if (!rows.length) {
-    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:#999;">暂无库存数据</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#999;">暂无库存数据</td></tr>';
     return;
   }
-  tbody.innerHTML = rows.map(r => `
+  tbody.innerHTML = rows.map((r, idx) => `
     <tr>
+      <td>${idx + 1}</td>
       <td>
         <a class="part-link"
            onclick="goToInventory('${encodeURIComponent(r.part_number)}')">
