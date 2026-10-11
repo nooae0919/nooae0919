@@ -51,7 +51,7 @@ async function loadInventory() {
   applyFilters();
 }
 
-/* 应用过滤（URL 料号 + 搜索框） */
+/* 应用过滤（URL 库位 + 搜索框） */
 function applyFilters() {
   const keyword = (document.getElementById('inv-search').value || '').trim().toLowerCase();
 
@@ -60,9 +60,9 @@ function applyFilters() {
     docs = docs.filter(d => d.part_number === filterPart);
   }
   if (keyword) {
+    // 只按库位搜索
     docs = docs.filter(d =>
-      (d.part_number || '').toLowerCase().includes(keyword) ||
-      (d.part_name || '').toLowerCase().includes(keyword)
+      (d.location || '').toLowerCase().includes(keyword)
     );
   }
 
