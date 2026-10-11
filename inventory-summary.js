@@ -1,19 +1,44 @@
 let db = null;
-let summaryRows = [];   // 缓存汇总结果
+let summaryRows = [];      // 缓存汇总结果
+let initialized = false;   // 防止重复初始化
 
-window.onAuthReady = function () {
-  db = initDB(window.AppwriteClient);
+/* ==================== 初始化保障 ==================== */
+
+function ensureDB() {
+  if (!db && window.AppwriteClient) {
+    db = initDB(window.AppwriteClient);
+  }
+  return db;
+}
+
+function initPage() {
+  if (initialized) return;
+  if (!ensureDB()) return;   // client 还没准备好，等下次
+  initialized = true;
   loadSummary();
-};
+}
+
+/* login.js 登录后会调用它 */
+window.onAuthReady = initPage;
+
+/* 兜底 1：DOM 加载完后试一次 */
+document.addEventListener('DOMContentLoaded', () => setTimeout(initPage, 0));
+
+/* 兜底 2：50ms 后再试一次（如果 login.js 是异步的） */
+setTimeout(initPage, 50);
+
+/* ==================== 业务逻辑 ==================== */
 
 /* 从 inventory 集合拉取所有数据并聚合 */
 async function loadSummary() {
+  if (!db) return;   // 极端情况下的保护
+
   const res = await db.listDocuments(CONFIG.DATABASE_ID, CONFIG.TABLES.inventory, [
     Appwrite.Query.limit(5000)
   ]);
 
   // 按料号聚合
-  const map = {};   // part_number -> { part_name, total, locationCount }
+  const map = {};   // part_number -> { part_name, total, locations }
   res.documents.forEach(d => {
     const key = d.part_number || '';
     if (!key) return;
@@ -77,12 +102,16 @@ window.goToInventory = function (partNumberEncoded) {
   window.location.href = `inventory.html?part=${encodeURIComponent(part)}`;
 };
 
-/* 搜索 */
+/* 搜索按钮 */
 document.getElementById('sum-search-btn').onclick = applyFilters;
+
+/* 清空按钮 */
 document.getElementById('sum-clear-btn').onclick = () => {
   document.getElementById('sum-search').value = '';
   applyFilters();
 };
+
+/* 输入即时过滤 */
 document.getElementById('sum-search').addEventListener('input', applyFilters);
 
 /* 刷新 */
