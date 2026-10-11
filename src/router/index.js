@@ -13,7 +13,9 @@ const routes = [
   { path: '/finish/:wo', name: 'finish-detail', component: () => import('../views/FinishDetail.vue'), props: true },
   { path: '/inventory', name: 'inventory', component: () => import('../views/InventoryList.vue') },
   { path: '/inventory-summary', name: 'inventory-summary', component: () => import('../views/InventorySummary.vue') },
-  { path: '/:pathMatch(.*)*', redirect: '/wo' }
+  { path: '/:pathMatch(.*)*', redirect: '/wo' },
+  { path: '/bom', name: 'bom', component: () => import('../views/BomList.vue') },
+  { path: '/bom/:id', name: 'bom-detail', component: () => import('../views/BomDetail.vue'), props: true },
 ];
 
 const router = createRouter({
