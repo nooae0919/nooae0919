@@ -12,7 +12,7 @@
       </h2>
       <div class="wo-meta">
         <span>成品料号：<b>{{ bom.product_number || '-' }}</b></span>
-        <span>成品编码：<b>{{ bom.product_code || '-' }}</b></span>
+        <span>成品名称：<b>{{ bom.product_name || '-' }}</b></span>
         <span>版本号：<b>{{ bom.version || '-' }}</b></span>
         <span>备注：<b>{{ bom.remark || '-' }}</b></span>
         <span>更新时间：<b>{{ formatTime(bom.$updatedAt) }}</b></span>
