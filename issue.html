@@ -30,19 +30,20 @@
 
     <main>
       <div class="toolbar">
-        <button id="issue-import">导入CSV</button>
-        <button id="issue-export">导出CSV</button>
-        <input type="file" id="issue-file-input" accept=".csv" hidden>
+        <button id="issue-export-all">导出全部领料记录</button>
+        <button id="issue-refresh">刷新</button>
       </div>
+
       <table id="issue-table">
         <thead>
           <tr>
             <th>工单号</th>
-            <th>物料料号</th>
-            <th>物料名称</th>
-            <th>领料数量</th>
-            <th>领料人</th>
-            <th>领料时间</th>
+            <th>成品料号</th>
+            <th>产品名称</th>
+            <th>计划数量</th>
+            <th>已领料种类</th>
+            <th>已领料总数</th>
+            <th>状态</th>
             <th>操作</th>
           </tr>
         </thead>
@@ -52,7 +53,7 @@
   </div>
 
   <script src="app.js"></script>
-  <script src="login.js"></script>
   <script src="issue.js"></script>
+  <script src="login.js"></script>
 </body>
 </html>
