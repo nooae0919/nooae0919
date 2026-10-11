@@ -2,137 +2,84 @@ let db = null;
 
 window.onAuthReady = function () {
   db = initDB(window.AppwriteClient);
-  loadFinish();
+  loadFinishSummary();
 };
 
-const FINISH_HEADERS = ['wo_number', 'product_number', 'finish_qty', 'operator', 'finished_at'];
+/* 加载工单列表 + 每个工单的入库汇总 */
+async function loadFinishSummary() {
+  const [woRes, finishRes] = await Promise.all([
+    db.listDocuments(CONFIG.DATABASE_ID, CONFIG.TABLES.wo, [
+      Appwrite.Query.limit(500)
+    ]),
+    db.listDocuments(CONFIG.DATABASE_ID, CONFIG.TABLES.finish, [
+      Appwrite.Query.limit(5000)
+    ])
+  ]);
 
-async function loadFinish() {
-  const res = await db.listDocuments(CONFIG.DATABASE_ID, CONFIG.TABLES.finish);
-  renderTable('#finish-table tbody', res.documents, FINISH_HEADERS, (d) =>
-    `<button onclick="deleteFinishRow('${d.$id}')">删除</button>`
-  );
-}
-
-window.deleteFinishRow = function (docId) {
-  deleteRow(db, CONFIG.TABLES.finish, docId, loadFinish);
-};
-
-document.getElementById('finish-import').onclick = () => document.getElementById('finish-file-input').click();
-document.getElementById('finish-file-input').onchange = async (e) => {
-  const f = e.target.files[0]; if (!f) return;
-  const { headers, rows } = await readCSV(f);
-  await batchImport(db, CONFIG.TABLES.finish, headers, rows);
-  loadFinish();
-  e.target.value = '';
-};
-
-document.getElementById('finish-export').onclick = async () => {
-  const res = await db.listDocuments(CONFIG.DATABASE_ID, CONFIG.TABLES.finish);
-  const rows = res.documents.map(d => FINISH_HEADERS.map(h => d[h] ?? ''));
-  exportCSV(FINISH_HEADERS, rows, 'finish_records');
-};
-
-/* 新增入库 */
-const finishModal = document.getElementById('finish-modal');
-const finishErr = document.getElementById('finish-form-error');
-let finishWoMap = {};   // ← 新增：工单号 → 工单对象 的映射
-
-document.getElementById('finish-add').onclick = async () => {
-  const woSel = document.getElementById('finish-form-wo');
-  woSel.innerHTML = '<option value="">-- 请选择工单 --</option>';
-  finishWoMap = {};
-
-  const res = await db.listDocuments(CONFIG.DATABASE_ID, CONFIG.TABLES.wo);
-  res.documents.forEach(d => {
-    // 只显示未完成的工单
-    if (d.status === 'completed') return;
-
-    const opt = document.createElement('option');
-    opt.value = d.wo_number;
-    opt.textContent = `${d.wo_number} - ${d.product_name}（计划 ${d.plan_qty}）`;
-    woSel.appendChild(opt);
-
-    finishWoMap[d.wo_number] = d;   // 建立映射，方便后面取料号
+  // 按工单号汇总入库数量
+  const summaryMap = {};   // wo_number -> totalQty
+  finishRes.documents.forEach(d => {
+    const wo = d.wo_number;
+    if (!wo) return;
+    if (!summaryMap[wo]) summaryMap[wo] = 0;
+    summaryMap[wo] += Number(d.finish_qty) || 0;
   });
 
-  document.getElementById('finish-form-part').value = '';
-  document.getElementById('finish-form-qty').value = '';
-  document.getElementById('finish-form-operator').value = '';
-  finishErr.textContent = '';
-  finishModal.classList.remove('hidden');
+  const tbody = document.querySelector('#finish-table tbody');
+  tbody.innerHTML = woRes.documents.map(wo => {
+    const planQty = Number(wo.plan_qty) || 0;
+    const finishedQty = summaryMap[wo.wo_number] || 0;
+    const remainQty = Math.max(planQty - finishedQty, 0);
+    const percent = planQty > 0 ? Math.min(Math.round(finishedQty / planQty * 100), 100) : 0;
+
+    const statusText = wo.status === 'completed' ? '已完成'
+                     : wo.status === 'in_progress' ? '生产中'
+                     : '待生产';
+
+    // 进度条颜色
+    const barColor = percent >= 100 ? '#16a34a' : percent > 0 ? '#2563eb' : '#e5e7eb';
+    const progressHtml = `
+      <div style="display:flex;align-items:center;gap:8px;min-width:140px;">
+        <div style="flex:1;height:8px;background:#e5e7eb;border-radius:4px;overflow:hidden;">
+          <div style="width:${percent}%;height:100%;background:${barColor};transition:width .3s;"></div>
+        </div>
+        <span style="font-size:12px;color:#666;min-width:36px;">${percent}%</span>
+      </div>`;
+
+    return `
+      <tr>
+        <td>${wo.wo_number || ''}</td>
+        <td>${wo.product_number || ''}</td>
+        <td>${wo.product_name || ''}</td>
+        <td>${planQty}</td>
+        <td style="color:#2563eb;font-weight:600;">${finishedQty}</td>
+        <td style="color:${remainQty > 0 ? '#d33' : '#16a34a'};font-weight:600;">${remainQty}</td>
+        <td>${progressHtml}</td>
+        <td>${statusText}</td>
+        <td>
+          <button onclick="openFinishDetail('${encodeURIComponent(wo.wo_number)}')">
+            查看明细
+          </button>
+        </td>
+      </tr>`;
+  }).join('');
+}
+
+/* 跳转到明细页 */
+window.openFinishDetail = function (woNumberEncoded) {
+  const woNumber = decodeURIComponent(woNumberEncoded);
+  window.location.href = `finish-detail.html?wo=${encodeURIComponent(woNumber)}`;
 };
 
-// 新增：选择工单后自动填充成品料号
-document.getElementById('finish-form-wo').onchange = (e) => {
-  const woNum = e.target.value;
-  const partInput = document.getElementById('finish-form-part');
-  if (woNum && finishWoMap[woNum]) {
-    partInput.value = finishWoMap[woNum].product_number || '';
-  } else {
-    partInput.value = '';
-  }
+/* 导出全部入库记录 */
+document.getElementById('finish-export-all').onclick = async () => {
+  const res = await db.listDocuments(CONFIG.DATABASE_ID, CONFIG.TABLES.finish, [
+    Appwrite.Query.limit(5000)
+  ]);
+  const headers = ['wo_number', 'product_number', 'finish_qty', 'operator', 'finished_at'];
+  const rows = res.documents.map(d => headers.map(h => d[h] ?? ''));
+  exportCSV(headers, rows, 'finish_records_all');
 };
 
-document.getElementById('finish-form-cancel').onclick = () => finishModal.classList.add('hidden');
-
-document.getElementById('finish-form-save').onclick = async () => {
-  const product_number = document.getElementById('finish-form-part').value.trim();
-  const wo_number = document.getElementById('finish-form-wo').value;
-  const finish_qty = parseInt(document.getElementById('finish-form-qty').value, 10);
-  const operator = document.getElementById('finish-form-operator').value.trim();
-
-  if (!product_number || !wo_number || !finish_qty) {
-    finishErr.textContent = '请先选择工单、填写入库数量';
-    return;
-  }
-
-  try {
-    /* 校验工单 */
-    const woList = await db.listDocuments(CONFIG.DATABASE_ID, CONFIG.TABLES.wo, [
-      Appwrite.Query.equal('wo_number', wo_number)
-    ]);
-    if (!woList.documents.length) {
-      finishErr.textContent = '未找到对应工单';
-      return;
-    }
-    const wo = woList.documents[0];
-
-    /* ★ 关键校验：成品料号必须与工单一致 */
-    if (product_number !== (wo.product_number || '')) {
-      finishErr.textContent = `成品料号与工单不一致！工单料号为 ${wo.product_number}`;
-      return;
-    }
-
-    /* 已入库数量 */
-    const existing = await db.listDocuments(CONFIG.DATABASE_ID, CONFIG.TABLES.finish, [
-      Appwrite.Query.equal('wo_number', wo_number)
-    ]);
-    const alreadyQty = existing.documents.reduce((s, d) => s + (Number(d.finish_qty) || 0), 0);
-
-    if (alreadyQty + finish_qty > wo.plan_qty) {
-      finishErr.textContent = `入库数量超出工单计划数量（已入 ${alreadyQty} / 计划 ${wo.plan_qty}）`;
-      return;
-    }
-
-    await db.createDocument(CONFIG.DATABASE_ID, CONFIG.TABLES.finish, ID.unique(), {
-      wo_number,
-      product_number,
-      finish_qty,
-      operator,
-      finished_at: new Date().toISOString()
-    });
-
-    /* 累计入库 == 计划数量 → 自动关结工单 */
-    if (alreadyQty + finish_qty === wo.plan_qty) {
-      await db.updateDocument(CONFIG.DATABASE_ID, CONFIG.TABLES.wo, wo.$id, {
-        status: 'completed'
-      });
-    }
-
-    finishModal.classList.add('hidden');
-    loadFinish();
-  } catch (e) {
-    finishErr.textContent = '保存失败：' + (e.message || e);
-  }
-};
+/* 刷新 */
+document.getElementById('finish-refresh').onclick = () => loadFinishSummary();
