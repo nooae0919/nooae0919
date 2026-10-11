@@ -8,7 +8,7 @@
     </div>
 
     <div class="search-bar">
-      <input v-model="keyword" type="text" placeholder="按成品料号 / 编码 / 版本搜索...">
+      <input v-model="keyword" type="text" placeholder="按成品料号 / 名称 / 版本搜索...">
     </div>
 
     <table id="bom-table">
@@ -16,7 +16,7 @@
         <tr>
           <th style="width:60px;">序号</th>
           <th>成品料号</th>
-          <th>成品编码</th>
+          <th>成品名称</th>
           <th>版本号</th>
           <th style="width:120px;">BOM条目数</th>
           <th>更新时间</th>
@@ -54,8 +54,8 @@
         <label>成品料号
           <input v-model="form.product_number" type="text" placeholder="如 P-1001">
         </label>
-        <label>成品编码
-          <input v-model="form.product_code" type="text" placeholder="如 FG-2024-001">
+        <label>成品名称
+          <input v-model="form.product_name" type="text" placeholder="如 主控板成品">
         </label>
         <label>版本号
           <input v-model="form.version" type="text" placeholder="如 V1.0">
@@ -94,7 +94,7 @@ const formError = ref('');
 const form = reactive({
   id: '',
   product_number: '',
-  product_code: '',
+  product_name: '',
   version: '',
   remark: ''
 });
@@ -104,7 +104,7 @@ const filteredDocs = computed(() => {
   if (!kw) return docs.value;
   return docs.value.filter(d =>
     (d.product_number || '').toLowerCase().includes(kw) ||
-    (d.product_code || '').toLowerCase().includes(kw) ||
+    (d.product_name || '').toLowerCase().includes(kw) ||
     (d.version || '').toLowerCase().includes(kw)
   );
 });
@@ -123,6 +123,7 @@ async function load() {
   ]);
   docs.value = res.documents;
 
+  // 统计每个 BOM 的明细条目数
   const itemRes = await listDocs(CONFIG.TABLES.bomItem, [Query.limit(10000)]);
   const map = {};
   itemRes.documents.forEach(it => {
@@ -136,7 +137,9 @@ onMounted(load);
 
 /* 新建 */
 function openAdd() {
-  Object.assign(form, { id: '', product_number: '', product_code: '', version: '', remark: '' });
+  Object.assign(form, {
+    id: '', product_number: '', product_name: '', version: '', remark: ''
+  });
   formError.value = '';
   showModal.value = true;
 }
@@ -147,7 +150,7 @@ async function openEdit(docId) {
   Object.assign(form, {
     id: doc.$id,
     product_number: doc.product_number || '',
-    product_code: doc.product_code || '',
+    product_name: doc.product_name || '',
     version: doc.version || '',
     remark: doc.remark || ''
   });
@@ -164,7 +167,7 @@ async function saveForm() {
   try {
     const payload = {
       product_number: form.product_number,
-      product_code: form.product_code,
+      product_name: form.product_name,
       version: form.version,
       remark: form.remark
     };
@@ -213,7 +216,7 @@ async function handleImport(e) {
   const f = e.target.files[0]; if (!f) return;
   const { headers, rows } = await readCSV(f);
 
-  const required = ['product_number', 'product_code', 'version'];
+  const required = ['product_number', 'product_name', 'version'];
   const missing = required.filter(h => !headers.includes(h));
   if (missing.length) {
     alert('CSV 缺少必需列：' + missing.join(', '));
@@ -246,7 +249,7 @@ async function handleImport(e) {
 
 /* 导出 CSV */
 async function handleExport() {
-  const headers = ['product_number', 'product_code', 'version', 'remark'];
+  const headers = ['product_number', 'product_name', 'version', 'remark'];
   const rows = docs.value.map(d => headers.map(h => d[h] ?? ''));
   exportCSV(headers, rows, 'bom_list');
 }
