@@ -31,7 +31,7 @@
               {{ d.product_number || '' }}
             </a>
           </td>
-          <td>{{ d.product_code || '' }}</td>
+          <td>{{ d.product_name || '' }}</td>
           <td>{{ d.version || '' }}</td>
           <td>{{ itemCountMap[d.$id] || 0 }}</td>
           <td>{{ formatTime(d.$updatedAt) }}</td>
