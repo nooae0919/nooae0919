@@ -1,21 +1,45 @@
 let db = null;
-let allDocs = [];          // 当前拉取到的所有库存记录
-let filterPart = null;     // 从汇总页跳过来时携带的料号
+let allDocs = [];
+let filterPart = null;
+let initialized = false;   // 防止重复初始化
 
-window.onAuthReady = function () {
-  db = initDB(window.AppwriteClient);
+/* 主动初始化：只要 AppwriteClient 存在就初始化 */
+function ensureDB() {
+  if (!db && window.AppwriteClient) {
+    db = initDB(window.AppwriteClient);
+  }
+  return db;
+}
 
-  // 检查 URL 是否带 ?part=xxx
+/* 真正的初始化逻辑（幂等，多次调用不会重复加载） */
+function initPage() {
+  if (initialized) return;
+  if (!ensureDB()) {
+    console.warn('AppwriteClient 尚未就绪，稍后重试');
+    return;
+  }
+  initialized = true;
+
   const params = new URLSearchParams(location.search);
   filterPart = params.get('part');
-
   if (filterPart) {
     document.getElementById('filter-notice').classList.remove('hidden');
     document.getElementById('filter-part-text').textContent = filterPart;
   }
-
   loadInventory();
-};
+}
+
+/* login.js 登录后会触发这个 */
+window.onAuthReady = initPage;
+
+/* 兜底：如果 login.js 已经触发过 onAuthReady，或者它加载晚了，用 DOMContentLoaded 再试 */
+document.addEventListener('DOMContentLoaded', () => {
+  // 延迟一点，等 login.js 设置好 window.AppwriteClient
+  setTimeout(initPage, 0);
+});
+
+/* 再兜底：如果前面都还没成功，50ms 后再试一次 */
+setTimeout(initPage, 50);
 
 /* 加载库存列表 */
 async function loadInventory() {
