@@ -1,96 +1,438 @@
 <template>
   <MainLayout>
     <div class="toolbar">
-      <button @click="handleExportAll">导出全部入库记录</button>
-      <button @click="load">刷新</button>
+      <button @click="openAdd">新增入库单</button>
+      <button @click="triggerImport">导入CSV</button>
+      <input type="file" accept=".csv" hidden ref="fileInput" @change="handleImport">
+    </div>
+
+    <div class="search-bar">
+      <input v-model="keyword" type="text" placeholder="按入库单号 / 工单号 / 入库人搜索...">
     </div>
 
     <table>
       <thead>
         <tr>
-          <th>工单号</th><th>成品料号</th><th>产品名称</th><th>计划数量</th>
-          <th>已入库</th><th>未入库</th><th>进度</th><th>状态</th><th>操作</th>
+          <th style="width:60px;">序号</th>
+          <th>入库单号</th>
+          <th>工单号</th>
+          <th>成品料号</th>
+          <th>成品名称</th>
+          <th>物料种类</th>
+          <th>入库总数</th>
+          <th>入库人</th>
+          <th>入库时间</th>
+          <th style="width:160px;">操作</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="wo in docs" :key="wo.$id">
-          <td>{{ wo.wo_number || '' }}</td>
-          <td>{{ wo.product_number || '' }}</td>
-          <td>{{ wo.product_name || '' }}</td>
-          <td>{{ planQty(wo) }}</td>
-          <td style="color:#2563eb;font-weight:600;">{{ finishedQty(wo.wo_number) }}</td>
-          <td :style="{ color: remainQty(wo) > 0 ? '#d33' : '#16a34a', fontWeight: 600 }">
-            {{ remainQty(wo) }}
-          </td>
+        <tr v-for="(b, idx) in filteredBatches" :key="b.key">
+          <td>{{ idx + 1 }}</td>
           <td>
-            <div style="display:flex;align-items:center;gap:8px;min-width:140px;">
-              <div style="flex:1;height:8px;background:#e5e7eb;border-radius:4px;overflow:hidden;">
-                <div :style="{
-                  width: percent(wo) + '%',
-                  height: '100%',
-                  background: percent(wo) >= 100 ? '#16a34a' : percent(wo) > 0 ? '#2563eb' : '#e5e7eb',
-                  transition: 'width .3s'
-                }"></div>
-              </div>
-              <span style="font-size:12px;color:#666;min-width:36px;">{{ percent(wo) }}%</span>
-            </div>
+            <a class="part-link" href="#" @click.prevent="goDetail(b)">
+              {{ b.finish_no || '(无单号)' }}
+            </a>
           </td>
-          <td>{{ statusText(wo.status) }}</td>
-          <td><button @click="goDetail(wo.wo_number)">查看明细</button></td>
+          <td>{{ b.wo_number || '' }}</td>
+          <td>{{ b.product_number || '' }}</td>
+          <td>{{ b.product_name || '' }}</td>
+          <td>{{ b.items.length }} 种</td>
+          <td><b>{{ b.totalQty }}</b></td>
+          <td>{{ b.operator || '' }}</td>
+          <td>{{ b.finished_at || '' }}</td>
+          <td>
+            <button @click="goDetail(b)">详情</button>
+            <button @click="deleteBatch(b)">删除</button>
+          </td>
+        </tr>
+        <tr v-if="!filteredBatches.length">
+          <td colspan="10" style="text-align:center;color:#999;">暂无入库单</td>
         </tr>
       </tbody>
     </table>
+
+    <!-- 新增入库单弹窗 -->
+    <div v-if="showAdd" class="modal-mask">
+      <div class="modal-box" style="width:760px;max-width:94vw;">
+        <h3>新增入库单</h3>
+
+        <label>工单
+          <select v-model="addForm.wo_number" @change="onWoChange">
+            <option value="">— 请选择工单 —</option>
+            <option v-for="w in woList" :key="w.$id" :value="w.wo_number">
+              {{ w.wo_number }} / {{ w.product_number }} / {{ w.product_name }}
+            </option>
+          </select>
+        </label>
+
+        <label>入库人
+          <input v-model="addForm.operator" type="text" placeholder="默认当前登录用户">
+        </label>
+
+        <div style="margin-top:8px;margin-bottom:8px;font-size:13px;color:#555;display:flex;justify-content:space-between;align-items:center;">
+          <span>成品明细</span>
+          <button class="btn-cancel" style="padding:4px 10px;" @click="addRow">+ 加一行</button>
+        </div>
+
+        <table style="margin-bottom:12px;">
+          <thead>
+            <tr>
+              <th style="width:50px;">#</th>
+              <th>成品料号</th>
+              <th>成品名称</th>
+              <th style="width:120px;">数量</th>
+              <th style="width:80px;">操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(r, i) in addForm.items" :key="i">
+              <td>{{ i + 1 }}</td>
+              <td><input v-model="r.product_number" type="text" placeholder="如 P-1001" style="margin:0;"></td>
+              <td><input v-model="r.product_name" type="text" placeholder="如 主控板" style="margin:0;"></td>
+              <td><input v-model.number="r.finish_qty" type="number" placeholder="数量" style="margin:0;"></td>
+              <td>
+                <button class="btn-cancel" style="padding:4px 8px;"
+                        @click="removeRow(i)" :disabled="addForm.items.length <= 1">删</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p class="error">{{ addError }}</p>
+        <div class="modal-actions">
+          <button class="btn-cancel" @click="showAdd = false">取消</button>
+          <button class="btn-save" @click="saveAdd">保存</button>
+        </div>
+      </div>
+    </div>
   </MainLayout>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed, reactive } from 'vue';
 import { useRouter } from 'vue-router';
 import MainLayout from '../layouts/MainLayout.vue';
 import { CONFIG } from '../config.js';
-import { listDocs } from '../api/db.js';
-import { exportCSV } from '../api/csv.js';
+import { listDocs, createDoc, updateDoc, deleteDoc } from '../api/db.js';
+import { readCSV } from '../api/csv.js';
+import { authStore } from '../stores/auth.js';
 import { Query } from 'appwrite';
 
 const router = useRouter();
-const docs = ref([]);
-const summaryMap = ref({});
 
-function statusText(s) {
-  return s === 'completed' ? '已完成' : s === 'in_progress' ? '生产中' : '待生产';
+const allFinishes = ref([]);
+const woList = ref([]);
+const keyword = ref('');
+const fileInput = ref(null);
+const showAdd = ref(false);
+const addError = ref('');
+
+const addForm = reactive({
+  wo_number: '',
+  operator: '',
+  items: [{ product_number: '', product_name: '', finish_qty: '' }]
+});
+
+function genFinishNo() {
+  const d = new Date();
+  const pad = n => String(n).padStart(2, '0');
+  const date = `${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}`;
+  const time = `${pad(d.getHours())}${pad(d.getMinutes())}${pad(d.getSeconds())}`;
+  const rand = String(Math.floor(Math.random() * 1000)).padStart(3, '0');
+  return `FG${date}${time}${rand}`;
 }
-function planQty(wo) { return Number(wo.plan_qty) || 0; }
-function finishedQty(wo) { return summaryMap.value[wo] || 0; }
-function remainQty(wo) { return Math.max(planQty(wo) - finishedQty(wo.wo_number), 0); }
-function percent(wo) {
-  const p = planQty(wo);
-  return p > 0 ? Math.min(Math.round(finishedQty(wo.wo_number) / p * 100), 100) : 0;
+
+function nowStr() {
+  const d = new Date();
+  const pad = n => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
 }
 
-async function load() {
-  const [woRes, finishRes] = await Promise.all([
-    listDocs(CONFIG.TABLES.wo, [Query.limit(500)]),
-    listDocs(CONFIG.TABLES.finish, [Query.limit(5000)])
-  ]);
-  docs.value = woRes.documents;
+const woMap = computed(() => {
+  const m = {};
+  woList.value.forEach(w => { m[w.wo_number] = w; });
+  return m;
+});
 
+const batches = computed(() => {
   const map = {};
-  finishRes.documents.forEach(d => {
-    const wo = d.wo_number; if (!wo) return;
-    map[wo] = (map[wo] || 0) + (Number(d.finish_qty) || 0);
+  allFinishes.value.forEach(d => {
+    const key = d.finish_no
+      ? `NO:${d.finish_no}`
+      : `FB:${d.wo_number}|${d.operator || ''}|${d.finished_at || ''}`;
+    if (!map[key]) {
+      map[key] = {
+        key,
+        finish_no: d.finish_no || '',
+        wo_number: d.wo_number,
+        operator: d.operator,
+        finished_at: d.finished_at,
+        items: [],
+        totalQty: 0
+      };
+    }
+    map[key].items.push(d);
+    map[key].totalQty += Number(d.finish_qty) || 0;
   });
-  summaryMap.value = map;
+  Object.values(map).forEach(b => {
+    const w = woMap.value[b.wo_number];
+    b.product_number = w?.product_number || b.items[0]?.product_number || '';
+    b.product_name = w?.product_name || b.items[0]?.product_name || '';
+  });
+  return Object.values(map).sort((a, b) =>
+    (b.finished_at || '').localeCompare(a.finished_at || '')
+  );
+});
+
+const filteredBatches = computed(() => {
+  const kw = keyword.value.trim().toLowerCase();
+  if (!kw) return batches.value;
+  return batches.value.filter(b =>
+    (b.finish_no || '').toLowerCase().includes(kw) ||
+    (b.wo_number || '').toLowerCase().includes(kw) ||
+    (b.operator || '').toLowerCase().includes(kw)
+  );
+});
+
+async function loadAll() {
+  const [finRes, woRes] = await Promise.all([
+    listDocs(CONFIG.TABLES.finish, [Query.limit(10000)]),
+    listDocs(CONFIG.TABLES.wo, [Query.limit(5000)])
+  ]);
+  allFinishes.value = finRes.documents;
+  woList.value = woRes.documents;
 }
 
-function goDetail(wo) {
-  router.push({ name: 'finish-detail', params: { wo } });
-}
-async function handleExportAll() {
-  const res = await listDocs(CONFIG.TABLES.finish, [Query.limit(5000)]);
-  const headers = ['wo_number', 'product_number', 'finish_qty', 'operator', 'finished_at'];
-  const rows = res.documents.map(d => headers.map(h => d[h] ?? ''));
-  exportCSV(headers, rows, 'finish_records_all');
+onMounted(loadAll);
+
+function goDetail(b) {
+  if (!b.finish_no) {
+    alert('该入库单没有单号（老数据），无法进入详情。');
+    return;
+  }
+  router.push({ name: 'finish-detail', params: { finishNo: b.finish_no } });
 }
 
-onMounted(load);
+/* 选择工单后，自动带出成品料号/名称作为默认 */
+function onWoChange() {
+  const w = woMap.value[addForm.wo_number];
+  if (!w) return;
+  // 若只有一行，自动填充
+  if (addForm.items.length === 1) {
+    addForm.items[0].product_number = w.product_number || '';
+    addForm.items[0].product_name = w.product_name || '';
+  }
+}
+
+function openAdd() {
+  addForm.wo_number = '';
+  addForm.operator = authStore.user?.name || authStore.user?.email || '';
+  addForm.items = [{ product_number: '', product_name: '', finish_qty: '' }];
+  addError.value = '';
+  showAdd.value = true;
+}
+function addRow() {
+  addForm.items.push({ product_number: '', product_name: '', finish_qty: '' });
+}
+function removeRow(i) {
+  if (addForm.items.length <= 1) return;
+  addForm.items.splice(i, 1);
+}
+
+/* 判断工单是否已完成 */
+async function maybeCloseWo(woNumber, addedQty) {
+  const w = woMap.value[woNumber];
+  if (!w || w.status === 'completed') return;
+
+  // 该工单已入库总量
+  const res = await listDocs(CONFIG.TABLES.finish, [
+    Query.equal('wo_number', woNumber),
+    Query.limit(10000)
+  ]);
+  const total = res.documents.reduce((s, d) => s + (Number(d.finish_qty) || 0), 0);
+  if (total >= Number(w.plan_qty || 0)) {
+    await updateDoc(CONFIG.TABLES.wo, w.$id, { status: 'completed' });
+  }
+}
+
+async function saveAdd() {
+  if (!addForm.wo_number) { addError.value = '请选择工单'; return; }
+  const valid = addForm.items.filter(r =>
+    r.product_number && r.finish_qty && Number(r.finish_qty) > 0
+  );
+  if (!valid.length) { addError.value = '至少填写一条有效成品'; return; }
+
+  const finishNo = genFinishNo();
+  const timeStr = nowStr();
+  const operator = addForm.operator.trim();
+
+  let ok = 0, fail = 0;
+  for (const r of valid) {
+    try {
+      await createDoc(CONFIG.TABLES.finish, {
+        finish_no: finishNo,
+        wo_number: addForm.wo_number,
+        product_number: String(r.product_number).trim(),
+        product_name: String(r.product_name || '').trim(),
+        finish_qty: Number(r.finish_qty),
+        operator,
+        finished_at: timeStr
+      });
+      ok++;
+    } catch (e) {
+      console.error('新增失败', r, e.message);
+      fail++;
+    }
+  }
+
+  if (fail > 0) {
+    addError.value = `部分失败：成功 ${ok} 条，失败 ${fail} 条`;
+    await loadAll();
+    return;
+  }
+
+  // 关结工单判断
+  try {
+    const total = valid.reduce((s, r) => s + Number(r.finish_qty), 0);
+    await maybeCloseWo(addForm.wo_number, total);
+  } catch (e) { /* ignore */ }
+
+  showAdd.value = false;
+  await loadAll();
+}
+
+/* 导入 */
+function triggerImport() { fileInput.value.click(); }
+
+async function handleImport(e) {
+  const f = e.target.files[0]; if (!f) return;
+  const { headers, rows } = await readCSV(f);
+
+  const required = ['wo_number', 'product_number', 'product_name', 'finish_qty'];
+  const missing = required.filter(h => !headers.includes(h));
+  if (missing.length) {
+    alert('CSV 缺少必需列：' + missing.join(', ') + '\n正确模板：wo_number,product_number,product_name,finish_qty');
+    e.target.value = '';
+    return;
+  }
+
+  const operator = authStore.user?.name || authStore.user?.email || '';
+  const timeStr = nowStr();
+
+  const parsed = [];
+  const woNoMap = {};
+  const errors = [];
+  const touchedWos = new Set();
+
+  for (let i = 0; i < rows.length; i++) {
+    const row = rows[i];
+    const data = {};
+    headers.forEach((h, idx) => {
+      const v = row[idx];
+      if (v === undefined || v === null || v === '') return;
+      if (h === 'finish_qty') {
+        const n = Number(v); if (isNaN(n)) return;
+        data[h] = n;
+      } else {
+        data[h] = String(v).trim();
+      }
+    });
+
+    if (!data.wo_number || !data.product_number) {
+      errors.push(`第 ${i+2} 行：工单号或成品料号为空`);
+      continue;
+    }
+    if (!data.finish_qty || data.finish_qty <= 0) {
+      errors.push(`第 ${i+2} 行：入库数量不合法`);
+      continue;
+    }
+    if (!woMap.value[data.wo_number]) {
+      errors.push(`第 ${i+2} 行：工单号 ${data.wo_number} 不存在`);
+      continue;
+    }
+
+    if (!woNoMap[data.wo_number]) {
+      woNoMap[data.wo_number] = genFinishNo();
+    }
+    data.finish_no = woNoMap[data.wo_number];
+    touchedWos.add(data.wo_number);
+    parsed.push({ rowIndex: i + 2, data });
+  }
+
+  if (errors.length && !parsed.length) {
+    alert('导入失败，全部不合法：\n' + errors.slice(0, 15).join('\n'));
+    e.target.value = '';
+    return;
+  }
+
+  let ok = 0, fail = 0;
+  for (const p of parsed) {
+    try {
+      await createDoc(CONFIG.TABLES.finish, {
+        finish_no: p.data.finish_no,
+        wo_number: p.data.wo_number,
+        product_number: p.data.product_number,
+        product_name: p.data.product_name || '',
+        finish_qty: p.data.finish_qty,
+        operator,
+        finished_at: timeStr
+      });
+      ok++;
+    } catch (err) {
+      errors.push(`第 ${p.rowIndex} 行：${err.message}`);
+      fail++;
+    }
+  }
+
+  // 关结工单判断
+  for (const woNum of touchedWos) {
+    try { await maybeCloseWo(woNum); } catch (e) { /* ignore */ }
+  }
+
+  let msg = `导入完成：成功 ${ok} 条，失败 ${fail} 条。\n共生成 ${Object.keys(woNoMap).length} 张入库单。`;
+  if (errors.length) {
+    msg += '\n\n失败明细（前 10 条）：\n' + errors.slice(0, 10).join('\n');
+    if (errors.length > 10) msg += `\n...还有 ${errors.length - 10} 条`;
+  }
+  alert(msg);
+
+  await loadAll();
+  e.target.value = '';
+}
+
+/* 删除整张入库单 */
+async function deleteBatch(b) {
+  const ok = window.$confirm
+    ? await window.$confirm({
+        title: '删除确认',
+        message: `确认删除入库单 ${b.finish_no || '(无单号)'}？共 ${b.items.length} 条明细。`
+      })
+    : confirm(`确认删除入库单？共 ${b.items.length} 条明细。`);
+  if (!ok) return;
+
+  try {
+    for (const it of b.items) {
+      await deleteDoc(CONFIG.TABLES.finish, it.$id);
+    }
+    // 删除后可能工单需要回退状态
+    await maybeReopenWo(b.wo_number);
+    await loadAll();
+  } catch (e) {
+    alert('删除失败：' + e.message);
+  }
+}
+
+/* 删除后如果工单已完成但总数不足，回退为生产中 */
+async function maybeReopenWo(woNumber) {
+  const w = woMap.value[woNumber];
+  if (!w || w.status !== 'completed') return;
+  const res = await listDocs(CONFIG.TABLES.finish, [
+    Query.equal('wo_number', woNumber),
+    Query.limit(10000)
+  ]);
+  const total = res.documents.reduce((s, d) => s + (Number(d.finish_qty) || 0), 0);
+  if (total < Number(w.plan_qty || 0)) {
+    await updateDoc(CONFIG.TABLES.wo, w.$id, { status: 'in_progress' });
+  }
+}
 </script>
