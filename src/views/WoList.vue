@@ -17,7 +17,7 @@
           <th>计划数量</th>
           <th>生产日期</th>
           <th>状态</th>
-          <th style="width:120px;">齐套状态</th>
+          <th>齐套状态</th>
           <th>操作</th>
         </tr>
       </thead>
