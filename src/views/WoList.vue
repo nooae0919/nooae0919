@@ -33,6 +33,7 @@
           <td>{{ d.plan_qty ?? '' }}</td>
           <td>{{ d.produce_date || '' }}</td>
           <td>{{ statusText(d.status) }}</td>
+          <td>  <button @click="goKitting(d)">齐套状态</button></td>
           <td>
             <span v-if="d.status === 'completed'" style="color:#999;font-size:13px;">
               已完成（不可修改）
@@ -156,7 +157,17 @@ import { CONFIG } from '../config.js';
 import { listDocs, getDoc, createDoc, updateDoc, batchImport } from '../api/db.js';
 import { exportCSV, readCSV } from '../api/csv.js';
 import { Query } from 'appwrite';
+import { useRouter } from 'vue-router';
+const router = useRouter();
 
+function goKitting(wo) {
+  if (!wo.bom_id) {
+    alert('该工单未关联 BOM，无法做齐套分析。请先编辑工单选择 BOM。');
+    return;
+  }
+  router.push({ name: 'wo-kitting', params: { woId: wo.$id } });
+}
+  
 const WO_HEADERS = ['wo_number', 'product_number', 'product_name', 'plan_qty', 'produce_date', 'status'];
 
 const docs = ref([]);
@@ -326,3 +337,4 @@ async function handleExport() {
   exportCSV(WO_HEADERS, rows, 'work_orders');
 }
 </script>
+
