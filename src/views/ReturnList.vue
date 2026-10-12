@@ -1,79 +1,383 @@
 <template>
   <MainLayout>
     <div class="toolbar">
-      <button @click="handleExportAll">导出全部退料记录</button>
-      <button @click="load">刷新</button>
+      <button @click="openAdd">新增退料单</button>
+      <button @click="triggerImport">导入CSV</button>
+      <input type="file" accept=".csv" hidden ref="fileInput" @change="handleImport">
+    </div>
+
+    <div class="search-bar">
+      <input v-model="keyword" type="text" placeholder="按退料单号 / 工单号 / 退料人搜索...">
     </div>
 
     <table>
       <thead>
         <tr>
-          <th>工单号</th><th>成品料号</th><th>产品名称</th><th>计划数量</th>
-          <th>已退料种类</th><th>已退料总数</th><th>状态</th><th>操作</th>
+          <th style="width:60px;">序号</th>
+          <th>退料单号</th>
+          <th>工单号</th>
+          <th>成品料号</th>
+          <th>成品名称</th>
+          <th>物料种类</th>
+          <th>退料总数</th>
+          <th>退料人</th>
+          <th>退料时间</th>
+          <th style="width:160px;">操作</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="wo in docs" :key="wo.$id">
-          <td>{{ wo.wo_number || '' }}</td>
-          <td>{{ wo.product_number || '' }}</td>
-          <td>{{ wo.product_name || '' }}</td>
-          <td>{{ wo.plan_qty ?? '' }}</td>
-          <td>{{ partCount(wo.wo_number) }}</td>
-          <td>{{ totalQty(wo.wo_number) }}</td>
-          <td>{{ statusText(wo.status) }}</td>
-          <td><button @click="goDetail(wo.wo_number)">查看明细</button></td>
+        <tr v-for="(b, idx) in filteredBatches" :key="b.key">
+          <td>{{ idx + 1 }}</td>
+          <td>
+            <a class="part-link" href="#" @click.prevent="goDetail(b)">
+              {{ b.return_no || '(无单号)' }}
+            </a>
+          </td>
+          <td>{{ b.wo_number || '' }}</td>
+          <td>{{ b.product_number || '' }}</td>
+          <td>{{ b.product_name || '' }}</td>
+          <td>{{ b.items.length }} 种</td>
+          <td><b>{{ b.totalQty }}</b></td>
+          <td>{{ b.operator || '' }}</td>
+          <td>{{ b.return_time || '' }}</td>
+          <td>
+            <button @click="goDetail(b)">详情</button>
+            <button @click="deleteBatch(b)">删除</button>
+          </td>
+        </tr>
+        <tr v-if="!filteredBatches.length">
+          <td colspan="10" style="text-align:center;color:#999;">暂无退料单</td>
         </tr>
       </tbody>
     </table>
+
+    <!-- 新增退料单弹窗 -->
+    <div v-if="showAdd" class="modal-mask">
+      <div class="modal-box" style="width:760px;max-width:94vw;">
+        <h3>新增退料单</h3>
+
+        <label>工单
+          <select v-model="addForm.wo_number">
+            <option value="">— 请选择工单 —</option>
+            <option v-for="w in woList" :key="w.$id" :value="w.wo_number">
+              {{ w.wo_number }} / {{ w.product_number }} / {{ w.product_name }}
+            </option>
+          </select>
+        </label>
+
+        <label>退料人
+          <input v-model="addForm.operator" type="text" placeholder="默认当前登录用户">
+        </label>
+
+        <div style="margin-top:8px;margin-bottom:8px;font-size:13px;color:#555;display:flex;justify-content:space-between;align-items:center;">
+          <span>物料明细</span>
+          <button class="btn-cancel" style="padding:4px 10px;" @click="addRow">+ 加一行</button>
+        </div>
+
+        <table style="margin-bottom:12px;">
+          <thead>
+            <tr>
+              <th style="width:50px;">#</th>
+              <th>物料料号</th>
+              <th>物料名称</th>
+              <th style="width:120px;">数量</th>
+              <th style="width:80px;">操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(r, i) in addForm.items" :key="i">
+              <td>{{ i + 1 }}</td>
+              <td><input v-model="r.part_number" type="text" placeholder="如 M-2001" style="margin:0;"></td>
+              <td><input v-model="r.part_name" type="text" placeholder="如 贴片电阻" style="margin:0;"></td>
+              <td><input v-model.number="r.return_qty" type="number" placeholder="数量" style="margin:0;"></td>
+              <td>
+                <button class="btn-cancel" style="padding:4px 8px;"
+                        @click="removeRow(i)" :disabled="addForm.items.length <= 1">删</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p class="error">{{ addError }}</p>
+        <div class="modal-actions">
+          <button class="btn-cancel" @click="showAdd = false">取消</button>
+          <button class="btn-save" @click="saveAdd">保存</button>
+        </div>
+      </div>
+    </div>
   </MainLayout>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed, reactive } from 'vue';
 import { useRouter } from 'vue-router';
 import MainLayout from '../layouts/MainLayout.vue';
 import { CONFIG } from '../config.js';
-import { listDocs } from '../api/db.js';
-import { exportCSV } from '../api/csv.js';
+import { listDocs, createDoc, deleteDoc } from '../api/db.js';
+import { readCSV } from '../api/csv.js';
+import { authStore } from '../stores/auth.js';
 import { Query } from 'appwrite';
 
 const router = useRouter();
-const docs = ref([]);
-const summaryMap = ref({});
 
-function statusText(s) {
-  return s === 'completed' ? '已完成' : s === 'in_progress' ? '生产中' : '待生产';
+const allReturns = ref([]);
+const woList = ref([]);
+const keyword = ref('');
+const fileInput = ref(null);
+const showAdd = ref(false);
+const addError = ref('');
+
+const addForm = reactive({
+  wo_number: '',
+  operator: '',
+  items: [{ part_number: '', part_name: '', return_qty: '' }]
+});
+
+/** 生成退料单号 */
+function genReturnNo() {
+  const d = new Date();
+  const pad = n => String(n).padStart(2, '0');
+  const date = `${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}`;
+  const time = `${pad(d.getHours())}${pad(d.getMinutes())}${pad(d.getSeconds())}`;
+  const rand = String(Math.floor(Math.random() * 1000)).padStart(3, '0');
+  return `RT${date}${time}${rand}`;
 }
-function partCount(wo) { return summaryMap.value[wo]?.partSet.size || 0; }
-function totalQty(wo) { return summaryMap.value[wo]?.totalQty || 0; }
 
-async function load() {
-  const [woRes, returnRes] = await Promise.all([
-    listDocs(CONFIG.TABLES.wo, [Query.limit(500)]),
-    listDocs(CONFIG.TABLES.return, [Query.limit(5000)])
-  ]);
-  docs.value = woRes.documents;
+function nowStr() {
+  const d = new Date();
+  const pad = n => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+}
 
+const woMap = computed(() => {
+  const m = {};
+  woList.value.forEach(w => { m[w.wo_number] = w; });
+  return m;
+});
+
+const batches = computed(() => {
   const map = {};
-  returnRes.documents.forEach(d => {
-    const wo = d.wo_number; if (!wo) return;
-    if (!map[wo]) map[wo] = { partSet: new Set(), totalQty: 0 };
-    map[wo].partSet.add(d.part_number);
-    map[wo].totalQty += Number(d.return_qty) || 0;
+  allReturns.value.forEach(d => {
+    const key = d.return_no
+      ? `NO:${d.return_no}`
+      : `FB:${d.wo_number}|${d.operator || ''}|${d.return_time || ''}`;
+    if (!map[key]) {
+      map[key] = {
+        key,
+        return_no: d.return_no || '',
+        wo_number: d.wo_number,
+        operator: d.operator,
+        return_time: d.return_time,
+        items: [],
+        totalQty: 0
+      };
+    }
+    map[key].items.push(d);
+    map[key].totalQty += Number(d.return_qty) || 0;
   });
-  summaryMap.value = map;
+  Object.values(map).forEach(b => {
+    const w = woMap.value[b.wo_number];
+    b.product_number = w?.product_number || '';
+    b.product_name = w?.product_name || '';
+  });
+  return Object.values(map).sort((a, b) =>
+    (b.return_time || '').localeCompare(a.return_time || '')
+  );
+});
+
+const filteredBatches = computed(() => {
+  const kw = keyword.value.trim().toLowerCase();
+  if (!kw) return batches.value;
+  return batches.value.filter(b =>
+    (b.return_no || '').toLowerCase().includes(kw) ||
+    (b.wo_number || '').toLowerCase().includes(kw) ||
+    (b.operator || '').toLowerCase().includes(kw)
+  );
+});
+
+async function loadAll() {
+  const [retRes, woRes] = await Promise.all([
+    listDocs(CONFIG.TABLES.return, [Query.limit(10000)]),
+    listDocs(CONFIG.TABLES.wo, [Query.limit(5000)])
+  ]);
+  allReturns.value = retRes.documents;
+  woList.value = woRes.documents;
 }
 
-function goDetail(wo) {
-  router.push({ name: 'return-detail', params: { wo } });
+onMounted(loadAll);
+
+function goDetail(b) {
+  if (!b.return_no) {
+    alert('该退料单没有单号（老数据），无法进入详情。');
+    return;
+  }
+  router.push({ name: 'return-detail', params: { returnNo: b.return_no } });
 }
 
-async function handleExportAll() {
-  const res = await listDocs(CONFIG.TABLES.return, [Query.limit(5000)]);
-  const headers = ['wo_number', 'part_number', 'part_name', 'return_qty', 'operator', 'return_time'];
-  const rows = res.documents.map(d => headers.map(h => d[h] ?? ''));
-  exportCSV(headers, rows, 'return_records_all');
+/* 新增 */
+function openAdd() {
+  addForm.wo_number = '';
+  addForm.operator = authStore.user?.name || authStore.user?.email || '';
+  addForm.items = [{ part_number: '', part_name: '', return_qty: '' }];
+  addError.value = '';
+  showAdd.value = true;
+}
+function addRow() {
+  addForm.items.push({ part_number: '', part_name: '', return_qty: '' });
+}
+function removeRow(i) {
+  if (addForm.items.length <= 1) return;
+  addForm.items.splice(i, 1);
 }
 
-onMounted(load);
+async function saveAdd() {
+  if (!addForm.wo_number) { addError.value = '请选择工单'; return; }
+  const valid = addForm.items.filter(r =>
+    r.part_number && r.return_qty && Number(r.return_qty) > 0
+  );
+  if (!valid.length) { addError.value = '至少填写一条有效物料'; return; }
+
+  const returnNo = genReturnNo();
+  const timeStr = nowStr();
+  const operator = addForm.operator.trim();
+
+  let ok = 0, fail = 0;
+  for (const r of valid) {
+    try {
+      await createDoc(CONFIG.TABLES.return, {
+        return_no: returnNo,
+        wo_number: addForm.wo_number,
+        part_number: String(r.part_number).trim(),
+        part_name: String(r.part_name || '').trim(),
+        return_qty: Number(r.return_qty),
+        operator,
+        return_time: timeStr
+      });
+      ok++;
+    } catch (e) {
+      console.error('新增失败', r, e.message);
+      fail++;
+    }
+  }
+
+  if (fail > 0) {
+    addError.value = `部分失败：成功 ${ok} 条，失败 ${fail} 条`;
+    await loadAll();
+    return;
+  }
+  showAdd.value = false;
+  await loadAll();
+}
+
+/* 导入 */
+function triggerImport() { fileInput.value.click(); }
+
+async function handleImport(e) {
+  const f = e.target.files[0]; if (!f) return;
+  const { headers, rows } = await readCSV(f);
+
+  const required = ['wo_number', 'part_number', 'part_name', 'return_qty'];
+  const missing = required.filter(h => !headers.includes(h));
+  if (missing.length) {
+    alert('CSV 缺少必需列：' + missing.join(', ') + '\n正确模板：wo_number,part_number,part_name,return_qty');
+    e.target.value = '';
+    return;
+  }
+
+  const operator = authStore.user?.name || authStore.user?.email || '';
+  const timeStr = nowStr();
+
+  const parsed = [];
+  const woNoMap = {};    // wo_number -> return_no
+  const errors = [];
+
+  for (let i = 0; i < rows.length; i++) {
+    const row = rows[i];
+    const data = {};
+    headers.forEach((h, idx) => {
+      const v = row[idx];
+      if (v === undefined || v === null || v === '') return;
+      if (h === 'return_qty') {
+        const n = Number(v); if (isNaN(n)) return;
+        data[h] = n;
+      } else {
+        data[h] = String(v).trim();
+      }
+    });
+
+    if (!data.wo_number || !data.part_number) {
+      errors.push(`第 ${i+2} 行：工单号或物料料号为空`);
+      continue;
+    }
+    if (!data.return_qty || data.return_qty <= 0) {
+      errors.push(`第 ${i+2} 行：退料数量不合法`);
+      continue;
+    }
+    if (!woMap.value[data.wo_number]) {
+      errors.push(`第 ${i+2} 行：工单号 ${data.wo_number} 不存在`);
+      continue;
+    }
+
+    if (!woNoMap[data.wo_number]) {
+      woNoMap[data.wo_number] = genReturnNo();
+    }
+    data.return_no = woNoMap[data.wo_number];
+    parsed.push({ rowIndex: i + 2, data });
+  }
+
+  if (errors.length && !parsed.length) {
+    alert('导入失败，全部不合法：\n' + errors.slice(0, 15).join('\n'));
+    e.target.value = '';
+    return;
+  }
+
+  let ok = 0, fail = 0;
+  for (const p of parsed) {
+    try {
+      await createDoc(CONFIG.TABLES.return, {
+        return_no: p.data.return_no,
+        wo_number: p.data.wo_number,
+        part_number: p.data.part_number,
+        part_name: p.data.part_name || '',
+        return_qty: p.data.return_qty,
+        operator,
+        return_time: timeStr
+      });
+      ok++;
+    } catch (err) {
+      errors.push(`第 ${p.rowIndex} 行：${err.message}`);
+      fail++;
+    }
+  }
+
+  let msg = `导入完成：成功 ${ok} 条，失败 ${fail} 条。\n共生成 ${Object.keys(woNoMap).length} 张退料单。`;
+  if (errors.length) {
+    msg += '\n\n失败明细（前 10 条）：\n' + errors.slice(0, 10).join('\n');
+    if (errors.length > 10) msg += `\n...还有 ${errors.length - 10} 条`;
+  }
+  alert(msg);
+
+  await loadAll();
+  e.target.value = '';
+}
+
+/* 删除整张退料单 */
+async function deleteBatch(b) {
+  const ok = window.$confirm
+    ? await window.$confirm({
+        title: '删除确认',
+        message: `确认删除退料单 ${b.return_no || '(无单号)'}？共 ${b.items.length} 条明细。`
+      })
+    : confirm(`确认删除退料单？共 ${b.items.length} 条明细。`);
+  if (!ok) return;
+
+  try {
+    for (const it of b.items) {
+      await deleteDoc(CONFIG.TABLES.return, it.$id);
+    }
+    await loadAll();
+  } catch (e) {
+    alert('删除失败：' + e.message);
+  }
+}
 </script>
