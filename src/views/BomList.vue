@@ -11,10 +11,7 @@
       <thead>
         <tr>
           <th style="width:44px;">
-            <input type="checkbox"
-                   :checked="allSelected"
-                   :indeterminate="someSelected"
-                   @change="toggleSelectAll">
+            <input type="checkbox" :checked="allSelected" :indeterminate="someSelected" @change="toggleSelectAll">
           </th>
           <th style="width:60px;">序号</th>
           <th>成品料号</th>
@@ -22,31 +19,20 @@
           <th>版本号</th>
           <th style="width:120px;">BOM条目数</th>
           <th>更新时间</th>
-          <th style="width:160px;">操作</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="(d, idx) in filteredDocs" :key="d.$id">
-          <td>
-            <input type="checkbox" :value="d.$id" v-model="selectedIds">
-          </td>
+          <td><input type="checkbox" :value="d.$id" v-model="selectedIds"></td>
           <td>{{ idx + 1 }}</td>
-          <td>
-            <a class="part-link" href="#" @click.prevent="goDetail(d.$id)">
-              {{ d.product_number || '' }}
-            </a>
-          </td>
+          <td>{{ d.product_number || '' }}</td>
           <td>{{ d.product_name || '' }}</td>
           <td>{{ d.version || '' }}</td>
           <td>{{ itemCountMap[d.$id] || 0 }}</td>
           <td>{{ formatTime(d.$updatedAt) }}</td>
-          <td>
-            <button @click="goDetail(d.$id)">详情</button>
-            <button @click="deleteRow(d.$id)">删除</button>
-          </td>
         </tr>
         <tr v-if="!filteredDocs.length">
-          <td colspan="8" style="text-align:center;color:#999;">
+          <td colspan="7" style="text-align:center;color:#999;">
             暂无 BOM 数据，请点击"操作 → 导入CSV"上传
           </td>
         </tr>
@@ -76,8 +62,10 @@ const keyword = ref('');
 const fileInput = ref(null);
 const selectedIds = ref([]);
 
-/* ⭐ 所有功能按钮收进"操作"菜单 */
+/* ⭐ 操作菜单 */
 const menuItems = computed(() => [
+  { label: '详情', onClick: viewSelected, disabled: selectedIds.value.length !== 1 },
+  { label: '删除', onClick: deleteSelected, disabled: selectedIds.value.length === 0 },
   { label: '导入CSV', onClick: triggerImport },
   { label: '导出CSV', onClick: handleExport, disabled: selectedIds.value.length === 0 }
 ]);
@@ -92,7 +80,6 @@ const filteredDocs = computed(() => {
   );
 });
 
-/* 全选 / 半选 */
 const allSelected = computed(() =>
   filteredDocs.value.length > 0 &&
   filteredDocs.value.every(d => selectedIds.value.includes(d.$id))
@@ -125,7 +112,6 @@ async function load() {
     Query.orderDesc('$updatedAt')
   ]);
   docs.value = res.documents;
-
   const itemRes = await listDocs(CONFIG.TABLES.bomItem, [Query.limit(10000)]);
   const map = {};
   itemRes.documents.forEach(it => {
@@ -133,43 +119,48 @@ async function load() {
     map[id] = (map[id] || 0) + 1;
   });
   itemCountMap.value = map;
-
-  // 清掉不存在的勾选
   const valid = new Set(docs.value.map(d => d.$id));
   selectedIds.value = selectedIds.value.filter(id => valid.has(id));
 }
-
 onMounted(load);
 
-/* 删除 */
-async function deleteRow(docId) {
-  const doc = docs.value.find(d => d.$id === docId);
-  const label = doc ? `${doc.product_number} / ${doc.product_name} / ${doc.version}` : docId;
+/* 详情（勾选 1 行） */
+function viewSelected() {
+  if (selectedIds.value.length !== 1) return;
+  router.push({ name: 'bom-detail', params: { id: selectedIds.value[0] } });
+}
+
+/* 删除（勾选 ≥1 行） */
+async function deleteSelected() {
+  if (!selectedIds.value.length) return;
+  const targets = docs.value.filter(d => selectedIds.value.includes(d.$id));
   const ok = window.$confirm
-    ? await window.$confirm({ title: '删除确认', message: `将删除「${label}」及其全部明细，确认？` })
-    : confirm(`将删除「${label}」及其全部明细，确认？`);
+    ? await window.$confirm({
+        title: '删除确认',
+        message: `将删除已勾选的 ${targets.length} 张 BOM 及其全部明细，确认？`
+      })
+    : confirm(`将删除 ${targets.length} 张 BOM，确认？`);
   if (!ok) return;
 
-  try {
-    const items = await listDocs(CONFIG.TABLES.bomItem, [
-      Query.equal('bom_id', docId), Query.limit(5000)
-    ]);
-    for (const it of items.documents) {
-      await deleteDoc(CONFIG.TABLES.bomItem, it.$id);
+  let ok2 = 0, fail = 0;
+  for (const b of targets) {
+    try {
+      const items = await listDocs(CONFIG.TABLES.bomItem, [
+        Query.equal('bom_id', b.$id), Query.limit(5000)
+      ]);
+      for (const it of items.documents) await deleteDoc(CONFIG.TABLES.bomItem, it.$id);
+      await deleteDoc(CONFIG.TABLES.bom, b.$id);
+      ok2++;
+    } catch (e) {
+      console.error('删除失败', b.product_number, e); fail++;
     }
-    await deleteDoc(CONFIG.TABLES.bom, docId);
-    selectedIds.value = selectedIds.value.filter(id => id !== docId);
-    await load();
-  } catch (e) {
-    alert('删除失败：' + e.message);
   }
+  selectedIds.value = [];
+  await load();
+  if (fail > 0) alert(`删除完成：成功 ${ok2} 张，失败 ${fail} 张`);
 }
 
-function goDetail(id) {
-  router.push({ name: 'bom-detail', params: { id } });
-}
-
-/* ============ 导入 CSV ============ */
+/* 导入 */
 function triggerImport() { fileInput.value.click(); }
 
 async function handleImport(e) {
@@ -209,16 +200,11 @@ async function handleImport(e) {
     const qtyRaw = row[idx['单板用量']];
 
     if (!product_number || !version || !part_number) {
-      errors.push(`第 ${i + 2} 行：成品料号 / 版本号 / 物料料号 不能为空`);
-      fail++;
-      continue;
+      errors.push(`第 ${i + 2} 行：成品料号 / 版本号 / 物料料号 不能为空`); fail++; continue;
     }
-
     const qty = Number(qtyRaw);
     if (isNaN(qty)) {
-      errors.push(`第 ${i + 2} 行：单板用量不是数字（${qtyRaw}）`);
-      fail++;
-      continue;
+      errors.push(`第 ${i + 2} 行：单板用量不是数字（${qtyRaw}）`); fail++; continue;
     }
 
     const bomKey = `${product_number}|${product_name}|${version}`;
@@ -227,38 +213,27 @@ async function handleImport(e) {
       let bomId = bomKeyToId[bomKey];
       if (!bomId) {
         const newBom = await createDoc(CONFIG.TABLES.bom, {
-          product_number,
-          product_name,
-          version,
-          remark: ''   // ⭐ 防止 required 报错
+          product_number, product_name, version, remark: ''
         });
         bomId = newBom.$id;
         bomKeyToId[bomKey] = bomId;
         okBom++;
         await sleep(30);
       }
-
       await createDoc(CONFIG.TABLES.bomItem, {
         bom_id: bomId,
-        product_number,
-        product_name,
-        version,
-        part_number,
-        part_name,
+        product_number, product_name, version,
+        part_number, part_name,
         qty_per_board: qty
       });
       okItem++;
       await sleep(30);
     } catch (err) {
-      errors.push(`第 ${i + 2} 行：${err.message}`);
-      fail++;
+      errors.push(`第 ${i + 2} 行：${err.message}`); fail++;
     }
   }
 
-  let msg = `导入完成：\n` +
-            `- 新建 BOM 头：${okBom} 张\n` +
-            `- 写入 BOM 明细：${okItem} 条\n` +
-            `- 失败：${fail} 条`;
+  let msg = `导入完成：\n- 新建 BOM 头：${okBom} 张\n- 写入 BOM 明细：${okItem} 条\n- 失败：${fail} 条`;
   if (errors.length) {
     msg += '\n\n失败明细（前 10 条）：\n' + errors.slice(0, 10).join('\n');
     if (errors.length > 10) msg += `\n...还有 ${errors.length - 10} 条`;
@@ -269,20 +244,16 @@ async function handleImport(e) {
   e.target.value = '';
 }
 
-/* ============ 导出 CSV（只导出勾选） ============ */
+/* 导出（勾选 ≥1 行） */
 async function handleExport() {
-  if (!selectedIds.value.length) {
-    alert('请先勾选要导出的 BOM');
-    return;
-  }
+  if (!selectedIds.value.length) { alert('请先勾选要导出的 BOM'); return; }
 
   let allItems = [];
   const chunkSize = 100;
   for (let i = 0; i < selectedIds.value.length; i += chunkSize) {
     const chunk = selectedIds.value.slice(i, i + chunkSize);
     const res = await listDocs(CONFIG.TABLES.bomItem, [
-      Query.equal('bom_id', chunk),
-      Query.limit(20000)
+      Query.equal('bom_id', chunk), Query.limit(20000)
     ]);
     allItems = allItems.concat(res.documents);
   }
@@ -317,11 +288,7 @@ async function handleExport() {
     }
   }
 
-  if (!data.length) {
-    alert('所选 BOM 没有明细可导出');
-    return;
-  }
-
+  if (!data.length) { alert('所选 BOM 没有明细可导出'); return; }
   exportCSV(headers, data, 'bom_selected');
 }
 </script>
