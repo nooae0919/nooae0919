@@ -270,4 +270,149 @@ async function saveAdd() {
         part_name: String(r.part_name || '').trim(),
         issue_qty: Number(r.issue_qty),
         operator,
-        issue_time:
+        issue_time: timeStr
+      });
+      ok++;
+    } catch (e) { console.error(e); fail++; }
+  }
+
+  if (fail === 0) {
+    const partNumbers = [...new Set(valid.map(r => String(r.part_number).trim()))];
+    try { await syncExcessToInventory(addForm.wo_number, partNumbers); }
+    catch (e) { console.error(e); }
+  }
+
+  if (fail > 0) {
+    addError.value = `部分失败：成功 ${ok} 条，失败 ${fail} 条`;
+    await loadAll();
+    return;
+  }
+  showAdd.value = false;
+  await loadAll();
+}
+
+function triggerImport() { fileInput.value.click(); }
+
+async function handleImport(e) {
+  const f = e.target.files[0]; if (!f) return;
+  const { headers, rows } = await readCSV(f);
+
+  const required = ['wo_number', 'part_number', 'part_name', 'issue_qty'];
+  const missing = required.filter(h => !headers.includes(h));
+  if (missing.length) {
+    alert('CSV 缺少必需列：' + missing.join(', ') + '\n正确模板：wo_number,part_number,part_name,issue_qty');
+    e.target.value = '';
+    return;
+  }
+
+  const operator = authStore.user?.name || authStore.user?.email || '';
+  const timeStr = nowStr();
+
+  const parsed = [];
+  const woNoMap = {};
+  const errors = [];
+
+  for (let i = 0; i < rows.length; i++) {
+    const row = rows[i];
+    const data = {};
+    headers.forEach((h, idx) => {
+      const v = row[idx];
+      if (v === undefined || v === null || v === '') return;
+      if (h === 'issue_qty') {
+        const n = Number(v); if (isNaN(n)) return;
+        data[h] = n;
+      } else data[h] = String(v).trim();
+    });
+
+    if (!data.wo_number || !data.part_number) {
+      errors.push(`第 ${i+2} 行：工单号或物料料号为空`); continue;
+    }
+    if (!data.issue_qty || data.issue_qty <= 0) {
+      errors.push(`第 ${i+2} 行：物料数量不合法`); continue;
+    }
+    if (!woMap.value[data.wo_number]) {
+      errors.push(`第 ${i+2} 行：工单号 ${data.wo_number} 不存在`); continue;
+    }
+
+    if (!woNoMap[data.wo_number]) woNoMap[data.wo_number] = genIssueNo();
+    data.issue_no = woNoMap[data.wo_number];
+    parsed.push({ rowIndex: i + 2, data });
+  }
+
+  if (errors.length && !parsed.length) {
+    alert('导入失败，全部不合法：\n' + errors.slice(0, 15).join('\n'));
+    e.target.value = '';
+    return;
+  }
+
+  let ok = 0, fail = 0;
+  for (const p of parsed) {
+    try {
+      await createDoc(CONFIG.TABLES.issue, {
+        issue_no: p.data.issue_no,
+        wo_number: p.data.wo_number,
+        part_number: p.data.part_number,
+        part_name: p.data.part_name || '',
+        issue_qty: p.data.issue_qty,
+        operator,
+        issue_time: timeStr
+      });
+      ok++;
+    } catch (err) {
+      errors.push(`第 ${p.rowIndex} 行：${err.message}`); fail++;
+    }
+  }
+
+  const woParts = {};
+  parsed.forEach(p => {
+    const wo = p.data.wo_number, pn = p.data.part_number;
+    if (!wo || !pn) return;
+    if (!woParts[wo]) woParts[wo] = new Set();
+    woParts[wo].add(pn);
+  });
+  for (const [woNum, partSet] of Object.entries(woParts)) {
+    try { await syncExcessToInventory(woNum, Array.from(partSet)); }
+    catch (err) { console.error('同步库存失败', woNum, err); }
+  }
+
+  let msg = `导入完成：成功 ${ok} 条，失败 ${fail} 条。\n共生成 ${Object.keys(woNoMap).length} 张领料单。`;
+  if (errors.length) {
+    msg += '\n\n失败明细（前 10 条）：\n' + errors.slice(0, 10).join('\n');
+    if (errors.length > 10) msg += `\n...还有 ${errors.length - 10} 条`;
+  }
+  alert(msg);
+
+  await loadAll();
+  e.target.value = '';
+}
+
+async function deleteBatch(b) {
+  const ok = window.$confirm
+    ? await window.$confirm({
+        title: '删除确认',
+        message: `确认删除领料单 ${b.issue_no || '(无单号)'}？共 ${b.items.length} 条明细。`
+      })
+    : confirm(`确认删除领料单？共 ${b.items.length} 条明细。`);
+  if (!ok) return;
+
+  const parts = [...new Set(b.items.map(i => i.part_number))];
+  try {
+    for (const it of b.items) await deleteDoc(CONFIG.TABLES.issue, it.$id);
+    if (b.wo_number && parts.length) {
+      try { await syncExcessToInventory(b.wo_number, parts); }
+      catch (e) { console.error(e); }
+    }
+    selectedKeys.value = selectedKeys.value.filter(k => k !== b.key);
+    await loadAll();
+  } catch (e) { alert('删除失败：' + e.message); }
+}
+
+async function handleExport() {
+  if (!selectedKeys.value.length) { alert('请先勾选要导出的领料单'); return; }
+  const selectedBatches = batches.value.filter(b => selectedKeys.value.includes(b.key));
+  const allItems = selectedBatches.flatMap(b => b.items);
+  const headers = ['issue_no', 'wo_number', 'part_number', 'part_name', 'issue_qty', 'operator', 'issue_time'];
+  const rows = allItems.map(d => headers.map(h => d[h] ?? ''));
+  exportCSV(headers, rows, 'issue_selected');
+}
+</script>
