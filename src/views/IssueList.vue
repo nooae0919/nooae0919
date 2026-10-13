@@ -115,6 +115,7 @@ import MainLayout from '../layouts/MainLayout.vue';
 import { CONFIG } from '../config.js';
 import { listDocs, createDoc, deleteDoc } from '../api/db.js';
 import { readCSV } from '../api/csv.js';
+import { syncExcessToInventory } from '../api/kitting.js';
 import { authStore } from '../stores/auth.js';
 import { Query } from 'appwrite';
 
@@ -133,7 +134,6 @@ const addForm = reactive({
   items: [{ part_number: '', part_name: '', issue_qty: '' }]
 });
 
-/** 生成领料单号 */
 function genIssueNo() {
   const d = new Date();
   const pad = n => String(n).padStart(2, '0');
@@ -143,21 +143,18 @@ function genIssueNo() {
   return `IS${date}${time}${rand}`;
 }
 
-/** 当前时间字符串 */
 function nowStr() {
   const d = new Date();
   const pad = n => String(n).padStart(2, '0');
   return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
 }
 
-/** 工单号 -> 工单信息 */
 const woMap = computed(() => {
   const m = {};
   woList.value.forEach(w => { m[w.wo_number] = w; });
   return m;
 });
 
-/** 把 issue 明细按 issue_no 聚合（老数据按 工单+人+时间 兜底） */
 const batches = computed(() => {
   const map = {};
   allIssues.value.forEach(d => {
@@ -178,7 +175,6 @@ const batches = computed(() => {
     map[key].items.push(d);
     map[key].totalQty += Number(d.issue_qty) || 0;
   });
-  // 补成品料号 / 名称
   Object.values(map).forEach(b => {
     const w = woMap.value[b.wo_number];
     b.product_number = w?.product_number || '';
@@ -218,7 +214,7 @@ function goDetail(b) {
   router.push({ name: 'issue-detail', params: { issueNo: b.issue_no } });
 }
 
-/* ============ 新增 ============ */
+/* 新增 */
 function openAdd() {
   addForm.wo_number = '';
   addForm.operator = authStore.user?.name || authStore.user?.email || '';
@@ -264,6 +260,16 @@ async function saveAdd() {
     }
   }
 
+  // ⭐ 只同步本次新增的料号
+  if (fail === 0) {
+    const partNumbers = [...new Set(valid.map(r => String(r.part_number).trim()))];
+    try {
+      await syncExcessToInventory(addForm.wo_number, partNumbers);
+    } catch (e) {
+      console.error('同步库存失败', e);
+    }
+  }
+
   if (fail > 0) {
     addError.value = `部分失败：成功 ${ok} 条，失败 ${fail} 条`;
     await loadAll();
@@ -273,14 +279,13 @@ async function saveAdd() {
   await loadAll();
 }
 
-/* ============ 导入 CSV ============ */
+/* 导入 */
 function triggerImport() { fileInput.value.click(); }
 
 async function handleImport(e) {
   const f = e.target.files[0]; if (!f) return;
   const { headers, rows } = await readCSV(f);
 
-  // 模板：工单号、物料料号、物料名称、物料数量
   const required = ['wo_number', 'part_number', 'part_name', 'issue_qty'];
   const missing = required.filter(h => !headers.includes(h));
   if (missing.length) {
@@ -292,9 +297,8 @@ async function handleImport(e) {
   const operator = authStore.user?.name || authStore.user?.email || '';
   const timeStr = nowStr();
 
-  // 第 1 步：解析所有行，按 wo_number 分组，每组生成一个 issue_no
   const parsed = [];
-  const woNoMap = {};      // wo_number -> issue_no
+  const woNoMap = {};
   const errors = [];
 
   for (let i = 0; i < rows.length; i++) {
@@ -319,7 +323,6 @@ async function handleImport(e) {
       errors.push(`第 ${i+2} 行：物料数量不合法`);
       continue;
     }
-    // 工单必须存在
     if (!woMap.value[data.wo_number]) {
       errors.push(`第 ${i+2} 行：工单号 ${data.wo_number} 不存在`);
       continue;
@@ -338,7 +341,6 @@ async function handleImport(e) {
     return;
   }
 
-  // 第 2 步：写入
   let ok = 0, fail = 0;
   for (const p of parsed) {
     try {
@@ -358,6 +360,23 @@ async function handleImport(e) {
     }
   }
 
+  // ⭐ 只同步本次涉及的料号
+  const woParts = {};
+  parsed.forEach(p => {
+    const wo = p.data.wo_number;
+    const pn = p.data.part_number;
+    if (!wo || !pn) return;
+    if (!woParts[wo]) woParts[wo] = new Set();
+    woParts[wo].add(pn);
+  });
+  for (const [woNum, partSet] of Object.entries(woParts)) {
+    try {
+      await syncExcessToInventory(woNum, Array.from(partSet));
+    } catch (err) {
+      console.error('同步库存失败', woNum, err);
+    }
+  }
+
   let msg = `导入完成：成功 ${ok} 条，失败 ${fail} 条。\n共生成 ${Object.keys(woNoMap).length} 张领料单。`;
   if (errors.length) {
     msg += '\n\n失败明细（前 10 条）：\n' + errors.slice(0, 10).join('\n');
@@ -369,7 +388,7 @@ async function handleImport(e) {
   e.target.value = '';
 }
 
-/* ============ 删除整张领料单 ============ */
+/* 删除整张领料单 */
 async function deleteBatch(b) {
   const ok = window.$confirm
     ? await window.$confirm({
@@ -379,9 +398,17 @@ async function deleteBatch(b) {
     : confirm(`确认删除领料单？共 ${b.items.length} 条明细。`);
   if (!ok) return;
 
+  const parts = [...new Set(b.items.map(i => i.part_number))];
+
   try {
     for (const it of b.items) {
       await deleteDoc(CONFIG.TABLES.issue, it.$id);
+    }
+    // ⭐ 只同步被删料号
+    if (b.wo_number && parts.length) {
+      try {
+        await syncExcessToInventory(b.wo_number, parts);
+      } catch (e) { console.error(e); }
     }
     await loadAll();
   } catch (e) {
