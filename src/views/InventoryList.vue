@@ -5,17 +5,11 @@
       <a href="#" @click.prevent="clearFilter">清除过滤</a>
     </div>
 
-    <div class="search-bar">
-      <input v-model="keyword" type="text" placeholder="按库位搜索...">
-      <button @click="applyFilters">搜索</button>
-      <button @click="clearAll">清空</button>
-    </div>
-
-    <div class="toolbar">
-      <button @click="openAdd">新增库存</button>
-      <button @click="triggerImport">导入CSV</button>
-      <button @click="handleExport">导出CSV</button>
-      <input type="file" accept=".csv" hidden ref="fileInput" @change="handleImport">
+    <div class="page-header">
+      <div class="search-bar">
+        <input v-model="keyword" type="text" placeholder="按库位搜索...">
+      </div>
+      <ActionMenu :items="menuItems" />
     </div>
 
     <table>
@@ -54,7 +48,8 @@
       </tbody>
     </table>
 
-    <!-- 新增 / 编辑弹窗 -->
+    <input type="file" accept=".csv" hidden ref="fileInput" @change="handleImport">
+
     <div v-if="showModal" class="modal-mask">
       <div class="modal-box">
         <h3>{{ form.id ? '编辑库存' : '新增库存' }}</h3>
@@ -87,6 +82,7 @@
 import { ref, onMounted, computed, reactive } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import MainLayout from '../layouts/MainLayout.vue';
+import ActionMenu from '../components/ActionMenu.vue';
 import { CONFIG } from '../config.js';
 import { listDocs, getDoc, createDoc, updateDoc, deleteDoc } from '../api/db.js';
 import { exportCSV, readCSV } from '../api/csv.js';
@@ -101,31 +97,27 @@ const filterPart = ref(route.query.part || null);
 const fileInput = ref(null);
 const showModal = ref(false);
 const formError = ref('');
-const woProductNameMap = ref({});   // ⭐ wo_number -> 成品名称
+const woProductNameMap = ref({});
 
 const form = reactive({
-  id: '',
-  part_number: '',
-  part_name: '',
-  quantity: '',
-  location: '',
-  isAuto: false
+  id: '', part_number: '', part_name: '', quantity: '', location: '', isAuto: false
 });
 
-/* 过滤后的列表 */
+/* ⭐ 操作菜单 */
+const menuItems = computed(() => [
+  { label: '新增库存', onClick: openAdd },
+  { label: '导入CSV', onClick: triggerImport },
+  { label: '导出CSV', onClick: handleExport }
+]);
+
 const filteredDocs = computed(() => {
   let docs = allDocs.value;
-  if (filterPart.value) {
-    docs = docs.filter(d => d.part_number === filterPart.value);
-  }
+  if (filterPart.value) docs = docs.filter(d => d.part_number === filterPart.value);
   const kw = keyword.value.trim().toLowerCase();
-  if (kw) {
-    docs = docs.filter(d => (d.location || '').toLowerCase().includes(kw));
-  }
+  if (kw) docs = docs.filter(d => (d.location || '').toLowerCase().includes(kw));
   return docs;
 });
 
-/* 加载库存 */
 async function load() {
   const res = await listDocs(CONFIG.TABLES.inventory, [
     Query.limit(5000),
@@ -133,37 +125,28 @@ async function load() {
   ]);
   allDocs.value = res.documents;
 }
-
-/* ⭐ 加载工单号 -> 成品名称 映射 */
 async function loadWoMap() {
-  const res = await listDocs(CONFIG.TABLES.wo, [
-    Query.limit(5000)
-  ]);
+  const res = await listDocs(CONFIG.TABLES.wo, [Query.limit(5000)]);
   const map = {};
   res.documents.forEach(w => {
     if (w.wo_number) map[w.wo_number] = w.product_name || '';
   });
   woProductNameMap.value = map;
 }
-
 onMounted(async () => {
   await Promise.all([load(), loadWoMap()]);
 });
-
-function applyFilters() { /* computed 自动响应 */ }
 
 function clearAll() {
   keyword.value = '';
   filterPart.value = null;
   router.replace({ name: 'inventory' });
 }
-
 function clearFilter() {
   filterPart.value = null;
   router.replace({ name: 'inventory' });
 }
 
-/* ============ 新增 / 编辑弹窗 ============ */
 function openAdd() {
   Object.assign(form, {
     id: '', part_number: '', part_name: '', quantity: '', location: '', isAuto: false
@@ -211,16 +194,13 @@ async function saveForm() {
   try {
     if (form.id) {
       if (form.isAuto) {
-        // 超发记录只允许改名称
         await updateDoc(CONFIG.TABLES.inventory, form.id, { part_name });
       } else {
         await updateDoc(CONFIG.TABLES.inventory, form.id, { part_name, quantity, location });
       }
     } else {
-      // 新增：检查库位是否已被其他料号占用
       const dup = await listDocs(CONFIG.TABLES.inventory, [
-        Query.equal('location', location),
-        Query.limit(1)
+        Query.equal('location', location), Query.limit(1)
       ]);
       if (dup.documents.length && dup.documents[0].part_number !== part_number) {
         formError.value = `库位 ${location} 已被物料 ${dup.documents[0].part_number} 占用`;
@@ -235,14 +215,11 @@ async function saveForm() {
   }
 }
 
-/* ============ 删除 ============ */
 async function deleteInv(docId) {
   try {
     const doc = await getDoc(CONFIG.TABLES.inventory, docId);
     const isAuto = !!doc.source_wo;
-    const name = isAuto
-      ? (woProductNameMap.value[doc.source_wo] || doc.source_wo)
-      : '';
+    const name = isAuto ? (woProductNameMap.value[doc.source_wo] || doc.source_wo) : '';
     const msg = isAuto
       ? `该记录由「${name}」超发自动生成。\n手动删除后，下次领料/工单变动可能重新生成。\n确认删除？`
       : '确认删除该库存记录？';
@@ -250,7 +227,6 @@ async function deleteInv(docId) {
       ? await window.$confirm({ title: '删除确认', message: msg })
       : confirm(msg);
     if (!ok) return;
-
     await deleteDoc(CONFIG.TABLES.inventory, docId);
     await load();
   } catch (e) {
@@ -258,7 +234,6 @@ async function deleteInv(docId) {
   }
 }
 
-/* ============ 导入 CSV ============ */
 function triggerImport() { fileInput.value.click(); }
 
 async function handleImport(e) {
@@ -273,7 +248,6 @@ async function handleImport(e) {
     return;
   }
 
-  // CSV 内部库位冲突预检
   const seen = {};
   const conflicts = [];
   for (let i = 0; i < rows.length; i++) {
@@ -284,9 +258,7 @@ async function handleImport(e) {
       if (v === undefined || v === null || v === '') return;
       if (h === 'quantity') {
         const n = Number(v); if (!isNaN(n)) data[h] = n;
-      } else {
-        data[h] = String(v).trim();
-      }
+      } else data[h] = String(v).trim();
     });
     if (!data.part_number || !data.part_name || !data.location) continue;
     if (seen[data.location] && seen[data.location] !== data.part_number) {
@@ -313,27 +285,21 @@ async function handleImport(e) {
       if (h === 'quantity') {
         const n = Number(v); if (isNaN(n)) return;
         data[h] = n;
-      } else {
-        data[h] = String(v).trim();
-      }
+      } else data[h] = String(v).trim();
     });
     if (!data.part_number || !data.part_name || !data.location) continue;
-
     try {
       const dup = await listDocs(CONFIG.TABLES.inventory, [
-        Query.equal('location', data.location),
-        Query.limit(1)
+        Query.equal('location', data.location), Query.limit(1)
       ]);
       if (dup.documents.length && dup.documents[0].part_number !== data.part_number) {
         errors.push(`第 ${i+2} 行：库位 ${data.location} 已被 ${dup.documents[0].part_number} 占用`);
-        fail++;
-        continue;
+        fail++; continue;
       }
       await createDoc(CONFIG.TABLES.inventory, data);
       ok++;
     } catch (err) {
-      errors.push(`第 ${i+2} 行：${err.message}`);
-      fail++;
+      errors.push(`第 ${i+2} 行：${err.message}`); fail++;
     }
   }
 
@@ -348,7 +314,6 @@ async function handleImport(e) {
   e.target.value = '';
 }
 
-/* ============ 导出 CSV ============ */
 async function handleExport() {
   const headers = ['part_number', 'part_name', 'quantity', 'location', 'source_wo'];
   const rows = allDocs.value.map(d => headers.map(h => d[h] ?? ''));
