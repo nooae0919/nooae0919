@@ -15,8 +15,8 @@
       <select v-model="lineFilter"
               style="padding:8px 12px;border:1px solid #d1d5db;border-radius:6px;font-size:14px;">
         <option value="">全部线体</option>
-        <option value="A线">A线</option>
-        <option value="B线">B线</option>
+        <option value="1线">1线</option>
+        <option value="2线">2线</option>
       </select>
     </div>
 
@@ -79,8 +79,8 @@
         <label>线体
           <select v-model="form.line">
             <option value="">— 请选择 —</option>
-            <option value="A线">A线</option>
-            <option value="B线">B线</option>
+            <option value="1线">1线</option>
+            <option value="2线">2线</option>
           </select>
         </label>
 
@@ -139,8 +139,8 @@
         <label>线体
           <select v-model="editForm.line">
             <option value="">— 请选择 —</option>
-            <option value="A线">A线</option>
-            <option value="B线">B线</option>
+            <option value="1线">1线</option>
+            <option value="2线">2线</option>
           </select>
         </label>
 
