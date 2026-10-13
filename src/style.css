@@ -243,3 +243,16 @@ td button:hover { background: #f3f4f6; }
   color: #1e40af;
 }
 .notice a { color: #2563eb; margin-left: 10px; }
+
+/* 子页面顶部 */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.page-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #222;
+}
