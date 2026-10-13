@@ -22,18 +22,13 @@
           <th>退料总数</th>
           <th>退料人</th>
           <th>退料时间</th>
-          <th style="width:160px;">操作</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="(b, idx) in filteredBatches" :key="b.key">
           <td><input type="checkbox" :value="b.key" v-model="selectedKeys"></td>
           <td>{{ idx + 1 }}</td>
-          <td>
-            <a class="part-link" href="#" @click.prevent="goDetail(b)">
-              {{ b.return_no || '(无单号)' }}
-            </a>
-          </td>
+          <td>{{ b.return_no || '(无单号)' }}</td>
           <td>{{ b.wo_number || '' }}</td>
           <td>{{ b.product_number || '' }}</td>
           <td>{{ b.product_name || '' }}</td>
@@ -41,13 +36,9 @@
           <td><b>{{ b.totalQty }}</b></td>
           <td>{{ b.operator || '' }}</td>
           <td>{{ b.return_time || '' }}</td>
-          <td>
-            <button @click="goDetail(b)">详情</button>
-            <button @click="deleteBatch(b)">删除</button>
-          </td>
         </tr>
         <tr v-if="!filteredBatches.length">
-          <td colspan="11" style="text-align:center;color:#999;">暂无退料单</td>
+          <td colspan="10" style="text-align:center;color:#999;">暂无退料单</td>
         </tr>
       </tbody>
     </table>
@@ -135,6 +126,8 @@ const addForm = reactive({
 /* ⭐ 操作菜单 */
 const menuItems = computed(() => [
   { label: '新增退料单', onClick: openAdd },
+  { label: '详情', onClick: viewSelected, disabled: selectedKeys.value.length !== 1 },
+  { label: '删除', onClick: deleteSelected, disabled: selectedKeys.value.length === 0 },
   { label: '导入CSV', onClick: triggerImport },
   { label: '导出CSV', onClick: handleExport, disabled: selectedKeys.value.length === 0 }
 ]);
@@ -230,7 +223,10 @@ async function loadAll() {
 }
 onMounted(loadAll);
 
-function goDetail(b) {
+function viewSelected() {
+  if (selectedKeys.value.length !== 1) return;
+  const b = batches.value.find(x => x.key === selectedKeys.value[0]);
+  if (!b) return;
   if (!b.return_no) { alert('该退料单没有单号（老数据），无法进入详情。'); return; }
   router.push({ name: 'return-detail', params: { returnNo: b.return_no } });
 }
@@ -367,20 +363,29 @@ async function handleImport(e) {
   e.target.value = '';
 }
 
-async function deleteBatch(b) {
+async function deleteSelected() {
+  if (!selectedKeys.value.length) return;
+  const targets = batches.value.filter(b => selectedKeys.value.includes(b.key));
   const ok = window.$confirm
     ? await window.$confirm({
         title: '删除确认',
-        message: `确认删除退料单 ${b.return_no || '(无单号)'}？共 ${b.items.length} 条明细。`
+        message: `将删除已勾选的 ${targets.length} 张退料单，共 ${targets.reduce((s, b) => s + b.items.length, 0)} 条明细。确认？`
       })
-    : confirm(`确认删除退料单？共 ${b.items.length} 条明细。`);
+    : confirm(`将删除 ${targets.length} 张退料单，确认？`);
   if (!ok) return;
 
-  try {
-    for (const it of b.items) await deleteDoc(CONFIG.TABLES.return, it.$id);
-    selectedKeys.value = selectedKeys.value.filter(k => k !== b.key);
-    await loadAll();
-  } catch (e) { alert('删除失败：' + e.message); }
+  let ok2 = 0, fail = 0;
+  for (const b of targets) {
+    try {
+      for (const it of b.items) await deleteDoc(CONFIG.TABLES.return, it.$id);
+      ok2++;
+    } catch (e) {
+      console.error('删除失败', b.return_no, e); fail++;
+    }
+  }
+  selectedKeys.value = [];
+  await loadAll();
+  if (fail > 0) alert(`删除完成：成功 ${ok2} 张，失败 ${fail} 张`);
 }
 
 async function handleExport() {
