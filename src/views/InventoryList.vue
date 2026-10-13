@@ -15,17 +15,25 @@
     <table>
       <thead>
         <tr>
+          <th style="width:44px;">
+            <input type="checkbox"
+                   :checked="allSelected"
+                   :indeterminate="someSelected"
+                   @change="toggleSelectAll">
+          </th>
           <th style="width:60px;">序号</th>
           <th>物料料号</th>
           <th>物料名称</th>
           <th>物料数量</th>
           <th>库位</th>
           <th>来源</th>
-          <th>操作</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="(d, idx) in filteredDocs" :key="d.$id">
+          <td>
+            <input type="checkbox" :value="d.$id" v-model="selectedIds">
+          </td>
           <td>{{ idx + 1 }}</td>
           <td>{{ d.part_number || '' }}</td>
           <td>{{ d.part_name || '' }}</td>
@@ -37,10 +45,6 @@
             </span>
             <span v-else style="color:#999;font-size:13px;">正常</span>
           </td>
-          <td>
-            <button @click="openEdit(d.$id)">编辑</button>
-            <button @click="deleteInv(d.$id)">删除</button>
-          </td>
         </tr>
         <tr v-if="!filteredDocs.length">
           <td colspan="7" style="text-align:center;color:#999;">暂无库存数据</td>
@@ -50,6 +54,7 @@
 
     <input type="file" accept=".csv" hidden ref="fileInput" @change="handleImport">
 
+    <!-- 新增 / 编辑弹窗 -->
     <div v-if="showModal" class="modal-mask">
       <div class="modal-box">
         <h3>{{ form.id ? '编辑库存' : '新增库存' }}</h3>
@@ -98,14 +103,17 @@ const fileInput = ref(null);
 const showModal = ref(false);
 const formError = ref('');
 const woProductNameMap = ref({});
+const selectedIds = ref([]);   // ⭐ 已勾选的行 $id
 
 const form = reactive({
   id: '', part_number: '', part_name: '', quantity: '', location: '', isAuto: false
 });
 
-/* ⭐ 操作菜单 */
+/* ⭐ 操作菜单：编辑/删除依赖勾选数量 */
 const menuItems = computed(() => [
   { label: '新增库存', onClick: openAdd },
+  { label: '编辑', onClick: editSelected, disabled: selectedIds.value.length !== 1 },
+  { label: '删除', onClick: deleteSelected, disabled: selectedIds.value.length === 0 },
   { label: '导入CSV', onClick: triggerImport },
   { label: '导出CSV', onClick: handleExport }
 ]);
@@ -118,12 +126,35 @@ const filteredDocs = computed(() => {
   return docs;
 });
 
+/* 全选 / 半选 */
+const allSelected = computed(() =>
+  filteredDocs.value.length > 0 &&
+  filteredDocs.value.every(d => selectedIds.value.includes(d.$id))
+);
+const someSelected = computed(() =>
+  !allSelected.value &&
+  filteredDocs.value.some(d => selectedIds.value.includes(d.$id))
+);
+function toggleSelectAll(e) {
+  if (e.target.checked) {
+    const set = new Set(selectedIds.value);
+    filteredDocs.value.forEach(d => set.add(d.$id));
+    selectedIds.value = Array.from(set);
+  } else {
+    const ids = new Set(filteredDocs.value.map(d => d.$id));
+    selectedIds.value = selectedIds.value.filter(id => !ids.has(id));
+  }
+}
+
 async function load() {
   const res = await listDocs(CONFIG.TABLES.inventory, [
     Query.limit(5000),
     Query.orderAsc('part_number')
   ]);
   allDocs.value = res.documents;
+  // 清掉已不存在的勾选
+  const valid = new Set(allDocs.value.map(d => d.$id));
+  selectedIds.value = selectedIds.value.filter(id => valid.has(id));
 }
 async function loadWoMap() {
   const res = await listDocs(CONFIG.TABLES.wo, [Query.limit(5000)]);
@@ -137,16 +168,12 @@ onMounted(async () => {
   await Promise.all([load(), loadWoMap()]);
 });
 
-function clearAll() {
-  keyword.value = '';
-  filterPart.value = null;
-  router.replace({ name: 'inventory' });
-}
 function clearFilter() {
   filterPart.value = null;
   router.replace({ name: 'inventory' });
 }
 
+/* ============ 新增 ============ */
 function openAdd() {
   Object.assign(form, {
     id: '', part_number: '', part_name: '', quantity: '', location: '', isAuto: false
@@ -155,7 +182,13 @@ function openAdd() {
   showModal.value = true;
 }
 
-async function openEdit(docId) {
+/* ============ 编辑（菜单触发，仅勾选 1 行） ============ */
+async function editSelected() {
+  if (selectedIds.value.length !== 1) {
+    alert('请只勾选一行再点编辑');
+    return;
+  }
+  const docId = selectedIds.value[0];
   try {
     const doc = await getDoc(CONFIG.TABLES.inventory, docId);
     const isAuto = !!doc.source_wo;
@@ -176,6 +209,7 @@ async function openEdit(docId) {
   }
 }
 
+/* ============ 保存 ============ */
 async function saveForm() {
   const part_number = (form.part_number || '').trim();
   const part_name = (form.part_name || '').trim();
@@ -209,31 +243,47 @@ async function saveForm() {
       await createDoc(CONFIG.TABLES.inventory, { part_number, part_name, quantity, location });
     }
     showModal.value = false;
+    selectedIds.value = [];
     await load();
   } catch (e) {
     formError.value = '保存失败：' + (e.message || e);
   }
 }
 
-async function deleteInv(docId) {
-  try {
-    const doc = await getDoc(CONFIG.TABLES.inventory, docId);
-    const isAuto = !!doc.source_wo;
-    const name = isAuto ? (woProductNameMap.value[doc.source_wo] || doc.source_wo) : '';
-    const msg = isAuto
-      ? `该记录由「${name}」超发自动生成。\n手动删除后，下次领料/工单变动可能重新生成。\n确认删除？`
-      : '确认删除该库存记录？';
-    const ok = window.$confirm
-      ? await window.$confirm({ title: '删除确认', message: msg })
-      : confirm(msg);
-    if (!ok) return;
-    await deleteDoc(CONFIG.TABLES.inventory, docId);
-    await load();
-  } catch (e) {
-    alert('删除失败：' + e.message);
+/* ============ 删除（菜单触发，可批量） ============ */
+async function deleteSelected() {
+  if (!selectedIds.value.length) return;
+
+  // 若有超发记录，提示
+  const autoCount = allDocs.value.filter(d =>
+    selectedIds.value.includes(d.$id) && d.source_wo
+  ).length;
+
+  let msg = `确认删除已勾选的 ${selectedIds.value.length} 条库存？`;
+  if (autoCount > 0) {
+    msg += `\n\n其中 ${autoCount} 条由工单超发自动生成，删除后下次领料/工单变动可能重新生成。`;
   }
+  const ok = window.$confirm
+    ? await window.$confirm({ title: '删除确认', message: msg })
+    : confirm(msg);
+  if (!ok) return;
+
+  let ok2 = 0, fail = 0;
+  for (const id of selectedIds.value) {
+    try {
+      await deleteDoc(CONFIG.TABLES.inventory, id);
+      ok2++;
+    } catch (e) {
+      console.error('删除失败', id, e);
+      fail++;
+    }
+  }
+  selectedIds.value = [];
+  await load();
+  if (fail > 0) alert(`删除完成：成功 ${ok2} 条，失败 ${fail} 条`);
 }
 
+/* ============ 导入 ============ */
 function triggerImport() { fileInput.value.click(); }
 
 async function handleImport(e) {
@@ -314,6 +364,7 @@ async function handleImport(e) {
   e.target.value = '';
 }
 
+/* ============ 导出 ============ */
 async function handleExport() {
   const headers = ['part_number', 'part_name', 'quantity', 'location', 'source_wo'];
   const rows = allDocs.value.map(d => headers.map(h => d[h] ?? ''));
