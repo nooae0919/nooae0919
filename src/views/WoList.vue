@@ -7,9 +7,20 @@
       <input type="file" accept=".csv" hidden ref="fileInput" @change="handleImport">
     </div>
 
+    <div class="search-bar">
+      <input v-model="keyword" type="text" placeholder="按工单号 / 成品料号 / 名称搜索...">
+      <select v-model="lineFilter"
+              style="padding:8px 12px;border:1px solid #d1d5db;border-radius:6px;font-size:14px;">
+        <option value="">全部线体</option>
+        <option value="A线">A线</option>
+        <option value="B线">B线</option>
+      </select>
+    </div>
+
     <table id="wo-table">
       <thead>
         <tr>
+          <th style="width:100px;">线体</th>
           <th>工单号</th>
           <th>成品料号</th>
           <th>成品名称</th>
@@ -17,23 +28,23 @@
           <th>计划数量</th>
           <th>生产日期</th>
           <th>状态</th>
-          <th>齐套状态</th>
-          <th>操作</th>
+          <th style="width:120px;">齐套状态</th>
+          <th style="width:230px;">操作</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="d in docs" :key="d.$id">
+        <tr v-for="d in filteredDocs" :key="d.$id">
+          <td>{{ d.line || '-' }}</td>
           <td>{{ d.wo_number || '' }}</td>
           <td>{{ d.product_number || '' }}</td>
           <td>{{ d.product_name || '' }}</td>
-          <td>
-            <span v-if="bomVersionMap[d.bom_id]">{{ bomVersionMap[d.bom_id] }}</span>
-            <span v-else style="color:#d33;">未关联</span>
-          </td>
+          <td>{{ bomVersionMap[d.bom_id] || '-' }}</td>
           <td>{{ d.plan_qty ?? '' }}</td>
           <td>{{ d.produce_date || '' }}</td>
           <td>{{ statusText(d.status) }}</td>
-          <td>  <button @click="goKitting(d)">齐套状态</button></td>
+          <td>
+            <button @click="goKitting(d)">齐套状态</button>
+          </td>
           <td>
             <span v-if="d.status === 'completed'" style="color:#999;font-size:13px;">
               已完成（不可修改）
@@ -41,13 +52,24 @@
             <button v-else @click="openEdit(d.$id)">编辑</button>
           </td>
         </tr>
+        <tr v-if="!filteredDocs.length">
+          <td colspan="10" style="text-align:center;color:#999;">暂无工单</td>
+        </tr>
       </tbody>
     </table>
 
-    <!-- 新增弹窗 -->
+    <!-- 新增工单弹窗 -->
     <div v-if="showAdd" class="modal-mask">
       <div class="modal-box">
         <h3>新增工单</h3>
+
+        <label>线体
+          <select v-model="form.line">
+            <option value="">— 请选择 —</option>
+            <option value="A线">A线</option>
+            <option value="B线">B线</option>
+          </select>
+        </label>
 
         <label>关联 BOM <span style="color:#d33;">*</span>
           <select v-model="form.bom_id" @change="onBomChange('add')">
@@ -96,10 +118,18 @@
       </div>
     </div>
 
-    <!-- 编辑弹窗 -->
+    <!-- 编辑工单弹窗 -->
     <div v-if="showEdit" class="modal-mask">
       <div class="modal-box">
         <h3>编辑工单</h3>
+
+        <label>线体
+          <select v-model="editForm.line">
+            <option value="">— 请选择 —</option>
+            <option value="A线">A线</option>
+            <option value="B线">B线</option>
+          </select>
+        </label>
 
         <label>关联 BOM <span style="color:#d33;">*</span>
           <select v-model="editForm.bom_id" @change="onBomChange('edit')">
@@ -151,29 +181,24 @@
 </template>
 
 <script setup>
-import { ref, onMounted, reactive } from 'vue';
+import { ref, onMounted, computed, reactive } from 'vue';
+import { useRouter } from 'vue-router';
 import MainLayout from '../layouts/MainLayout.vue';
 import { CONFIG } from '../config.js';
-import { listDocs, getDoc, createDoc, updateDoc, batchImport } from '../api/db.js';
+import { listDocs, getDoc, createDoc, updateDoc } from '../api/db.js';
 import { exportCSV, readCSV } from '../api/csv.js';
 import { Query } from 'appwrite';
-import { useRouter } from 'vue-router';
+
 const router = useRouter();
 
-function goKitting(wo) {
-  if (!wo.bom_id) {
-    alert('该工单未关联 BOM，无法做齐套分析。请先编辑工单选择 BOM。');
-    return;
-  }
-  router.push({ name: 'wo-kitting', params: { woId: wo.$id } });
-}
-  
-const WO_HEADERS = ['wo_number', 'product_number', 'product_name', 'plan_qty', 'produce_date', 'status'];
+const WO_HEADERS = ['wo_number', 'line', 'product_number', 'product_name', 'plan_qty', 'produce_date', 'status'];
 
 const docs = ref([]);
-const bomList = ref([]);          // 所有 BOM 供下拉选择
+const bomList = ref([]);          // 所有 BOM（供下拉选择）
 const bomMap = ref({});           // bom_id -> bom 文档
-const bomVersionMap = ref({});    // bom_id -> version（列表显示用）
+const bomVersionMap = ref({});    // bom_id -> version
+const keyword = ref('');
+const lineFilter = ref('');
 const fileInput = ref(null);
 const showAdd = ref(false);
 const showEdit = ref(false);
@@ -181,11 +206,14 @@ const formError = ref('');
 const editError = ref('');
 
 const form = reactive({
-  bom_id: '', wo_number: '', product_number: '', product_name: '',
+  bom_id: '', wo_number: '', line: '',
+  product_number: '', product_name: '',
   plan_qty: '', produce_date: '', status: 'pending'
 });
+
 const editForm = reactive({
-  $id: '', bom_id: '', wo_number: '', product_number: '', product_name: '',
+  $id: '', bom_id: '', wo_number: '', line: '',
+  product_number: '', product_name: '',
   plan_qty: '', produce_date: '', status: 'pending'
 });
 
@@ -193,15 +221,14 @@ function statusText(s) {
   return s === 'completed' ? '已完成' : s === 'in_progress' ? '生产中' : '待生产';
 }
 
-/* 加载 BOM 下拉数据 */
+/* ============ 加载 BOM 下拉数据 ============ */
 async function loadBoms() {
   const res = await listDocs(CONFIG.TABLES.bom, [
     Query.limit(5000),
     Query.orderAsc('product_number')
   ]);
   bomList.value = res.documents;
-  const map = {};
-  const vmap = {};
+  const map = {}, vmap = {};
   res.documents.forEach(b => {
     map[b.$id] = b;
     vmap[b.$id] = b.version || '';
@@ -210,9 +237,9 @@ async function loadBoms() {
   bomVersionMap.value = vmap;
 }
 
-/* 加载工单 */
+/* ============ 加载工单 ============ */
 async function load() {
-  const res = await listDocs(CONFIG.TABLES.wo);
+  const res = await listDocs(CONFIG.TABLES.wo, [Query.limit(5000)]);
   docs.value = res.documents;
 }
 
@@ -221,7 +248,24 @@ onMounted(async () => {
   await load();
 });
 
-/* 选择 BOM 后自动填充成品信息 */
+/* ============ 搜索 / 线体筛选 ============ */
+const filteredDocs = computed(() => {
+  let list = docs.value;
+  if (lineFilter.value) {
+    list = list.filter(d => d.line === lineFilter.value);
+  }
+  const kw = keyword.value.trim().toLowerCase();
+  if (kw) {
+    list = list.filter(d =>
+      (d.wo_number || '').toLowerCase().includes(kw) ||
+      (d.product_number || '').toLowerCase().includes(kw) ||
+      (d.product_name || '').toLowerCase().includes(kw)
+    );
+  }
+  return list;
+});
+
+/* ============ 选择 BOM 后自动填充成品信息 ============ */
 function onBomChange(which) {
   const target = which === 'add' ? form : editForm;
   const b = bomMap.value[target.bom_id];
@@ -234,10 +278,11 @@ function onBomChange(which) {
   }
 }
 
-/* 新增 */
+/* ============ 新增 ============ */
 function openAdd() {
   Object.assign(form, {
-    bom_id: '', wo_number: '', product_number: '', product_name: '',
+    bom_id: '', wo_number: '', line: '',
+    product_number: '', product_name: '',
     plan_qty: '', produce_date: '', status: 'pending'
   });
   formError.value = '';
@@ -245,6 +290,7 @@ function openAdd() {
 }
 
 async function saveAdd() {
+  if (!form.line) { formError.value = '请选择线体'; return; }
   if (!form.bom_id) { formError.value = '请先选择关联 BOM'; return; }
   if (!form.wo_number || !form.plan_qty) {
     formError.value = '工单号和计划数量必填';
@@ -254,6 +300,7 @@ async function saveAdd() {
     await createDoc(CONFIG.TABLES.wo, {
       bom_id: form.bom_id,
       wo_number: form.wo_number,
+      line: form.line,
       product_number: form.product_number,
       product_name: form.product_name,
       plan_qty: Number(form.plan_qty),
@@ -261,13 +308,13 @@ async function saveAdd() {
       status: form.status
     });
     showAdd.value = false;
-    load();
+    await load();
   } catch (e) {
     formError.value = '保存失败：' + (e.message || e);
   }
 }
 
-/* 编辑 */
+/* ============ 编辑 ============ */
 async function openEdit(docId) {
   try {
     const doc = await getDoc(CONFIG.TABLES.wo, docId);
@@ -279,6 +326,7 @@ async function openEdit(docId) {
       $id: doc.$id,
       bom_id: doc.bom_id || '',
       wo_number: doc.wo_number || '',
+      line: doc.line || '',
       product_number: doc.product_number || '',
       product_name: doc.product_name || '',
       plan_qty: doc.plan_qty || '',
@@ -293,6 +341,7 @@ async function openEdit(docId) {
 }
 
 async function saveEdit() {
+  if (!editForm.line) { editError.value = '请选择线体'; return; }
   if (!editForm.bom_id) { editError.value = '请先选择关联 BOM'; return; }
   if (!editForm.plan_qty) {
     editError.value = '计划数量必填';
@@ -307,6 +356,7 @@ async function saveEdit() {
     }
     await updateDoc(CONFIG.TABLES.wo, editForm.$id, {
       bom_id: editForm.bom_id,
+      line: editForm.line,
       product_number: editForm.product_number,
       product_name: editForm.product_name,
       plan_qty: Number(editForm.plan_qty),
@@ -314,27 +364,89 @@ async function saveEdit() {
       status: editForm.status
     });
     showEdit.value = false;
-    load();
+    await load();
   } catch (e) {
     editError.value = '保存失败：' + (e.message || e);
   }
 }
 
-/* 导入导出（保持原逻辑，CSV 需包含 bom_id 或 product_number 用于匹配） */
+/* ============ 跳转齐套详情 ============ */
+function goKitting(wo) {
+  if (!wo.bom_id) {
+    alert('该工单未关联 BOM，无法做齐套分析。请先编辑工单选择 BOM。');
+    return;
+  }
+  router.push({ name: 'wo-kitting', params: { woId: wo.$id } });
+}
+
+/* ============ 导入 CSV ============ */
 function triggerImport() { fileInput.value.click(); }
 
 async function handleImport(e) {
   const f = e.target.files[0]; if (!f) return;
   const { headers, rows } = await readCSV(f);
-  await batchImport(CONFIG.TABLES.wo, headers, rows);
-  load();
+
+  // 建 product_number -> bom_id 映射
+  const pnToBom = {};
+  bomList.value.forEach(b => { pnToBom[b.product_number] = b.$id; });
+
+  let ok = 0, fail = 0;
+  const errors = [];
+
+  for (let i = 0; i < rows.length; i++) {
+    const row = rows[i];
+    const data = {};
+    headers.forEach((h, idx) => {
+      const v = row[idx];
+      if (v === undefined || v === null || v === '') return;
+      if (h === 'plan_qty') {
+        const n = Number(v); if (isNaN(n)) return;
+        data[h] = n;
+      } else {
+        data[h] = String(v).trim();
+      }
+    });
+
+    // 自动匹配 bom_id
+    if (!data.bom_id && data.product_number) {
+      const bid = pnToBom[data.product_number];
+      if (bid) data.bom_id = bid;
+    }
+    if (!data.bom_id) {
+      errors.push(`第 ${i+2} 行：找不到匹配的 BOM（成品料号 ${data.product_number || '未填'}）`);
+      fail++;
+      continue;
+    }
+    if (!data.wo_number) {
+      errors.push(`第 ${i+2} 行：工单号为空`);
+      fail++;
+      continue;
+    }
+
+    try {
+      await createDoc(CONFIG.TABLES.wo, data);
+      ok++;
+    } catch (err) {
+      errors.push(`第 ${i+2} 行：${err.message}`);
+      fail++;
+    }
+  }
+
+  let msg = `导入完成：成功 ${ok} 条，失败 ${fail} 条`;
+  if (errors.length) {
+    msg += '\n\n失败明细（前 10 条）：\n' + errors.slice(0, 10).join('\n');
+    if (errors.length > 10) msg += `\n...还有 ${errors.length - 10} 条`;
+  }
+  alert(msg);
+
+  await load();
   e.target.value = '';
 }
 
+/* ============ 导出 CSV ============ */
 async function handleExport() {
-  const res = await listDocs(CONFIG.TABLES.wo);
+  const res = await listDocs(CONFIG.TABLES.wo, [Query.limit(5000)]);
   const rows = res.documents.map(d => WO_HEADERS.map(h => d[h] ?? ''));
   exportCSV(WO_HEADERS, rows, 'work_orders');
 }
 </script>
-
