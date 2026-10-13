@@ -1,21 +1,20 @@
 <template>
   <MainLayout>
-    <div class="search-bar">
-      <input v-model="keyword" type="text" placeholder="按物料料号或名称搜索...">
-      <button @click="applyFilters">搜索</button>
-      <button @click="clear">清空</button>
-    </div>
-
-    <div class="toolbar">
-      <button @click="load">刷新</button>
-      <button @click="handleExport">导出汇总CSV</button>
+    <div class="page-header">
+      <div class="search-bar">
+        <input v-model="keyword" type="text" placeholder="按物料料号或名称搜索...">
+      </div>
+      <ActionMenu :items="menuItems" />
     </div>
 
     <table>
       <thead>
         <tr>
           <th style="width:60px;">序号</th>
-          <th>物料料号</th><th>物料名称</th><th>库存总数量</th><th>库位数</th>
+          <th>物料料号</th>
+          <th>物料名称</th>
+          <th>库存总数量</th>
+          <th>库位数</th>
         </tr>
       </thead>
       <tbody>
@@ -42,6 +41,7 @@
 import { ref, onMounted, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import MainLayout from '../layouts/MainLayout.vue';
+import ActionMenu from '../components/ActionMenu.vue';
 import { CONFIG } from '../config.js';
 import { listDocs } from '../api/db.js';
 import { exportCSV } from '../api/csv.js';
@@ -50,6 +50,12 @@ import { Query } from 'appwrite';
 const router = useRouter();
 const summaryRows = ref([]);
 const keyword = ref('');
+
+/* ⭐ 操作菜单 */
+const menuItems = computed(() => [
+  { label: '刷新', onClick: load },
+  { label: '导出汇总CSV', onClick: handleExport }
+]);
 
 const filteredRows = computed(() => {
   const kw = keyword.value.trim().toLowerCase();
@@ -78,11 +84,7 @@ async function load() {
     }))
     .sort((a, b) => a.part_number.localeCompare(b.part_number));
 }
-
 onMounted(load);
-
-function applyFilters() { /* computed 自动响应 */ }
-function clear() { keyword.value = ''; }
 
 function goToInventory(part) {
   router.push({ name: 'inventory', query: { part } });
