@@ -22,7 +22,12 @@
       <thead>
         <tr>
           <th style="width:60px;">序号</th>
-          <th>物料料号</th><th>物料名称</th><th>物料数量</th><th>库位</th><th>操作</th>
+          <th>物料料号</th>
+          <th>物料名称</th>
+          <th>物料数量</th>
+          <th>库位</th>
+          <th>来源</th>
+          <th>操作</th>
         </tr>
       </thead>
       <tbody>
@@ -33,12 +38,18 @@
           <td><span class="qty-badge">{{ d.quantity ?? 0 }}</span></td>
           <td>{{ d.location || '' }}</td>
           <td>
+            <span v-if="d.source_wo" style="color:#2563eb;font-size:13px;">
+              工单 {{ d.source_wo }}
+            </span>
+            <span v-else style="color:#999;font-size:13px;">正常</span>
+          </td>
+          <td>
             <button @click="openEdit(d.$id)">编辑</button>
             <button @click="deleteInv(d.$id)">删除</button>
           </td>
         </tr>
         <tr v-if="!filteredDocs.length">
-          <td colspan="6" style="text-align:center;color:#999;">暂无库存数据</td>
+          <td colspan="7" style="text-align:center;color:#999;">暂无库存数据</td>
         </tr>
       </tbody>
     </table>
@@ -49,11 +60,19 @@
         <h3>{{ form.id ? '编辑库存' : '新增库存' }}</h3>
         <label>物料料号
           <input v-model="form.part_number" type="text" placeholder="如 M-2001"
-                 :disabled="!!form.id">
+                 :disabled="!!form.id || form.isAuto">
         </label>
-        <label>物料名称<input v-model="form.part_name" type="text" placeholder="如 电阻0603"></label>
-        <label>物料数量<input v-model.number="form.quantity" type="number" placeholder="如 1000"></label>
-        <label>库位<input v-model="form.location" type="text" placeholder="如 A-1-01"></label>
+        <label>物料名称
+          <input v-model="form.part_name" type="text" placeholder="如 电阻0603">
+        </label>
+        <label>物料数量
+          <input v-model.number="form.quantity" type="number" placeholder="如 1000"
+                 :disabled="form.isAuto">
+        </label>
+        <label>库位
+          <input v-model="form.location" type="text" placeholder="如 A-1-01"
+                 :disabled="form.isAuto">
+        </label>
         <p class="error">{{ formError }}</p>
         <div class="modal-actions">
           <button class="btn-cancel" @click="showModal = false">取消</button>
@@ -83,7 +102,7 @@ const fileInput = ref(null);
 const showModal = ref(false);
 const formError = ref('');
 const form = reactive({
-  id: '', part_number: '', part_name: '', quantity: '', location: ''
+  id: '', part_number: '', part_name: '', quantity: '', location: '', isAuto: false
 });
 
 const filteredDocs = computed(() => {
@@ -104,21 +123,22 @@ async function load() {
 
 onMounted(load);
 
-function applyFilters() { /* 输入即过滤，用 computed 已自动响应 */ }
+function applyFilters() { /* computed 自动响应 */ }
 
 function clearAll() {
   keyword.value = '';
   filterPart.value = null;
   router.replace({ name: 'inventory' });
 }
-
 function clearFilter() {
   filterPart.value = null;
   router.replace({ name: 'inventory' });
 }
 
 function openAdd() {
-  Object.assign(form, { id: '', part_number: '', part_name: '', quantity: '', location: '' });
+  Object.assign(form, {
+    id: '', part_number: '', part_name: '', quantity: '', location: '', isAuto: false
+  });
   formError.value = '';
   showModal.value = true;
 }
@@ -126,16 +146,22 @@ function openAdd() {
 async function openEdit(docId) {
   try {
     const doc = await getDoc(CONFIG.TABLES.inventory, docId);
+    const isAuto = !!doc.source_wo;
     Object.assign(form, {
       id: doc.$id,
       part_number: doc.part_number || '',
       part_name: doc.part_name || '',
       quantity: doc.quantity ?? '',
-      location: doc.location || ''
+      location: doc.location || '',
+      isAuto
     });
-    formError.value = '';
+    formError.value = isAuto
+      ? `该记录由工单 ${doc.source_wo} 超发自动生成，数量/库位/料号不可改。`
+      : '';
     showModal.value = true;
-  } catch (e) { alert('读取失败：' + e.message); }
+  } catch (e) {
+    alert('读取失败：' + e.message);
+  }
 }
 
 async function saveForm() {
@@ -155,13 +181,18 @@ async function saveForm() {
 
   try {
     if (form.id) {
-      await updateDoc(CONFIG.TABLES.inventory, form.id, { part_name, quantity, location });
+      // 超发记录只允许改名称
+      if (form.isAuto) {
+        await updateDoc(CONFIG.TABLES.inventory, form.id, { part_name });
+      } else {
+        await updateDoc(CONFIG.TABLES.inventory, form.id, { part_name, quantity, location });
+      }
     } else {
       const dup = await listDocs(CONFIG.TABLES.inventory, [
         Query.equal('location', location), Query.limit(1)
       ]);
       if (dup.documents.length && dup.documents[0].part_number !== part_number) {
-        formError.value = `库位 ${location} 已被物料 ${dup.documents[0].part_number} 占用，不能分配给新料号`;
+        formError.value = `库位 ${location} 已被物料 ${dup.documents[0].part_number} 占用`;
         return;
       }
       await createDoc(CONFIG.TABLES.inventory, { part_number, part_name, quantity, location });
@@ -174,104 +205,24 @@ async function saveForm() {
 }
 
 async function deleteInv(docId) {
-  if (!confirm('确认删除该库存记录？')) return;
   try {
+    const doc = await getDoc(CONFIG.TABLES.inventory, docId);
+    const isAuto = !!doc.source_wo;
+    const msg = isAuto
+      ? `该记录由工单 ${doc.source_wo} 超发自动生成。\n手动删除后，下次领料/工单变动可能重新生成。\n确认删除？`
+      : '确认删除该库存记录？';
+    const ok = window.$confirm
+      ? await window.$confirm({ title: '删除确认', message: msg })
+      : confirm(msg);
+    if (!ok) return;
+
     await deleteDoc(CONFIG.TABLES.inventory, docId);
     await load();
-  } catch (e) { alert('删除失败：' + e.message); }
+  } catch (e) {
+    alert('删除失败：' + e.message);
+  }
 }
 
 function triggerImport() { fileInput.value.click(); }
 
-async function handleImport(e) {
-  const f = e.target.files[0]; if (!f) return;
-  const { headers, rows } = await readCSV(f);
-
-  const required = ['part_number', 'part_name', 'quantity', 'location'];
-  const missing = required.filter(h => !headers.includes(h));
-  if (missing.length) {
-    alert('CSV 缺少必需列：' + missing.join(', '));
-    e.target.value = '';
-    return;
-  }
-
-  // CSV 内部库位冲突预检
-  const seen = {};
-  const conflicts = [];
-  for (let i = 0; i < rows.length; i++) {
-    const row = rows[i];
-    const data = {};
-    headers.forEach((h, idx) => {
-      const v = row[idx];
-      if (v === undefined || v === null || v === '') return;
-      if (h === 'quantity') {
-        const n = Number(v); if (!isNaN(n)) data[h] = n;
-      } else {
-        data[h] = String(v).trim();
-      }
-    });
-    if (!data.part_number || !data.part_name || !data.location) continue;
-    if (seen[data.location] && seen[data.location] !== data.part_number) {
-      conflicts.push(`第 ${i+2} 行：库位 ${data.location} 与料号 ${seen[data.location]} 冲突`);
-    } else {
-      seen[data.location] = data.part_number;
-    }
-  }
-  if (conflicts.length) {
-    alert('CSV 内部库位冲突：\n' + conflicts.slice(0, 10).join('\n') +
-          (conflicts.length > 10 ? `\n...还有 ${conflicts.length - 10} 条` : ''));
-    e.target.value = '';
-    return;
-  }
-
-  let ok = 0, fail = 0;
-  const errors = [];
-  for (let i = 0; i < rows.length; i++) {
-    const row = rows[i];
-    const data = {};
-    headers.forEach((h, idx) => {
-      const v = row[idx];
-      if (v === undefined || v === null || v === '') return;
-      if (h === 'quantity') {
-        const n = Number(v); if (isNaN(n)) return;
-        data[h] = n;
-      } else {
-        data[h] = String(v).trim();
-      }
-    });
-    if (!data.part_number || !data.part_name || !data.location) continue;
-
-    try {
-      const dup = await listDocs(CONFIG.TABLES.inventory, [
-        Query.equal('location', data.location), Query.limit(1)
-      ]);
-      if (dup.documents.length && dup.documents[0].part_number !== data.part_number) {
-        errors.push(`第 ${i+2} 行：库位 ${data.location} 已被 ${dup.documents[0].part_number} 占用`);
-        fail++;
-        continue;
-      }
-      await createDoc(CONFIG.TABLES.inventory, data);
-      ok++;
-    } catch (err) {
-      errors.push(`第 ${i+2} 行：${err.message}`);
-      fail++;
-    }
-  }
-
-  let msg = `导入完成：成功 ${ok} 条，失败 ${fail} 条`;
-  if (errors.length) {
-    msg += '\n\n失败明细（前 10 条）：\n' + errors.slice(0, 10).join('\n');
-    if (errors.length > 10) msg += `\n...还有 ${errors.length - 10} 条`;
-  }
-  alert(msg);
-
-  await load();
-  e.target.value = '';
-}
-
-async function handleExport() {
-  const headers = ['part_number', 'part_name', 'quantity', 'location'];
-  const rows = allDocs.value.map(d => headers.map(h => d[h] ?? ''));
-  exportCSV(headers, rows, 'inventory');
-}
-</script>
+async
