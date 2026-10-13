@@ -3,6 +3,9 @@
     <div class="toolbar">
       <button @click="openAdd">新增退料单</button>
       <button @click="triggerImport">导入CSV</button>
+      <button @click="handleExport" :disabled="selectedKeys.length === 0">
+        导出CSV{{ selectedKeys.length ? `（已选 ${selectedKeys.length}）` : '' }}
+      </button>
       <input type="file" accept=".csv" hidden ref="fileInput" @change="handleImport">
     </div>
 
@@ -13,6 +16,9 @@
     <table>
       <thead>
         <tr>
+          <th style="width:44px;">
+            <input type="checkbox" :checked="allSelected" :indeterminate="someSelected" @change="toggleSelectAll">
+          </th>
           <th style="width:60px;">序号</th>
           <th>退料单号</th>
           <th>工单号</th>
@@ -27,6 +33,7 @@
       </thead>
       <tbody>
         <tr v-for="(b, idx) in filteredBatches" :key="b.key">
+          <td><input type="checkbox" :value="b.key" v-model="selectedKeys"></td>
           <td>{{ idx + 1 }}</td>
           <td>
             <a class="part-link" href="#" @click.prevent="goDetail(b)">
@@ -46,7 +53,7 @@
           </td>
         </tr>
         <tr v-if="!filteredBatches.length">
-          <td colspan="10" style="text-align:center;color:#999;">暂无退料单</td>
+          <td colspan="11" style="text-align:center;color:#999;">暂无退料单</td>
         </tr>
       </tbody>
     </table>
@@ -55,7 +62,6 @@
     <div v-if="showAdd" class="modal-mask">
       <div class="modal-box" style="width:760px;max-width:94vw;">
         <h3>新增退料单</h3>
-
         <label>工单
           <select v-model="addForm.wo_number">
             <option value="">— 请选择工单 —</option>
@@ -64,12 +70,11 @@
             </option>
           </select>
         </label>
-
         <label>退料人
           <input v-model="addForm.operator" type="text" placeholder="默认当前登录用户">
         </label>
 
-        <div style="margin-top:8px;margin-bottom:8px;font-size:13px;color:#555;display:flex;justify-content:space-between;align-items:center;">
+        <div style="margin:8px 0;font-size:13px;color:#555;display:flex;justify-content:space-between;align-items:center;">
           <span>物料明细</span>
           <button class="btn-cancel" style="padding:4px 10px;" @click="addRow">+ 加一行</button>
         </div>
@@ -81,15 +86,15 @@
               <th>物料料号</th>
               <th>物料名称</th>
               <th style="width:120px;">数量</th>
-              <th style="width:80px;">操作</th>
+              <th style="width:70px;">操作</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="(r, i) in addForm.items" :key="i">
               <td>{{ i + 1 }}</td>
-              <td><input v-model="r.part_number" type="text" placeholder="如 M-2001" style="margin:0;"></td>
-              <td><input v-model="r.part_name" type="text" placeholder="如 贴片电阻" style="margin:0;"></td>
-              <td><input v-model.number="r.return_qty" type="number" placeholder="数量" style="margin:0;"></td>
+              <td><input v-model="r.part_number" type="text" style="margin:0;"></td>
+              <td><input v-model="r.part_name" type="text" style="margin:0;"></td>
+              <td><input v-model.number="r.return_qty" type="number" style="margin:0;"></td>
               <td>
                 <button class="btn-cancel" style="padding:4px 8px;"
                         @click="removeRow(i)" :disabled="addForm.items.length <= 1">删</button>
@@ -114,7 +119,7 @@ import { useRouter } from 'vue-router';
 import MainLayout from '../layouts/MainLayout.vue';
 import { CONFIG } from '../config.js';
 import { listDocs, createDoc, deleteDoc } from '../api/db.js';
-import { readCSV } from '../api/csv.js';
+import { exportCSV, readCSV } from '../api/csv.js';
 import { authStore } from '../stores/auth.js';
 import { Query } from 'appwrite';
 
@@ -124,6 +129,7 @@ const allReturns = ref([]);
 const woList = ref([]);
 const keyword = ref('');
 const fileInput = ref(null);
+const selectedKeys = ref([]);
 const showAdd = ref(false);
 const addError = ref('');
 
@@ -133,7 +139,6 @@ const addForm = reactive({
   items: [{ part_number: '', part_name: '', return_qty: '' }]
 });
 
-/** 生成退料单号 */
 function genReturnNo() {
   const d = new Date();
   const pad = n => String(n).padStart(2, '0');
@@ -142,7 +147,6 @@ function genReturnNo() {
   const rand = String(Math.floor(Math.random() * 1000)).padStart(3, '0');
   return `RT${date}${time}${rand}`;
 }
-
 function nowStr() {
   const d = new Date();
   const pad = n => String(n).padStart(2, '0');
@@ -195,6 +199,25 @@ const filteredBatches = computed(() => {
   );
 });
 
+const allSelected = computed(() =>
+  filteredBatches.value.length > 0 &&
+  filteredBatches.value.every(b => selectedKeys.value.includes(b.key))
+);
+const someSelected = computed(() =>
+  !allSelected.value &&
+  filteredBatches.value.some(b => selectedKeys.value.includes(b.key))
+);
+function toggleSelectAll(e) {
+  if (e.target.checked) {
+    const set = new Set(selectedKeys.value);
+    filteredBatches.value.forEach(b => set.add(b.key));
+    selectedKeys.value = Array.from(set);
+  } else {
+    const keys = new Set(filteredBatches.value.map(b => b.key));
+    selectedKeys.value = selectedKeys.value.filter(k => !keys.has(k));
+  }
+}
+
 async function loadAll() {
   const [retRes, woRes] = await Promise.all([
     listDocs(CONFIG.TABLES.return, [Query.limit(10000)]),
@@ -202,15 +225,14 @@ async function loadAll() {
   ]);
   allReturns.value = retRes.documents;
   woList.value = woRes.documents;
+  const validKeys = new Set(batches.value.map(b => b.key));
+  selectedKeys.value = selectedKeys.value.filter(k => validKeys.has(k));
 }
 
 onMounted(loadAll);
 
 function goDetail(b) {
-  if (!b.return_no) {
-    alert('该退料单没有单号（老数据），无法进入详情。');
-    return;
-  }
+  if (!b.return_no) { alert('该退料单没有单号（老数据），无法进入详情。'); return; }
   router.push({ name: 'return-detail', params: { returnNo: b.return_no } });
 }
 
@@ -222,9 +244,7 @@ function openAdd() {
   addError.value = '';
   showAdd.value = true;
 }
-function addRow() {
-  addForm.items.push({ part_number: '', part_name: '', return_qty: '' });
-}
+function addRow() { addForm.items.push({ part_number: '', part_name: '', return_qty: '' }); }
 function removeRow(i) {
   if (addForm.items.length <= 1) return;
   addForm.items.splice(i, 1);
@@ -254,10 +274,7 @@ async function saveAdd() {
         return_time: timeStr
       });
       ok++;
-    } catch (e) {
-      console.error('新增失败', r, e.message);
-      fail++;
-    }
+    } catch (e) { console.error(e); fail++; }
   }
 
   if (fail > 0) {
@@ -288,7 +305,7 @@ async function handleImport(e) {
   const timeStr = nowStr();
 
   const parsed = [];
-  const woNoMap = {};    // wo_number -> return_no
+  const woNoMap = {};
   const errors = [];
 
   for (let i = 0; i < rows.length; i++) {
@@ -300,27 +317,20 @@ async function handleImport(e) {
       if (h === 'return_qty') {
         const n = Number(v); if (isNaN(n)) return;
         data[h] = n;
-      } else {
-        data[h] = String(v).trim();
-      }
+      } else data[h] = String(v).trim();
     });
 
     if (!data.wo_number || !data.part_number) {
-      errors.push(`第 ${i+2} 行：工单号或物料料号为空`);
-      continue;
+      errors.push(`第 ${i+2} 行：工单号或物料料号为空`); continue;
     }
     if (!data.return_qty || data.return_qty <= 0) {
-      errors.push(`第 ${i+2} 行：退料数量不合法`);
-      continue;
+      errors.push(`第 ${i+2} 行：退料数量不合法`); continue;
     }
     if (!woMap.value[data.wo_number]) {
-      errors.push(`第 ${i+2} 行：工单号 ${data.wo_number} 不存在`);
-      continue;
+      errors.push(`第 ${i+2} 行：工单号 ${data.wo_number} 不存在`); continue;
     }
 
-    if (!woNoMap[data.wo_number]) {
-      woNoMap[data.wo_number] = genReturnNo();
-    }
+    if (!woNoMap[data.wo_number]) woNoMap[data.wo_number] = genReturnNo();
     data.return_no = woNoMap[data.wo_number];
     parsed.push({ rowIndex: i + 2, data });
   }
@@ -345,8 +355,7 @@ async function handleImport(e) {
       });
       ok++;
     } catch (err) {
-      errors.push(`第 ${p.rowIndex} 行：${err.message}`);
-      fail++;
+      errors.push(`第 ${p.rowIndex} 行：${err.message}`); fail++;
     }
   }
 
@@ -361,7 +370,6 @@ async function handleImport(e) {
   e.target.value = '';
 }
 
-/* 删除整张退料单 */
 async function deleteBatch(b) {
   const ok = window.$confirm
     ? await window.$confirm({
@@ -375,9 +383,17 @@ async function deleteBatch(b) {
     for (const it of b.items) {
       await deleteDoc(CONFIG.TABLES.return, it.$id);
     }
+    selectedKeys.value = selectedKeys.value.filter(k => k !== b.key);
     await loadAll();
-  } catch (e) {
-    alert('删除失败：' + e.message);
-  }
+  } catch (e) { alert('删除失败：' + e.message); }
+}
+
+async function handleExport() {
+  if (!selectedKeys.value.length) { alert('请先勾选要导出的退料单'); return; }
+  const selectedBatches = batches.value.filter(b => selectedKeys.value.includes(b.key));
+  const allItems = selectedBatches.flatMap(b => b.items);
+  const headers = ['return_no', 'wo_number', 'part_number', 'part_name', 'return_qty', 'operator', 'return_time'];
+  const rows = allItems.map(d => headers.map(h => d[h] ?? ''));
+  exportCSV(headers, rows, 'return_selected');
 }
 </script>
