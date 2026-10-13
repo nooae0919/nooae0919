@@ -1,7 +1,6 @@
 <template>
   <MainLayout>
     <div class="toolbar">
-      <button @click="openAdd">新建 BOM</button>
       <button @click="triggerImport">导入CSV</button>
       <button @click="handleExport">导出CSV</button>
       <input type="file" accept=".csv" hidden ref="fileInput" @change="handleImport">
@@ -42,23 +41,25 @@
           </td>
         </tr>
         <tr v-if="!filteredDocs.length">
-          <td colspan="7" style="text-align:center;color:#999;">暂无 BOM 数据</td>
+          <td colspan="7" style="text-align:center;color:#999;">
+            暂无 BOM 数据，请点击"导入CSV"上传
+          </td>
         </tr>
       </tbody>
     </table>
 
-    <!-- 新增 / 编辑弹窗 -->
+    <!-- 编辑弹窗（保留，用于修改成品料号/名称/版本/备注） -->
     <div v-if="showModal" class="modal-mask">
       <div class="modal-box">
-        <h3>{{ form.id ? '编辑 BOM' : '新建 BOM' }}</h3>
+        <h3>编辑 BOM</h3>
         <label>成品料号
-          <input v-model="form.product_number" type="text" placeholder="如 P-1001">
+          <input v-model="form.product_number" type="text">
         </label>
         <label>成品名称
-          <input v-model="form.product_name" type="text" placeholder="如 主控板成品">
+          <input v-model="form.product_name" type="text">
         </label>
         <label>版本号
-          <input v-model="form.version" type="text" placeholder="如 V1.0">
+          <input v-model="form.version" type="text">
         </label>
         <label>备注
           <input v-model="form.remark" type="text" placeholder="可选">
@@ -135,13 +136,6 @@ async function load() {
 
 onMounted(load);
 
-/* 新建 */
-function openAdd() {
-  Object.assign(form, { id: '', product_number: '', product_name: '', version: '', remark: '' });
-  formError.value = '';
-  showModal.value = true;
-}
-
 /* 编辑 */
 async function openEdit(docId) {
   const doc = await getDoc(CONFIG.TABLES.bom, docId);
@@ -156,42 +150,39 @@ async function openEdit(docId) {
   showModal.value = true;
 }
 
-/* 保存 */
+/* 保存（编辑 BOM 头 + 级联更新明细冗余字段） */
 async function saveForm() {
   if (!form.product_number || !form.version) {
     formError.value = '成品料号和版本号必填';
     return;
   }
   try {
-    const payload = {
+    await updateDoc(CONFIG.TABLES.bom, form.id, {
       product_number: form.product_number,
       product_name: form.product_name,
       version: form.version,
       remark: form.remark
-    };
-    if (form.id) {
-      await updateDoc(CONFIG.TABLES.bom, form.id, payload);
-      // ⭐ 同步更新该 BOM 下所有明细的冗余字段
-      try {
-        const itemRes = await listDocs(CONFIG.TABLES.bomItem, [
-          Query.equal('bom_id', form.id),
-          Query.limit(20000)
-        ]);
-        for (const it of itemRes.documents) {
-          await updateDoc(CONFIG.TABLES.bomItem, it.$id, {
-            product_number: form.product_number,
-            product_name: form.product_name,
-            version: form.version
-          });
-          await sleep(30);
-        }
-      } catch (e) {
-        console.error('同步明细冗余字段失败', e);
-        alert('BOM 头已更新，但明细冗余字段同步失败：' + (e.message || e));
+    });
+
+    // ⭐ 级联更新该 BOM 下所有明细的冗余字段
+    try {
+      const itemRes = await listDocs(CONFIG.TABLES.bomItem, [
+        Query.equal('bom_id', form.id),
+        Query.limit(20000)
+      ]);
+      for (const it of itemRes.documents) {
+        await updateDoc(CONFIG.TABLES.bomItem, it.$id, {
+          product_number: form.product_number,
+          product_name: form.product_name,
+          version: form.version
+        });
+        await sleep(30);
       }
-    } else {
-      await createDoc(CONFIG.TABLES.bom, payload);
+    } catch (e) {
+      console.error('同步明细冗余字段失败', e);
+      alert('BOM 头已更新，但明细冗余字段同步失败：' + (e.message || e));
     }
+
     showModal.value = false;
     await load();
   } catch (e) {
@@ -225,14 +216,13 @@ function goDetail(id) {
   router.push({ name: 'bom-detail', params: { id } });
 }
 
-/* ============ 导入 CSV（扁平模板） ============ */
+/* ============ 导入 CSV（自动解析 BOM） ============ */
 function triggerImport() { fileInput.value.click(); }
 
 async function handleImport(e) {
   const f = e.target.files[0]; if (!f) return;
   const { headers, rows } = await readCSV(f);
 
-  // 必需列（序号可省略）
   const required = ['成品料号', '成品名称', '版本号', '物料料号', '物料名称', '单板用量'];
   const missing = required.filter(h => !headers.includes(h));
   if (missing.length) {
@@ -242,13 +232,12 @@ async function handleImport(e) {
     return;
   }
 
-  // 索引定位
   const idx = {};
   headers.forEach((h, i) => { idx[h] = i; });
 
-  // 一次性拉取已有 BOM 头
+  // 拉已有 BOM 头
   const existingBomRes = await listDocs(CONFIG.TABLES.bom, [Query.limit(10000)]);
-  const bomKeyToId = {};   // "料号|名称|版本" -> bom_id
+  const bomKeyToId = {};
   existingBomRes.documents.forEach(b => {
     const key = `${b.product_number || ''}|${b.product_name || ''}|${b.version || ''}`;
     bomKeyToId[key] = b.$id;
@@ -257,7 +246,6 @@ async function handleImport(e) {
   let okBom = 0, okItem = 0, fail = 0;
   const errors = [];
 
-  // 逐行处理
   for (let i = 0; i < rows.length; i++) {
     const row = rows[i];
 
@@ -298,12 +286,12 @@ async function handleImport(e) {
         await sleep(30);
       }
 
-      // 2. 写明细（⭐ 冗余写入 BOM 头信息）
+      // 2. 写明细（冗余字段）
       await createDoc(CONFIG.TABLES.bomItem, {
         bom_id: bomId,
-        product_number,       // ⭐
-        product_name,         // ⭐
-        version,              // ⭐
+        product_number,
+        product_name,
+        version,
         part_number,
         part_name,
         qty_per_board: qty
@@ -330,14 +318,13 @@ async function handleImport(e) {
   e.target.value = '';
 }
 
-/* ============ 导出 CSV（扁平模板） ============ */
+/* ============ 导出 CSV ============ */
 async function handleExport() {
   const [bomRes, itemRes] = await Promise.all([
     listDocs(CONFIG.TABLES.bom, [Query.limit(10000)]),
     listDocs(CONFIG.TABLES.bomItem, [Query.limit(50000)])
   ]);
 
-  // 明细按 bom_id 分组
   const itemsByBom = {};
   itemRes.documents.forEach(it => {
     const id = it.bom_id; if (!id) return;
@@ -348,7 +335,6 @@ async function handleExport() {
   const headers = ['序号', '成品料号', '成品名称', '版本号', '物料料号', '物料名称', '单板用量'];
   const data = [];
 
-  // BOM 头排序
   const sortedBoms = bomRes.documents.slice().sort((a, b) =>
     (a.product_number || '').localeCompare(b.product_number || '') ||
     (a.version || '').localeCompare(b.version || '')
@@ -360,7 +346,6 @@ async function handleExport() {
       (x.part_number || '').localeCompare(y.part_number || '')
     );
     for (const it of items) {
-      // ⭐ 优先用明细里的冗余字段，兜底用 BOM 头的
       data.push([
         seq++,
         it.product_number || b.product_number || '',
