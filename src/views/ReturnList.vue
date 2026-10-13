@@ -1,16 +1,10 @@
 <template>
   <MainLayout>
-    <div class="toolbar">
-      <button @click="openAdd">新增退料单</button>
-      <button @click="triggerImport">导入CSV</button>
-      <button @click="handleExport" :disabled="selectedKeys.length === 0">
-        导出CSV{{ selectedKeys.length ? `（已选 ${selectedKeys.length}）` : '' }}
-      </button>
-      <input type="file" accept=".csv" hidden ref="fileInput" @change="handleImport">
-    </div>
-
-    <div class="search-bar">
-      <input v-model="keyword" type="text" placeholder="按退料单号 / 工单号 / 退料人搜索...">
+    <div class="page-header">
+      <div class="search-bar">
+        <input v-model="keyword" type="text" placeholder="按退料单号 / 工单号 / 退料人搜索...">
+      </div>
+      <ActionMenu :items="menuItems" />
     </div>
 
     <table>
@@ -58,7 +52,8 @@
       </tbody>
     </table>
 
-    <!-- 新增退料单弹窗 -->
+    <input type="file" accept=".csv" hidden ref="fileInput" @change="handleImport">
+
     <div v-if="showAdd" class="modal-mask">
       <div class="modal-box" style="width:760px;max-width:94vw;">
         <h3>新增退料单</h3>
@@ -73,12 +68,10 @@
         <label>退料人
           <input v-model="addForm.operator" type="text" placeholder="默认当前登录用户">
         </label>
-
         <div style="margin:8px 0;font-size:13px;color:#555;display:flex;justify-content:space-between;align-items:center;">
           <span>物料明细</span>
           <button class="btn-cancel" style="padding:4px 10px;" @click="addRow">+ 加一行</button>
         </div>
-
         <table style="margin-bottom:12px;">
           <thead>
             <tr>
@@ -102,7 +95,6 @@
             </tr>
           </tbody>
         </table>
-
         <p class="error">{{ addError }}</p>
         <div class="modal-actions">
           <button class="btn-cancel" @click="showAdd = false">取消</button>
@@ -117,6 +109,7 @@
 import { ref, onMounted, computed, reactive } from 'vue';
 import { useRouter } from 'vue-router';
 import MainLayout from '../layouts/MainLayout.vue';
+import ActionMenu from '../components/ActionMenu.vue';
 import { CONFIG } from '../config.js';
 import { listDocs, createDoc, deleteDoc } from '../api/db.js';
 import { exportCSV, readCSV } from '../api/csv.js';
@@ -138,6 +131,13 @@ const addForm = reactive({
   operator: '',
   items: [{ part_number: '', part_name: '', return_qty: '' }]
 });
+
+/* ⭐ 操作菜单 */
+const menuItems = computed(() => [
+  { label: '新增退料单', onClick: openAdd },
+  { label: '导入CSV', onClick: triggerImport },
+  { label: '导出CSV', onClick: handleExport, disabled: selectedKeys.value.length === 0 }
+]);
 
 function genReturnNo() {
   const d = new Date();
@@ -228,7 +228,6 @@ async function loadAll() {
   const validKeys = new Set(batches.value.map(b => b.key));
   selectedKeys.value = selectedKeys.value.filter(k => validKeys.has(k));
 }
-
 onMounted(loadAll);
 
 function goDetail(b) {
@@ -236,7 +235,6 @@ function goDetail(b) {
   router.push({ name: 'return-detail', params: { returnNo: b.return_no } });
 }
 
-/* 新增 */
 function openAdd() {
   addForm.wo_number = '';
   addForm.operator = authStore.user?.name || authStore.user?.email || '';
@@ -286,7 +284,6 @@ async function saveAdd() {
   await loadAll();
 }
 
-/* 导入 */
 function triggerImport() { fileInput.value.click(); }
 
 async function handleImport(e) {
@@ -380,9 +377,7 @@ async function deleteBatch(b) {
   if (!ok) return;
 
   try {
-    for (const it of b.items) {
-      await deleteDoc(CONFIG.TABLES.return, it.$id);
-    }
+    for (const it of b.items) await deleteDoc(CONFIG.TABLES.return, it.$id);
     selectedKeys.value = selectedKeys.value.filter(k => k !== b.key);
     await loadAll();
   } catch (e) { alert('删除失败：' + e.message); }
