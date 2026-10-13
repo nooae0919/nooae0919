@@ -39,7 +39,7 @@
           <td>{{ d.location || '' }}</td>
           <td>
             <span v-if="d.source_wo" style="color:#2563eb;font-size:13px;">
-            {{ d.source_wo }}
+              {{ woProductNameMap[d.source_wo] || d.source_wo }}
             </span>
             <span v-else style="color:#999;font-size:13px;">正常</span>
           </td>
@@ -101,18 +101,31 @@ const filterPart = ref(route.query.part || null);
 const fileInput = ref(null);
 const showModal = ref(false);
 const formError = ref('');
+const woProductNameMap = ref({});   // ⭐ wo_number -> 成品名称
+
 const form = reactive({
-  id: '', part_number: '', part_name: '', quantity: '', location: '', isAuto: false
+  id: '',
+  part_number: '',
+  part_name: '',
+  quantity: '',
+  location: '',
+  isAuto: false
 });
 
+/* 过滤后的列表 */
 const filteredDocs = computed(() => {
   let docs = allDocs.value;
-  if (filterPart.value) docs = docs.filter(d => d.part_number === filterPart.value);
+  if (filterPart.value) {
+    docs = docs.filter(d => d.part_number === filterPart.value);
+  }
   const kw = keyword.value.trim().toLowerCase();
-  if (kw) docs = docs.filter(d => (d.location || '').toLowerCase().includes(kw));
+  if (kw) {
+    docs = docs.filter(d => (d.location || '').toLowerCase().includes(kw));
+  }
   return docs;
 });
 
+/* 加载库存 */
 async function load() {
   const res = await listDocs(CONFIG.TABLES.inventory, [
     Query.limit(5000),
@@ -121,7 +134,21 @@ async function load() {
   allDocs.value = res.documents;
 }
 
-onMounted(load);
+/* ⭐ 加载工单号 -> 成品名称 映射 */
+async function loadWoMap() {
+  const res = await listDocs(CONFIG.TABLES.wo, [
+    Query.limit(5000)
+  ]);
+  const map = {};
+  res.documents.forEach(w => {
+    if (w.wo_number) map[w.wo_number] = w.product_name || '';
+  });
+  woProductNameMap.value = map;
+}
+
+onMounted(async () => {
+  await Promise.all([load(), loadWoMap()]);
+});
 
 function applyFilters() { /* computed 自动响应 */ }
 
@@ -130,11 +157,13 @@ function clearAll() {
   filterPart.value = null;
   router.replace({ name: 'inventory' });
 }
+
 function clearFilter() {
   filterPart.value = null;
   router.replace({ name: 'inventory' });
 }
 
+/* ============ 新增 / 编辑弹窗 ============ */
 function openAdd() {
   Object.assign(form, {
     id: '', part_number: '', part_name: '', quantity: '', location: '', isAuto: false
@@ -156,7 +185,7 @@ async function openEdit(docId) {
       isAuto
     });
     formError.value = isAuto
-      ? `该记录由工单 ${doc.source_wo} 超发自动生成，数量/库位/料号不可改。`
+      ? `该记录由 ${woProductNameMap.value[doc.source_wo] || doc.source_wo} 超发自动生成，数量/库位/料号不可改。`
       : '';
     showModal.value = true;
   } catch (e) {
@@ -181,15 +210,17 @@ async function saveForm() {
 
   try {
     if (form.id) {
-      // 超发记录只允许改名称
       if (form.isAuto) {
+        // 超发记录只允许改名称
         await updateDoc(CONFIG.TABLES.inventory, form.id, { part_name });
       } else {
         await updateDoc(CONFIG.TABLES.inventory, form.id, { part_name, quantity, location });
       }
     } else {
+      // 新增：检查库位是否已被其他料号占用
       const dup = await listDocs(CONFIG.TABLES.inventory, [
-        Query.equal('location', location), Query.limit(1)
+        Query.equal('location', location),
+        Query.limit(1)
       ]);
       if (dup.documents.length && dup.documents[0].part_number !== part_number) {
         formError.value = `库位 ${location} 已被物料 ${dup.documents[0].part_number} 占用`;
@@ -204,12 +235,16 @@ async function saveForm() {
   }
 }
 
+/* ============ 删除 ============ */
 async function deleteInv(docId) {
   try {
     const doc = await getDoc(CONFIG.TABLES.inventory, docId);
     const isAuto = !!doc.source_wo;
+    const name = isAuto
+      ? (woProductNameMap.value[doc.source_wo] || doc.source_wo)
+      : '';
     const msg = isAuto
-      ? `该记录由工单 ${doc.source_wo} 超发自动生成。\n手动删除后，下次领料/工单变动可能重新生成。\n确认删除？`
+      ? `该记录由「${name}」超发自动生成。\n手动删除后，下次领料/工单变动可能重新生成。\n确认删除？`
       : '确认删除该库存记录？';
     const ok = window.$confirm
       ? await window.$confirm({ title: '删除确认', message: msg })
@@ -223,6 +258,7 @@ async function deleteInv(docId) {
   }
 }
 
+/* ============ 导入 CSV ============ */
 function triggerImport() { fileInput.value.click(); }
 
 async function handleImport(e) {
@@ -285,7 +321,8 @@ async function handleImport(e) {
 
     try {
       const dup = await listDocs(CONFIG.TABLES.inventory, [
-        Query.equal('location', data.location), Query.limit(1)
+        Query.equal('location', data.location),
+        Query.limit(1)
       ]);
       if (dup.documents.length && dup.documents[0].part_number !== data.part_number) {
         errors.push(`第 ${i+2} 行：库位 ${data.location} 已被 ${dup.documents[0].part_number} 占用`);
@@ -311,6 +348,7 @@ async function handleImport(e) {
   e.target.value = '';
 }
 
+/* ============ 导出 CSV ============ */
 async function handleExport() {
   const headers = ['part_number', 'part_name', 'quantity', 'location', 'source_wo'];
   const rows = allDocs.value.map(d => headers.map(h => d[h] ?? ''));
