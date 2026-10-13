@@ -3,6 +3,9 @@
     <div class="toolbar">
       <button @click="openAdd">新增入库单</button>
       <button @click="triggerImport">导入CSV</button>
+      <button @click="handleExport" :disabled="selectedKeys.length === 0">
+        导出CSV{{ selectedKeys.length ? `（已选 ${selectedKeys.length}）` : '' }}
+      </button>
       <input type="file" accept=".csv" hidden ref="fileInput" @change="handleImport">
     </div>
 
@@ -13,6 +16,9 @@
     <table>
       <thead>
         <tr>
+          <th style="width:44px;">
+            <input type="checkbox" :checked="allSelected" :indeterminate="someSelected" @change="toggleSelectAll">
+          </th>
           <th style="width:60px;">序号</th>
           <th>入库单号</th>
           <th>工单号</th>
@@ -27,6 +33,7 @@
       </thead>
       <tbody>
         <tr v-for="(b, idx) in filteredBatches" :key="b.key">
+          <td><input type="checkbox" :value="b.key" v-model="selectedKeys"></td>
           <td>{{ idx + 1 }}</td>
           <td>
             <a class="part-link" href="#" @click.prevent="goDetail(b)">
@@ -46,7 +53,7 @@
           </td>
         </tr>
         <tr v-if="!filteredBatches.length">
-          <td colspan="10" style="text-align:center;color:#999;">暂无入库单</td>
+          <td colspan="11" style="text-align:center;color:#999;">暂无入库单</td>
         </tr>
       </tbody>
     </table>
@@ -55,7 +62,6 @@
     <div v-if="showAdd" class="modal-mask">
       <div class="modal-box" style="width:760px;max-width:94vw;">
         <h3>新增入库单</h3>
-
         <label>工单
           <select v-model="addForm.wo_number" @change="onWoChange">
             <option value="">— 请选择工单 —</option>
@@ -64,12 +70,11 @@
             </option>
           </select>
         </label>
-
         <label>入库人
           <input v-model="addForm.operator" type="text" placeholder="默认当前登录用户">
         </label>
 
-        <div style="margin-top:8px;margin-bottom:8px;font-size:13px;color:#555;display:flex;justify-content:space-between;align-items:center;">
+        <div style="margin:8px 0;font-size:13px;color:#555;display:flex;justify-content:space-between;align-items:center;">
           <span>成品明细</span>
           <button class="btn-cancel" style="padding:4px 10px;" @click="addRow">+ 加一行</button>
         </div>
@@ -81,15 +86,15 @@
               <th>成品料号</th>
               <th>成品名称</th>
               <th style="width:120px;">数量</th>
-              <th style="width:80px;">操作</th>
+              <th style="width:70px;">操作</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="(r, i) in addForm.items" :key="i">
               <td>{{ i + 1 }}</td>
-              <td><input v-model="r.product_number" type="text" placeholder="如 P-1001" style="margin:0;"></td>
-              <td><input v-model="r.product_name" type="text" placeholder="如 主控板" style="margin:0;"></td>
-              <td><input v-model.number="r.finish_qty" type="number" placeholder="数量" style="margin:0;"></td>
+              <td><input v-model="r.product_number" type="text" style="margin:0;"></td>
+              <td><input v-model="r.product_name" type="text" style="margin:0;"></td>
+              <td><input v-model.number="r.finish_qty" type="number" style="margin:0;"></td>
               <td>
                 <button class="btn-cancel" style="padding:4px 8px;"
                         @click="removeRow(i)" :disabled="addForm.items.length <= 1">删</button>
@@ -114,7 +119,7 @@ import { useRouter } from 'vue-router';
 import MainLayout from '../layouts/MainLayout.vue';
 import { CONFIG } from '../config.js';
 import { listDocs, createDoc, updateDoc, deleteDoc } from '../api/db.js';
-import { readCSV } from '../api/csv.js';
+import { exportCSV, readCSV } from '../api/csv.js';
 import { authStore } from '../stores/auth.js';
 import { Query } from 'appwrite';
 
@@ -124,6 +129,7 @@ const allFinishes = ref([]);
 const woList = ref([]);
 const keyword = ref('');
 const fileInput = ref(null);
+const selectedKeys = ref([]);
 const showAdd = ref(false);
 const addError = ref('');
 
@@ -141,7 +147,6 @@ function genFinishNo() {
   const rand = String(Math.floor(Math.random() * 1000)).padStart(3, '0');
   return `FG${date}${time}${rand}`;
 }
-
 function nowStr() {
   const d = new Date();
   const pad = n => String(n).padStart(2, '0');
@@ -194,6 +199,25 @@ const filteredBatches = computed(() => {
   );
 });
 
+const allSelected = computed(() =>
+  filteredBatches.value.length > 0 &&
+  filteredBatches.value.every(b => selectedKeys.value.includes(b.key))
+);
+const someSelected = computed(() =>
+  !allSelected.value &&
+  filteredBatches.value.some(b => selectedKeys.value.includes(b.key))
+);
+function toggleSelectAll(e) {
+  if (e.target.checked) {
+    const set = new Set(selectedKeys.value);
+    filteredBatches.value.forEach(b => set.add(b.key));
+    selectedKeys.value = Array.from(set);
+  } else {
+    const keys = new Set(filteredBatches.value.map(b => b.key));
+    selectedKeys.value = selectedKeys.value.filter(k => !keys.has(k));
+  }
+}
+
 async function loadAll() {
   const [finRes, woRes] = await Promise.all([
     listDocs(CONFIG.TABLES.finish, [Query.limit(10000)]),
@@ -201,29 +225,27 @@ async function loadAll() {
   ]);
   allFinishes.value = finRes.documents;
   woList.value = woRes.documents;
+  const validKeys = new Set(batches.value.map(b => b.key));
+  selectedKeys.value = selectedKeys.value.filter(k => validKeys.has(k));
 }
 
 onMounted(loadAll);
 
 function goDetail(b) {
-  if (!b.finish_no) {
-    alert('该入库单没有单号（老数据），无法进入详情。');
-    return;
-  }
+  if (!b.finish_no) { alert('该入库单没有单号（老数据），无法进入详情。'); return; }
   router.push({ name: 'finish-detail', params: { finishNo: b.finish_no } });
 }
 
-/* 选择工单后，自动带出成品料号/名称作为默认 */
 function onWoChange() {
   const w = woMap.value[addForm.wo_number];
   if (!w) return;
-  // 若只有一行，自动填充
   if (addForm.items.length === 1) {
     addForm.items[0].product_number = w.product_number || '';
     addForm.items[0].product_name = w.product_name || '';
   }
 }
 
+/* 新增 */
 function openAdd() {
   addForm.wo_number = '';
   addForm.operator = authStore.user?.name || authStore.user?.email || '';
@@ -231,23 +253,17 @@ function openAdd() {
   addError.value = '';
   showAdd.value = true;
 }
-function addRow() {
-  addForm.items.push({ product_number: '', product_name: '', finish_qty: '' });
-}
+function addRow() { addForm.items.push({ product_number: '', product_name: '', finish_qty: '' }); }
 function removeRow(i) {
   if (addForm.items.length <= 1) return;
   addForm.items.splice(i, 1);
 }
 
-/* 判断工单是否已完成 */
-async function maybeCloseWo(woNumber, addedQty) {
+async function maybeCloseWo(woNumber) {
   const w = woMap.value[woNumber];
   if (!w || w.status === 'completed') return;
-
-  // 该工单已入库总量
   const res = await listDocs(CONFIG.TABLES.finish, [
-    Query.equal('wo_number', woNumber),
-    Query.limit(10000)
+    Query.equal('wo_number', woNumber), Query.limit(10000)
   ]);
   const total = res.documents.reduce((s, d) => s + (Number(d.finish_qty) || 0), 0);
   if (total >= Number(w.plan_qty || 0)) {
@@ -279,10 +295,7 @@ async function saveAdd() {
         finished_at: timeStr
       });
       ok++;
-    } catch (e) {
-      console.error('新增失败', r, e.message);
-      fail++;
-    }
+    } catch (e) { console.error(e); fail++; }
   }
 
   if (fail > 0) {
@@ -291,11 +304,7 @@ async function saveAdd() {
     return;
   }
 
-  // 关结工单判断
-  try {
-    const total = valid.reduce((s, r) => s + Number(r.finish_qty), 0);
-    await maybeCloseWo(addForm.wo_number, total);
-  } catch (e) { /* ignore */ }
+  try { await maybeCloseWo(addForm.wo_number); } catch (e) { /* ignore */ }
 
   showAdd.value = false;
   await loadAll();
@@ -333,27 +342,20 @@ async function handleImport(e) {
       if (h === 'finish_qty') {
         const n = Number(v); if (isNaN(n)) return;
         data[h] = n;
-      } else {
-        data[h] = String(v).trim();
-      }
+      } else data[h] = String(v).trim();
     });
 
     if (!data.wo_number || !data.product_number) {
-      errors.push(`第 ${i+2} 行：工单号或成品料号为空`);
-      continue;
+      errors.push(`第 ${i+2} 行：工单号或成品料号为空`); continue;
     }
     if (!data.finish_qty || data.finish_qty <= 0) {
-      errors.push(`第 ${i+2} 行：入库数量不合法`);
-      continue;
+      errors.push(`第 ${i+2} 行：入库数量不合法`); continue;
     }
     if (!woMap.value[data.wo_number]) {
-      errors.push(`第 ${i+2} 行：工单号 ${data.wo_number} 不存在`);
-      continue;
+      errors.push(`第 ${i+2} 行：工单号 ${data.wo_number} 不存在`); continue;
     }
 
-    if (!woNoMap[data.wo_number]) {
-      woNoMap[data.wo_number] = genFinishNo();
-    }
+    if (!woNoMap[data.wo_number]) woNoMap[data.wo_number] = genFinishNo();
     data.finish_no = woNoMap[data.wo_number];
     touchedWos.add(data.wo_number);
     parsed.push({ rowIndex: i + 2, data });
@@ -379,12 +381,10 @@ async function handleImport(e) {
       });
       ok++;
     } catch (err) {
-      errors.push(`第 ${p.rowIndex} 行：${err.message}`);
-      fail++;
+      errors.push(`第 ${p.rowIndex} 行：${err.message}`); fail++;
     }
   }
 
-  // 关结工单判断
   for (const woNum of touchedWos) {
     try { await maybeCloseWo(woNum); } catch (e) { /* ignore */ }
   }
@@ -400,7 +400,6 @@ async function handleImport(e) {
   e.target.value = '';
 }
 
-/* 删除整张入库单 */
 async function deleteBatch(b) {
   const ok = window.$confirm
     ? await window.$confirm({
@@ -414,25 +413,27 @@ async function deleteBatch(b) {
     for (const it of b.items) {
       await deleteDoc(CONFIG.TABLES.finish, it.$id);
     }
-    // 删除后可能工单需要回退状态
-    await maybeReopenWo(b.wo_number);
+    const w = woMap.value[b.wo_number];
+    if (w && w.status === 'completed') {
+      const res = await listDocs(CONFIG.TABLES.finish, [
+        Query.equal('wo_number', b.wo_number), Query.limit(10000)
+      ]);
+      const total = res.documents.reduce((s, d) => s + (Number(d.finish_qty) || 0), 0);
+      if (total < Number(w.plan_qty || 0)) {
+        await updateDoc(CONFIG.TABLES.wo, w.$id, { status: 'in_progress' });
+      }
+    }
+    selectedKeys.value = selectedKeys.value.filter(k => k !== b.key);
     await loadAll();
-  } catch (e) {
-    alert('删除失败：' + e.message);
-  }
+  } catch (e) { alert('删除失败：' + e.message); }
 }
 
-/* 删除后如果工单已完成但总数不足，回退为生产中 */
-async function maybeReopenWo(woNumber) {
-  const w = woMap.value[woNumber];
-  if (!w || w.status !== 'completed') return;
-  const res = await listDocs(CONFIG.TABLES.finish, [
-    Query.equal('wo_number', woNumber),
-    Query.limit(10000)
-  ]);
-  const total = res.documents.reduce((s, d) => s + (Number(d.finish_qty) || 0), 0);
-  if (total < Number(w.plan_qty || 0)) {
-    await updateDoc(CONFIG.TABLES.wo, w.$id, { status: 'in_progress' });
-  }
+async function handleExport() {
+  if (!selectedKeys.value.length) { alert('请先勾选要导出的入库单'); return; }
+  const selectedBatches = batches.value.filter(b => selectedKeys.value.includes(b.key));
+  const allItems = selectedBatches.flatMap(b => b.items);
+  const headers = ['finish_no', 'wo_number', 'product_number', 'product_name', 'finish_qty', 'operator', 'finished_at'];
+  const rows = allItems.map(d => headers.map(h => d[h] ?? ''));
+  exportCSV(headers, rows, 'finish_selected');
 }
 </script>
