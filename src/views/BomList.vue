@@ -82,6 +82,7 @@ import { listDocs, getDoc, createDoc, updateDoc, deleteDoc } from '../api/db.js'
 import { exportCSV, readCSV } from '../api/csv.js';
 import { Query } from 'appwrite';
 
+const sleep = ms => new Promise(r => setTimeout(r, ms));
 const router = useRouter();
 
 const docs = ref([]);
@@ -123,7 +124,6 @@ async function load() {
   ]);
   docs.value = res.documents;
 
-  // 统计每个 BOM 的明细条目数
   const itemRes = await listDocs(CONFIG.TABLES.bomItem, [Query.limit(10000)]);
   const map = {};
   itemRes.documents.forEach(it => {
@@ -137,9 +137,7 @@ onMounted(load);
 
 /* 新建 */
 function openAdd() {
-  Object.assign(form, {
-    id: '', product_number: '', product_name: '', version: '', remark: ''
-  });
+  Object.assign(form, { id: '', product_number: '', product_name: '', version: '', remark: '' });
   formError.value = '';
   showModal.value = true;
 }
@@ -209,48 +207,161 @@ function goDetail(id) {
   router.push({ name: 'bom-detail', params: { id } });
 }
 
-/* 导入 CSV（BOM 头） */
+/* ============ 导入 CSV（扁平模板） ============ */
 function triggerImport() { fileInput.value.click(); }
 
 async function handleImport(e) {
   const f = e.target.files[0]; if (!f) return;
   const { headers, rows } = await readCSV(f);
 
-  const required = ['product_number', 'product_name', 'version'];
+  // 必需列（序号可以省略；其它必填）
+  const required = ['成品料号', '成品名称', '版本号', '物料料号', '物料名称', '单板用量'];
   const missing = required.filter(h => !headers.includes(h));
   if (missing.length) {
-    alert('CSV 缺少必需列：' + missing.join(', '));
+    alert('CSV 缺少必需列：' + missing.join('、') +
+          '\n\n模板列应为：\n序号,成品料号,成品名称,版本号,物料料号,物料名称,单板用量');
     e.target.value = '';
     return;
   }
 
-  let ok = 0, fail = 0;
-  for (const row of rows) {
-    const data = {};
-    headers.forEach((h, i) => {
-      const v = row[i];
-      if (v === undefined || v === null || v === '') return;
-      data[h] = String(v).trim();
-    });
-    if (!data.product_number || !data.version) continue;
+  // 索引定位
+  const idx = {};
+  headers.forEach((h, i) => { idx[h] = i; });
+
+  // 一次性拉取已有 BOM 头，避免循环里重复查询
+  const existingBomRes = await listDocs(CONFIG.TABLES.bom, [Query.limit(10000)]);
+  const bomKeyToId = {};   // "料号|名称|版本" -> bom_id
+  existingBomRes.documents.forEach(b => {
+    const key = `${b.product_number || ''}|${b.product_name || ''}|${b.version || ''}`;
+    bomKeyToId[key] = b.$id;
+  });
+
+  let okBom = 0, okItem = 0, fail = 0;
+  const errors = [];
+  const touchedBomIds = new Set();
+
+  // 逐行处理
+  for (let i = 0; i < rows.length; i++) {
+    const row = rows[i];
+
+    const product_number = String(row[idx['成品料号']] || '').trim();
+    const product_name = String(row[idx['成品名称']] || '').trim();
+    const version = String(row[idx['版本号']] || '').trim();
+    const part_number = String(row[idx['物料料号']] || '').trim();
+    const part_name = String(row[idx['物料名称']] || '').trim();
+    const qtyRaw = row[idx['单板用量']];
+
+    if (!product_number || !version || !part_number) {
+      errors.push(`第 ${i + 2} 行：成品料号 / 版本号 / 物料料号 不能为空`);
+      fail++;
+      continue;
+    }
+
+    const qty = Number(qtyRaw);
+    if (isNaN(qty)) {
+      errors.push(`第 ${i + 2} 行：单板用量不是数字（${qtyRaw}）`);
+      fail++;
+      continue;
+    }
+
+    const bomKey = `${product_number}|${product_name}|${version}`;
 
     try {
-      await createDoc(CONFIG.TABLES.bom, data);
-      ok++;
+      // 1. 找/建 BOM 头
+      let bomId = bomKeyToId[bomKey];
+      if (!bomId) {
+        const newBom = await createDoc(CONFIG.TABLES.bom, {
+          product_number,
+          product_name,
+          version
+        });
+        bomId = newBom.$id;
+        bomKeyToId[bomKey] = bomId;
+        okBom++;
+        await sleep(30);
+      }
+
+      // 2. 写明细
+      await createDoc(CONFIG.TABLES.bomItem, {
+        bom_id: bomId,
+        part_number,
+        part_name,
+        qty_per_board: qty
+      });
+      okItem++;
+      touchedBomIds.add(bomId);
+      await sleep(30);
     } catch (err) {
-      console.error('导入失败', data, err.message);
+      errors.push(`第 ${i + 2} 行：${err.message}`);
       fail++;
     }
   }
-  alert(`导入完成：成功 ${ok} 条，失败 ${fail} 条`);
+
+  let msg = `导入完成：\n` +
+            `- 新建 BOM 头：${okBom} 张\n` +
+            `- 写入 BOM 明细：${okItem} 条\n` +
+            `- 失败：${fail} 条`;
+  if (errors.length) {
+    msg += '\n\n失败明细（前 10 条）：\n' + errors.slice(0, 10).join('\n');
+    if (errors.length > 10) msg += `\n...还有 ${errors.length - 10} 条`;
+  }
+  alert(msg);
+
   await load();
   e.target.value = '';
 }
 
-/* 导出 CSV */
+/* ============ 导出 CSV（扁平模板） ============ */
 async function handleExport() {
-  const headers = ['product_number', 'product_name', 'version', 'remark'];
-  const rows = docs.value.map(d => headers.map(h => d[h] ?? ''));
-  exportCSV(headers, rows, 'bom_list');
+  // 拉全部 BOM + 明细
+  const [bomRes, itemRes] = await Promise.all([
+    listDocs(CONFIG.TABLES.bom, [Query.limit(10000)]),
+    listDocs(CONFIG.TABLES.bomItem, [Query.limit(50000)])
+  ]);
+
+  const bomMap = {};
+  bomRes.documents.forEach(b => { bomMap[b.$id] = b; });
+
+  // 明细按 bom_id 分组
+  const itemsByBom = {};
+  itemRes.documents.forEach(it => {
+    const id = it.bom_id; if (!id) return;
+    if (!itemsByBom[id]) itemsByBom[id] = [];
+    itemsByBom[id].push(it);
+  });
+
+  const headers = ['序号', '成品料号', '成品名称', '版本号', '物料料号', '物料名称', '单板用量'];
+  const data = [];
+
+  // 遍历 BOM（按成品料号排序），每组内部按物料料号排序
+  const sortedBoms = bomRes.documents.slice().sort((a, b) =>
+    (a.product_number || '').localeCompare(b.product_number || '') ||
+    (a.version || '').localeCompare(b.version || '')
+  );
+
+  let seq = 1;
+  for (const b of sortedBoms) {
+    const items = (itemsByBom[b.$id] || []).slice().sort((x, y) =>
+      (x.part_number || '').localeCompare(y.part_number || '')
+    );
+    for (const it of items) {
+      data.push([
+        seq++,
+        b.product_number || '',
+        b.product_name || '',
+        b.version || '',
+        it.part_number || '',
+        it.part_name || '',
+        it.qty_per_board ?? ''
+      ]);
+    }
+  }
+
+  if (!data.length) {
+    alert('暂无 BOM 明细可导出');
+    return;
+  }
+
+  exportCSV(headers, data, 'bom_list');
 }
 </script>
