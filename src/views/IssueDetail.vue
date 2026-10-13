@@ -55,6 +55,7 @@ import MainLayout from '../layouts/MainLayout.vue';
 import { CONFIG } from '../config.js';
 import { listDocs, deleteDoc } from '../api/db.js';
 import { exportCSV } from '../api/csv.js';
+import { syncExcessToInventory } from '../api/kitting.js';
 import { Query } from 'appwrite';
 
 const props = defineProps({ issueNo: String });
@@ -75,7 +76,6 @@ async function load() {
   }
   const first = items[0];
 
-  // 补工单信息
   let product_number = '', product_name = '';
   if (first.wo_number) {
     const woRes = await listDocs(CONFIG.TABLES.wo, [
@@ -112,8 +112,20 @@ async function deleteItem(itemId) {
     ? await window.$confirm({ title: '删除确认', message: '确认删除该条明细？' })
     : confirm('确认删除该条明细？');
   if (!ok) return;
+
+  const item = batch.value?.items.find(i => i.$id === itemId);
+  const pn = item?.part_number;
+  const woNum = batch.value?.wo_number;
+
   try {
     await deleteDoc(CONFIG.TABLES.issue, itemId);
+
+    // ⭐ 只同步被删料号
+    if (woNum && pn) {
+      try {
+        await syncExcessToInventory(woNum, [pn]);
+      } catch (e) { console.error(e); }
+    }
     await load();
   } catch (e) {
     alert('删除失败：' + e.message);
