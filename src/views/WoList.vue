@@ -12,8 +12,8 @@
       <select v-model="lineFilter"
               style="padding:8px 12px;border:1px solid #d1d5db;border-radius:6px;font-size:14px;">
         <option value="">全部线体</option>
-        <option value="1线">1线</option>
-        <option value="2线">2线</option>
+        <option value="A线">A线</option>
+        <option value="B线">B线</option>
       </select>
     </div>
 
@@ -66,8 +66,8 @@
         <label>线体
           <select v-model="form.line">
             <option value="">— 请选择 —</option>
-            <option value="1线">1线</option>
-            <option value="2线">2线</option>
+            <option value="A线">A线</option>
+            <option value="B线">B线</option>
           </select>
         </label>
 
@@ -126,8 +126,8 @@
         <label>线体
           <select v-model="editForm.line">
             <option value="">— 请选择 —</option>
-            <option value="1线">1线</option>
-            <option value="2线">2线</option>
+            <option value="A线">A线</option>
+            <option value="B线">B线</option>
           </select>
         </label>
 
@@ -187,6 +187,7 @@ import MainLayout from '../layouts/MainLayout.vue';
 import { CONFIG } from '../config.js';
 import { listDocs, getDoc, createDoc, updateDoc } from '../api/db.js';
 import { exportCSV, readCSV } from '../api/csv.js';
+import { syncExcessToInventory } from '../api/kitting.js';
 import { Query } from 'appwrite';
 
 const router = useRouter();
@@ -194,9 +195,9 @@ const router = useRouter();
 const WO_HEADERS = ['wo_number', 'line', 'product_number', 'product_name', 'plan_qty', 'produce_date', 'status'];
 
 const docs = ref([]);
-const bomList = ref([]);          // 所有 BOM（供下拉选择）
-const bomMap = ref({});           // bom_id -> bom 文档
-const bomVersionMap = ref({});    // bom_id -> version
+const bomList = ref([]);
+const bomMap = ref({});
+const bomVersionMap = ref({});
 const keyword = ref('');
 const lineFilter = ref('');
 const fileInput = ref(null);
@@ -221,7 +222,7 @@ function statusText(s) {
   return s === 'completed' ? '已完成' : s === 'in_progress' ? '生产中' : '待生产';
 }
 
-/* ============ 加载 BOM 下拉数据 ============ */
+/* 加载 BOM 下拉数据 */
 async function loadBoms() {
   const res = await listDocs(CONFIG.TABLES.bom, [
     Query.limit(5000),
@@ -237,7 +238,7 @@ async function loadBoms() {
   bomVersionMap.value = vmap;
 }
 
-/* ============ 加载工单 ============ */
+/* 加载工单 */
 async function load() {
   const res = await listDocs(CONFIG.TABLES.wo, [Query.limit(5000)]);
   docs.value = res.documents;
@@ -248,7 +249,7 @@ onMounted(async () => {
   await load();
 });
 
-/* ============ 搜索 / 线体筛选 ============ */
+/* 搜索 / 线体筛选 */
 const filteredDocs = computed(() => {
   let list = docs.value;
   if (lineFilter.value) {
@@ -265,7 +266,7 @@ const filteredDocs = computed(() => {
   return list;
 });
 
-/* ============ 选择 BOM 后自动填充成品信息 ============ */
+/* 选择 BOM 后自动填充成品信息 */
 function onBomChange(which) {
   const target = which === 'add' ? form : editForm;
   const b = bomMap.value[target.bom_id];
@@ -307,6 +308,14 @@ async function saveAdd() {
       produce_date: form.produce_date,
       status: form.status
     });
+
+    // ⭐ 同步超发库存（新增工单：全量，通常状态非生产中时无变化）
+    try {
+      await syncExcessToInventory(form.wo_number);
+    } catch (e) {
+      console.error('同步库存失败', e);
+    }
+
     showAdd.value = false;
     await load();
   } catch (e) {
@@ -354,6 +363,7 @@ async function saveEdit() {
       setTimeout(() => { showEdit.value = false; load(); }, 1200);
       return;
     }
+
     await updateDoc(CONFIG.TABLES.wo, editForm.$id, {
       bom_id: editForm.bom_id,
       line: editForm.line,
@@ -363,6 +373,14 @@ async function saveEdit() {
       produce_date: editForm.produce_date,
       status: editForm.status
     });
+
+    // ⭐ 同步超发库存（编辑工单：状态/线体/计划数量可能变化，全量同步）
+    try {
+      await syncExcessToInventory(editForm.wo_number);
+    } catch (e) {
+      console.error('同步库存失败', e);
+    }
+
     showEdit.value = false;
     await load();
   } catch (e) {
@@ -386,12 +404,12 @@ async function handleImport(e) {
   const f = e.target.files[0]; if (!f) return;
   const { headers, rows } = await readCSV(f);
 
-  // 建 product_number -> bom_id 映射
   const pnToBom = {};
   bomList.value.forEach(b => { pnToBom[b.product_number] = b.$id; });
 
   let ok = 0, fail = 0;
   const errors = [];
+  const touchedWos = new Set();
 
   for (let i = 0; i < rows.length; i++) {
     const row = rows[i];
@@ -407,7 +425,6 @@ async function handleImport(e) {
       }
     });
 
-    // 自动匹配 bom_id
     if (!data.bom_id && data.product_number) {
       const bid = pnToBom[data.product_number];
       if (bid) data.bom_id = bid;
@@ -425,10 +442,20 @@ async function handleImport(e) {
 
     try {
       await createDoc(CONFIG.TABLES.wo, data);
+      touchedWos.add(data.wo_number);
       ok++;
     } catch (err) {
       errors.push(`第 ${i+2} 行：${err.message}`);
       fail++;
+    }
+  }
+
+  // ⭐ 同步本次涉及的工单（全量）
+  for (const woNum of touchedWos) {
+    try {
+      await syncExcessToInventory(woNum);
+    } catch (err) {
+      console.error('同步库存失败', woNum, err);
     }
   }
 
