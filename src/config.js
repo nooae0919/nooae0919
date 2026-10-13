@@ -9,6 +9,7 @@ export const CONFIG = {
     finish: '6aca49a6001fafc443a6',
     inventory: '6acafa1c002842294f67',
     bom: '6acb5b010038c2f875ef',
-    bomItem: '6acb5b5b000f35cd0447'
+    bomItem: '6acb5b5b000f35cd0447',
+    woBom:'6acdbfc80011ffd64b9c'
   }
 };
