@@ -4,7 +4,7 @@ import { Query } from 'appwrite';
 
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
-/** 计算某个工单的超发明细 */
+/** 计算某个工单的超发明细（基于 wo_bom 快照） */
 export async function computeExcess(woNumber) {
   const woRes = await listDocs(CONFIG.TABLES.wo, [
     Query.equal('wo_number', woNumber),
@@ -12,10 +12,10 @@ export async function computeExcess(woNumber) {
   ]);
   if (!woRes.documents.length) return null;
   const wo = woRes.documents[0];
-  if (!wo.bom_id) return null;
 
-  const bomItemRes = await listDocs(CONFIG.TABLES.bomItem, [
-    Query.equal('bom_id', wo.bom_id),
+  // ⭐ 用料明细从 wo_bom 快照拿，不再查 bom_item
+  const snapRes = await listDocs(CONFIG.TABLES.woBom, [
+    Query.equal('wo_number', woNumber),
     Query.limit(20000)
   ]);
 
@@ -30,7 +30,7 @@ export async function computeExcess(woNumber) {
   });
 
   const planQty = Number(wo.plan_qty) || 0;
-  const rows = bomItemRes.documents.map(it => {
+  const rows = snapRes.documents.map(it => {
     const per = Number(it.qty_per_board) || 0;
     const required = Math.ceil(per * planQty);
     const issued = issueMap[it.part_number] || 0;
@@ -48,27 +48,16 @@ export async function computeExcess(woNumber) {
   return { wo, rows };
 }
 
-/**
- * 同步某个工单的超发到库存
- * @param {string} woNumber 工单号
- * @param {string[]} [partNumbers] 可选，只同步这些料号；不传则全量
- * 规则：
- *  - 工单状态 != in_progress  → 删除该工单贡献的所有超发库存
- *  - 工单状态 == in_progress  → 每个料号：
- *      超发 > 0  → 新增/更新一条 source_wo=工单号、location=线体 的记录
- *      超发 <= 0 → 删除该料号的超发库存
- */
+/** 同步超发到库存 */
 export async function syncExcessToInventory(woNumber, partNumbers) {
   const computed = await computeExcess(woNumber);
-  if (!computed) return { action: 'skip', reason: 'no-wo-or-bom' };
+  if (!computed) return { action: 'skip', reason: 'no-wo' };
   const { wo, rows: allRows } = computed;
 
-  // 只处理指定料号
   const rows = partNumbers && partNumbers.length
     ? allRows.filter(r => partNumbers.includes(r.part_number))
     : allRows;
 
-  // 查出该工单现有的超发库存记录
   const existingRes = await listDocs(CONFIG.TABLES.inventory, [
     Query.equal('source_wo', woNumber),
     Query.limit(5000)
@@ -78,11 +67,9 @@ export async function syncExcessToInventory(woNumber, partNumbers) {
     existingMap[d.part_number] = d;
   });
 
-  // 工单不是"生产中" → 删除该工单的全部超发库存
   if (wo.status !== 'in_progress') {
     let removed = 0;
     for (const doc of existingRes.documents) {
-      // 如果限定了料号列表，也一并清掉这些料号的记录
       if (partNumbers && partNumbers.length && !partNumbers.includes(doc.part_number)) continue;
       await deleteDoc(CONFIG.TABLES.inventory, doc.$id);
       removed++;
@@ -94,13 +81,10 @@ export async function syncExcessToInventory(woNumber, partNumbers) {
   if (!wo.line) return { action: 'skip', reason: 'no-line' };
 
   let created = 0, updated = 0, removed = 0;
-
   for (const r of rows) {
     const existing = existingMap[r.part_number];
-
     if (r.excess > 0) {
       if (existing) {
-        // 有则更新
         if (Number(existing.quantity) !== r.excess || existing.location !== wo.line) {
           await updateDoc(CONFIG.TABLES.inventory, existing.$id, {
             quantity: r.excess,
@@ -111,7 +95,6 @@ export async function syncExcessToInventory(woNumber, partNumbers) {
           await sleep(30);
         }
       } else {
-        // 无则新增
         await createDoc(CONFIG.TABLES.inventory, {
           part_number: r.part_number,
           part_name: r.part_name,
@@ -123,7 +106,6 @@ export async function syncExcessToInventory(woNumber, partNumbers) {
         await sleep(30);
       }
     } else {
-      // 超发 <= 0 → 删除该料号的超发库存
       if (existing) {
         await deleteDoc(CONFIG.TABLES.inventory, existing.$id);
         removed++;
@@ -131,11 +113,48 @@ export async function syncExcessToInventory(woNumber, partNumbers) {
       }
     }
   }
-
   return { action: 'sync', created, updated, removed };
 }
 
-/** 工单状态变化时调用（全量） */
 export async function onWoStatusChanged(woNumber) {
-  return syncExcessToInventory(woNumber);   // 不传 partNumbers → 全量
+  return syncExcessToInventory(woNumber);
+}
+
+/** ⭐ 工具函数：把 BOM 明细复制为工单快照 */
+export async function snapshotBomToWo(bomId, woNumber) {
+  // 先删旧的（用于"重新载入 BOM"）
+  const oldRes = await listDocs(CONFIG.TABLES.woBom, [
+    Query.equal('wo_number', woNumber),
+    Query.limit(20000)
+  ]);
+  for (const it of oldRes.documents) {
+    await deleteDoc(CONFIG.TABLES.woBom, it.$id);
+    await sleep(20);
+  }
+
+  // 拉 BOM
+  const bomRes = await listDocs(CONFIG.TABLES.bom, [
+    Query.equal('$id', bomId), Query.limit(1)
+  ]);
+  const bomVersion = bomRes.documents[0]?.version || '';
+
+  const itemRes = await listDocs(CONFIG.TABLES.bomItem, [
+    Query.equal('bom_id', bomId),
+    Query.limit(20000)
+  ]);
+
+  let ok = 0;
+  for (const it of itemRes.documents) {
+    await createDoc(CONFIG.TABLES.woBom, {
+      wo_number: woNumber,
+      part_number: it.part_number,
+      part_name: it.part_name || '',
+      qty_per_board: Number(it.qty_per_board) || 0,
+      bom_version: bomVersion,
+      source_bom_id: bomId
+    });
+    ok++;
+    await sleep(20);   // 节流
+  }
+  return { ok, bomVersion };
 }
