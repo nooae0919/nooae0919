@@ -1,7 +1,8 @@
 <template>
   <MainLayout>
-    <div class="toolbar">
-      <button @click="$router.push('/issue')">← 返回列表</button>
+    <div class="page-header">
+      <div class="page-title">领料单详情</div>
+      <ActionMenu :items="menuItems" />
     </div>
 
     <div class="card" v-if="batch">
@@ -19,7 +20,6 @@
 
     <div class="toolbar" style="margin-top:24px;">
       <h3 style="flex:1;">物料明细</h3>
-      <button @click="handleExport">导出CSV</button>
     </div>
 
     <table>
@@ -50,8 +50,9 @@
 
 <script setup>
 import { ref, onMounted, computed, watch } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import MainLayout from '../layouts/MainLayout.vue';
+import ActionMenu from '../components/ActionMenu.vue';
 import { CONFIG } from '../config.js';
 import { listDocs, deleteDoc } from '../api/db.js';
 import { exportCSV } from '../api/csv.js';
@@ -60,9 +61,16 @@ import { Query } from 'appwrite';
 
 const props = defineProps({ issueNo: String });
 const route = useRoute();
+const router = useRouter();
 const issueNo = computed(() => props.issueNo || route.params.issueNo);
 
 const batch = ref(null);
+
+/* ⭐ 操作菜单 */
+const menuItems = computed(() => [
+  { label: '返回列表', onClick: () => router.push('/issue') },
+  { label: '导出CSV', onClick: handleExport, disabled: !batch.value?.items?.length }
+]);
 
 async function load() {
   const res = await listDocs(CONFIG.TABLES.issue, [
@@ -119,12 +127,9 @@ async function deleteItem(itemId) {
 
   try {
     await deleteDoc(CONFIG.TABLES.issue, itemId);
-
-    // ⭐ 只同步被删料号
     if (woNum && pn) {
-      try {
-        await syncExcessToInventory(woNum, [pn]);
-      } catch (e) { console.error(e); }
+      try { await syncExcessToInventory(woNum, [pn]); }
+      catch (e) { console.error(e); }
     }
     await load();
   } catch (e) {
