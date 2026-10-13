@@ -39,7 +39,7 @@
           <td>{{ d.location || '' }}</td>
           <td>
             <span v-if="d.source_wo" style="color:#2563eb;font-size:13px;">
-              {{ d.source_wo }}
+            {{ d.source_wo }}
             </span>
             <span v-else style="color:#999;font-size:13px;">正常</span>
           </td>
