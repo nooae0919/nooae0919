@@ -22,18 +22,13 @@
           <th>领料总数</th>
           <th>领料人</th>
           <th>领料时间</th>
-          <th style="width:160px;">操作</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="(b, idx) in filteredBatches" :key="b.key">
           <td><input type="checkbox" :value="b.key" v-model="selectedKeys"></td>
           <td>{{ idx + 1 }}</td>
-          <td>
-            <a class="part-link" href="#" @click.prevent="goDetail(b)">
-              {{ b.issue_no || '(无单号)' }}
-            </a>
-          </td>
+          <td>{{ b.issue_no || '(无单号)' }}</td>
           <td>{{ b.wo_number || '' }}</td>
           <td>{{ b.product_number || '' }}</td>
           <td>{{ b.product_name || '' }}</td>
@@ -41,19 +36,16 @@
           <td><b>{{ b.totalQty }}</b></td>
           <td>{{ b.operator || '' }}</td>
           <td>{{ b.issue_time || '' }}</td>
-          <td>
-            <button @click="goDetail(b)">详情</button>
-            <button @click="deleteBatch(b)">删除</button>
-          </td>
         </tr>
         <tr v-if="!filteredBatches.length">
-          <td colspan="11" style="text-align:center;color:#999;">暂无领料单</td>
+          <td colspan="10" style="text-align:center;color:#999;">暂无领料单</td>
         </tr>
       </tbody>
     </table>
 
     <input type="file" accept=".csv" hidden ref="fileInput" @change="handleImport">
 
+    <!-- 新增领料单弹窗 -->
     <div v-if="showAdd" class="modal-mask">
       <div class="modal-box" style="width:760px;max-width:94vw;">
         <h3>新增领料单</h3>
@@ -136,6 +128,8 @@ const addForm = reactive({
 /* ⭐ 操作菜单 */
 const menuItems = computed(() => [
   { label: '新增领料单', onClick: openAdd },
+  { label: '详情', onClick: viewSelected, disabled: selectedKeys.value.length !== 1 },
+  { label: '删除', onClick: deleteSelected, disabled: selectedKeys.value.length === 0 },
   { label: '导入CSV', onClick: triggerImport },
   { label: '导出CSV', onClick: handleExport, disabled: selectedKeys.value.length === 0 }
 ]);
@@ -231,7 +225,11 @@ async function loadAll() {
 }
 onMounted(loadAll);
 
-function goDetail(b) {
+/* 详情（勾选 1 行） */
+function viewSelected() {
+  if (selectedKeys.value.length !== 1) return;
+  const b = batches.value.find(x => x.key === selectedKeys.value[0]);
+  if (!b) return;
   if (!b.issue_no) { alert('该领料单没有单号（老数据），无法进入详情。'); return; }
   router.push({ name: 'issue-detail', params: { issueNo: b.issue_no } });
 }
@@ -281,7 +279,6 @@ async function saveAdd() {
     try { await syncExcessToInventory(addForm.wo_number, partNumbers); }
     catch (e) { console.error(e); }
   }
-
   if (fail > 0) {
     addError.value = `部分失败：成功 ${ok} 条，失败 ${fail} 条`;
     await loadAll();
@@ -386,27 +383,40 @@ async function handleImport(e) {
   e.target.value = '';
 }
 
-async function deleteBatch(b) {
+/* 删除（勾选 ≥1 行） */
+async function deleteSelected() {
+  if (!selectedKeys.value.length) return;
+  const targets = batches.value.filter(b => selectedKeys.value.includes(b.key));
+  if (!targets.length) return;
+
   const ok = window.$confirm
     ? await window.$confirm({
         title: '删除确认',
-        message: `确认删除领料单 ${b.issue_no || '(无单号)'}？共 ${b.items.length} 条明细。`
+        message: `将删除已勾选的 ${targets.length} 张领料单，共 ${targets.reduce((s, b) => s + b.items.length, 0)} 条明细。确认？`
       })
-    : confirm(`确认删除领料单？共 ${b.items.length} 条明细。`);
+    : confirm(`将删除 ${targets.length} 张领料单，确认？`);
   if (!ok) return;
 
-  const parts = [...new Set(b.items.map(i => i.part_number))];
-  try {
-    for (const it of b.items) await deleteDoc(CONFIG.TABLES.issue, it.$id);
-    if (b.wo_number && parts.length) {
-      try { await syncExcessToInventory(b.wo_number, parts); }
-      catch (e) { console.error(e); }
+  let ok2 = 0, fail = 0;
+  for (const b of targets) {
+    const parts = [...new Set(b.items.map(i => i.part_number))];
+    try {
+      for (const it of b.items) await deleteDoc(CONFIG.TABLES.issue, it.$id);
+      if (b.wo_number && parts.length) {
+        try { await syncExcessToInventory(b.wo_number, parts); }
+        catch (e) { console.error(e); }
+      }
+      ok2++;
+    } catch (e) {
+      console.error('删除失败', b.issue_no, e); fail++;
     }
-    selectedKeys.value = selectedKeys.value.filter(k => k !== b.key);
-    await loadAll();
-  } catch (e) { alert('删除失败：' + e.message); }
+  }
+  selectedKeys.value = [];
+  await loadAll();
+  if (fail > 0) alert(`删除完成：成功 ${ok2} 张，失败 ${fail} 张`);
 }
 
+/* 导出（勾选 ≥1 行） */
 async function handleExport() {
   if (!selectedKeys.value.length) { alert('请先勾选要导出的领料单'); return; }
   const selectedBatches = batches.value.filter(b => selectedKeys.value.includes(b.key));
