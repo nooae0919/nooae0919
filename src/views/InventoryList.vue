@@ -225,4 +225,95 @@ async function deleteInv(docId) {
 
 function triggerImport() { fileInput.value.click(); }
 
-async
+async function handleImport(e) {
+  const f = e.target.files[0]; if (!f) return;
+  const { headers, rows } = await readCSV(f);
+
+  const required = ['part_number', 'part_name', 'quantity', 'location'];
+  const missing = required.filter(h => !headers.includes(h));
+  if (missing.length) {
+    alert('CSV 缺少必需列：' + missing.join(', '));
+    e.target.value = '';
+    return;
+  }
+
+  // CSV 内部库位冲突预检
+  const seen = {};
+  const conflicts = [];
+  for (let i = 0; i < rows.length; i++) {
+    const row = rows[i];
+    const data = {};
+    headers.forEach((h, idx) => {
+      const v = row[idx];
+      if (v === undefined || v === null || v === '') return;
+      if (h === 'quantity') {
+        const n = Number(v); if (!isNaN(n)) data[h] = n;
+      } else {
+        data[h] = String(v).trim();
+      }
+    });
+    if (!data.part_number || !data.part_name || !data.location) continue;
+    if (seen[data.location] && seen[data.location] !== data.part_number) {
+      conflicts.push(`第 ${i+2} 行：库位 ${data.location} 与料号 ${seen[data.location]} 冲突`);
+    } else {
+      seen[data.location] = data.part_number;
+    }
+  }
+  if (conflicts.length) {
+    alert('CSV 内部库位冲突：\n' + conflicts.slice(0, 10).join('\n') +
+          (conflicts.length > 10 ? `\n...还有 ${conflicts.length - 10} 条` : ''));
+    e.target.value = '';
+    return;
+  }
+
+  let ok = 0, fail = 0;
+  const errors = [];
+  for (let i = 0; i < rows.length; i++) {
+    const row = rows[i];
+    const data = {};
+    headers.forEach((h, idx) => {
+      const v = row[idx];
+      if (v === undefined || v === null || v === '') return;
+      if (h === 'quantity') {
+        const n = Number(v); if (isNaN(n)) return;
+        data[h] = n;
+      } else {
+        data[h] = String(v).trim();
+      }
+    });
+    if (!data.part_number || !data.part_name || !data.location) continue;
+
+    try {
+      const dup = await listDocs(CONFIG.TABLES.inventory, [
+        Query.equal('location', data.location), Query.limit(1)
+      ]);
+      if (dup.documents.length && dup.documents[0].part_number !== data.part_number) {
+        errors.push(`第 ${i+2} 行：库位 ${data.location} 已被 ${dup.documents[0].part_number} 占用`);
+        fail++;
+        continue;
+      }
+      await createDoc(CONFIG.TABLES.inventory, data);
+      ok++;
+    } catch (err) {
+      errors.push(`第 ${i+2} 行：${err.message}`);
+      fail++;
+    }
+  }
+
+  let msg = `导入完成：成功 ${ok} 条，失败 ${fail} 条`;
+  if (errors.length) {
+    msg += '\n\n失败明细（前 10 条）：\n' + errors.slice(0, 10).join('\n');
+    if (errors.length > 10) msg += `\n...还有 ${errors.length - 10} 条`;
+  }
+  alert(msg);
+
+  await load();
+  e.target.value = '';
+}
+
+async function handleExport() {
+  const headers = ['part_number', 'part_name', 'quantity', 'location', 'source_wo'];
+  const rows = allDocs.value.map(d => headers.map(h => d[h] ?? ''));
+  exportCSV(headers, rows, 'inventory');
+}
+</script>
