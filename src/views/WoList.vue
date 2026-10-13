@@ -15,8 +15,8 @@
       <select v-model="lineFilter"
               style="padding:8px 12px;border:1px solid #d1d5db;border-radius:6px;font-size:14px;">
         <option value="">全部线体</option>
-        <option value="1线">1线</option>
-        <option value="2线">2线</option>
+        <option value="A线">A线</option>
+        <option value="B线">B线</option>
       </select>
     </div>
 
@@ -30,6 +30,8 @@
           <th>BOM版本</th>
           <th>计划数量</th>
           <th>生产日期</th>
+          <th style="width:110px;">已入库数量</th>
+          <th style="width:110px;">未入库数量</th>
           <th>状态</th>
           <th style="width:280px;">操作</th>
         </tr>
@@ -47,6 +49,12 @@
           </td>
           <td>{{ d.plan_qty ?? '' }}</td>
           <td>{{ d.produce_date || '' }}</td>
+          <td style="color:#2563eb;font-weight:600;">
+            {{ finishedMap[d.wo_number] || 0 }}
+          </td>
+          <td :style="{ color: remainQty(d) > 0 ? '#d33' : '#16a34a', fontWeight: 600 }">
+            {{ remainQty(d) }}
+          </td>
           <td>{{ statusText(d.status) }}</td>
           <td>
             <button @click="goKitting(d)">齐套状态</button>
@@ -58,7 +66,7 @@
           </td>
         </tr>
         <tr v-if="!filteredDocs.length">
-          <td colspan="9" style="text-align:center;color:#999;">暂无工单</td>
+          <td colspan="11" style="text-align:center;color:#999;">暂无工单</td>
         </tr>
       </tbody>
     </table>
@@ -71,8 +79,8 @@
         <label>线体
           <select v-model="form.line">
             <option value="">— 请选择 —</option>
-            <option value="1线">1线</option>
-            <option value="2线">2线</option>
+            <option value="A线">A线</option>
+            <option value="B线">B线</option>
           </select>
         </label>
 
@@ -131,8 +139,8 @@
         <label>线体
           <select v-model="editForm.line">
             <option value="">— 请选择 —</option>
-            <option value="1线">1线</option>
-            <option value="2线">2线</option>
+            <option value="A线">A线</option>
+            <option value="B线">B线</option>
           </select>
         </label>
 
@@ -190,7 +198,7 @@ import { ref, onMounted, computed, reactive } from 'vue';
 import { useRouter } from 'vue-router';
 import MainLayout from '../layouts/MainLayout.vue';
 import { CONFIG } from '../config.js';
-import { listDocs, getDoc, createDoc, updateDoc, deleteDoc } from '../api/db.js';
+import { listDocs, getDoc, createDoc, updateDoc } from '../api/db.js';
 import { exportCSV, readCSV } from '../api/csv.js';
 import { syncExcessToInventory, snapshotBomToWo } from '../api/kitting.js';
 import { Query } from 'appwrite';
@@ -204,6 +212,7 @@ const bomList = ref([]);
 const bomMap = ref({});
 const bomVersionMap = ref({});
 const snapshotVersionMap = ref({});   // wo_number -> 快照版本号
+const finishedMap = ref({});          // wo_number -> 已入库数量
 const keyword = ref('');
 const lineFilter = ref('');
 const fileInput = ref(null);
@@ -228,6 +237,13 @@ function statusText(s) {
   return s === 'completed' ? '已完成' : s === 'in_progress' ? '生产中' : '待生产';
 }
 
+/* ⭐ 未入库数量 */
+function remainQty(wo) {
+  const plan = Number(wo.plan_qty) || 0;
+  const fin = Number(finishedMap.value[wo.wo_number]) || 0;
+  return Math.max(plan - fin, 0);
+}
+
 /* ============ 加载数据 ============ */
 async function loadBoms() {
   const res = await listDocs(CONFIG.TABLES.bom, [
@@ -245,7 +261,6 @@ async function loadBoms() {
 }
 
 async function loadSnapshotMap() {
-  // 拉 wo_bom 里所有工单的快照版本号
   const res = await listDocs(CONFIG.TABLES.woBom, [
     Query.limit(50000)
   ]);
@@ -256,13 +271,26 @@ async function loadSnapshotMap() {
   snapshotVersionMap.value = map;
 }
 
+/* ⭐ 加载成品入库汇总 */
+async function loadFinishes() {
+  const res = await listDocs(CONFIG.TABLES.finish, [
+    Query.limit(20000)
+  ]);
+  const map = {};
+  res.documents.forEach(d => {
+    const wo = d.wo_number; if (!wo) return;
+    map[wo] = (map[wo] || 0) + (Number(d.finish_qty) || 0);
+  });
+  finishedMap.value = map;
+}
+
 async function load() {
   const res = await listDocs(CONFIG.TABLES.wo, [Query.limit(5000)]);
   docs.value = res.documents;
 }
 
 async function loadAll() {
-  await Promise.all([loadBoms(), load(), loadSnapshotMap()]);
+  await Promise.all([loadBoms(), load(), loadSnapshotMap(), loadFinishes()]);
 }
 
 onMounted(loadAll);
@@ -316,7 +344,6 @@ async function saveAdd() {
     return;
   }
   try {
-    // 1. 建工单
     await createDoc(CONFIG.TABLES.wo, {
       bom_id: form.bom_id,
       wo_number: form.wo_number,
@@ -328,20 +355,11 @@ async function saveAdd() {
       status: form.status
     });
 
-    // 2. ⭐ 写 BOM 快照
-    try {
-      await snapshotBomToWo(form.bom_id, form.wo_number);
-    } catch (e) {
-      console.error('写入 BOM 快照失败', e);
-      alert('工单已创建，但 BOM 快照写入失败：' + (e.message || e));
-    }
+    try { await snapshotBomToWo(form.bom_id, form.wo_number); }
+    catch (e) { console.error('写入快照失败', e); }
 
-    // 3. 同步超发库存
-    try {
-      await syncExcessToInventory(form.wo_number);
-    } catch (e) {
-      console.error('同步库存失败', e);
-    }
+    try { await syncExcessToInventory(form.wo_number); }
+    catch (e) { console.error('同步库存失败', e); }
 
     showAdd.value = false;
     await loadAll();
@@ -401,30 +419,21 @@ async function saveEdit() {
       status: editForm.status
     });
 
-    // ⭐ 如果 BOM 换了，询问是否重载快照
     if (bomChanged) {
       const ok = window.$confirm
         ? await window.$confirm({
             title: 'BOM 已更换',
-            message: '检测到关联 BOM 已变更，是否用新 BOM 重新生成工单用料快照？\n（会导致齐套/超发按新 BOM 重算）'
+            message: '检测到关联 BOM 已变更，是否用新 BOM 重新生成工单用料快照？'
           })
-        : confirm('检测到关联 BOM 已变更，是否用新 BOM 重新生成工单用料快照？');
+        : confirm('BOM 已变更，是否重载用料快照？');
       if (ok) {
-        try {
-          await snapshotBomToWo(editForm.bom_id, editForm.wo_number);
-        } catch (e) {
-          console.error('重新快照失败', e);
-          alert('BOM 快照更新失败：' + (e.message || e));
-        }
+        try { await snapshotBomToWo(editForm.bom_id, editForm.wo_number); }
+        catch (e) { alert('快照更新失败：' + (e.message || e)); }
       }
     }
 
-    // ⭐ 同步库存
-    try {
-      await syncExcessToInventory(editForm.wo_number);
-    } catch (e) {
-      console.error('同步库存失败', e);
-    }
+    try { await syncExcessToInventory(editForm.wo_number); }
+    catch (e) { console.error('同步库存失败', e); }
 
     showEdit.value = false;
     await loadAll();
@@ -442,18 +451,15 @@ function goKitting(wo) {
   router.push({ name: 'wo-kitting', params: { woId: wo.$id } });
 }
 
-/* ============ 重载 BOM（单个工单） ============ */
+/* ============ 重载 BOM ============ */
 async function reloadBom(wo) {
-  if (!wo.bom_id) {
-    alert('该工单未关联 BOM。');
-    return;
-  }
+  if (!wo.bom_id) { alert('该工单未关联 BOM。'); return; }
   const ok = window.$confirm
     ? await window.$confirm({
         title: '重载 BOM 快照',
-        message: `工单 ${wo.wo_number} 将用当前 BOM 的最新明细覆盖用料快照。\n已有的领料记录不受影响，但齐套/超发会按新快照重算。\n确认继续？`
+        message: `工单 ${wo.wo_number} 将用当前 BOM 最新明细覆盖用料快照。\n已有的领料记录不受影响，但齐套/超发会按新快照重算。\n确认继续？`
       })
-    : confirm('将用当前 BOM 的最新明细覆盖工单用料快照，确认继续？');
+    : confirm('将用当前 BOM 覆盖工单用料快照，确认继续？');
   if (!ok) return;
 
   try {
@@ -466,9 +472,8 @@ async function reloadBom(wo) {
   }
 }
 
-/* ============ 批量初始化快照（给历史工单补） ============ */
+/* ============ 批量初始化快照 ============ */
 async function batchInitSnapshots() {
-  // 找出所有有 bom_id 但没有快照的工单
   const missing = docs.value.filter(d => d.bom_id && !snapshotVersionMap.value[d.wo_number]);
   if (!missing.length) {
     alert('所有工单都已有快照，无需初始化。');
@@ -551,7 +556,7 @@ async function handleImport(e) {
 
     try {
       await createDoc(CONFIG.TABLES.wo, data);
-      touchedWos.add({ wo_number: data.wo_number, bom_id: data.bom_id });
+      touchedWos.add(JSON.stringify({ wo_number: data.wo_number, bom_id: data.bom_id }));
       ok++;
     } catch (err) {
       errors.push(`第 ${i+2} 行：${err.message}`);
@@ -559,18 +564,12 @@ async function handleImport(e) {
     }
   }
 
-  // ⭐ 写快照 + 同步库存
-  for (const item of touchedWos) {
-    try {
-      await snapshotBomToWo(item.bom_id, item.wo_number);
-    } catch (e) {
-      console.error('快照失败', item.wo_number, e);
-    }
-    try {
-      await syncExcessToInventory(item.wo_number);
-    } catch (e) {
-      console.error('同步失败', item.wo_number, e);
-    }
+  for (const s of touchedWos) {
+    const item = JSON.parse(s);
+    try { await snapshotBomToWo(item.bom_id, item.wo_number); }
+    catch (e) { console.error('快照失败', item.wo_number, e); }
+    try { await syncExcessToInventory(item.wo_number); }
+    catch (e) { console.error('同步失败', item.wo_number, e); }
   }
 
   let msg = `导入完成：成功 ${ok} 条，失败 ${fail} 条`;
