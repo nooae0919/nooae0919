@@ -1,7 +1,8 @@
 <template>
   <MainLayout>
-    <div class="toolbar">
-      <button @click="$router.push('/bom')">← 返回列表</button>
+    <div class="page-header">
+      <div class="page-title">BOM 详情</div>
+      <ActionMenu :items="menuItems" />
     </div>
 
     <!-- BOM 头信息 -->
@@ -19,13 +20,9 @@
       </div>
     </div>
 
-    <!-- 明细表 -->
+    <!-- 明细 -->
     <div class="toolbar" style="margin-top:24px;">
       <h3 style="flex:1;">BOM 明细（{{ items.length }} 条）</h3>
-      <button @click="openAdd">新增物料</button>
-      <button @click="triggerImport">导入CSV</button>
-      <button @click="handleExport">导出CSV</button>
-      <input type="file" accept=".csv" hidden ref="fileInput" @change="handleImport">
     </div>
 
     <table>
@@ -35,7 +32,6 @@
           <th>物料料号</th>
           <th>物料名称</th>
           <th>单板用量</th>
-          <th>单位</th>
           <th style="width:160px;">操作</th>
         </tr>
       </thead>
@@ -45,17 +41,18 @@
           <td>{{ it.part_number || '' }}</td>
           <td>{{ it.part_name || '' }}</td>
           <td><b>{{ it.qty_per_board ?? '' }}</b></td>
-          <td>{{ it.unit || '' }}</td>
           <td>
             <button @click="openEdit(it.$id)">编辑</button>
             <button @click="deleteItem(it.$id)">删除</button>
           </td>
         </tr>
         <tr v-if="!items.length">
-          <td colspan="6" style="text-align:center;color:#999;">暂无明细</td>
+          <td colspan="5" style="text-align:center;color:#999;">暂无明细</td>
         </tr>
       </tbody>
     </table>
+
+    <input type="file" accept=".csv" hidden ref="fileInput" @change="handleImport">
 
     <!-- 新增 / 编辑明细弹窗 -->
     <div v-if="showModal" class="modal-mask">
@@ -70,9 +67,6 @@
         <label>单板用量
           <input v-model.number="form.qty_per_board" type="number" step="any" placeholder="如 12">
         </label>
-        <label>单位
-          <input v-model="form.unit" type="text" placeholder="如 PCS / 卷">
-        </label>
         <p class="error">{{ formError }}</p>
         <div class="modal-actions">
           <button class="btn-cancel" @click="showModal = false">取消</button>
@@ -85,15 +79,19 @@
 
 <script setup>
 import { ref, onMounted, computed, reactive, watch } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import MainLayout from '../layouts/MainLayout.vue';
+import ActionMenu from '../components/ActionMenu.vue';
 import { CONFIG } from '../config.js';
 import { listDocs, getDoc, createDoc, updateDoc, deleteDoc } from '../api/db.js';
 import { exportCSV, readCSV } from '../api/csv.js';
 import { Query } from 'appwrite';
 
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+
 const props = defineProps({ id: String });
 const route = useRoute();
+const router = useRouter();
 const bomId = computed(() => props.id || route.params.id);
 
 const bom = ref(null);
@@ -103,12 +101,15 @@ const showModal = ref(false);
 const formError = ref('');
 
 const form = reactive({
-  id: '',
-  part_number: '',
-  part_name: '',
-  qty_per_board: '',
-  unit: ''
+  id: '', part_number: '', part_name: '', qty_per_board: ''
 });
+
+const menuItems = computed(() => [
+  { label: '返回列表', onClick: () => router.push('/bom') },
+  { label: '新增物料', onClick: openAdd },
+  { label: '导入CSV', onClick: triggerImport },
+  { label: '导出CSV', onClick: handleExport, disabled: !items.value.length }
+]);
 
 function formatTime(iso) {
   if (!iso) return '';
@@ -120,7 +121,6 @@ function formatTime(iso) {
 async function loadBom() {
   bom.value = await getDoc(CONFIG.TABLES.bom, bomId.value);
 }
-
 async function loadItems() {
   const res = await listDocs(CONFIG.TABLES.bomItem, [
     Query.equal('bom_id', bomId.value),
@@ -129,12 +129,7 @@ async function loadItems() {
   ]);
   items.value = res.documents;
 }
-
-async function loadAll() {
-  await loadBom();
-  await loadItems();
-}
-
+async function loadAll() { await loadBom(); await loadItems(); }
 watch(bomId, loadAll);
 
 onMounted(() => {
@@ -144,9 +139,7 @@ onMounted(() => {
 
 /* 新增 */
 function openAdd() {
-  Object.assign(form, {
-    id: '', part_number: '', part_name: '', qty_per_board: '', unit: ''
-  });
+  Object.assign(form, { id: '', part_number: '', part_name: '', qty_per_board: '' });
   formError.value = '';
   showModal.value = true;
 }
@@ -158,25 +151,33 @@ async function openEdit(itemId) {
     id: doc.$id,
     part_number: doc.part_number || '',
     part_name: doc.part_name || '',
-    qty_per_board: doc.qty_per_board ?? '',
-    unit: doc.unit || ''
+    qty_per_board: doc.qty_per_board ?? ''
   });
   formError.value = '';
   showModal.value = true;
 }
 
+/* 保存（⭐ 冗余写入 BOM 头信息） */
 async function saveForm() {
   if (!form.part_number || !form.qty_per_board) {
     formError.value = '物料料号和单板用量必填';
     return;
   }
+  if (!bom.value) {
+    formError.value = 'BOM 头信息未加载完成，请稍候';
+    return;
+  }
+
   const payload = {
     bom_id: bomId.value,
+    product_number: bom.value.product_number || '',
+    product_name: bom.value.product_name || '',
+    version: bom.value.version || '',
     part_number: form.part_number,
     part_name: form.part_name,
-    qty_per_board: Number(form.qty_per_board),
-    unit: form.unit
+    qty_per_board: Number(form.qty_per_board)
   };
+
   try {
     if (form.id) {
       await updateDoc(CONFIG.TABLES.bomItem, form.id, payload);
@@ -196,7 +197,6 @@ async function deleteItem(itemId) {
     ? await window.$confirm({ title: '删除确认', message: '确认删除该物料？' })
     : confirm('确认删除该物料？');
   if (!ok) return;
-
   try {
     await deleteDoc(CONFIG.TABLES.bomItem, itemId);
     await loadItems();
@@ -205,58 +205,125 @@ async function deleteItem(itemId) {
   }
 }
 
-/* 导入明细 */
+/* ============ 导入 CSV（扁平模板） ============ */
 function triggerImport() { fileInput.value.click(); }
 
 async function handleImport(e) {
   const f = e.target.files[0]; if (!f) return;
   const { headers, rows } = await readCSV(f);
 
-  const required = ['part_number', 'part_name', 'qty_per_board'];
+  const required = ['成品料号', '成品名称', '版本号', '物料料号', '物料名称', '单板用量'];
   const missing = required.filter(h => !headers.includes(h));
   if (missing.length) {
-    alert('CSV 缺少必需列：' + missing.join(', '));
+    alert('CSV 缺少必需列：' + missing.join('、') +
+          '\n\n模板列应为：\n序号,成品料号,成品名称,版本号,物料料号,物料名称,单板用量');
     e.target.value = '';
     return;
   }
 
-  let ok = 0, fail = 0;
-  for (const row of rows) {
-    const data = { bom_id: bomId.value };
-    headers.forEach((h, i) => {
-      const v = row[i];
-      if (v === undefined || v === null || v === '') return;
-      if (h === 'qty_per_board') {
-        const n = Number(v); if (isNaN(n)) return;
-        data[h] = n;
-      } else {
-        data[h] = String(v).trim();
-      }
-    });
-    if (!data.part_number || !data.qty_per_board) continue;
+  if (!bom.value) {
+    alert('BOM 未加载完成，请稍候再试。');
+    e.target.value = '';
+    return;
+  }
+
+  const idx = {};
+  headers.forEach((h, i) => { idx[h] = i; });
+
+  const curPn = bom.value.product_number || '';
+  const curName = bom.value.product_name || '';
+  const curVer = bom.value.version || '';
+
+  let ok = 0, skip = 0, fail = 0;
+  const errors = [];
+  const skipMismatch = [];
+
+  for (let i = 0; i < rows.length; i++) {
+    const row = rows[i];
+
+    const product_number = String(row[idx['成品料号']] || '').trim();
+    const product_name = String(row[idx['成品名称']] || '').trim();
+    const version = String(row[idx['版本号']] || '').trim();
+    const part_number = String(row[idx['物料料号']] || '').trim();
+    const part_name = String(row[idx['物料名称']] || '').trim();
+    const qtyRaw = row[idx['单板用量']];
+
+    if (!product_number && !part_number && !qtyRaw) continue;
+
+    // 必须和当前 BOM 一致
+    if (product_number !== curPn || product_name !== curName || version !== curVer) {
+      skipMismatch.push(`第 ${i + 2} 行：${product_number} / ${product_name} / ${version}`);
+      skip++;
+      continue;
+    }
+
+    if (!part_number) {
+      errors.push(`第 ${i + 2} 行：物料料号为空`);
+      fail++;
+      continue;
+    }
+
+    const qty = Number(qtyRaw);
+    if (isNaN(qty)) {
+      errors.push(`第 ${i + 2} 行：单板用量不是数字（${qtyRaw}）`);
+      fail++;
+      continue;
+    }
 
     try {
-      await createDoc(CONFIG.TABLES.bomItem, data);
+      await createDoc(CONFIG.TABLES.bomItem, {
+        bom_id: bomId.value,
+        product_number: curPn,       // ⭐ 冗余写入
+        product_name: curName,
+        version: curVer,
+        part_number,
+        part_name,
+        qty_per_board: qty
+      });
       ok++;
+      await sleep(30);
     } catch (err) {
-      console.error('导入失败', data, err.message);
+      errors.push(`第 ${i + 2} 行：${err.message}`);
       fail++;
     }
   }
-  alert(`导入完成：成功 ${ok} 条，失败 ${fail} 条`);
+
+  let msg = `导入完成：\n- 成功：${ok} 条\n- 跳过（BOM 不匹配）：${skip} 条\n- 失败：${fail} 条`;
+
+  if (skipMismatch.length) {
+    msg += `\n\n与当前 BOM 不一致被跳过的行（前 5 条）：\n` +
+           skipMismatch.slice(0, 5).join('\n');
+    if (skipMismatch.length > 5) msg += `\n...还有 ${skipMismatch.length - 5} 条`;
+    msg += `\n\n当前 BOM：${curPn} / ${curName} / ${curVer}`;
+  }
+
+  if (errors.length) {
+    msg += `\n\n失败明细（前 10 条）：\n` + errors.slice(0, 10).join('\n');
+    if (errors.length > 10) msg += `\n...还有 ${errors.length - 10} 条`;
+  }
+
+  alert(msg);
+
   await loadItems();
   e.target.value = '';
 }
 
-/* 导出明细 */
+/* ============ 导出 CSV ============ */
 function handleExport() {
-  const headers = ['part_number', 'part_name', 'qty_per_board', 'unit'];
-  const rows = items.value.map(d => [
-    d.part_number ?? '',
-    d.part_name ?? '',
-    d.qty_per_board ?? '',
-    d.unit ?? ''
+  if (!items.value.length) {
+    alert('暂无可导出的明细');
+    return;
+  }
+  const headers = ['序号', '成品料号', '成品名称', '版本号', '物料料号', '物料名称', '单板用量'];
+  const data = items.value.map((it, i) => [
+    i + 1,
+    it.product_number || bom.value?.product_number || '',
+    it.product_name || bom.value?.product_name || '',
+    it.version || bom.value?.version || '',
+    it.part_number || '',
+    it.part_name || '',
+    it.qty_per_board ?? ''
   ]);
-  exportCSV(headers, rows, `bom_items_${bom.value?.product_number || bomId.value}`);
+  exportCSV(headers, data, `bom_items_${bom.value?.product_number || bomId.value}`);
 }
 </script>
