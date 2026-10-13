@@ -1,7 +1,8 @@
 <template>
   <MainLayout>
-    <div class="toolbar">
-      <button @click="$router.push('/finish')">← 返回列表</button>
+    <div class="page-header">
+      <div class="page-title">入库单详情</div>
+      <ActionMenu :items="menuItems" />
     </div>
 
     <div class="card" v-if="batch">
@@ -19,7 +20,6 @@
 
     <div class="toolbar" style="margin-top:24px;">
       <h3 style="flex:1;">成品明细</h3>
-      <button @click="handleExport">导出CSV</button>
     </div>
 
     <table>
@@ -50,8 +50,9 @@
 
 <script setup>
 import { ref, onMounted, computed, watch } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import MainLayout from '../layouts/MainLayout.vue';
+import ActionMenu from '../components/ActionMenu.vue';
 import { CONFIG } from '../config.js';
 import { listDocs, deleteDoc } from '../api/db.js';
 import { exportCSV } from '../api/csv.js';
@@ -59,9 +60,15 @@ import { Query } from 'appwrite';
 
 const props = defineProps({ finishNo: String });
 const route = useRoute();
+const router = useRouter();
 const finishNo = computed(() => props.finishNo || route.params.finishNo);
 
 const batch = ref(null);
+
+const menuItems = computed(() => [
+  { label: '返回列表', onClick: () => router.push('/finish') },
+  { label: '导出CSV', onClick: handleExport, disabled: !batch.value?.items?.length }
+]);
 
 async function load() {
   const res = await listDocs(CONFIG.TABLES.finish, [
