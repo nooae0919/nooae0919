@@ -2,51 +2,12 @@ import { CONFIG } from '../config.js';
 import { listDocs, createDoc, updateDoc, deleteDoc } from './db.js';
 import { Query } from 'appwrite';
 
-/* ============ 工具：延迟 ============ */
+/* ============ 工具 ============ */
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
-/* ============ 并发批量执行器 ============ */
-/**
- * 把 items 分批并发执行 fn，每批 concurrency 个，批间 delayMs 毫秒
- * @param {Array} items 待处理数组
- * @param {Function} fn 对单个 item 执行 async 操作
- * @param {Object} opts { concurrency, delayMs, onProgress }
- */
-async function batchRun(items, fn, opts = {}) {
-  const {
-    concurrency = 5,
-    delayMs = 1200,
-    onProgress = null
-  } = opts;
-
-  const total = items.length;
-  let done = 0, ok = 0, fail = 0;
-  const errors = [];
-
-  const chunks = [];
-  for (let i = 0; i < total; i += concurrency) {
-    chunks.push(items.slice(i, i + concurrency));
-  }
-
-  for (let ci = 0; ci < chunks.length; ci++) {
-    const chunk = chunks[ci];
-    await Promise.all(chunk.map(async (item) => {
-      try {
-        await fn(item);
-        ok++;
-      } catch (e) {
-        fail++;
-        errors.push(e.message || String(e));
-      } finally {
-        done++;
-      }
-    }));
-    if (onProgress) onProgress({ done, total, ok, fail });
-    if (ci < chunks.length - 1) await sleep(delayMs);
-  }
-
-  return { ok, fail, errors };
-}
+/* 每条操作之间的间隔（毫秒），用于规避 Appwrite 限流
+   60ms → 每秒约 16 条，安全；如遇 429 调到 100~150 */
+const STEP_DELAY = 60;
 
 /* ============================================================
  *  计算工单超发明细（可传 partNumbers 只查指定料号）
@@ -60,7 +21,7 @@ export async function computeExcess(woNumber, partNumbers) {
   if (!woRes.documents.length) return null;
   const wo = woRes.documents[0];
 
-  // 2. BOM 快照（只查指定料号，减少数据量）
+  // 2. BOM 快照（只查指定料号）
   const snapQueries = [
     Query.equal('wo_number', woNumber),
     Query.limit(2000)
@@ -118,7 +79,7 @@ export async function syncExcessToInventory(woNumber, partNumbers) {
   if (!computed) return { action: 'skip', reason: 'no-wo' };
   const { wo, rows: allRows } = computed;
 
-  // 已查出的现有超发库存
+  // 已存在的超发库存记录
   const existingRes = await listDocs(CONFIG.TABLES.inventory, [
     Query.equal('source_wo', woNumber),
     Query.limit(5000)
@@ -128,29 +89,30 @@ export async function syncExcessToInventory(woNumber, partNumbers) {
     existingMap[d.part_number] = d;
   });
 
-  // 工单不是"生产中" → 清除全部
+  // 工单不是"生产中" → 清除全部（或指定料号）
   if (wo.status !== 'in_progress') {
-    let removed = 0;
     const toDelete = existingRes.documents.filter(doc => {
       if (partNumbers && partNumbers.length) {
         return partNumbers.includes(doc.part_number);
       }
       return true;
     });
-    if (toDelete.length) {
-      const res = await batchRun(
-        toDelete,
-        doc => deleteDoc(CONFIG.TABLES.inventory, doc.$id),
-        { concurrency: 5, delayMs: 800 }
-      );
-      removed = res.ok;
+    let removed = 0;
+    for (const doc of toDelete) {
+      try {
+        await deleteDoc(CONFIG.TABLES.inventory, doc.$id);
+        removed++;
+      } catch (e) {
+        console.error('删除超发库存失败', doc.$id, e.message);
+      }
+      await sleep(STEP_DELAY);
     }
     return { action: 'clear', removed };
   }
 
   if (!wo.line) return { action: 'skip', reason: 'no-line' };
 
-  // 逐料号同步
+  // 分类：新增 / 更新 / 删除
   const toCreate = [];
   const toUpdate = [];
   const toRemove = [];
@@ -160,11 +122,10 @@ export async function syncExcessToInventory(woNumber, partNumbers) {
     if (r.excess > 0) {
       if (existing) {
         if (Number(existing.quantity) !== r.excess || existing.location !== wo.line) {
-          toUpdate.push({ id: existing.$id, data: {
-            quantity: r.excess,
-            location: wo.line,
-            part_name: r.part_name
-          }});
+          toUpdate.push({
+            id: existing.$id,
+            data: { quantity: r.excess, location: wo.line, part_name: r.part_name }
+          });
         }
       } else {
         toCreate.push({
@@ -182,29 +143,23 @@ export async function syncExcessToInventory(woNumber, partNumbers) {
 
   let created = 0, updated = 0, removed = 0;
 
-  if (toRemove.length) {
-    const res = await batchRun(
-      toRemove,
-      id => deleteDoc(CONFIG.TABLES.inventory, id),
-      { concurrency: 5, delayMs: 800 }
-    );
-    removed = res.ok;
+  // 顺序删除
+  for (const id of toRemove) {
+    try { await deleteDoc(CONFIG.TABLES.inventory, id); removed++; }
+    catch (e) { console.error(e.message); }
+    await sleep(STEP_DELAY);
   }
-  if (toUpdate.length) {
-    const res = await batchRun(
-      toUpdate,
-      item => updateDoc(CONFIG.TABLES.inventory, item.id, item.data),
-      { concurrency: 5, delayMs: 800 }
-    );
-    updated = res.ok;
+  // 顺序更新
+  for (const item of toUpdate) {
+    try { await updateDoc(CONFIG.TABLES.inventory, item.id, item.data); updated++; }
+    catch (e) { console.error(e.message); }
+    await sleep(STEP_DELAY);
   }
-  if (toCreate.length) {
-    const res = await batchRun(
-      toCreate,
-      data => createDoc(CONFIG.TABLES.inventory, data),
-      { concurrency: 5, delayMs: 800 }
-    );
-    created = res.ok;
+  // 顺序创建
+  for (const data of toCreate) {
+    try { await createDoc(CONFIG.TABLES.inventory, data); created++; }
+    catch (e) { console.error(e.message); }
+    await sleep(STEP_DELAY);
   }
 
   return { action: 'sync', created, updated, removed };
@@ -218,65 +173,105 @@ export async function onWoStatusChanged(woNumber) {
 }
 
 /* ============================================================
- *  BOM → 工单快照（并发批量，解决 131 条限流）
- *  可选 onProgress 回调 { phase, done, total }
+ *  BOM → 工单快照
+ *  1. 顺序删除旧快照（每条 60ms）
+ *  2. 拉 BOM 明细，按料号合并数量
+ *  3. 顺序写入新快照（每条 60ms）
+ *
+ *  onProgress({ phase, done, total, ok, fail })
+ *    phase: 'delete' | 'create'
  * ============================================================ */
 export async function snapshotBomToWo(bomId, woNumber, onProgress) {
-  // 1. 先删旧快照
+  // ---------- 1. 拉旧快照并顺序删除 ----------
   const oldRes = await listDocs(CONFIG.TABLES.woBom, [
     Query.equal('wo_number', woNumber),
     Query.limit(5000)
   ]);
+
   let removed = 0;
-  if (oldRes.documents.length) {
-    const res = await batchRun(
-      oldRes.documents,
-      it => deleteDoc(CONFIG.TABLES.woBom, it.$id),
-      {
-        concurrency: 5,
-        delayMs: 1000,
-        onProgress: p => onProgress && onProgress({ phase: 'delete', ...p })
-      }
-    );
-    removed = res.ok;
+  const oldTotal = oldRes.documents.length;
+
+  for (let i = 0; i < oldTotal; i++) {
+    const it = oldRes.documents[i];
+    try {
+      await deleteDoc(CONFIG.TABLES.woBom, it.$id);
+      removed++;
+    } catch (e) {
+      console.error('删除旧快照失败', it.$id, e.message);
+    }
+    if (onProgress) {
+      onProgress({
+        phase: 'delete',
+        done: i + 1,
+        total: oldTotal,
+        ok: removed,
+        fail: i + 1 - removed
+      });
+    }
+    await sleep(STEP_DELAY);
   }
 
-  // 2. 拉 BOM 头（取版本）
+  // ---------- 2. 拉 BOM 头 ----------
   const bomRes = await listDocs(CONFIG.TABLES.bom, [
     Query.equal('$id', bomId),
     Query.limit(1)
   ]);
   const bomVersion = bomRes.documents[0]?.version || '';
 
-  // 3. 拉 BOM 明细
+  // ---------- 3. 拉 BOM 明细，按料号合并 ----------
   const itemRes = await listDocs(CONFIG.TABLES.bomItem, [
     Query.equal('bom_id', bomId),
     Query.limit(5000)
   ]);
 
-  // 4. 并发写入快照
-  const items = itemRes.documents.map(it => ({
+  const merged = {};
+  itemRes.documents.forEach(it => {
+    const pn = String(it.part_number || '').trim();
+    if (!pn) return;
+    if (!merged[pn]) {
+      merged[pn] = { part_number: pn, part_name: it.part_name || '', qty_per_board: 0 };
+    }
+    merged[pn].qty_per_board += Number(it.qty_per_board) || 0;
+  });
+  const items = Object.values(merged).map(m => ({
     wo_number: woNumber,
-    part_number: it.part_number,
-    part_name: it.part_name || '',
-    qty_per_board: Number(it.qty_per_board) || 0,
+    part_number: m.part_number,
+    part_name: m.part_name,
+    qty_per_board: m.qty_per_board,
     bom_version: bomVersion,
     source_bom_id: bomId
   }));
 
-  let ok = 0;
-  if (items.length) {
-    const res = await batchRun(
-      items,
-      data => createDoc(CONFIG.TABLES.woBom, data),
-      {
-        concurrency: 5,
-        delayMs: 1000,
-        onProgress: p => onProgress && onProgress({ phase: 'create', ...p })
-      }
-    );
-    ok = res.ok;
+  // ---------- 4. 顺序写入新快照 ----------
+  let ok = 0, fail = 0;
+  const total = items.length;
+
+  for (let i = 0; i < total; i++) {
+    try {
+      await createDoc(CONFIG.TABLES.woBom, items[i]);
+      ok++;
+    } catch (e) {
+      console.error('写入快照失败', items[i].part_number, e.message);
+      fail++;
+    }
+    if (onProgress) {
+      onProgress({
+        phase: 'create',
+        done: i + 1,
+        total,
+        ok,
+        fail
+      });
+    }
+    await sleep(STEP_DELAY);
   }
 
-  return { ok, removed, bomVersion, total: items.length };
+  return {
+    ok,                 // 成功写入条数
+    removed,            // 成功删除旧条数
+    bomVersion,
+    total,              // 最终快照条数（合并后）
+    originalCount: itemRes.documents.length,   // BOM 原始明细条数
+    fail                // 写入失败条数
+  };
 }
