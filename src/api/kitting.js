@@ -7,7 +7,7 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
 
 /* 每条操作之间的间隔（毫秒），用于规避 Appwrite 限流
    60ms → 每秒约 16 条，安全；如遇 429 调到 100~150 */
-const STEP_DELAY = 60;
+const STEP_DELAY = 150;
 
 /* ============================================================
  *  计算工单超发明细（可传 partNumbers 只查指定料号）
