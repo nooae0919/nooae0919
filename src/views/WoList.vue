@@ -13,6 +13,11 @@
       <ActionMenu :items="menuItems" />
     </div>
 
+    <!-- ⭐ 批量操作进度提示条 -->
+    <div v-if="progressText" class="notice" style="background:#fef3c7;border-left-color:#d97706;color:#92400e;">
+      {{ progressText }}
+    </div>
+
     <table id="wo-table">
       <thead>
         <tr>
@@ -189,6 +194,7 @@ import { exportCSV, readCSV } from '../api/csv.js';
 import { syncExcessToInventory, snapshotBomToWo } from '../api/kitting.js';
 import { Query } from 'appwrite';
 
+const sleep = ms => new Promise(r => setTimeout(r, ms));
 const router = useRouter();
 
 const WO_HEADERS = ['wo_number', 'line', 'product_number', 'product_name', 'plan_qty', 'produce_date', 'status'];
@@ -206,6 +212,7 @@ const showAdd = ref(false);
 const showEdit = ref(false);
 const formError = ref('');
 const editError = ref('');
+const progressText = ref('');   // ⭐ 进度提示
 
 const form = reactive({
   bom_id: '', wo_number: '', line: '',
@@ -229,13 +236,13 @@ const menuItems = computed(() => [
 function statusText(s) {
   return s === 'completed' ? '已完成' : s === 'in_progress' ? '生产中' : '待生产';
 }
-
 function remainQty(wo) {
   const plan = Number(wo.plan_qty) || 0;
   const fin = Number(finishedMap.value[wo.wo_number]) || 0;
   return Math.max(plan - fin, 0);
 }
 
+/* ============ 加载数据 ============ */
 async function loadBoms() {
   const res = await listDocs(CONFIG.TABLES.bom, [
     Query.limit(5000),
@@ -276,6 +283,7 @@ async function loadAll() {
 }
 onMounted(loadAll);
 
+/* ============ 搜索 / 筛选 ============ */
 const filteredDocs = computed(() => {
   let list = docs.value;
   if (lineFilter.value) list = list.filter(d => d.line === lineFilter.value);
@@ -290,6 +298,7 @@ const filteredDocs = computed(() => {
   return list;
 });
 
+/* ============ BOM 联动 ============ */
 function onBomChange(which) {
   const target = which === 'add' ? form : editForm;
   const b = bomMap.value[target.bom_id];
@@ -302,6 +311,7 @@ function onBomChange(which) {
   }
 }
 
+/* ============ 新增 ============ */
 function openAdd() {
   Object.assign(form, {
     bom_id: '', wo_number: '', line: '',
@@ -330,17 +340,31 @@ async function saveAdd() {
       produce_date: form.produce_date,
       status: form.status
     });
-    try { await snapshotBomToWo(form.bom_id, form.wo_number); }
-    catch (e) { console.error('写入快照失败', e); }
+
+    // 快照
+    progressText.value = `正在生成 BOM 快照...`;
+    try {
+      await snapshotBomToWo(form.bom_id, form.wo_number, p => {
+        progressText.value = `[${p.phase === 'delete' ? '删除旧快照' : '写入新快照'}] ${p.done}/${p.total}`;
+      });
+    } catch (e) {
+      console.error('写入快照失败', e);
+    }
+
+    // 同步库存
     try { await syncExcessToInventory(form.wo_number); }
     catch (e) { console.error('同步库存失败', e); }
+
+    progressText.value = '';
     showAdd.value = false;
     await loadAll();
   } catch (e) {
+    progressText.value = '';
     formError.value = '保存失败：' + (e.message || e);
   }
 }
 
+/* ============ 编辑 ============ */
 async function openEdit(docId) {
   try {
     const doc = await getDoc(CONFIG.TABLES.wo, docId);
@@ -375,6 +399,7 @@ async function saveEdit() {
       return;
     }
     const bomChanged = current.bom_id !== editForm.bom_id;
+
     await updateDoc(CONFIG.TABLES.wo, editForm.$id, {
       bom_id: editForm.bom_id,
       line: editForm.line,
@@ -384,6 +409,7 @@ async function saveEdit() {
       produce_date: editForm.produce_date,
       status: editForm.status
     });
+
     if (bomChanged) {
       const ok = window.$confirm
         ? await window.$confirm({
@@ -392,12 +418,22 @@ async function saveEdit() {
           })
         : confirm('BOM 已变更，是否重载用料快照？');
       if (ok) {
-        try { await snapshotBomToWo(editForm.bom_id, editForm.wo_number); }
-        catch (e) { alert('快照更新失败：' + (e.message || e)); }
+        progressText.value = `正在重载 BOM 快照...`;
+        try {
+          await snapshotBomToWo(editForm.bom_id, editForm.wo_number, p => {
+            progressText.value = `[${p.phase === 'delete' ? '删除旧快照' : '写入新快照'}] ${p.done}/${p.total}`;
+          });
+        } catch (e) {
+          alert('快照更新失败：' + (e.message || e));
+        } finally {
+          progressText.value = '';
+        }
       }
     }
+
     try { await syncExcessToInventory(editForm.wo_number); }
     catch (e) { console.error('同步库存失败', e); }
+
     showEdit.value = false;
     await loadAll();
   } catch (e) {
@@ -405,53 +441,73 @@ async function saveEdit() {
   }
 }
 
+/* ============ 跳转齐套 ============ */
 function goKitting(wo) {
   if (!wo.bom_id) { alert('该工单未关联 BOM，无法做齐套分析。'); return; }
   router.push({ name: 'wo-kitting', params: { woId: wo.$id } });
 }
 
+/* ============ 重载 BOM（带进度） ============ */
 async function reloadBom(wo) {
   if (!wo.bom_id) { alert('该工单未关联 BOM。'); return; }
   const ok = window.$confirm
     ? await window.$confirm({
         title: '重载 BOM 快照',
-        message: `工单 ${wo.wo_number} 将用当前 BOM 最新明细覆盖用料快照。\n已有的领料记录不受影响，但齐套/超发会按新快照重算。\n确认继续？`
+        message: `工单 ${wo.wo_number} 将用当前 BOM 最新明细覆盖用料快照。\n已有的领料记录不受影响，但齐套/超发会按新快照重算。\n\n（BOM 明细较多时需要几十秒，请耐心等待）\n确认继续？`
       })
     : confirm('将用当前 BOM 覆盖工单用料快照，确认继续？');
   if (!ok) return;
+
+  progressText.value = `正在重载 BOM 快照...`;
   try {
-    const res = await snapshotBomToWo(wo.bom_id, wo.wo_number);
+    const res = await snapshotBomToWo(wo.bom_id, wo.wo_number, p => {
+      progressText.value = `[${p.phase === 'delete' ? '删除旧快照' : '写入新快照'}] ${p.done}/${p.total}`;
+    });
+    progressText.value = `正在同步超发库存...`;
     await syncExcessToInventory(wo.wo_number);
     await loadSnapshotMap();
+    progressText.value = '';
     alert(`BOM 快照已重载，共 ${res.ok} 条明细（版本 ${res.bomVersion || '-'}）。`);
   } catch (e) {
+    progressText.value = '';
     alert('重载失败：' + (e.message || e));
   }
 }
 
+/* ============ 批量初始化快照（加节流） ============ */
 async function batchInitSnapshots() {
   const missing = docs.value.filter(d => d.bom_id && !snapshotVersionMap.value[d.wo_number]);
   if (!missing.length) { alert('所有工单都已有快照，无需初始化。'); return; }
+
   const ok = window.$confirm
     ? await window.$confirm({
         title: '批量初始化快照',
-        message: `共 ${missing.length} 个工单缺少快照，将按各自关联的 BOM 生成。\n过程可能需要几十秒，期间请勿关闭页面。\n确认继续？`
+        message: `共 ${missing.length} 个工单缺少快照，将按各自关联的 BOM 生成。\n每个工单之间间隔 1.5 秒，避免 Appwrite 限流。\n总耗时约 ${Math.ceil(missing.length * 30 / 60)} 分钟（视 BOM 大小）。\n\n期间请勿关闭页面。\n确认继续？`
       })
-    : confirm(`共 ${missing.length} 个工单缺少快照，确认批量生成？`);
+    : confirm(`共 ${missing.length} 个工单，确认批量生成？`);
   if (!ok) return;
 
   let success = 0, fail = 0;
   const errors = [];
-  for (const wo of missing) {
+
+  for (let i = 0; i < missing.length; i++) {
+    const wo = missing[i];
+    progressText.value = `批量初始化快照：${i + 1}/${missing.length}（成功 ${success}，失败 ${fail}）`;
     try {
-      await snapshotBomToWo(wo.bom_id, wo.wo_number);
+      await snapshotBomToWo(wo.bom_id, wo.wo_number, p => {
+        progressText.value = `批量初始化：工单 ${wo.wo_number}（${i+1}/${missing.length}）[${p.phase}] ${p.done}/${p.total}`;
+      });
       success++;
     } catch (e) {
       errors.push(`${wo.wo_number}: ${e.message || e}`);
       fail++;
     }
+    if (i < missing.length - 1) await sleep(1500);   // ⭐ 工单之间节流
   }
+
+  progressText.value = '';
   await loadSnapshotMap();
+
   let msg = `批量初始化完成：成功 ${success} 个，失败 ${fail} 个。`;
   if (errors.length) {
     msg += '\n\n失败明细（前 10 条）：\n' + errors.slice(0, 10).join('\n');
@@ -460,6 +516,7 @@ async function batchInitSnapshots() {
   alert(msg);
 }
 
+/* ============ 导入 CSV ============ */
 function triggerImport() { fileInput.value.click(); }
 
 async function handleImport(e) {
@@ -471,7 +528,7 @@ async function handleImport(e) {
 
   let ok = 0, fail = 0;
   const errors = [];
-  const touchedWos = new Set();
+  const touchedWos = [];
 
   for (let i = 0; i < rows.length; i++) {
     const row = rows[i];
@@ -490,31 +547,32 @@ async function handleImport(e) {
       if (bid) data.bom_id = bid;
     }
     if (!data.bom_id) {
-      errors.push(`第 ${i+2} 行：找不到匹配的 BOM`);
-      fail++; continue;
+      errors.push(`第 ${i+2} 行：找不到匹配的 BOM`); fail++; continue;
     }
     if (!data.wo_number) {
-      errors.push(`第 ${i+2} 行：工单号为空`);
-      fail++; continue;
+      errors.push(`第 ${i+2} 行：工单号为空`); fail++; continue;
     }
 
     try {
       await createDoc(CONFIG.TABLES.wo, data);
-      touchedWos.add(JSON.stringify({ wo_number: data.wo_number, bom_id: data.bom_id }));
+      touchedWos.push({ wo_number: data.wo_number, bom_id: data.bom_id });
       ok++;
     } catch (err) {
-      errors.push(`第 ${i+2} 行：${err.message}`);
-      fail++;
+      errors.push(`第 ${i+2} 行：${err.message}`); fail++;
     }
   }
 
-  for (const s of touchedWos) {
-    const item = JSON.parse(s);
+  // 逐个工单建快照 + 同步库存（互相之间节流）
+  for (let i = 0; i < touchedWos.length; i++) {
+    const item = touchedWos[i];
+    progressText.value = `正在处理工单快照：${i+1}/${touchedWos.length}`;
     try { await snapshotBomToWo(item.bom_id, item.wo_number); }
     catch (e) { console.error('快照失败', item.wo_number, e); }
     try { await syncExcessToInventory(item.wo_number); }
     catch (e) { console.error('同步失败', item.wo_number, e); }
+    if (i < touchedWos.length - 1) await sleep(1500);
   }
+  progressText.value = '';
 
   let msg = `导入完成：成功 ${ok} 条，失败 ${fail} 条`;
   if (errors.length) {
@@ -527,6 +585,7 @@ async function handleImport(e) {
   e.target.value = '';
 }
 
+/* ============ 导出 CSV ============ */
 async function handleExport() {
   const res = await listDocs(CONFIG.TABLES.wo, [Query.limit(5000)]);
   const rows = res.documents.map(d => WO_HEADERS.map(h => d[h] ?? ''));
