@@ -1,12 +1,15 @@
 <template>
-  <div v-if="total > 0" class="pagination">
+  <div v-if="total > 0 || loading" class="pagination">
     <span class="pagination-summary">
-      显示 {{ start }}–{{ end }} 条，共 {{ total }} 条（每页 {{ PAGE_SIZE }} 条）
+      <template v-if="loading">加载中...</template>
+      <template v-else>
+        显示 {{ start }}–{{ end }} 条，共 {{ total }} 条（每页 {{ PAGE_SIZE }} 条）
+      </template>
     </span>
     <div class="pagination-controls">
-      <button :disabled="page <= 1" @click="changePage(page - 1)">上一页</button>
+      <button :disabled="loading || page <= 1" @click="changePage(page - 1)">上一页</button>
       <span>第 {{ page }} / {{ pageCount }} 页</span>
-      <button :disabled="page >= pageCount" @click="changePage(page + 1)">下一页</button>
+      <button :disabled="loading || page >= pageCount" @click="changePage(page + 1)">下一页</button>
     </div>
   </div>
 </template>
@@ -17,7 +20,8 @@ import { PAGE_SIZE } from '../composables/usePagination.js';
 
 const props = defineProps({
   page: { type: Number, required: true },
-  total: { type: Number, required: true }
+  total: { type: Number, required: true },
+  loading: { type: Boolean, default: false },
 });
 const emit = defineEmits(['update:page']);
 
