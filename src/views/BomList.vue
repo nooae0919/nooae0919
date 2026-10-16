@@ -31,21 +31,21 @@
           <td>{{ itemCountMap[d.$id] || 0 }}</td>
           <td>{{ formatTime(d.$updatedAt) }}</td>
         </tr>
-        <tr v-if="!filteredDocs.length">
+        <tr v-if="!loading && !paginatedDocs.length">
           <td colspan="7" style="text-align:center;color:#999;">
             暂无 BOM 数据，请点击"操作 → 导入CSV"上传
           </td>
         </tr>
       </tbody>
     </table>
-    <Pagination v-model:page="currentPage" :total="filteredDocs.length" />
+    <Pagination v-model:page="currentPage" :total="total" :loading="loading" />
 
     <input type="file" accept=".csv" hidden ref="fileInput" @change="handleImport">
   </MainLayout>
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import MainLayout from '../layouts/MainLayout.vue';
 import ActionMenu from '../components/ActionMenu.vue';
@@ -59,13 +59,11 @@ import { Query } from 'appwrite';
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const router = useRouter();
 
-const docs = ref([]);
 const itemCountMap = ref({});
 const keyword = ref('');
 const fileInput = ref(null);
 const selectedIds = ref([]);
 
-/* ⭐ 操作菜单 */
 const menuItems = computed(() => [
   { label: '详情', onClick: viewSelected, disabled: selectedIds.value.length !== 1 },
   { label: '删除', onClick: deleteSelected, disabled: selectedIds.value.length === 0 },
@@ -73,16 +71,45 @@ const menuItems = computed(() => [
   { label: '导出CSV', onClick: handleExport, disabled: selectedIds.value.length === 0 }
 ]);
 
-const filteredDocs = computed(() => {
-  const kw = keyword.value.trim().toLowerCase();
-  if (!kw) return docs.value;
-  return docs.value.filter(d =>
-    (d.product_number || '').toLowerCase().includes(kw) ||
-    (d.product_name || '').toLowerCase().includes(kw) ||
-    (d.version || '').toLowerCase().includes(kw)
-  );
+const { currentPage, paginatedItems: paginatedDocs, total, loading, reload } =
+  usePagination([], {
+    mode: 'server',
+    pageSize: PAGE_SIZE,
+    fetcher: async ({ page, pageSize }) => {
+      const queries = [
+        Query.orderDesc('$updatedAt'),
+        Query.limit(pageSize),
+        Query.offset((page - 1) * pageSize),
+      ];
+      const kw = keyword.value.trim();
+      if (kw) queries.unshift(Query.search('product_number', kw));
+      const res = await listDocs(CONFIG.TABLES.bom, queries);
+
+      // 只统计当前页 BOM 的条目数
+      if (res.documents.length) {
+        const ids = res.documents.map(d => d.$id);
+        const itemRes = await listDocs(CONFIG.TABLES.bomItem, [
+          Query.equal('bom_id', ids),
+          Query.limit(10000),
+        ]);
+        const map = {};
+        itemRes.documents.forEach(it => {
+          map[it.bom_id] = (map[it.bom_id] || 0) + 1;
+        });
+        itemCountMap.value = map;
+      } else {
+        itemCountMap.value = {};
+      }
+      return { items: res.documents, total: res.total };
+    },
+  });
+
+watch(keyword, () => {
+  if (currentPage.value !== 1) currentPage.value = 1;
+  else reload();
 });
-const { currentPage, paginatedItems: paginatedDocs } = usePagination(filteredDocs);
+
+onMounted(reload);
 
 const allSelected = computed(() =>
   paginatedDocs.value.length > 0 &&
@@ -110,34 +137,14 @@ function formatTime(iso) {
   return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
 }
 
-async function load() {
-  const res = await listDocs(CONFIG.TABLES.bom, [
-    Query.limit(5000),
-    Query.orderDesc('$updatedAt')
-  ]);
-  docs.value = res.documents;
-  const itemRes = await listDocs(CONFIG.TABLES.bomItem, [Query.limit(10000)]);
-  const map = {};
-  itemRes.documents.forEach(it => {
-    const id = it.bom_id; if (!id) return;
-    map[id] = (map[id] || 0) + 1;
-  });
-  itemCountMap.value = map;
-  const valid = new Set(docs.value.map(d => d.$id));
-  selectedIds.value = selectedIds.value.filter(id => valid.has(id));
-}
-onMounted(load);
-
-/* 详情（勾选 1 行） */
 function viewSelected() {
   if (selectedIds.value.length !== 1) return;
   router.push({ name: 'bom-detail', params: { id: selectedIds.value[0] } });
 }
 
-/* 删除（勾选 ≥1 行） */
 async function deleteSelected() {
   if (!selectedIds.value.length) return;
-  const targets = docs.value.filter(d => selectedIds.value.includes(d.$id));
+  const targets = paginatedDocs.value.filter(d => selectedIds.value.includes(d.$id));
   const ok = window.$confirm
     ? await window.$confirm({
         title: '删除确认',
@@ -160,11 +167,10 @@ async function deleteSelected() {
     }
   }
   selectedIds.value = [];
-  await load();
+  await reload();
   if (fail > 0) alert(`删除完成：成功 ${ok2} 张，失败 ${fail} 张`);
 }
 
-/* 导入 */
 function triggerImport() { fileInput.value.click(); }
 
 async function handleImport(e) {
@@ -183,9 +189,20 @@ async function handleImport(e) {
   const idx = {};
   headers.forEach((h, i) => { idx[h] = i; });
 
-  const existingBomRes = await listDocs(CONFIG.TABLES.bom, [Query.limit(10000)]);
+  // 预取已有 BOM 头（分页拉全量）
+  const existingBoms = [];
+  let offset = 0;
+  const chunk = 500;
+  while (true) {
+    const res = await listDocs(CONFIG.TABLES.bom, [
+      Query.limit(chunk), Query.offset(offset)
+    ]);
+    existingBoms.push(...res.documents);
+    if (res.documents.length < chunk) break;
+    offset += chunk;
+  }
   const bomKeyToId = {};
-  existingBomRes.documents.forEach(b => {
+  existingBoms.forEach(b => {
     const key = `${b.product_number || ''}|${b.product_name || ''}|${b.version || ''}`;
     bomKeyToId[key] = b.$id;
   });
@@ -244,11 +261,10 @@ async function handleImport(e) {
   }
   alert(msg);
 
-  await load();
+  await reload();
   e.target.value = '';
 }
 
-/* 导出（勾选 ≥1 行） */
 async function handleExport() {
   if (!selectedIds.value.length) { alert('请先勾选要导出的 BOM'); return; }
 
@@ -269,7 +285,7 @@ async function handleExport() {
     itemsByBom[id].push(it);
   });
 
-  const selectedBoms = docs.value.filter(d => selectedIds.value.includes(d.$id));
+  const selectedBoms = paginatedDocs.value.filter(d => selectedIds.value.includes(d.$id));
 
   const headers = ['序号', '成品料号', '成品名称', '版本号', '物料料号', '物料名称', '单板用量'];
   const data = [];
