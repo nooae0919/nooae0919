@@ -499,4 +499,107 @@ async function batchInitSnapshots() {
     progressText.value = `批量初始化快照：${i + 1}/${missing.length}（成功 ${success}，失败 ${fail}）`;
     try {
       await snapshotBomToWo(wo.bom_id, wo.wo_number, p => {
-        progressText.value = `批量初始化：工单 ${wo.wo_number}（${i+1}/${missing.length}）[${
+        progressText.value = `批量初始化：工单 ${wo.wo_number}（${i+1}/${missing.length}）[${p.phase}] ${p.done}/${p.total}`;
+      });
+      success++;
+    } catch (e) {
+      errors.push(`${wo.wo_number}: ${e.message || e}`);
+      fail++;
+    }
+    if (i < missing.length - 1) await sleep(1500);
+  }
+
+  progressText.value = '';
+  await reload();
+
+  let msg = `批量初始化完成：成功 ${success} 个，失败 ${fail} 个。`;
+  if (errors.length) {
+    msg += '\n\n失败明细（前 10 条）：\n' + errors.slice(0, 10).join('\n');
+    if (errors.length > 10) msg += `\n...还有 ${errors.length - 10} 条`;
+  }
+  alert(msg);
+}
+
+function triggerImport() { fileInput.value.click(); }
+
+async function handleImport(e) {
+  const f = e.target.files[0]; if (!f) return;
+  const { headers, rows } = await readCSV(f);
+
+  const pnToBom = {};
+  bomList.value.forEach(b => { pnToBom[b.product_number] = b.$id; });
+
+  let ok = 0, fail = 0;
+  const errors = [];
+  const touchedWos = [];
+
+  for (let i = 0; i < rows.length; i++) {
+    const row = rows[i];
+    const data = {};
+    headers.forEach((h, idx) => {
+      const v = row[idx];
+      if (v === undefined || v === null || v === '') return;
+      if (h === 'plan_qty') {
+        const n = Number(v); if (isNaN(n)) return;
+        data[h] = n;
+      } else data[h] = String(v).trim();
+    });
+
+    if (!data.bom_id && data.product_number) {
+      const bid = pnToBom[data.product_number];
+      if (bid) data.bom_id = bid;
+    }
+    if (!data.bom_id) {
+      errors.push(`第 ${i+2} 行：找不到匹配的 BOM`); fail++; continue;
+    }
+    if (!data.wo_number) {
+      errors.push(`第 ${i+2} 行：工单号为空`); fail++; continue;
+    }
+
+    try {
+      await createDoc(CONFIG.TABLES.wo, data);
+      touchedWos.push({ wo_number: data.wo_number, bom_id: data.bom_id });
+      ok++;
+    } catch (err) {
+      errors.push(`第 ${i+2} 行：${err.message}`); fail++;
+    }
+  }
+
+  for (let i = 0; i < touchedWos.length; i++) {
+    const item = touchedWos[i];
+    progressText.value = `正在处理工单快照：${i+1}/${touchedWos.length}`;
+    try { await snapshotBomToWo(item.bom_id, item.wo_number); }
+    catch (e) { console.error('快照失败', item.wo_number, e); }
+    try { await syncExcessToInventory(item.wo_number); }
+    catch (e) { console.error('同步失败', item.wo_number, e); }
+    if (i < touchedWos.length - 1) await sleep(1500);
+  }
+  progressText.value = '';
+
+  let msg = `导入完成：成功 ${ok} 条，失败 ${fail} 条`;
+  if (errors.length) {
+    msg += '\n\n失败明细（前 10 条）：\n' + errors.slice(0, 10).join('\n');
+    if (errors.length > 10) msg += `\n...还有 ${errors.length - 10} 条`;
+  }
+  alert(msg);
+
+  await reload();
+  e.target.value = '';
+}
+
+async function handleExport() {
+  const all = [];
+  let offset = 0;
+  const chunk = 500;
+  while (true) {
+    const res = await listDocs(CONFIG.TABLES.wo, [
+      Query.limit(chunk), Query.offset(offset)
+    ]);
+    all.push(...res.documents);
+    if (res.documents.length < chunk) break;
+    offset += chunk;
+  }
+  const rows = all.map(d => WO_HEADERS.map(h => d[h] ?? ''));
+  exportCSV(WO_HEADERS, rows, 'work_orders');
+}
+</script>
