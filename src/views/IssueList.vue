@@ -37,16 +37,15 @@
           <td>{{ b.operator || '' }}</td>
           <td>{{ b.issue_time || '' }}</td>
         </tr>
-        <tr v-if="!filteredBatches.length">
+        <tr v-if="!loading && !paginatedBatches.length">
           <td colspan="10" style="text-align:center;color:#999;">暂无领料单</td>
         </tr>
       </tbody>
     </table>
-    <Pagination v-model:page="currentPage" :total="filteredBatches.length" />
+    <Pagination v-model:page="currentPage" :total="total" :loading="loading" />
 
     <input type="file" accept=".csv" hidden ref="fileInput" @change="handleImport">
 
-    <!-- 新增领料单弹窗 -->
     <div v-if="showAdd" class="modal-mask">
       <div class="modal-box" style="width:760px;max-width:94vw;">
         <h3>新增领料单</h3>
@@ -99,7 +98,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed, reactive } from 'vue';
+import { ref, onMounted, computed, reactive, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import MainLayout from '../layouts/MainLayout.vue';
 import ActionMenu from '../components/ActionMenu.vue';
@@ -114,7 +113,7 @@ import { Query } from 'appwrite';
 
 const router = useRouter();
 
-const allIssues = ref([]);
+const allIssueNos = ref([]);    // 全量单号（去重后）
 const woList = ref([]);
 const keyword = ref('');
 const fileInput = ref(null);
@@ -128,7 +127,6 @@ const addForm = reactive({
   items: [{ part_number: '', part_name: '', issue_qty: '' }]
 });
 
-/* ⭐ 操作菜单 */
 const menuItems = computed(() => [
   { label: '新增领料单', onClick: openAdd },
   { label: '详情', onClick: viewSelected, disabled: selectedKeys.value.length !== 1 },
@@ -157,46 +155,95 @@ const woMap = computed(() => {
   return m;
 });
 
-const batches = computed(() => {
-  const map = {};
-  allIssues.value.forEach(d => {
-    const key = d.issue_no
-      ? `NO:${d.issue_no}`
-      : `FB:${d.wo_number}|${d.operator || ''}|${d.issue_time || ''}`;
-    if (!map[key]) {
-      map[key] = {
-        key,
-        issue_no: d.issue_no || '',
-        wo_number: d.wo_number,
-        operator: d.operator,
-        issue_time: d.issue_time,
-        items: [],
-        totalQty: 0
-      };
-    }
-    map[key].items.push(d);
-    map[key].totalQty += Number(d.issue_qty) || 0;
-  });
-  Object.values(map).forEach(b => {
-    const w = woMap.value[b.wo_number];
-    b.product_number = w?.product_number || '';
-    b.product_name = w?.product_name || '';
-  });
-  return Object.values(map).sort((a, b) =>
-    (b.issue_time || '').localeCompare(a.issue_time || '')
-  );
-});
+/* 服务端分页：分页单位是"单据头" */
+const { currentPage, paginatedItems: paginatedBatches, total, loading, reload } =
+  usePagination([], {
+    mode: 'server',
+    pageSize: PAGE_SIZE,
+    fetcher: async ({ page, pageSize }) => {
+      // 1. 全量单号（轻量，只取 issue_no / wo_number / operator / issue_time 的索引字段）
+      //    这里为简化，仍拉全量明细，但只用于构建单号索引；正式环境建议新增单据头表
+      const all = [];
+      let offset = 0;
+      const chunk = 500;
+      while (true) {
+        const res = await listDocs(CONFIG.TABLES.issue, [
+          Query.limit(chunk), Query.offset(offset)
+        ]);
+        all.push(...res.documents);
+        if (res.documents.length < chunk) break;
+        offset += chunk;
+      }
+      allIssueNos.value = all;
 
-const filteredBatches = computed(() => {
-  const kw = keyword.value.trim().toLowerCase();
-  if (!kw) return batches.value;
-  return batches.value.filter(b =>
-    (b.issue_no || '').toLowerCase().includes(kw) ||
-    (b.wo_number || '').toLowerCase().includes(kw) ||
-    (b.operator || '').toLowerCase().includes(kw)
-  );
+      // 2. 按单号聚合为单据头（不拉明细，只保留索引信息）
+      const batchMap = {};
+      all.forEach(d => {
+        const key = d.issue_no
+          ? `NO:${d.issue_no}`
+          : `FB:${d.wo_number}|${d.operator || ''}|${d.issue_time || ''}`;
+        if (!batchMap[key]) {
+          batchMap[key] = {
+            key,
+            issue_no: d.issue_no || '',
+            wo_number: d.wo_number,
+            operator: d.operator,
+            issue_time: d.issue_time,
+            itemCount: 0,
+            totalQty: 0,
+            _ids: [],
+          };
+        }
+        batchMap[key].itemCount++;
+        batchMap[key].totalQty += Number(d.issue_qty) || 0;
+        batchMap[key]._ids.push(d.$id);
+      });
+
+      // 3. 关键词过滤（单号 / 工单号 / 领料人）
+      const kw = keyword.value.trim().toLowerCase();
+      let batches = Object.values(batchMap);
+      if (kw) {
+        batches = batches.filter(b =>
+          (b.issue_no || '').toLowerCase().includes(kw) ||
+          (b.wo_number || '').toLowerCase().includes(kw) ||
+          (b.operator || '').toLowerCase().includes(kw)
+        );
+      }
+
+      // 4. 排序：按领料时间倒序
+      batches.sort((a, b) =>
+        (b.issue_time || '').localeCompare(a.issue_time || '')
+      );
+
+      // 5. 分页
+      const totalCount = batches.length;
+      const start = (page - 1) * pageSize;
+      const pageBatches = batches.slice(start, start + pageSize);
+
+      // 6. 只对当前页单据拉明细（用于展示 items.length 和 totalQty，这里已在上一步算出，无需再拉）
+      //    补充成品料号/名称
+      pageBatches.forEach(b => {
+        const w = woMap.value[b.wo_number];
+        b.product_number = w?.product_number || '';
+        b.product_name = w?.product_name || '';
+        b.items = { length: b.itemCount };  // 模板只用 items.length
+      });
+
+      return { items: pageBatches, total: totalCount };
+    },
+  });
+
+watch(keyword, () => { if (currentPage.value !== 1) currentPage.value = 1; else reload(); });
+
+async function loadWos() {
+  const res = await listDocs(CONFIG.TABLES.wo, [Query.limit(5000)]);
+  woList.value = res.documents;
+}
+
+onMounted(async () => {
+  await loadWos();
+  await reload();
 });
-const { currentPage, paginatedItems: paginatedBatches } = usePagination(filteredBatches);
 
 const allSelected = computed(() =>
   paginatedBatches.value.length > 0 &&
@@ -217,22 +264,9 @@ function toggleSelectAll(e) {
   }
 }
 
-async function loadAll() {
-  const [issueRes, woRes] = await Promise.all([
-    listDocs(CONFIG.TABLES.issue, [Query.limit(10000)]),
-    listDocs(CONFIG.TABLES.wo, [Query.limit(5000)])
-  ]);
-  allIssues.value = issueRes.documents;
-  woList.value = woRes.documents;
-  const validKeys = new Set(batches.value.map(b => b.key));
-  selectedKeys.value = selectedKeys.value.filter(k => validKeys.has(k));
-}
-onMounted(loadAll);
-
-/* 详情（勾选 1 行） */
 function viewSelected() {
   if (selectedKeys.value.length !== 1) return;
-  const b = batches.value.find(x => x.key === selectedKeys.value[0]);
+  const b = paginatedBatches.value.find(x => x.key === selectedKeys.value[0]);
   if (!b) return;
   if (!b.issue_no) { alert('该领料单没有单号（老数据），无法进入详情。'); return; }
   router.push({ name: 'issue-detail', params: { issueNo: b.issue_no } });
@@ -285,11 +319,11 @@ async function saveAdd() {
   }
   if (fail > 0) {
     addError.value = `部分失败：成功 ${ok} 条，失败 ${fail} 条`;
-    await loadAll();
+    await reload();
     return;
   }
   showAdd.value = false;
-  await loadAll();
+  await reload();
 }
 
 function triggerImport() { fileInput.value.click(); }
@@ -383,31 +417,35 @@ async function handleImport(e) {
   }
   alert(msg);
 
-  await loadAll();
+  await reload();
   e.target.value = '';
 }
 
-/* 删除（勾选 ≥1 行） */
 async function deleteSelected() {
   if (!selectedKeys.value.length) return;
-  const targets = batches.value.filter(b => selectedKeys.value.includes(b.key));
+  const targets = paginatedBatches.value.filter(b => selectedKeys.value.includes(b.key));
   if (!targets.length) return;
 
   const ok = window.$confirm
     ? await window.$confirm({
         title: '删除确认',
-        message: `将删除已勾选的 ${targets.length} 张领料单，共 ${targets.reduce((s, b) => s + b.items.length, 0)} 条明细。确认？`
+        message: `将删除已勾选的 ${targets.length} 张领料单，共 ${targets.reduce((s, b) => s + (b.itemCount || 0), 0)} 条明细。确认？`
       })
     : confirm(`将删除 ${targets.length} 张领料单，确认？`);
   if (!ok) return;
 
   let ok2 = 0, fail = 0;
   for (const b of targets) {
-    const parts = [...new Set(b.items.map(i => i.part_number))];
+    const parts = b._ids ? [...new Set(b._ids.map(id => id))] : [];
     try {
-      for (const it of b.items) await deleteDoc(CONFIG.TABLES.issue, it.$id);
-      if (b.wo_number && parts.length) {
-        try { await syncExcessToInventory(b.wo_number, parts); }
+      // 需要拉当前单据的明细 id 才能删
+      const res = await listDocs(CONFIG.TABLES.issue, [
+        Query.equal('issue_no', b.issue_no), Query.limit(5000)
+      ]);
+      const partNumbers = [...new Set(res.documents.map(i => i.part_number))];
+      for (const it of res.documents) await deleteDoc(CONFIG.TABLES.issue, it.$id);
+      if (b.wo_number && partNumbers.length) {
+        try { await syncExcessToInventory(b.wo_number, partNumbers); }
         catch (e) { console.error(e); }
       }
       ok2++;
@@ -416,15 +454,20 @@ async function deleteSelected() {
     }
   }
   selectedKeys.value = [];
-  await loadAll();
+  await reload();
   if (fail > 0) alert(`删除完成：成功 ${ok2} 张，失败 ${fail} 张`);
 }
 
-/* 导出（勾选 ≥1 行） */
 async function handleExport() {
   if (!selectedKeys.value.length) { alert('请先勾选要导出的领料单'); return; }
-  const selectedBatches = batches.value.filter(b => selectedKeys.value.includes(b.key));
-  const allItems = selectedBatches.flatMap(b => b.items);
+  const selectedBatches = paginatedBatches.value.filter(b => selectedKeys.value.includes(b.key));
+  const allItems = [];
+  for (const b of selectedBatches) {
+    const res = await listDocs(CONFIG.TABLES.issue, [
+      Query.equal('issue_no', b.issue_no), Query.limit(5000)
+    ]);
+    allItems.push(...res.documents);
+  }
   const headers = ['issue_no', 'wo_number', 'part_number', 'part_name', 'issue_qty', 'operator', 'issue_time'];
   const rows = allItems.map(d => headers.map(h => d[h] ?? ''));
   exportCSV(headers, rows, 'issue_selected');
