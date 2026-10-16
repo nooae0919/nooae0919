@@ -5,7 +5,6 @@
       <button @click="$router.push('/bom')">返回列表</button>
     </div>
 
-    <!-- BOM 头信息 -->
     <div class="card" v-if="bom">
       <h2>
         {{ bom.product_number }}
@@ -20,9 +19,8 @@
       </div>
     </div>
 
-    <!-- 明细表（只读） -->
     <div class="toolbar" style="margin-top:24px;">
-      <h3 style="flex:1;">BOM 明细（{{ items.length }} 条）</h3>
+      <h3 style="flex:1;">BOM 明细（{{ total }} 条）</h3>
     </div>
 
     <table>
@@ -41,12 +39,12 @@
           <td>{{ it.part_name || '' }}</td>
           <td><b>{{ it.qty_per_board ?? '' }}</b></td>
         </tr>
-        <tr v-if="!items.length">
+        <tr v-if="!loading && !paginatedItems.length">
           <td colspan="4" style="text-align:center;color:#999;">暂无明细</td>
         </tr>
       </tbody>
     </table>
-    <Pagination v-model:page="currentPage" :total="items.length" />
+    <Pagination v-model:page="currentPage" :total="total" :loading="loading" />
   </MainLayout>
 </template>
 
@@ -65,8 +63,6 @@ const route = useRoute();
 const bomId = computed(() => props.id || route.params.id);
 
 const bom = ref(null);
-const items = ref([]);
-const { currentPage, paginatedItems } = usePagination(items);
 
 function formatTime(iso) {
   if (!iso) return '';
@@ -78,19 +74,32 @@ function formatTime(iso) {
 async function loadBom() {
   bom.value = await getDoc(CONFIG.TABLES.bom, bomId.value);
 }
-async function loadItems() {
-  const res = await listDocs(CONFIG.TABLES.bomItem, [
-    Query.equal('bom_id', bomId.value),
-    Query.orderAsc('part_number'),
-    Query.limit(5000)
-  ]);
-  items.value = res.documents;
-}
-async function loadAll() { await loadBom(); await loadItems(); }
-watch(bomId, loadAll);
 
-onMounted(() => {
+const { currentPage, paginatedItems, total, loading, reload } =
+  usePagination([], {
+    mode: 'server',
+    pageSize: PAGE_SIZE,
+    fetcher: async ({ page, pageSize }) => {
+      const id = bomId.value;
+      if (!id) return { items: [], total: 0 };
+      const res = await listDocs(CONFIG.TABLES.bomItem, [
+        Query.equal('bom_id', id),
+        Query.orderAsc('part_number'),
+        Query.limit(pageSize),
+        Query.offset((page - 1) * pageSize),
+      ]);
+      return { items: res.documents, total: res.total };
+    },
+  });
+
+watch(bomId, async () => {
+  await loadBom();
+  reload();
+});
+
+onMounted(async () => {
   if (!bomId.value) { alert('未指定 BOM ID'); return; }
-  loadAll();
+  await loadBom();
+  reload();
 });
 </script>
