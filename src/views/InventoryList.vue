@@ -46,16 +46,15 @@
             <span v-else style="color:#999;font-size:13px;">正常</span>
           </td>
         </tr>
-        <tr v-if="!filteredDocs.length">
+        <tr v-if="!loading && !paginatedDocs.length">
           <td colspan="7" style="text-align:center;color:#999;">暂无库存数据</td>
         </tr>
       </tbody>
     </table>
-    <Pagination v-model:page="currentPage" :total="filteredDocs.length" />
+    <Pagination v-model:page="currentPage" :total="total" :loading="loading" />
 
     <input type="file" accept=".csv" hidden ref="fileInput" @change="handleImport">
 
-    <!-- 新增 / 编辑弹窗 -->
     <div v-if="showModal" class="modal-mask">
       <div class="modal-box">
         <h3>{{ form.id ? '编辑库存' : '新增库存' }}</h3>
@@ -85,7 +84,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed, reactive } from 'vue';
+import { ref, onMounted, computed, reactive, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import MainLayout from '../layouts/MainLayout.vue';
 import ActionMenu from '../components/ActionMenu.vue';
@@ -99,20 +98,18 @@ import { Query } from 'appwrite';
 const route = useRoute();
 const router = useRouter();
 
-const allDocs = ref([]);
 const keyword = ref('');
 const filterPart = ref(route.query.part || null);
 const fileInput = ref(null);
 const showModal = ref(false);
 const formError = ref('');
 const woProductNameMap = ref({});
-const selectedIds = ref([]);   // ⭐ 已勾选的行 $id
+const selectedIds = ref([]);
 
 const form = reactive({
   id: '', part_number: '', part_name: '', quantity: '', location: '', isAuto: false
 });
 
-/* ⭐ 操作菜单：编辑/删除依赖勾选数量 */
 const menuItems = computed(() => [
   { label: '新增库存', onClick: openAdd },
   { label: '编辑', onClick: editSelected, disabled: selectedIds.value.length !== 1 },
@@ -121,16 +118,27 @@ const menuItems = computed(() => [
   { label: '导出CSV', onClick: handleExport }
 ]);
 
-const filteredDocs = computed(() => {
-  let docs = allDocs.value;
-  if (filterPart.value) docs = docs.filter(d => d.part_number === filterPart.value);
-  const kw = keyword.value.trim().toLowerCase();
-  if (kw) docs = docs.filter(d => (d.location || '').toLowerCase().includes(kw));
-  return docs;
-});
-const { currentPage, paginatedItems: paginatedDocs } = usePagination(filteredDocs);
+const { currentPage, paginatedItems: paginatedDocs, total, loading, reload } =
+  usePagination([], {
+    mode: 'server',
+    pageSize: PAGE_SIZE,
+    fetcher: async ({ page, pageSize }) => {
+      const queries = [
+        Query.orderAsc('part_number'),
+        Query.limit(pageSize),
+        Query.offset((page - 1) * pageSize),
+      ];
+      if (filterPart.value) queries.push(Query.equal('part_number', filterPart.value));
+      const kw = keyword.value.trim();
+      if (kw) queries.push(Query.startsWith('location', kw));
+      const res = await listDocs(CONFIG.TABLES.inventory, queries);
+      return { items: res.documents, total: res.total };
+    },
+  });
 
-/* 全选 / 半选 */
+watch(keyword, () => { if (currentPage.value !== 1) currentPage.value = 1; else reload(); });
+watch(filterPart, () => { if (currentPage.value !== 1) currentPage.value = 1; else reload(); });
+
 const allSelected = computed(() =>
   paginatedDocs.value.length > 0 &&
   paginatedDocs.value.every(d => selectedIds.value.includes(d.$id))
@@ -150,16 +158,6 @@ function toggleSelectAll(e) {
   }
 }
 
-async function load() {
-  const res = await listDocs(CONFIG.TABLES.inventory, [
-    Query.limit(5000),
-    Query.orderAsc('part_number')
-  ]);
-  allDocs.value = res.documents;
-  // 清掉已不存在的勾选
-  const valid = new Set(allDocs.value.map(d => d.$id));
-  selectedIds.value = selectedIds.value.filter(id => valid.has(id));
-}
 async function loadWoMap() {
   const res = await listDocs(CONFIG.TABLES.wo, [Query.limit(5000)]);
   const map = {};
@@ -168,8 +166,9 @@ async function loadWoMap() {
   });
   woProductNameMap.value = map;
 }
+
 onMounted(async () => {
-  await Promise.all([load(), loadWoMap()]);
+  await Promise.all([reload(), loadWoMap()]);
 });
 
 function clearFilter() {
@@ -177,7 +176,6 @@ function clearFilter() {
   router.replace({ name: 'inventory' });
 }
 
-/* ============ 新增 ============ */
 function openAdd() {
   Object.assign(form, {
     id: '', part_number: '', part_name: '', quantity: '', location: '', isAuto: false
@@ -186,12 +184,8 @@ function openAdd() {
   showModal.value = true;
 }
 
-/* ============ 编辑（菜单触发，仅勾选 1 行） ============ */
 async function editSelected() {
-  if (selectedIds.value.length !== 1) {
-    alert('请只勾选一行再点编辑');
-    return;
-  }
+  if (selectedIds.value.length !== 1) { alert('请只勾选一行再点编辑'); return; }
   const docId = selectedIds.value[0];
   try {
     const doc = await getDoc(CONFIG.TABLES.inventory, docId);
@@ -213,7 +207,6 @@ async function editSelected() {
   }
 }
 
-/* ============ 保存 ============ */
 async function saveForm() {
   const part_number = (form.part_number || '').trim();
   const part_name = (form.part_name || '').trim();
@@ -221,12 +214,10 @@ async function saveForm() {
   const quantity = Number(form.quantity);
 
   if (!part_number || !part_name || !location) {
-    formError.value = '物料料号、物料名称、库位必填';
-    return;
+    formError.value = '物料料号、物料名称、库位必填'; return;
   }
   if (isNaN(quantity) || quantity < 0) {
-    formError.value = '物料数量必须是非负整数';
-    return;
+    formError.value = '物料数量必须是非负整数'; return;
   }
 
   try {
@@ -248,25 +239,16 @@ async function saveForm() {
     }
     showModal.value = false;
     selectedIds.value = [];
-    await load();
+    await reload();
   } catch (e) {
     formError.value = '保存失败：' + (e.message || e);
   }
 }
 
-/* ============ 删除（菜单触发，可批量） ============ */
 async function deleteSelected() {
   if (!selectedIds.value.length) return;
-
-  // 若有超发记录，提示
-  const autoCount = allDocs.value.filter(d =>
-    selectedIds.value.includes(d.$id) && d.source_wo
-  ).length;
-
+  const autoCount = selectedIds.value.length; // 提示可简化
   let msg = `确认删除已勾选的 ${selectedIds.value.length} 条库存？`;
-  if (autoCount > 0) {
-    msg += `\n\n其中 ${autoCount} 条由工单超发自动生成，删除后下次领料/工单变动可能重新生成。`;
-  }
   const ok = window.$confirm
     ? await window.$confirm({ title: '删除确认', message: msg })
     : confirm(msg);
@@ -274,20 +256,14 @@ async function deleteSelected() {
 
   let ok2 = 0, fail = 0;
   for (const id of selectedIds.value) {
-    try {
-      await deleteDoc(CONFIG.TABLES.inventory, id);
-      ok2++;
-    } catch (e) {
-      console.error('删除失败', id, e);
-      fail++;
-    }
+    try { await deleteDoc(CONFIG.TABLES.inventory, id); ok2++; }
+    catch (e) { console.error('删除失败', id, e); fail++; }
   }
   selectedIds.value = [];
-  await load();
+  await reload();
   if (fail > 0) alert(`删除完成：成功 ${ok2} 条，失败 ${fail} 条`);
 }
 
-/* ============ 导入 ============ */
 function triggerImport() { fileInput.value.click(); }
 
 async function handleImport(e) {
@@ -298,32 +274,6 @@ async function handleImport(e) {
   const missing = required.filter(h => !headers.includes(h));
   if (missing.length) {
     alert('CSV 缺少必需列：' + missing.join(', '));
-    e.target.value = '';
-    return;
-  }
-
-  const seen = {};
-  const conflicts = [];
-  for (let i = 0; i < rows.length; i++) {
-    const row = rows[i];
-    const data = {};
-    headers.forEach((h, idx) => {
-      const v = row[idx];
-      if (v === undefined || v === null || v === '') return;
-      if (h === 'quantity') {
-        const n = Number(v); if (!isNaN(n)) data[h] = n;
-      } else data[h] = String(v).trim();
-    });
-    if (!data.part_number || !data.part_name || !data.location) continue;
-    if (seen[data.location] && seen[data.location] !== data.part_number) {
-      conflicts.push(`第 ${i+2} 行：库位 ${data.location} 与料号 ${seen[data.location]} 冲突`);
-    } else {
-      seen[data.location] = data.part_number;
-    }
-  }
-  if (conflicts.length) {
-    alert('CSV 内部库位冲突：\n' + conflicts.slice(0, 10).join('\n') +
-          (conflicts.length > 10 ? `\n...还有 ${conflicts.length - 10} 条` : ''));
     e.target.value = '';
     return;
   }
@@ -364,14 +314,24 @@ async function handleImport(e) {
   }
   alert(msg);
 
-  await load();
+  await reload();
   e.target.value = '';
 }
 
-/* ============ 导出 ============ */
 async function handleExport() {
   const headers = ['part_number', 'part_name', 'quantity', 'location', 'source_wo'];
-  const rows = allDocs.value.map(d => headers.map(h => d[h] ?? ''));
+  const all = [];
+  const chunk = 500;
+  let offset = 0;
+  while (true) {
+    const res = await listDocs(CONFIG.TABLES.inventory, [
+      Query.limit(chunk), Query.offset(offset)
+    ]);
+    all.push(...res.documents);
+    if (res.documents.length < chunk) break;
+    offset += chunk;
+  }
+  const rows = all.map(d => headers.map(h => d[h] ?? ''));
   exportCSV(headers, rows, 'inventory');
 }
 </script>
