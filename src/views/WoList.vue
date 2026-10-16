@@ -13,7 +13,6 @@
       <ActionMenu :items="menuItems" />
     </div>
 
-    <!-- ⭐ 批量操作进度提示条 -->
     <div v-if="progressText" class="notice" style="background:#fef3c7;border-left-color:#d97706;color:#92400e;">
       {{ progressText }}
     </div>
@@ -63,12 +62,12 @@
             <button v-else @click="openEdit(d.$id)" style="margin-left:4px;">编辑</button>
           </td>
         </tr>
-        <tr v-if="!filteredDocs.length">
+        <tr v-if="!loading && !paginatedDocs.length">
           <td colspan="11" style="text-align:center;color:#999;">暂无工单</td>
         </tr>
       </tbody>
     </table>
-    <Pagination v-model:page="currentPage" :total="filteredDocs.length" />
+    <Pagination v-model:page="currentPage" :total="total" :loading="loading" />
 
     <input type="file" accept=".csv" hidden ref="fileInput" @change="handleImport">
 
@@ -76,7 +75,6 @@
     <div v-if="showAdd" class="modal-mask">
       <div class="modal-box">
         <h3>新增工单</h3>
-
         <label>线体
           <select v-model="form.line">
             <option value="">— 请选择 —</option>
@@ -84,7 +82,6 @@
             <option value="2线">2线</option>
           </select>
         </label>
-
         <label>关联 BOM <span style="color:#d33;">*</span>
           <select v-model="form.bom_id" @change="onBomChange('add')">
             <option value="">— 请选择 BOM —</option>
@@ -93,7 +90,6 @@
             </option>
           </select>
         </label>
-
         <label>工单号
           <input v-model="form.wo_number" type="text" placeholder="如 WO-2024-0001">
         </label>
@@ -118,7 +114,6 @@
             <option value="completed">已完成</option>
           </select>
         </label>
-
         <p class="error">{{ formError }}</p>
         <div class="modal-actions">
           <button class="btn-cancel" @click="showAdd = false">取消</button>
@@ -131,7 +126,6 @@
     <div v-if="showEdit" class="modal-mask">
       <div class="modal-box">
         <h3>编辑工单</h3>
-
         <label>线体
           <select v-model="editForm.line">
             <option value="">— 请选择 —</option>
@@ -139,7 +133,6 @@
             <option value="2线">2线</option>
           </select>
         </label>
-
         <label>关联 BOM <span style="color:#d33;">*</span>
           <select v-model="editForm.bom_id" @change="onBomChange('edit')">
             <option value="">— 请选择 BOM —</option>
@@ -148,7 +141,6 @@
             </option>
           </select>
         </label>
-
         <label>工单号
           <input v-model="editForm.wo_number" type="text" disabled>
         </label>
@@ -173,7 +165,6 @@
             <option value="completed">已完成</option>
           </select>
         </label>
-
         <p class="error">{{ editError }}</p>
         <div class="modal-actions">
           <button class="btn-cancel" @click="showEdit = false">取消</button>
@@ -185,12 +176,12 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed, reactive } from 'vue';
+import { ref, onMounted, computed, reactive, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import MainLayout from '../layouts/MainLayout.vue';
 import ActionMenu from '../components/ActionMenu.vue';
 import Pagination from '../components/Pagination.vue';
-import { usePagination } from '../composables/usePagination.js';
+import { PAGE_SIZE, usePagination } from '../composables/usePagination.js';
 import { CONFIG } from '../config.js';
 import { listDocs, getDoc, createDoc, updateDoc } from '../api/db.js';
 import { exportCSV, readCSV } from '../api/csv.js';
@@ -202,7 +193,6 @@ const router = useRouter();
 
 const WO_HEADERS = ['wo_number', 'line', 'product_number', 'product_name', 'plan_qty', 'produce_date', 'status'];
 
-const docs = ref([]);
 const bomList = ref([]);
 const bomMap = ref({});
 const bomVersionMap = ref({});
@@ -215,7 +205,7 @@ const showAdd = ref(false);
 const showEdit = ref(false);
 const formError = ref('');
 const editError = ref('');
-const progressText = ref('');   // ⭐ 进度提示
+const progressText = ref('');
 
 const form = reactive({
   bom_id: '', wo_number: '', line: '',
@@ -228,7 +218,6 @@ const editForm = reactive({
   plan_qty: '', produce_date: '', status: 'pending'
 });
 
-/* ⭐ 操作菜单 */
 const menuItems = computed(() => [
   { label: '新增工单', onClick: openAdd },
   { label: '导入CSV', onClick: triggerImport },
@@ -245,7 +234,53 @@ function remainQty(wo) {
   return Math.max(plan - fin, 0);
 }
 
-/* ============ 加载数据 ============ */
+const { currentPage, paginatedItems: paginatedDocs, total, loading, reload } =
+  usePagination([], {
+    mode: 'server',
+    pageSize: PAGE_SIZE,
+    fetcher: async ({ page, pageSize }) => {
+      const queries = [
+        Query.limit(pageSize),
+        Query.offset((page - 1) * pageSize),
+      ];
+      if (lineFilter.value) queries.push(Query.equal('line', lineFilter.value));
+      const kw = keyword.value.trim();
+      if (kw) queries.push(Query.search('wo_number', kw));
+      const res = await listDocs(CONFIG.TABLES.wo, queries);
+
+      // 只对当前页工单补充：快照版本 + 已入库数量
+      const woNumbers = res.documents.map(d => d.wo_number).filter(Boolean);
+      const snapMap = {};
+      const finMap = {};
+      if (woNumbers.length) {
+        const [snapRes, finRes] = await Promise.all([
+          listDocs(CONFIG.TABLES.woBom, [
+            Query.equal('wo_number', woNumbers),
+            Query.limit(20000),
+          ]),
+          listDocs(CONFIG.TABLES.finish, [
+            Query.equal('wo_number', woNumbers),
+            Query.limit(20000),
+          ]),
+        ]);
+        snapRes.documents.forEach(it => {
+          if (!snapMap[it.wo_number]) snapMap[it.wo_number] = it.bom_version || '';
+        });
+        finRes.documents.forEach(d => {
+          const wo = d.wo_number; if (!wo) return;
+          finMap[wo] = (finMap[wo] || 0) + (Number(d.finish_qty) || 0);
+        });
+      }
+      snapshotVersionMap.value = snapMap;
+      finishedMap.value = finMap;
+
+      return { items: res.documents, total: res.total };
+    },
+  });
+
+watch(keyword, () => { if (currentPage.value !== 1) currentPage.value = 1; else reload(); });
+watch(lineFilter, () => { if (currentPage.value !== 1) currentPage.value = 1; else reload(); });
+
 async function loadBoms() {
   const res = await listDocs(CONFIG.TABLES.bom, [
     Query.limit(5000),
@@ -260,49 +295,11 @@ async function loadBoms() {
   bomMap.value = map;
   bomVersionMap.value = vmap;
 }
-async function loadSnapshotMap() {
-  const res = await listDocs(CONFIG.TABLES.woBom, [Query.limit(50000)]);
-  const map = {};
-  res.documents.forEach(it => {
-    if (!map[it.wo_number]) map[it.wo_number] = it.bom_version || '';
-  });
-  snapshotVersionMap.value = map;
-}
-async function loadFinishes() {
-  const res = await listDocs(CONFIG.TABLES.finish, [Query.limit(20000)]);
-  const map = {};
-  res.documents.forEach(d => {
-    const wo = d.wo_number; if (!wo) return;
-    map[wo] = (map[wo] || 0) + (Number(d.finish_qty) || 0);
-  });
-  finishedMap.value = map;
-}
-async function load() {
-  const res = await listDocs(CONFIG.TABLES.wo, [Query.limit(5000)]);
-  docs.value = res.documents;
-}
-async function loadAll() {
-  await Promise.all([loadBoms(), load(), loadSnapshotMap(), loadFinishes()]);
-}
-onMounted(loadAll);
 
-/* ============ 搜索 / 筛选 ============ */
-const filteredDocs = computed(() => {
-  let list = docs.value;
-  if (lineFilter.value) list = list.filter(d => d.line === lineFilter.value);
-  const kw = keyword.value.trim().toLowerCase();
-  if (kw) {
-    list = list.filter(d =>
-      (d.wo_number || '').toLowerCase().includes(kw) ||
-      (d.product_number || '').toLowerCase().includes(kw) ||
-      (d.product_name || '').toLowerCase().includes(kw)
-    );
-  }
-  return list;
+onMounted(async () => {
+  await Promise.all([reload(), loadBoms()]);
 });
-const { currentPage, paginatedItems: paginatedDocs } = usePagination(filteredDocs);
 
-/* ============ BOM 联动 ============ */
 function onBomChange(which) {
   const target = which === 'add' ? form : editForm;
   const b = bomMap.value[target.bom_id];
@@ -315,7 +312,6 @@ function onBomChange(which) {
   }
 }
 
-/* ============ 新增 ============ */
 function openAdd() {
   Object.assign(form, {
     bom_id: '', wo_number: '', line: '',
@@ -345,30 +341,25 @@ async function saveAdd() {
       status: form.status
     });
 
-    // 快照
     progressText.value = `正在生成 BOM 快照...`;
     try {
       await snapshotBomToWo(form.bom_id, form.wo_number, p => {
         progressText.value = `[${p.phase === 'delete' ? '删除旧快照' : '写入新快照'}] ${p.done}/${p.total}`;
       });
-    } catch (e) {
-      console.error('写入快照失败', e);
-    }
+    } catch (e) { console.error('写入快照失败', e); }
 
-    // 同步库存
     try { await syncExcessToInventory(form.wo_number); }
     catch (e) { console.error('同步库存失败', e); }
 
     progressText.value = '';
     showAdd.value = false;
-    await loadAll();
+    await reload();
   } catch (e) {
     progressText.value = '';
     formError.value = '保存失败：' + (e.message || e);
   }
 }
 
-/* ============ 编辑 ============ */
 async function openEdit(docId) {
   try {
     const doc = await getDoc(CONFIG.TABLES.wo, docId);
@@ -399,7 +390,7 @@ async function saveEdit() {
     const current = await getDoc(CONFIG.TABLES.wo, editForm.$id);
     if (current.status === 'completed') {
       editError.value = '该工单已完成，不允许修改。';
-      setTimeout(() => { showEdit.value = false; loadAll(); }, 1200);
+      setTimeout(() => { showEdit.value = false; reload(); }, 1200);
       return;
     }
     const bomChanged = current.bom_id !== editForm.bom_id;
@@ -439,19 +430,17 @@ async function saveEdit() {
     catch (e) { console.error('同步库存失败', e); }
 
     showEdit.value = false;
-    await loadAll();
+    await reload();
   } catch (e) {
     editError.value = '保存失败：' + (e.message || e);
   }
 }
 
-/* ============ 跳转齐套 ============ */
 function goKitting(wo) {
   if (!wo.bom_id) { alert('该工单未关联 BOM，无法做齐套分析。'); return; }
   router.push({ name: 'wo-kitting', params: { woId: wo.$id } });
 }
 
-/* ============ 重载 BOM（带进度） ============ */
 async function reloadBom(wo) {
   if (!wo.bom_id) { alert('该工单未关联 BOM。'); return; }
   const ok = window.$confirm
@@ -469,18 +458,29 @@ async function reloadBom(wo) {
     });
     progressText.value = `正在同步超发库存...`;
     await syncExcessToInventory(wo.wo_number);
-    await loadSnapshotMap();
     progressText.value = '';
     alert(`BOM 快照已重载，共 ${res.ok} 条明细（版本 ${res.bomVersion || '-'}）。`);
+    await reload();
   } catch (e) {
     progressText.value = '';
     alert('重载失败：' + (e.message || e));
   }
 }
 
-/* ============ 批量初始化快照（加节流） ============ */
 async function batchInitSnapshots() {
-  const missing = docs.value.filter(d => d.bom_id && !snapshotVersionMap.value[d.wo_number]);
+  // 先拉全量工单号（仅取 wo_number + bom_id + $id，用于批量）
+  const all = [];
+  let offset = 0;
+  const chunk = 500;
+  while (true) {
+    const res = await listDocs(CONFIG.TABLES.wo, [
+      Query.limit(chunk), Query.offset(offset)
+    ]);
+    all.push(...res.documents);
+    if (res.documents.length < chunk) break;
+    offset += chunk;
+  }
+  const missing = all.filter(d => d.bom_id && !snapshotVersionMap.value[d.wo_number]);
   if (!missing.length) { alert('所有工单都已有快照，无需初始化。'); return; }
 
   const ok = window.$confirm
@@ -499,100 +499,4 @@ async function batchInitSnapshots() {
     progressText.value = `批量初始化快照：${i + 1}/${missing.length}（成功 ${success}，失败 ${fail}）`;
     try {
       await snapshotBomToWo(wo.bom_id, wo.wo_number, p => {
-        progressText.value = `批量初始化：工单 ${wo.wo_number}（${i+1}/${missing.length}）[${p.phase}] ${p.done}/${p.total}`;
-      });
-      success++;
-    } catch (e) {
-      errors.push(`${wo.wo_number}: ${e.message || e}`);
-      fail++;
-    }
-    if (i < missing.length - 1) await sleep(1500);   // ⭐ 工单之间节流
-  }
-
-  progressText.value = '';
-  await loadSnapshotMap();
-
-  let msg = `批量初始化完成：成功 ${success} 个，失败 ${fail} 个。`;
-  if (errors.length) {
-    msg += '\n\n失败明细（前 10 条）：\n' + errors.slice(0, 10).join('\n');
-    if (errors.length > 10) msg += `\n...还有 ${errors.length - 10} 条`;
-  }
-  alert(msg);
-}
-
-/* ============ 导入 CSV ============ */
-function triggerImport() { fileInput.value.click(); }
-
-async function handleImport(e) {
-  const f = e.target.files[0]; if (!f) return;
-  const { headers, rows } = await readCSV(f);
-
-  const pnToBom = {};
-  bomList.value.forEach(b => { pnToBom[b.product_number] = b.$id; });
-
-  let ok = 0, fail = 0;
-  const errors = [];
-  const touchedWos = [];
-
-  for (let i = 0; i < rows.length; i++) {
-    const row = rows[i];
-    const data = {};
-    headers.forEach((h, idx) => {
-      const v = row[idx];
-      if (v === undefined || v === null || v === '') return;
-      if (h === 'plan_qty') {
-        const n = Number(v); if (isNaN(n)) return;
-        data[h] = n;
-      } else data[h] = String(v).trim();
-    });
-
-    if (!data.bom_id && data.product_number) {
-      const bid = pnToBom[data.product_number];
-      if (bid) data.bom_id = bid;
-    }
-    if (!data.bom_id) {
-      errors.push(`第 ${i+2} 行：找不到匹配的 BOM`); fail++; continue;
-    }
-    if (!data.wo_number) {
-      errors.push(`第 ${i+2} 行：工单号为空`); fail++; continue;
-    }
-
-    try {
-      await createDoc(CONFIG.TABLES.wo, data);
-      touchedWos.push({ wo_number: data.wo_number, bom_id: data.bom_id });
-      ok++;
-    } catch (err) {
-      errors.push(`第 ${i+2} 行：${err.message}`); fail++;
-    }
-  }
-
-  // 逐个工单建快照 + 同步库存（互相之间节流）
-  for (let i = 0; i < touchedWos.length; i++) {
-    const item = touchedWos[i];
-    progressText.value = `正在处理工单快照：${i+1}/${touchedWos.length}`;
-    try { await snapshotBomToWo(item.bom_id, item.wo_number); }
-    catch (e) { console.error('快照失败', item.wo_number, e); }
-    try { await syncExcessToInventory(item.wo_number); }
-    catch (e) { console.error('同步失败', item.wo_number, e); }
-    if (i < touchedWos.length - 1) await sleep(1500);
-  }
-  progressText.value = '';
-
-  let msg = `导入完成：成功 ${ok} 条，失败 ${fail} 条`;
-  if (errors.length) {
-    msg += '\n\n失败明细（前 10 条）：\n' + errors.slice(0, 10).join('\n');
-    if (errors.length > 10) msg += `\n...还有 ${errors.length - 10} 条`;
-  }
-  alert(msg);
-
-  await loadAll();
-  e.target.value = '';
-}
-
-/* ============ 导出 CSV ============ */
-async function handleExport() {
-  const res = await listDocs(CONFIG.TABLES.wo, [Query.limit(5000)]);
-  const rows = res.documents.map(d => WO_HEADERS.map(h => d[h] ?? ''));
-  exportCSV(WO_HEADERS, rows, 'work_orders');
-}
-</script>
+        progressText.value = `批量初始化：工单 ${wo.wo_number}（${i+1}/${missing.length}）[${
