@@ -5,7 +5,6 @@
       <ActionMenu :items="menuItems" />
     </div>
 
-    <!-- 工单信息卡片 -->
     <div class="card" v-if="wo">
       <h2>
         工单 {{ wo.wo_number }}
@@ -19,7 +18,7 @@
         <span>生产日期：<b>{{ wo.produce_date || '-' }}</b></span>
         <span>状态：<b>{{ statusText(wo.status) }}</b></span>
         <span>BOM快照版本：<b>{{ bomVersion || '-' }}</b></span>
-        <span>物料种类：<b>{{ rows.length }}</b></span>
+        <span>物料种类：<b>{{ total }}</b></span>
         <span>超发种类：<b style="color:#16a34a;">{{ excessCount }}</b></span>
         <span>缺料种类：<b style="color:#d33;">{{ missingCount }}</b></span>
       </div>
@@ -59,14 +58,14 @@
             <span v-else style="color:#ccc;">-</span>
           </td>
         </tr>
-        <tr v-if="!rows.length">
+        <tr v-if="!loading && !paginatedRows.length">
           <td colspan="8" style="text-align:center;color:#999;">
             {{ loading ? '加载中...' : '该工单 BOM 没有明细' }}
           </td>
         </tr>
       </tbody>
     </table>
-    <Pagination v-model:page="currentPage" :total="rows.length" />
+    <Pagination v-model:page="currentPage" :total="total" :loading="loading" />
   </MainLayout>
 </template>
 
@@ -90,24 +89,38 @@ const woId = computed(() => props.woId || route.params.woId);
 
 const wo = ref(null);
 const bomVersion = ref('');
-const rows = ref([]);
-const loading = ref(false);
-const { currentPage, paginatedItems: paginatedRows } = usePagination(rows);
+const excessCount = ref(0);
+const missingCount = ref(0);
+const allRows = ref([]);       // 全量（用于导出、超发统计、入库）
+const pushedMap = ref({});
 
-const missingCount = computed(() => rows.value.filter(r => r.excess < 0).length);
-const excessCount = computed(() => rows.value.filter(r => r.excess > 0).length);
-
-/* ⭐ 操作菜单 */
 const menuItems = computed(() => [
   { label: '返回工单列表', onClick: () => router.push('/wo') },
   { label: '刷新', onClick: load },
   { label: '超发入库', onClick: pushExcessToInventory, disabled: excessCount.value === 0 },
-  { label: '导出CSV', onClick: handleExport, disabled: !rows.value.length }
+  { label: '导出CSV', onClick: handleExport, disabled: !total.value }
 ]);
 
 function statusText(s) {
   return s === 'completed' ? '已完成' : s === 'in_progress' ? '生产中' : '待生产';
 }
+
+const { currentPage, paginatedItems: paginatedRows, total, loading, reload } =
+  usePagination([], {
+    mode: 'server',
+    pageSize: PAGE_SIZE,
+    fetcher: async ({ page, pageSize }) => {
+      // 齐套数据需要 join：wo_bom 快照 + issue 领料
+      // 服务端分页单位是 wo_bom 快照行
+      if (!wo.value) {
+        // 第一次先加载头部与全量用于统计
+        await loadAllRows();
+      }
+      const start = (page - 1) * pageSize;
+      const pageRows = allRows.value.slice(start, start + pageSize);
+      return { items: pageRows, total: allRows.value.length };
+    },
+  });
 
 async function loadPushedMap() {
   if (!wo.value) return {};
@@ -120,60 +133,62 @@ async function loadPushedMap() {
   return map;
 }
 
-async function load() {
-  loading.value = true;
-  try {
-    wo.value = await getDoc(CONFIG.TABLES.wo, woId.value);
-    if (!wo.value) { alert('未找到工单'); return; }
+async function loadAllRows() {
+  wo.value = await getDoc(CONFIG.TABLES.wo, woId.value);
+  if (!wo.value) { alert('未找到工单'); allRows.value = []; return; }
 
-    // 从 wo_bom 拿快照
-    const snapRes = await listDocs(CONFIG.TABLES.woBom, [
-      Query.equal('wo_number', wo.value.wo_number),
-      Query.orderAsc('part_number'),
-      Query.limit(20000)
-    ]);
-
-    if (!snapRes.documents.length) {
-      alert('该工单还没有用料快照，请在工单列表点"重载BOM"生成。');
-      rows.value = [];
-      return;
-    }
-
-    bomVersion.value = snapRes.documents[0]?.bom_version || '';
-
-    const issueRes = await listDocs(CONFIG.TABLES.issue, [
-      Query.equal('wo_number', wo.value.wo_number),
-      Query.limit(20000)
-    ]);
-    const issueMap = {};
-    issueRes.documents.forEach(d => {
-      const pn = d.part_number; if (!pn) return;
-      issueMap[pn] = (issueMap[pn] || 0) + (Number(d.issue_qty) || 0);
-    });
-
-    const pushedMap = await loadPushedMap();
-
-    const planQty = Number(wo.value.plan_qty) || 0;
-    rows.value = snapRes.documents.map(it => {
-      const per = Number(it.qty_per_board) || 0;
-      const required = Math.ceil(per * planQty);
-      const issued = issueMap[it.part_number] || 0;
-      const excess = issued - required;
-      return {
-        part_number: it.part_number,
-        part_name: it.part_name || '',
-        qty_per_board: per,
-        required,
-        issued,
-        excess,
-        pushed: !!pushedMap[it.part_number]
-      };
-    }).sort((a, b) => (a.part_number || '').localeCompare(b.part_number || ''));
-  } catch (e) {
-    alert('加载失败：' + e.message);
-  } finally {
-    loading.value = false;
+  // 快照
+  const snapRes = await listDocs(CONFIG.TABLES.woBom, [
+    Query.equal('wo_number', wo.value.wo_number),
+    Query.orderAsc('part_number'),
+    Query.limit(20000)
+  ]);
+  if (!snapRes.documents.length) {
+    alert('该工单还没有用料快照，请在工单列表点"重载BOM"生成。');
+    allRows.value = [];
+    return;
   }
+  bomVersion.value = snapRes.documents[0]?.bom_version || '';
+
+  // 领料
+  const issueRes = await listDocs(CONFIG.TABLES.issue, [
+    Query.equal('wo_number', wo.value.wo_number),
+    Query.limit(20000)
+  ]);
+  const issueMap = {};
+  issueRes.documents.forEach(d => {
+    const pn = d.part_number; if (!pn) return;
+    issueMap[pn] = (issueMap[pn] || 0) + (Number(d.issue_qty) || 0);
+  });
+
+  pushedMap.value = await loadPushedMap();
+
+  const planQty = Number(wo.value.plan_qty) || 0;
+  allRows.value = snapRes.documents.map(it => {
+    const per = Number(it.qty_per_board) || 0;
+    const required = Math.ceil(per * planQty);
+    const issued = issueMap[it.part_number] || 0;
+    const excess = issued - required;
+    return {
+      part_number: it.part_number,
+      part_name: it.part_name || '',
+      qty_per_board: per,
+      required,
+      issued,
+      excess,
+      pushed: !!pushedMap.value[it.part_number]
+    };
+  }).sort((a, b) => (a.part_number || '').localeCompare(b.part_number || ''));
+
+  excessCount.value = allRows.value.filter(r => r.excess > 0).length;
+  missingCount.value = allRows.value.filter(r => r.excess < 0).length;
+}
+
+async function load() {
+  allRows.value = [];
+  wo.value = null;
+  await loadAllRows();
+  await reload();
 }
 
 watch(woId, load);
@@ -189,13 +204,11 @@ async function pushExcessToInventory() {
     alert('该工单没有线体，无法确定入库库位。请先编辑工单选择线体。');
     return;
   }
-
-  const excessRows = rows.value.filter(r => r.excess > 0);
+  const excessRows = allRows.value.filter(r => r.excess > 0);
   if (!excessRows.length) {
     alert('该工单没有超发的物料，无需入库。');
     return;
   }
-
   const ok = window.$confirm
     ? await window.$confirm({
         title: '超发入库确认',
@@ -219,9 +232,9 @@ async function pushExcessToInventory() {
 }
 
 function handleExport() {
-  if (!rows.value.length) { alert('暂无数据'); return; }
+  if (!allRows.value.length) { alert('暂无数据'); return; }
   const headers = ['part_number', 'part_name', 'qty_per_board', 'required', 'issued', 'excess'];
-  const data = rows.value.map(r => [
+  const data = allRows.value.map(r => [
     r.part_number, r.part_name, r.qty_per_board, r.required, r.issued, r.excess
   ]);
   exportCSV(headers, data, `kitting_${wo.value?.wo_number || woId.value}`);
