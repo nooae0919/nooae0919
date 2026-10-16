@@ -35,7 +35,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="d in filteredDocs" :key="d.$id">
+        <tr v-for="d in paginatedDocs" :key="d.$id">
           <td>{{ d.line || '-' }}</td>
           <td>{{ d.wo_number || '' }}</td>
           <td>{{ d.product_number || '' }}</td>
@@ -68,6 +68,7 @@
         </tr>
       </tbody>
     </table>
+    <Pagination v-model:page="currentPage" :total="filteredDocs.length" />
 
     <input type="file" accept=".csv" hidden ref="fileInput" @change="handleImport">
 
@@ -188,6 +189,8 @@ import { ref, onMounted, computed, reactive } from 'vue';
 import { useRouter } from 'vue-router';
 import MainLayout from '../layouts/MainLayout.vue';
 import ActionMenu from '../components/ActionMenu.vue';
+import Pagination from '../components/Pagination.vue';
+import { usePagination } from '../composables/usePagination.js';
 import { CONFIG } from '../config.js';
 import { listDocs, getDoc, createDoc, updateDoc } from '../api/db.js';
 import { exportCSV, readCSV } from '../api/csv.js';
@@ -297,6 +300,7 @@ const filteredDocs = computed(() => {
   }
   return list;
 });
+const { currentPage, paginatedItems: paginatedDocs } = usePagination(filteredDocs);
 
 /* ============ BOM 联动 ============ */
 function onBomChange(which) {

@@ -25,9 +25,9 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(b, idx) in filteredBatches" :key="b.key">
+        <tr v-for="(b, idx) in paginatedBatches" :key="b.key">
           <td><input type="checkbox" :value="b.key" v-model="selectedKeys"></td>
-          <td>{{ idx + 1 }}</td>
+          <td>{{ (currentPage - 1) * PAGE_SIZE + idx + 1 }}</td>
           <td>{{ b.issue_no || '(无单号)' }}</td>
           <td>{{ b.wo_number || '' }}</td>
           <td>{{ b.product_number || '' }}</td>
@@ -42,6 +42,7 @@
         </tr>
       </tbody>
     </table>
+    <Pagination v-model:page="currentPage" :total="filteredBatches.length" />
 
     <input type="file" accept=".csv" hidden ref="fileInput" @change="handleImport">
 
@@ -102,6 +103,8 @@ import { ref, onMounted, computed, reactive } from 'vue';
 import { useRouter } from 'vue-router';
 import MainLayout from '../layouts/MainLayout.vue';
 import ActionMenu from '../components/ActionMenu.vue';
+import Pagination from '../components/Pagination.vue';
+import { PAGE_SIZE, usePagination } from '../composables/usePagination.js';
 import { CONFIG } from '../config.js';
 import { listDocs, createDoc, deleteDoc } from '../api/db.js';
 import { exportCSV, readCSV } from '../api/csv.js';
@@ -193,22 +196,23 @@ const filteredBatches = computed(() => {
     (b.operator || '').toLowerCase().includes(kw)
   );
 });
+const { currentPage, paginatedItems: paginatedBatches } = usePagination(filteredBatches);
 
 const allSelected = computed(() =>
-  filteredBatches.value.length > 0 &&
-  filteredBatches.value.every(b => selectedKeys.value.includes(b.key))
+  paginatedBatches.value.length > 0 &&
+  paginatedBatches.value.every(b => selectedKeys.value.includes(b.key))
 );
 const someSelected = computed(() =>
   !allSelected.value &&
-  filteredBatches.value.some(b => selectedKeys.value.includes(b.key))
+  paginatedBatches.value.some(b => selectedKeys.value.includes(b.key))
 );
 function toggleSelectAll(e) {
   if (e.target.checked) {
     const set = new Set(selectedKeys.value);
-    filteredBatches.value.forEach(b => set.add(b.key));
+    paginatedBatches.value.forEach(b => set.add(b.key));
     selectedKeys.value = Array.from(set);
   } else {
-    const keys = new Set(filteredBatches.value.map(b => b.key));
+    const keys = new Set(paginatedBatches.value.map(b => b.key));
     selectedKeys.value = selectedKeys.value.filter(k => !keys.has(k));
   }
 }

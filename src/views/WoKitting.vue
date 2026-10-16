@@ -43,8 +43,8 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(r, idx) in rows" :key="r.part_number">
-          <td>{{ idx + 1 }}</td>
+        <tr v-for="(r, idx) in paginatedRows" :key="r.part_number">
+          <td>{{ (currentPage - 1) * PAGE_SIZE + idx + 1 }}</td>
           <td>{{ r.part_number }}</td>
           <td>{{ r.part_name || '' }}</td>
           <td>{{ r.qty_per_board }}</td>
@@ -66,6 +66,7 @@
         </tr>
       </tbody>
     </table>
+    <Pagination v-model:page="currentPage" :total="rows.length" />
   </MainLayout>
 </template>
 
@@ -74,6 +75,8 @@ import { ref, computed, onMounted, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import MainLayout from '../layouts/MainLayout.vue';
 import ActionMenu from '../components/ActionMenu.vue';
+import Pagination from '../components/Pagination.vue';
+import { PAGE_SIZE, usePagination } from '../composables/usePagination.js';
 import { CONFIG } from '../config.js';
 import { listDocs, getDoc } from '../api/db.js';
 import { exportCSV } from '../api/csv.js';
@@ -89,6 +92,7 @@ const wo = ref(null);
 const bomVersion = ref('');
 const rows = ref([]);
 const loading = ref(false);
+const { currentPage, paginatedItems: paginatedRows } = usePagination(rows);
 
 const missingCount = computed(() => rows.value.filter(r => r.excess < 0).length);
 const excessCount = computed(() => rows.value.filter(r => r.excess > 0).length);

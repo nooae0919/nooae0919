@@ -32,8 +32,8 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(it, idx) in batch?.items || []" :key="it.$id">
-          <td>{{ idx + 1 }}</td>
+        <tr v-for="(it, idx) in paginatedItems" :key="it.$id">
+          <td>{{ (currentPage - 1) * PAGE_SIZE + idx + 1 }}</td>
           <td>{{ it.part_number || '' }}</td>
           <td>{{ it.part_name || '' }}</td>
           <td><b>{{ it.issue_qty ?? '' }}</b></td>
@@ -43,6 +43,7 @@
         </tr>
       </tbody>
     </table>
+    <Pagination v-model:page="currentPage" :total="batchItems.length" />
   </MainLayout>
 </template>
 
@@ -50,6 +51,8 @@
 import { ref, onMounted, computed, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import MainLayout from '../layouts/MainLayout.vue';
+import Pagination from '../components/Pagination.vue';
+import { PAGE_SIZE, usePagination } from '../composables/usePagination.js';
 import { CONFIG } from '../config.js';
 import { listDocs } from '../api/db.js';
 import { Query } from 'appwrite';
@@ -59,6 +62,8 @@ const route = useRoute();
 const issueNo = computed(() => props.issueNo || route.params.issueNo);
 
 const batch = ref(null);
+const batchItems = computed(() => batch.value?.items || []);
+const { currentPage, paginatedItems } = usePagination(batchItems);
 
 async function load() {
   const res = await listDocs(CONFIG.TABLES.issue, [

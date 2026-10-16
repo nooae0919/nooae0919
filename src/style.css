@@ -212,6 +212,25 @@ td button:hover { background: #f3f4f6; }
 }
 .search-bar input:focus { outline: none; border-color: #2563eb; }
 
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-top: 14px;
+  color: #666;
+  font-size: 13px;
+}
+.pagination-controls { display: flex; align-items: center; gap: 12px; }
+.pagination-controls button {
+  padding: 6px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #fff;
+  cursor: pointer;
+}
+.pagination-controls button:disabled { color: #aaa; cursor: not-allowed; }
+
 /* 徽标 */
 .qty-badge {
   display: inline-block;

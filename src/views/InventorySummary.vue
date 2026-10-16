@@ -18,8 +18,8 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(r, idx) in filteredRows" :key="r.part_number">
-          <td>{{ idx + 1 }}</td>
+        <tr v-for="(r, idx) in paginatedRows" :key="r.part_number">
+          <td>{{ (currentPage - 1) * PAGE_SIZE + idx + 1 }}</td>
           <td>
             <a class="part-link" href="#" @click.prevent="goToInventory(r.part_number)">
               {{ r.part_number }}
@@ -34,6 +34,7 @@
         </tr>
       </tbody>
     </table>
+    <Pagination v-model:page="currentPage" :total="filteredRows.length" />
   </MainLayout>
 </template>
 
@@ -42,6 +43,8 @@ import { ref, onMounted, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import MainLayout from '../layouts/MainLayout.vue';
 import ActionMenu from '../components/ActionMenu.vue';
+import Pagination from '../components/Pagination.vue';
+import { PAGE_SIZE, usePagination } from '../composables/usePagination.js';
 import { CONFIG } from '../config.js';
 import { listDocs } from '../api/db.js';
 import { exportCSV } from '../api/csv.js';
@@ -65,6 +68,7 @@ const filteredRows = computed(() => {
     r.part_name.toLowerCase().includes(kw)
   );
 });
+const { currentPage, paginatedItems: paginatedRows } = usePagination(filteredRows);
 
 async function load() {
   const res = await listDocs(CONFIG.TABLES.inventory, [Query.limit(5000)]);

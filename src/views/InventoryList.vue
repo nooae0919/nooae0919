@@ -30,11 +30,11 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(d, idx) in filteredDocs" :key="d.$id">
+        <tr v-for="(d, idx) in paginatedDocs" :key="d.$id">
           <td>
             <input type="checkbox" :value="d.$id" v-model="selectedIds">
           </td>
-          <td>{{ idx + 1 }}</td>
+          <td>{{ (currentPage - 1) * PAGE_SIZE + idx + 1 }}</td>
           <td>{{ d.part_number || '' }}</td>
           <td>{{ d.part_name || '' }}</td>
           <td><span class="qty-badge">{{ d.quantity ?? 0 }}</span></td>
@@ -51,6 +51,7 @@
         </tr>
       </tbody>
     </table>
+    <Pagination v-model:page="currentPage" :total="filteredDocs.length" />
 
     <input type="file" accept=".csv" hidden ref="fileInput" @change="handleImport">
 
@@ -88,6 +89,8 @@ import { ref, onMounted, computed, reactive } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import MainLayout from '../layouts/MainLayout.vue';
 import ActionMenu from '../components/ActionMenu.vue';
+import Pagination from '../components/Pagination.vue';
+import { PAGE_SIZE, usePagination } from '../composables/usePagination.js';
 import { CONFIG } from '../config.js';
 import { listDocs, getDoc, createDoc, updateDoc, deleteDoc } from '../api/db.js';
 import { exportCSV, readCSV } from '../api/csv.js';
@@ -125,23 +128,24 @@ const filteredDocs = computed(() => {
   if (kw) docs = docs.filter(d => (d.location || '').toLowerCase().includes(kw));
   return docs;
 });
+const { currentPage, paginatedItems: paginatedDocs } = usePagination(filteredDocs);
 
 /* 全选 / 半选 */
 const allSelected = computed(() =>
-  filteredDocs.value.length > 0 &&
-  filteredDocs.value.every(d => selectedIds.value.includes(d.$id))
+  paginatedDocs.value.length > 0 &&
+  paginatedDocs.value.every(d => selectedIds.value.includes(d.$id))
 );
 const someSelected = computed(() =>
   !allSelected.value &&
-  filteredDocs.value.some(d => selectedIds.value.includes(d.$id))
+  paginatedDocs.value.some(d => selectedIds.value.includes(d.$id))
 );
 function toggleSelectAll(e) {
   if (e.target.checked) {
     const set = new Set(selectedIds.value);
-    filteredDocs.value.forEach(d => set.add(d.$id));
+    paginatedDocs.value.forEach(d => set.add(d.$id));
     selectedIds.value = Array.from(set);
   } else {
-    const ids = new Set(filteredDocs.value.map(d => d.$id));
+    const ids = new Set(paginatedDocs.value.map(d => d.$id));
     selectedIds.value = selectedIds.value.filter(id => !ids.has(id));
   }
 }

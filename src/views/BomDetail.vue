@@ -35,8 +35,8 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(it, idx) in items" :key="it.$id">
-          <td>{{ idx + 1 }}</td>
+        <tr v-for="(it, idx) in paginatedItems" :key="it.$id">
+          <td>{{ (currentPage - 1) * PAGE_SIZE + idx + 1 }}</td>
           <td>{{ it.part_number || '' }}</td>
           <td>{{ it.part_name || '' }}</td>
           <td><b>{{ it.qty_per_board ?? '' }}</b></td>
@@ -46,6 +46,7 @@
         </tr>
       </tbody>
     </table>
+    <Pagination v-model:page="currentPage" :total="items.length" />
   </MainLayout>
 </template>
 
@@ -53,6 +54,8 @@
 import { ref, onMounted, computed, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import MainLayout from '../layouts/MainLayout.vue';
+import Pagination from '../components/Pagination.vue';
+import { PAGE_SIZE, usePagination } from '../composables/usePagination.js';
 import { CONFIG } from '../config.js';
 import { listDocs, getDoc } from '../api/db.js';
 import { Query } from 'appwrite';
@@ -63,6 +66,7 @@ const bomId = computed(() => props.id || route.params.id);
 
 const bom = ref(null);
 const items = ref([]);
+const { currentPage, paginatedItems } = usePagination(items);
 
 function formatTime(iso) {
   if (!iso) return '';
