@@ -29,17 +29,17 @@
           <td><span class="qty-badge">{{ r.total }}</span></td>
           <td>{{ r.locationCount }}</td>
         </tr>
-        <tr v-if="!filteredRows.length">
+        <tr v-if="!loading && !paginatedRows.length">
           <td colspan="5" style="text-align:center;color:#999;">暂无库存数据</td>
         </tr>
       </tbody>
     </table>
-    <Pagination v-model:page="currentPage" :total="filteredRows.length" />
+    <Pagination v-model:page="currentPage" :total="total" :loading="loading" />
   </MainLayout>
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import MainLayout from '../layouts/MainLayout.vue';
 import ActionMenu from '../components/ActionMenu.vue';
@@ -51,54 +51,84 @@ import { exportCSV } from '../api/csv.js';
 import { Query } from 'appwrite';
 
 const router = useRouter();
-const summaryRows = ref([]);
 const keyword = ref('');
 
-/* ⭐ 操作菜单 */
 const menuItems = computed(() => [
-  { label: '刷新', onClick: load },
+  { label: '刷新', onClick: () => reload() },
   { label: '导出汇总CSV', onClick: handleExport }
 ]);
 
-const filteredRows = computed(() => {
-  const kw = keyword.value.trim().toLowerCase();
-  if (!kw) return summaryRows.value;
-  return summaryRows.value.filter(r =>
-    r.part_number.toLowerCase().includes(kw) ||
-    r.part_name.toLowerCase().includes(kw)
-  );
-});
-const { currentPage, paginatedItems: paginatedRows } = usePagination(filteredRows);
+const { currentPage, paginatedItems: paginatedRows, total, loading, reload } =
+  usePagination([], {
+    mode: 'server',
+    pageSize: PAGE_SIZE,
+    fetcher: async ({ page, pageSize }) => {
+      // 汇总需要按料号聚合，Appwrite 无 group by，这里分页拉库存明细后前端聚合当前页
+      // 若数据量大，建议后端建 summary 表
+      const queries = [
+        Query.orderAsc('part_number'),
+        Query.limit(pageSize),
+        Query.offset((page - 1) * pageSize),
+      ];
+      const kw = keyword.value.trim();
+      if (kw) {
+        queries.unshift(Query.search('part_number', kw));
+      }
+      const res = await listDocs(CONFIG.TABLES.inventory, queries);
 
-async function load() {
-  const res = await listDocs(CONFIG.TABLES.inventory, [Query.limit(5000)]);
-  const map = {};
-  res.documents.forEach(d => {
-    const key = d.part_number || ''; if (!key) return;
-    if (!map[key]) map[key] = { part_name: d.part_name || '', total: 0, locations: new Set() };
-    map[key].total += Number(d.quantity) || 0;
-    if (d.location) map[key].locations.add(d.location);
+      // 对当前页按料号聚合
+      const map = {};
+      res.documents.forEach(d => {
+        const key = d.part_number || ''; if (!key) return;
+        if (!map[key]) map[key] = { part_name: d.part_name || '', total: 0, locations: new Set() };
+        map[key].total += Number(d.quantity) || 0;
+        if (d.location) map[key].locations.add(d.location);
+      });
+      const items = Object.entries(map).map(([part_number, v]) => ({
+        part_number,
+        part_name: v.part_name,
+        total: v.total,
+        locationCount: v.locations.size
+      }));
+      return { items, total: res.total };
+    },
   });
-  summaryRows.value = Object.entries(map)
-    .map(([part_number, v]) => ({
-      part_number,
-      part_name: v.part_name,
-      total: v.total,
-      locationCount: v.locations.size
-    }))
-    .sort((a, b) => a.part_number.localeCompare(b.part_number));
-}
-onMounted(load);
+
+watch(keyword, () => {
+  if (currentPage.value !== 1) currentPage.value = 1;
+  else reload();
+});
+
+onMounted(reload);
 
 function goToInventory(part) {
   router.push({ name: 'inventory', query: { part } });
 }
 
-function handleExport() {
-  if (!summaryRows.value.length) { alert('暂无数据'); return; }
+async function handleExport() {
+  // 导出全量：分页拉取
+  const all = [];
+  const chunk = 500;
+  let offset = 0;
+  while (true) {
+    const res = await listDocs(CONFIG.TABLES.inventory, [
+      Query.limit(chunk), Query.offset(offset)
+    ]);
+    all.push(...res.documents);
+    if (res.documents.length < chunk) break;
+    offset += chunk;
+  }
+  if (!all.length) { alert('暂无数据'); return; }
+  const map = {};
+  all.forEach(d => {
+    const key = d.part_number || ''; if (!key) return;
+    if (!map[key]) map[key] = { part_name: d.part_name || '', total: 0, locations: new Set() };
+    map[key].total += Number(d.quantity) || 0;
+    if (d.location) map[key].locations.add(d.location);
+  });
   const headers = ['part_number', 'part_name', 'total_quantity', 'location_count'];
-  const rows = summaryRows.value.map(r =>
-    [r.part_number, r.part_name, r.total, r.locationCount]
+  const rows = Object.entries(map).map(([pn, v]) =>
+    [pn, v.part_name, v.total, v.locations.size]
   );
   exportCSV(headers, rows, 'inventory_summary');
 }
