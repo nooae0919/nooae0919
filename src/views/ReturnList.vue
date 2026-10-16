@@ -32,17 +32,17 @@
           <td>{{ b.wo_number || '' }}</td>
           <td>{{ b.product_number || '' }}</td>
           <td>{{ b.product_name || '' }}</td>
-          <td>{{ b.items.length }} 种</td>
+          <td>{{ b.itemCount }} 种</td>
           <td><b>{{ b.totalQty }}</b></td>
           <td>{{ b.operator || '' }}</td>
           <td>{{ b.return_time || '' }}</td>
         </tr>
-        <tr v-if="!filteredBatches.length">
+        <tr v-if="!loading && !paginatedBatches.length">
           <td colspan="10" style="text-align:center;color:#999;">暂无退料单</td>
         </tr>
       </tbody>
     </table>
-    <Pagination v-model:page="currentPage" :total="filteredBatches.length" />
+    <Pagination v-model:page="currentPage" :total="total" :loading="loading" />
 
     <input type="file" accept=".csv" hidden ref="fileInput" @change="handleImport">
 
@@ -98,7 +98,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed, reactive } from 'vue';
+import { ref, onMounted, computed, reactive, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import MainLayout from '../layouts/MainLayout.vue';
 import ActionMenu from '../components/ActionMenu.vue';
@@ -112,7 +112,6 @@ import { Query } from 'appwrite';
 
 const router = useRouter();
 
-const allReturns = ref([]);
 const woList = ref([]);
 const keyword = ref('');
 const fileInput = ref(null);
@@ -126,7 +125,6 @@ const addForm = reactive({
   items: [{ part_number: '', part_name: '', return_qty: '' }]
 });
 
-/* ⭐ 操作菜单 */
 const menuItems = computed(() => [
   { label: '新增退料单', onClick: openAdd },
   { label: '详情', onClick: viewSelected, disabled: selectedKeys.value.length !== 1 },
@@ -155,46 +153,81 @@ const woMap = computed(() => {
   return m;
 });
 
-const batches = computed(() => {
-  const map = {};
-  allReturns.value.forEach(d => {
-    const key = d.return_no
-      ? `NO:${d.return_no}`
-      : `FB:${d.wo_number}|${d.operator || ''}|${d.return_time || ''}`;
-    if (!map[key]) {
-      map[key] = {
-        key,
-        return_no: d.return_no || '',
-        wo_number: d.wo_number,
-        operator: d.operator,
-        return_time: d.return_time,
-        items: [],
-        totalQty: 0
-      };
-    }
-    map[key].items.push(d);
-    map[key].totalQty += Number(d.return_qty) || 0;
-  });
-  Object.values(map).forEach(b => {
-    const w = woMap.value[b.wo_number];
-    b.product_number = w?.product_number || '';
-    b.product_name = w?.product_name || '';
-  });
-  return Object.values(map).sort((a, b) =>
-    (b.return_time || '').localeCompare(a.return_time || '')
-  );
-});
+const { currentPage, paginatedItems: paginatedBatches, total, loading, reload } =
+  usePagination([], {
+    mode: 'server',
+    pageSize: PAGE_SIZE,
+    fetcher: async ({ page, pageSize }) => {
+      const all = [];
+      let offset = 0;
+      const chunk = 500;
+      while (true) {
+        const res = await listDocs(CONFIG.TABLES.return, [
+          Query.limit(chunk), Query.offset(offset)
+        ]);
+        all.push(...res.documents);
+        if (res.documents.length < chunk) break;
+        offset += chunk;
+      }
 
-const filteredBatches = computed(() => {
-  const kw = keyword.value.trim().toLowerCase();
-  if (!kw) return batches.value;
-  return batches.value.filter(b =>
-    (b.return_no || '').toLowerCase().includes(kw) ||
-    (b.wo_number || '').toLowerCase().includes(kw) ||
-    (b.operator || '').toLowerCase().includes(kw)
-  );
+      const batchMap = {};
+      all.forEach(d => {
+        const key = d.return_no
+          ? `NO:${d.return_no}`
+          : `FB:${d.wo_number}|${d.operator || ''}|${d.return_time || ''}`;
+        if (!batchMap[key]) {
+          batchMap[key] = {
+            key,
+            return_no: d.return_no || '',
+            wo_number: d.wo_number,
+            operator: d.operator,
+            return_time: d.return_time,
+            itemCount: 0,
+            totalQty: 0,
+          };
+        }
+        batchMap[key].itemCount++;
+        batchMap[key].totalQty += Number(d.return_qty) || 0;
+      });
+
+      const kw = keyword.value.trim().toLowerCase();
+      let batches = Object.values(batchMap);
+      if (kw) {
+        batches = batches.filter(b =>
+          (b.return_no || '').toLowerCase().includes(kw) ||
+          (b.wo_number || '').toLowerCase().includes(kw) ||
+          (b.operator || '').toLowerCase().includes(kw)
+        );
+      }
+      batches.sort((a, b) =>
+        (b.return_time || '').localeCompare(a.return_time || '')
+      );
+
+      const totalCount = batches.length;
+      const start = (page - 1) * pageSize;
+      const pageBatches = batches.slice(start, start + pageSize);
+
+      pageBatches.forEach(b => {
+        const w = woMap.value[b.wo_number];
+        b.product_number = w?.product_number || '';
+        b.product_name = w?.product_name || '';
+      });
+
+      return { items: pageBatches, total: totalCount };
+    },
+  });
+
+watch(keyword, () => { if (currentPage.value !== 1) currentPage.value = 1; else reload(); });
+
+async function loadWos() {
+  const res = await listDocs(CONFIG.TABLES.wo, [Query.limit(5000)]);
+  woList.value = res.documents;
+}
+
+onMounted(async () => {
+  await loadWos();
+  await reload();
 });
-const { currentPage, paginatedItems: paginatedBatches } = usePagination(filteredBatches);
 
 const allSelected = computed(() =>
   paginatedBatches.value.length > 0 &&
@@ -215,21 +248,9 @@ function toggleSelectAll(e) {
   }
 }
 
-async function loadAll() {
-  const [retRes, woRes] = await Promise.all([
-    listDocs(CONFIG.TABLES.return, [Query.limit(10000)]),
-    listDocs(CONFIG.TABLES.wo, [Query.limit(5000)])
-  ]);
-  allReturns.value = retRes.documents;
-  woList.value = woRes.documents;
-  const validKeys = new Set(batches.value.map(b => b.key));
-  selectedKeys.value = selectedKeys.value.filter(k => validKeys.has(k));
-}
-onMounted(loadAll);
-
 function viewSelected() {
   if (selectedKeys.value.length !== 1) return;
-  const b = batches.value.find(x => x.key === selectedKeys.value[0]);
+  const b = paginatedBatches.value.find(x => x.key === selectedKeys.value[0]);
   if (!b) return;
   if (!b.return_no) { alert('该退料单没有单号（老数据），无法进入详情。'); return; }
   router.push({ name: 'return-detail', params: { returnNo: b.return_no } });
@@ -277,11 +298,11 @@ async function saveAdd() {
 
   if (fail > 0) {
     addError.value = `部分失败：成功 ${ok} 条，失败 ${fail} 条`;
-    await loadAll();
+    await reload();
     return;
   }
   showAdd.value = false;
-  await loadAll();
+  await reload();
 }
 
 function triggerImport() { fileInput.value.click(); }
@@ -363,17 +384,17 @@ async function handleImport(e) {
   }
   alert(msg);
 
-  await loadAll();
+  await reload();
   e.target.value = '';
 }
 
 async function deleteSelected() {
   if (!selectedKeys.value.length) return;
-  const targets = batches.value.filter(b => selectedKeys.value.includes(b.key));
+  const targets = paginatedBatches.value.filter(b => selectedKeys.value.includes(b.key));
   const ok = window.$confirm
     ? await window.$confirm({
         title: '删除确认',
-        message: `将删除已勾选的 ${targets.length} 张退料单，共 ${targets.reduce((s, b) => s + b.items.length, 0)} 条明细。确认？`
+        message: `将删除已勾选的 ${targets.length} 张退料单，共 ${targets.reduce((s, b) => s + (b.itemCount || 0), 0)} 条明细。确认？`
       })
     : confirm(`将删除 ${targets.length} 张退料单，确认？`);
   if (!ok) return;
@@ -381,21 +402,30 @@ async function deleteSelected() {
   let ok2 = 0, fail = 0;
   for (const b of targets) {
     try {
-      for (const it of b.items) await deleteDoc(CONFIG.TABLES.return, it.$id);
+      const res = await listDocs(CONFIG.TABLES.return, [
+        Query.equal('return_no', b.return_no), Query.limit(5000)
+      ]);
+      for (const it of res.documents) await deleteDoc(CONFIG.TABLES.return, it.$id);
       ok2++;
     } catch (e) {
       console.error('删除失败', b.return_no, e); fail++;
     }
   }
   selectedKeys.value = [];
-  await loadAll();
+  await reload();
   if (fail > 0) alert(`删除完成：成功 ${ok2} 张，失败 ${fail} 张`);
 }
 
 async function handleExport() {
   if (!selectedKeys.value.length) { alert('请先勾选要导出的退料单'); return; }
-  const selectedBatches = batches.value.filter(b => selectedKeys.value.includes(b.key));
-  const allItems = selectedBatches.flatMap(b => b.items);
+  const selectedBatches = paginatedBatches.value.filter(b => selectedKeys.value.includes(b.key));
+  const allItems = [];
+  for (const b of selectedBatches) {
+    const res = await listDocs(CONFIG.TABLES.return, [
+      Query.equal('return_no', b.return_no), Query.limit(5000)
+    ]);
+    allItems.push(...res.documents);
+  }
   const headers = ['return_no', 'wo_number', 'part_number', 'part_name', 'return_qty', 'operator', 'return_time'];
   const rows = allItems.map(d => headers.map(h => d[h] ?? ''));
   exportCSV(headers, rows, 'return_selected');
