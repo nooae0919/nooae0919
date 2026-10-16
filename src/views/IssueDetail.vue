@@ -13,7 +13,7 @@
         <span>成品名称：<b>{{ batch.product_name || '-' }}</b></span>
         <span>领料人：<b>{{ batch.operator || '-' }}</b></span>
         <span>领料时间：<b>{{ batch.issue_time || '-' }}</b></span>
-        <span>物料种类：<b>{{ batch.items.length }}</b></span>
+        <span>物料种类：<b>{{ total }}</b></span>
         <span>领料总数：<b>{{ batch.totalQty }}</b></span>
       </div>
     </div>
@@ -38,12 +38,12 @@
           <td>{{ it.part_name || '' }}</td>
           <td><b>{{ it.issue_qty ?? '' }}</b></td>
         </tr>
-        <tr v-if="batch && !batch.items.length">
+        <tr v-if="!loading && !paginatedItems.length">
           <td colspan="4" style="text-align:center;color:#999;">暂无明细</td>
         </tr>
       </tbody>
     </table>
-    <Pagination v-model:page="currentPage" :total="batchItems.length" />
+    <Pagination v-model:page="currentPage" :total="total" :loading="loading" />
   </MainLayout>
 </template>
 
@@ -62,44 +62,75 @@ const route = useRoute();
 const issueNo = computed(() => props.issueNo || route.params.issueNo);
 
 const batch = ref(null);
-const batchItems = computed(() => batch.value?.items || []);
-const { currentPage, paginatedItems } = usePagination(batchItems);
 
-async function load() {
-  const res = await listDocs(CONFIG.TABLES.issue, [
-    Query.equal('issue_no', issueNo.value),
-    Query.limit(5000)
-  ]);
-  const items = res.documents;
-  if (!items.length) { alert('未找到该领料单'); return; }
-  const first = items[0];
+const { currentPage, paginatedItems, total, loading, reload } =
+  usePagination([], {
+    mode: 'server',
+    pageSize: PAGE_SIZE,
+    fetcher: async ({ page, pageSize }) => {
+      const no = issueNo.value;
+      if (!no) return { items: [], total: 0 };
 
-  let product_number = '', product_name = '';
-  if (first.wo_number) {
-    const woRes = await listDocs(CONFIG.TABLES.wo, [
-      Query.equal('wo_number', first.wo_number), Query.limit(1)
-    ]);
-    if (woRes.documents.length) {
-      product_number = woRes.documents[0].product_number || '';
-      product_name = woRes.documents[0].product_name || '';
-    }
-  }
+      // 1. 当前页明细
+      const res = await listDocs(CONFIG.TABLES.issue, [
+        Query.equal('issue_no', no),
+        Query.orderAsc('part_number'),
+        Query.limit(pageSize),
+        Query.offset((page - 1) * pageSize),
+      ]);
 
-  batch.value = {
-    issue_no: issueNo.value,
-    wo_number: first.wo_number,
-    operator: first.operator,
-    issue_time: first.issue_time,
-    product_number,
-    product_name,
-    items,
-    totalQty: items.reduce((s, d) => s + (Number(d.issue_qty) || 0), 0)
-  };
-}
+      // 2. 头部信息（第一次请求时获取）
+      if (!batch.value) {
+        const firstRes = await listDocs(CONFIG.TABLES.issue, [
+          Query.equal('issue_no', no),
+          Query.limit(1)
+        ]);
+        const first = firstRes.documents[0];
+        if (!first) {
+          batch.value = null;
+          return { items: [], total: 0 };
+        }
+        let product_number = '', product_name = '';
+        if (first.wo_number) {
+          const woRes = await listDocs(CONFIG.TABLES.wo, [
+            Query.equal('wo_number', first.wo_number), Query.limit(1)
+          ]);
+          if (woRes.documents.length) {
+            product_number = woRes.documents[0].product_number || '';
+            product_name = woRes.documents[0].product_name || '';
+          }
+        }
+        batch.value = {
+          issue_no: no,
+          wo_number: first.wo_number,
+          operator: first.operator,
+          issue_time: first.issue_time,
+          product_number,
+          product_name,
+          totalQty: 0,   // 下面单独算
+        };
+        // 汇总数量（单号下全部明细，分页拉）
+        let all = [], offset = 0, chunk = 500;
+        while (true) {
+          const r = await listDocs(CONFIG.TABLES.issue, [
+            Query.equal('issue_no', no),
+            Query.limit(chunk), Query.offset(offset)
+          ]);
+          all.push(...r.documents);
+          if (r.documents.length < chunk) break;
+          offset += chunk;
+        }
+        batch.value.totalQty = all.reduce((s, d) => s + (Number(d.issue_qty) || 0), 0);
+      }
 
-watch(issueNo, load);
+      return { items: res.documents, total: res.total };
+    },
+  });
+
+watch(issueNo, () => { batch.value = null; reload(); });
+
 onMounted(() => {
   if (!issueNo.value) { alert('未指定领料单号'); return; }
-  load();
+  reload();
 });
 </script>
