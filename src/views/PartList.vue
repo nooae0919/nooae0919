@@ -240,7 +240,6 @@ async function handleImport(e) {
         Query.equal('part_number', data.part_number), Query.limit(1)
       ]);
       if (dup.documents.length) {
-        // 已存在则更新名称
         await updateDoc(CONFIG.TABLES.part, dup.documents[0].$id, {
           part_name: data.part_name || dup.documents[0].part_name
         });
