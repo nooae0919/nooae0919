@@ -1,8 +1,11 @@
 <template>
   <MainLayout>
     <div class="page-header">
-      <div class="search-bar">
-        <input v-model="keyword" type="text" placeholder="按料号 / 名称 / 规格搜索...">
+      <div class="search-bar" style="display: flex; gap: 8px;">
+        <input v-model="searchInput" type="text" placeholder="按料号 / 名称 / 规格搜索..." @keyup.enter="handleSearch" style="flex: 1; max-width: 320px; padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 6px;">
+        <!-- ⭐ 补充了这两个按钮 -->
+        <button @click="handleSearch" style="padding: 8px 16px; border: 1px solid #2563eb; background: #2563eb; color: #fff; border-radius: 6px; cursor: pointer;">查询</button>
+        <button v-if="keyword" @click="clearSearch" style="padding: 8px 16px; border: 1px solid #d1d5db; background: #fff; border-radius: 6px; cursor: pointer;">重置</button>
       </div>
       <ActionMenu :items="menuItems" />
     </div>
