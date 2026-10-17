@@ -2,9 +2,11 @@
   <MainLayout>
     <div class="page-header">
       <div class="search-bar">
-        <input v-model="keyword" type="text" placeholder="按工单号 / 成品料号 / 名称搜索...">
+        <input v-model="searchInput" type="text" placeholder="按工单号搜索..." @keyup.enter="handleSearch">
+        <button @click="handleSearch">查询</button>
+        <button v-if="keyword" @click="clearSearch" style="background:#f3f4f6;">重置</button>
         <select v-model="lineFilter"
-                style="padding:8px 12px;border:1px solid #d1d5db;border-radius:6px;font-size:14px;">
+                style="padding:8px 12px;border:1px solid #d1d5db;border-radius:6px;font-size:14px;margin-left:8px;">
           <option value="">全部线体</option>
           <option value="1线">1线</option>
           <option value="2线">2线</option>
@@ -71,7 +73,6 @@
 
     <input type="file" accept=".csv" hidden ref="fileInput" @change="handleImport">
 
-    <!-- 新增工单弹窗 -->
     <div v-if="showAdd" class="modal-mask">
       <div class="modal-box">
         <h3>新增工单</h3>
@@ -94,12 +95,10 @@
           <input v-model="form.wo_number" type="text" placeholder="如 WO-2024-0001">
         </label>
         <label>成品料号
-          <input :value="form.product_number" type="text" readonly
-                 style="background:#f3f4f6;cursor:not-allowed;">
+          <input :value="form.product_number" type="text" readonly style="background:#f3f4f6;cursor:not-allowed;">
         </label>
         <label>成品名称
-          <input :value="form.product_name" type="text" readonly
-                 style="background:#f3f4f6;cursor:not-allowed;">
+          <input :value="form.product_name" type="text" readonly style="background:#f3f4f6;cursor:not-allowed;">
         </label>
         <label>计划数量
           <input v-model.number="form.plan_qty" type="number" placeholder="如 500">
@@ -122,7 +121,6 @@
       </div>
     </div>
 
-    <!-- 编辑工单弹窗 -->
     <div v-if="showEdit" class="modal-mask">
       <div class="modal-box">
         <h3>编辑工单</h3>
@@ -145,12 +143,10 @@
           <input v-model="editForm.wo_number" type="text" disabled>
         </label>
         <label>成品料号
-          <input :value="editForm.product_number" type="text" readonly
-                 style="background:#f3f4f6;cursor:not-allowed;">
+          <input :value="editForm.product_number" type="text" readonly style="background:#f3f4f6;cursor:not-allowed;">
         </label>
         <label>成品名称
-          <input :value="editForm.product_name" type="text" readonly
-                 style="background:#f3f4f6;cursor:not-allowed;">
+          <input :value="editForm.product_name" type="text" readonly style="background:#f3f4f6;cursor:not-allowed;">
         </label>
         <label>计划数量
           <input v-model.number="editForm.plan_qty" type="number">
@@ -198,6 +194,7 @@ const bomMap = ref({});
 const bomVersionMap = ref({});
 const snapshotVersionMap = ref({});
 const finishedMap = ref({});
+const searchInput = ref('');
 const keyword = ref('');
 const lineFilter = ref('');
 const fileInput = ref(null);
@@ -208,14 +205,10 @@ const editError = ref('');
 const progressText = ref('');
 
 const form = reactive({
-  bom_id: '', wo_number: '', line: '',
-  product_number: '', product_name: '',
-  plan_qty: '', produce_date: '', status: 'pending'
+  bom_id: '', wo_number: '', line: '', product_number: '', product_name: '', plan_qty: '', produce_date: '', status: 'pending'
 });
 const editForm = reactive({
-  $id: '', bom_id: '', wo_number: '', line: '',
-  product_number: '', product_name: '',
-  plan_qty: '', produce_date: '', status: 'pending'
+  $id: '', bom_id: '', wo_number: '', line: '', product_number: '', product_name: '', plan_qty: '', produce_date: '', status: 'pending'
 });
 
 const menuItems = computed(() => [
@@ -225,99 +218,66 @@ const menuItems = computed(() => [
   { label: '批量初始化快照', onClick: batchInitSnapshots }
 ]);
 
-function statusText(s) {
-  return s === 'completed' ? '已完成' : s === 'in_progress' ? '生产中' : '待生产';
-}
-function remainQty(wo) {
-  const plan = Number(wo.plan_qty) || 0;
-  const fin = Number(finishedMap.value[wo.wo_number]) || 0;
-  return Math.max(plan - fin, 0);
-}
+function statusText(s) { return s === 'completed' ? '已完成' : s === 'in_progress' ? '生产中' : '待生产'; }
+function remainQty(wo) { return Math.max((Number(wo.plan_qty) || 0) - (Number(finishedMap.value[wo.wo_number]) || 0), 0); }
 
 const { currentPage, paginatedItems: paginatedDocs, total, loading, reload } =
   usePagination([], {
     mode: 'server',
     pageSize: PAGE_SIZE,
     fetcher: async ({ page, pageSize }) => {
-      const queries = [
-        Query.limit(pageSize),
-        Query.offset((page - 1) * pageSize),
-      ];
+      const queries = [Query.limit(pageSize), Query.offset((page - 1) * pageSize)];
       if (lineFilter.value) queries.push(Query.equal('line', lineFilter.value));
-      const kw = keyword.value.trim();
-      if (kw) queries.push(Query.search('wo_number', kw));
+      if (keyword.value) queries.push(Query.search('wo_number', keyword.value));
+      
       const res = await listDocs(CONFIG.TABLES.wo, queries);
-
-      // 只对当前页工单补充：快照版本 + 已入库数量
       const woNumbers = res.documents.map(d => d.wo_number).filter(Boolean);
       const snapMap = {};
       const finMap = {};
+      
       if (woNumbers.length) {
         const [snapRes, finRes] = await Promise.all([
-          listDocs(CONFIG.TABLES.woBom, [
-            Query.equal('wo_number', woNumbers),
-            Query.limit(20000),
-          ]),
-          listDocs(CONFIG.TABLES.finish, [
-            Query.equal('wo_number', woNumbers),
-            Query.limit(20000),
-          ]),
+          listDocs(CONFIG.TABLES.woBom, [Query.equal('wo_number', woNumbers), Query.limit(20000)]),
+          listDocs(CONFIG.TABLES.finish, [Query.equal('wo_number', woNumbers), Query.limit(20000)]),
         ]);
-        snapRes.documents.forEach(it => {
-          if (!snapMap[it.wo_number]) snapMap[it.wo_number] = it.bom_version || '';
-        });
-        finRes.documents.forEach(d => {
-          const wo = d.wo_number; if (!wo) return;
-          finMap[wo] = (finMap[wo] || 0) + (Number(d.finish_qty) || 0);
-        });
+        snapRes.documents.forEach(it => { if (!snapMap[it.wo_number]) snapMap[it.wo_number] = it.bom_version || ''; });
+        finRes.documents.forEach(d => { if (d.wo_number) finMap[d.wo_number] = (finMap[d.wo_number] || 0) + (Number(d.finish_qty) || 0); });
       }
       snapshotVersionMap.value = snapMap;
       finishedMap.value = finMap;
-
       return { items: res.documents, total: res.total };
     },
   });
 
-watch(keyword, () => { if (currentPage.value !== 1) currentPage.value = 1; else reload(); });
+function handleSearch() {
+  keyword.value = searchInput.value.trim();
+  if (currentPage.value !== 1) currentPage.value = 1;
+  else reload();
+}
+function clearSearch() { searchInput.value = ''; handleSearch(); }
+
 watch(lineFilter, () => { if (currentPage.value !== 1) currentPage.value = 1; else reload(); });
 
 async function loadBoms() {
-  const res = await listDocs(CONFIG.TABLES.bom, [
-    Query.limit(5000),
-    Query.orderAsc('product_number')
-  ]);
+  const res = await listDocs(CONFIG.TABLES.bom, [Query.limit(5000), Query.orderAsc('product_number')]);
   bomList.value = res.documents;
   const map = {}, vmap = {};
-  res.documents.forEach(b => {
-    map[b.$id] = b;
-    vmap[b.$id] = b.version || '';
-  });
+  res.documents.forEach(b => { map[b.$id] = b; vmap[b.$id] = b.version || ''; });
   bomMap.value = map;
   bomVersionMap.value = vmap;
 }
 
-onMounted(async () => {
-  await Promise.all([reload(), loadBoms()]);
-});
+onMounted(async () => { await Promise.all([reload(), loadBoms()]); });
 
 function onBomChange(which) {
   const target = which === 'add' ? form : editForm;
   const b = bomMap.value[target.bom_id];
-  if (b) {
-    target.product_number = b.product_number || '';
-    target.product_name = b.product_name || '';
-  } else {
-    target.product_number = '';
-    target.product_name = '';
-  }
+  if (b) { target.product_number = b.product_number || ''; target.product_name = b.product_name || ''; }
+  else { target.product_number = ''; target.product_name = ''; }
 }
 
 function openAdd() {
-  Object.assign(form, {
-    bom_id: '', wo_number: '', line: '',
-    product_number: '', product_name: '',
-    plan_qty: '', produce_date: '', status: 'pending'
-  });
+  Object.assign(form, { bom_id: '', wo_number: '', line: '', product_number: '', product_name: '', plan_qty: '', produce_date: '', status: 'pending' });
   formError.value = '';
   showAdd.value = true;
 }
@@ -325,39 +285,22 @@ function openAdd() {
 async function saveAdd() {
   if (!form.line) { formError.value = '请选择线体'; return; }
   if (!form.bom_id) { formError.value = '请先选择关联 BOM'; return; }
-  if (!form.wo_number || !form.plan_qty) {
-    formError.value = '工单号和计划数量必填';
-    return;
-  }
+  if (!form.wo_number || !form.plan_qty) { formError.value = '工单号和计划数量必填'; return; }
   try {
     await createDoc(CONFIG.TABLES.wo, {
-      bom_id: form.bom_id,
-      wo_number: form.wo_number,
-      line: form.line,
-      product_number: form.product_number,
-      product_name: form.product_name,
-      plan_qty: Number(form.plan_qty),
-      produce_date: form.produce_date,
-      status: form.status
+      bom_id: form.bom_id, wo_number: form.wo_number, line: form.line,
+      product_number: form.product_number, product_name: form.product_name,
+      plan_qty: Number(form.plan_qty), produce_date: form.produce_date, status: form.status
     });
 
     progressText.value = `正在生成 BOM 快照...`;
-    try {
-      await snapshotBomToWo(form.bom_id, form.wo_number, p => {
-        progressText.value = `[${p.phase === 'delete' ? '删除旧快照' : '写入新快照'}] ${p.done}/${p.total}`;
-      });
-    } catch (e) { console.error('写入快照失败', e); }
-
-    try { await syncExcessToInventory(form.wo_number); }
-    catch (e) { console.error('同步库存失败', e); }
+    try { await snapshotBomToWo(form.bom_id, form.wo_number, p => { progressText.value = `[${p.phase === 'delete' ? '删除旧快照' : '写入新快照'}] ${p.done}/${p.total}`; }); } catch (e) { console.error(e); }
+    try { await syncExcessToInventory(form.wo_number); } catch (e) { console.error(e); }
 
     progressText.value = '';
     showAdd.value = false;
     await reload();
-  } catch (e) {
-    progressText.value = '';
-    formError.value = '保存失败：' + (e.message || e);
-  }
+  } catch (e) { progressText.value = ''; formError.value = '保存失败：' + (e.message || e); }
 }
 
 async function openEdit(docId) {
@@ -365,21 +308,13 @@ async function openEdit(docId) {
     const doc = await getDoc(CONFIG.TABLES.wo, docId);
     if (doc.status === 'completed') { alert('该工单已完成，不允许修改。'); return; }
     Object.assign(editForm, {
-      $id: doc.$id,
-      bom_id: doc.bom_id || '',
-      wo_number: doc.wo_number || '',
-      line: doc.line || '',
-      product_number: doc.product_number || '',
-      product_name: doc.product_name || '',
-      plan_qty: doc.plan_qty || '',
-      produce_date: doc.produce_date || '',
-      status: doc.status || 'pending'
+      $id: doc.$id, bom_id: doc.bom_id || '', wo_number: doc.wo_number || '', line: doc.line || '',
+      product_number: doc.product_number || '', product_name: doc.product_name || '',
+      plan_qty: doc.plan_qty || '', produce_date: doc.produce_date || '', status: doc.status || 'pending'
     });
     editError.value = '';
     showEdit.value = true;
-  } catch (e) {
-    alert('读取工单失败：' + e.message);
-  }
+  } catch (e) { alert('读取工单失败：' + e.message); }
 }
 
 async function saveEdit() {
@@ -396,44 +331,22 @@ async function saveEdit() {
     const bomChanged = current.bom_id !== editForm.bom_id;
 
     await updateDoc(CONFIG.TABLES.wo, editForm.$id, {
-      bom_id: editForm.bom_id,
-      line: editForm.line,
-      product_number: editForm.product_number,
-      product_name: editForm.product_name,
-      plan_qty: Number(editForm.plan_qty),
-      produce_date: editForm.produce_date,
-      status: editForm.status
+      bom_id: editForm.bom_id, line: editForm.line,
+      product_number: editForm.product_number, product_name: editForm.product_name,
+      plan_qty: Number(editForm.plan_qty), produce_date: editForm.produce_date, status: editForm.status
     });
 
     if (bomChanged) {
-      const ok = window.$confirm
-        ? await window.$confirm({
-            title: 'BOM 已更换',
-            message: '检测到关联 BOM 已变更，是否用新 BOM 重新生成工单用料快照？'
-          })
-        : confirm('BOM 已变更，是否重载用料快照？');
-      if (ok) {
+      if (confirm('检测到关联 BOM 已变更，是否用新 BOM 重新生成工单用料快照？')) {
         progressText.value = `正在重载 BOM 快照...`;
-        try {
-          await snapshotBomToWo(editForm.bom_id, editForm.wo_number, p => {
-            progressText.value = `[${p.phase === 'delete' ? '删除旧快照' : '写入新快照'}] ${p.done}/${p.total}`;
-          });
-        } catch (e) {
-          alert('快照更新失败：' + (e.message || e));
-        } finally {
-          progressText.value = '';
-        }
+        try { await snapshotBomToWo(editForm.bom_id, editForm.wo_number, p => { progressText.value = `[${p.phase === 'delete' ? '删除旧快照' : '写入新快照'}] ${p.done}/${p.total}`; }); } catch (e) { alert('快照更新失败：' + (e.message || e)); } finally { progressText.value = ''; }
       }
     }
 
-    try { await syncExcessToInventory(editForm.wo_number); }
-    catch (e) { console.error('同步库存失败', e); }
-
+    try { await syncExcessToInventory(editForm.wo_number); } catch (e) { console.error(e); }
     showEdit.value = false;
     await reload();
-  } catch (e) {
-    editError.value = '保存失败：' + (e.message || e);
-  }
+  } catch (e) { editError.value = '保存失败：' + (e.message || e); }
 }
 
 function goKitting(wo) {
@@ -443,53 +356,31 @@ function goKitting(wo) {
 
 async function reloadBom(wo) {
   if (!wo.bom_id) { alert('该工单未关联 BOM。'); return; }
-  const ok = window.$confirm
-    ? await window.$confirm({
-        title: '重载 BOM 快照',
-        message: `工单 ${wo.wo_number} 将用当前 BOM 最新明细覆盖用料快照。\n已有的领料记录不受影响，但齐套/超发会按新快照重算。\n\n（BOM 明细较多时需要几十秒，请耐心等待）\n确认继续？`
-      })
-    : confirm('将用当前 BOM 覆盖工单用料快照，确认继续？');
-  if (!ok) return;
+  if (!confirm(`工单 ${wo.wo_number} 将用当前 BOM 最新明细覆盖用料快照，确认继续？`)) return;
 
   progressText.value = `正在重载 BOM 快照...`;
   try {
-    const res = await snapshotBomToWo(wo.bom_id, wo.wo_number, p => {
-      progressText.value = `[${p.phase === 'delete' ? '删除旧快照' : '写入新快照'}] ${p.done}/${p.total}`;
-    });
+    const res = await snapshotBomToWo(wo.bom_id, wo.wo_number, p => { progressText.value = `[${p.phase === 'delete' ? '删除旧快照' : '写入新快照'}] ${p.done}/${p.total}`; });
     progressText.value = `正在同步超发库存...`;
     await syncExcessToInventory(wo.wo_number);
     progressText.value = '';
     alert(`BOM 快照已重载，共 ${res.ok} 条明细（版本 ${res.bomVersion || '-'}）。`);
     await reload();
-  } catch (e) {
-    progressText.value = '';
-    alert('重载失败：' + (e.message || e));
-  }
+  } catch (e) { progressText.value = ''; alert('重载失败：' + (e.message || e)); }
 }
 
 async function batchInitSnapshots() {
-  // 先拉全量工单号（仅取 wo_number + bom_id + $id，用于批量）
   const all = [];
   let offset = 0;
-  const chunk = 500;
   while (true) {
-    const res = await listDocs(CONFIG.TABLES.wo, [
-      Query.limit(chunk), Query.offset(offset)
-    ]);
+    const res = await listDocs(CONFIG.TABLES.wo, [Query.limit(500), Query.offset(offset)]);
     all.push(...res.documents);
-    if (res.documents.length < chunk) break;
-    offset += chunk;
+    if (res.documents.length < 500) break;
+    offset += 500;
   }
   const missing = all.filter(d => d.bom_id && !snapshotVersionMap.value[d.wo_number]);
   if (!missing.length) { alert('所有工单都已有快照，无需初始化。'); return; }
-
-  const ok = window.$confirm
-    ? await window.$confirm({
-        title: '批量初始化快照',
-        message: `共 ${missing.length} 个工单缺少快照，将按各自关联的 BOM 生成。\n每个工单之间间隔 1.5 秒，避免 Appwrite 限流。\n总耗时约 ${Math.ceil(missing.length * 30 / 60)} 分钟（视 BOM 大小）。\n\n期间请勿关闭页面。\n确认继续？`
-      })
-    : confirm(`共 ${missing.length} 个工单，确认批量生成？`);
-  if (!ok) return;
+  if (!confirm(`共 ${missing.length} 个工单缺少快照，确认批量生成？`)) return;
 
   let success = 0, fail = 0;
   const errors = [];
@@ -498,14 +389,9 @@ async function batchInitSnapshots() {
     const wo = missing[i];
     progressText.value = `批量初始化快照：${i + 1}/${missing.length}（成功 ${success}，失败 ${fail}）`;
     try {
-      await snapshotBomToWo(wo.bom_id, wo.wo_number, p => {
-        progressText.value = `批量初始化：工单 ${wo.wo_number}（${i+1}/${missing.length}）[${p.phase}] ${p.done}/${p.total}`;
-      });
+      await snapshotBomToWo(wo.bom_id, wo.wo_number, p => { progressText.value = `批量初始化：工单 ${wo.wo_number}（${i+1}/${missing.length}）[${p.phase}] ${p.done}/${p.total}`; });
       success++;
-    } catch (e) {
-      errors.push(`${wo.wo_number}: ${e.message || e}`);
-      fail++;
-    }
+    } catch (e) { errors.push(`${wo.wo_number}: ${e.message || e}`); fail++; }
     if (i < missing.length - 1) await sleep(1500);
   }
 
@@ -513,10 +399,7 @@ async function batchInitSnapshots() {
   await reload();
 
   let msg = `批量初始化完成：成功 ${success} 个，失败 ${fail} 个。`;
-  if (errors.length) {
-    msg += '\n\n失败明细（前 10 条）：\n' + errors.slice(0, 10).join('\n');
-    if (errors.length > 10) msg += `\n...还有 ${errors.length - 10} 条`;
-  }
+  if (errors.length) msg += '\n\n失败明细：\n' + errors.slice(0, 10).join('\n');
   alert(msg);
 }
 
@@ -539,50 +422,36 @@ async function handleImport(e) {
     headers.forEach((h, idx) => {
       const v = row[idx];
       if (v === undefined || v === null || v === '') return;
-      if (h === 'plan_qty') {
-        const n = Number(v); if (isNaN(n)) return;
-        data[h] = n;
-      } else data[h] = String(v).trim();
+      if (h === 'plan_qty') { const n = Number(v); if (isNaN(n)) return; data[h] = n; }
+      else data[h] = String(v).trim();
     });
 
     if (!data.bom_id && data.product_number) {
       const bid = pnToBom[data.product_number];
       if (bid) data.bom_id = bid;
     }
-    if (!data.bom_id) {
-      errors.push(`第 ${i+2} 行：找不到匹配的 BOM`); fail++; continue;
-    }
-    if (!data.wo_number) {
-      errors.push(`第 ${i+2} 行：工单号为空`); fail++; continue;
-    }
+    if (!data.bom_id) { errors.push(`第 ${i+2} 行：找不到匹配的 BOM`); fail++; continue; }
+    if (!data.wo_number) { errors.push(`第 ${i+2} 行：工单号为空`); fail++; continue; }
 
     try {
       await createDoc(CONFIG.TABLES.wo, data);
       touchedWos.push({ wo_number: data.wo_number, bom_id: data.bom_id });
       ok++;
-    } catch (err) {
-      errors.push(`第 ${i+2} 行：${err.message}`); fail++;
-    }
+    } catch (err) { errors.push(`第 ${i+2} 行：${err.message}`); fail++; }
   }
 
   for (let i = 0; i < touchedWos.length; i++) {
     const item = touchedWos[i];
     progressText.value = `正在处理工单快照：${i+1}/${touchedWos.length}`;
-    try { await snapshotBomToWo(item.bom_id, item.wo_number); }
-    catch (e) { console.error('快照失败', item.wo_number, e); }
-    try { await syncExcessToInventory(item.wo_number); }
-    catch (e) { console.error('同步失败', item.wo_number, e); }
+    try { await snapshotBomToWo(item.bom_id, item.wo_number); } catch (e) {}
+    try { await syncExcessToInventory(item.wo_number); } catch (e) {}
     if (i < touchedWos.length - 1) await sleep(1500);
   }
   progressText.value = '';
 
   let msg = `导入完成：成功 ${ok} 条，失败 ${fail} 条`;
-  if (errors.length) {
-    msg += '\n\n失败明细（前 10 条）：\n' + errors.slice(0, 10).join('\n');
-    if (errors.length > 10) msg += `\n...还有 ${errors.length - 10} 条`;
-  }
+  if (errors.length) msg += '\n\n' + errors.slice(0, 10).join('\n');
   alert(msg);
-
   await reload();
   e.target.value = '';
 }
@@ -590,14 +459,11 @@ async function handleImport(e) {
 async function handleExport() {
   const all = [];
   let offset = 0;
-  const chunk = 500;
   while (true) {
-    const res = await listDocs(CONFIG.TABLES.wo, [
-      Query.limit(chunk), Query.offset(offset)
-    ]);
+    const res = await listDocs(CONFIG.TABLES.wo, [Query.limit(500), Query.offset(offset)]);
     all.push(...res.documents);
-    if (res.documents.length < chunk) break;
-    offset += chunk;
+    if (res.documents.length < 500) break;
+    offset += 500;
   }
   const rows = all.map(d => WO_HEADERS.map(h => d[h] ?? ''));
   exportCSV(WO_HEADERS, rows, 'work_orders');
