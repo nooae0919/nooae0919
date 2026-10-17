@@ -35,7 +35,7 @@
         <tr v-for="(it, idx) in paginatedItems" :key="it.$id">
           <td>{{ (currentPage - 1) * PAGE_SIZE + idx + 1 }}</td>
           <td>{{ it.part_number || '' }}</td>
-          <td>{{ it.part_name || '' }}</td>
+          <td>{{ partName(it.part_number) }}</td>
           <td><b>{{ it.issue_qty ?? '' }}</b></td>
         </tr>
         <tr v-if="!loading && !paginatedItems.length">
@@ -55,6 +55,7 @@ import Pagination from '../components/Pagination.vue';
 import { PAGE_SIZE, usePagination } from '../composables/usePagination.js';
 import { CONFIG } from '../config.js';
 import { listDocs } from '../api/db.js';
+import { partName, getPartMap } from '../api/partMap.js';
 import { Query } from 'appwrite';
 
 const props = defineProps({ issueNo: String });
@@ -71,7 +72,6 @@ const { currentPage, paginatedItems, total, loading, reload } =
       const no = issueNo.value;
       if (!no) return { items: [], total: 0 };
 
-      // 1. 当前页明细
       const res = await listDocs(CONFIG.TABLES.issue, [
         Query.equal('issue_no', no),
         Query.orderAsc('part_number'),
@@ -79,7 +79,6 @@ const { currentPage, paginatedItems, total, loading, reload } =
         Query.offset((page - 1) * pageSize),
       ]);
 
-      // 2. 头部信息（第一次请求时获取）
       if (!batch.value) {
         const firstRes = await listDocs(CONFIG.TABLES.issue, [
           Query.equal('issue_no', no),
@@ -107,9 +106,8 @@ const { currentPage, paginatedItems, total, loading, reload } =
           issue_time: first.issue_time,
           product_number,
           product_name,
-          totalQty: 0,   // 下面单独算
+          totalQty: 0,
         };
-        // 汇总数量（单号下全部明细，分页拉）
         let all = [], offset = 0, chunk = 500;
         while (true) {
           const r = await listDocs(CONFIG.TABLES.issue, [
@@ -129,8 +127,9 @@ const { currentPage, paginatedItems, total, loading, reload } =
 
 watch(issueNo, () => { batch.value = null; reload(); });
 
-onMounted(() => {
+onMounted(async () => {
   if (!issueNo.value) { alert('未指定领料单号'); return; }
+  await getPartMap();
   reload();
 });
 </script>
