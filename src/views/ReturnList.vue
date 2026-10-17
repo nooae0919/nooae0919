@@ -107,6 +107,7 @@ import { PAGE_SIZE, usePagination } from '../composables/usePagination.js';
 import { CONFIG } from '../config.js';
 import { listDocs, createDoc, deleteDoc } from '../api/db.js';
 import { exportCSV, readCSV } from '../api/csv.js';
+import { partName, getPartMap, ensurePart } from '../api/partMap.js';
 import { authStore } from '../stores/auth.js';
 import { Query } from 'appwrite';
 
@@ -225,6 +226,7 @@ async function loadWos() {
 }
 
 onMounted(async () => {
+  await getPartMap();
   await loadWos();
   await reload();
 });
@@ -283,11 +285,12 @@ async function saveAdd() {
   let ok = 0, fail = 0;
   for (const r of valid) {
     try {
+      const pn = String(r.part_number).trim();
+      await ensurePart(pn, String(r.part_name || '').trim());
       await createDoc(CONFIG.TABLES.return, {
         return_no: returnNo,
         wo_number: addForm.wo_number,
-        part_number: String(r.part_number).trim(),
-        part_name: String(r.part_name || '').trim(),
+        part_number: pn,
         return_qty: Number(r.return_qty),
         operator,
         return_time: timeStr
@@ -362,11 +365,11 @@ async function handleImport(e) {
   let ok = 0, fail = 0;
   for (const p of parsed) {
     try {
+      await ensurePart(p.data.part_number, p.data.part_name || '');
       await createDoc(CONFIG.TABLES.return, {
         return_no: p.data.return_no,
         wo_number: p.data.wo_number,
         part_number: p.data.part_number,
-        part_name: p.data.part_name || '',
         return_qty: p.data.return_qty,
         operator,
         return_time: timeStr
@@ -427,7 +430,10 @@ async function handleExport() {
     allItems.push(...res.documents);
   }
   const headers = ['return_no', 'wo_number', 'part_number', 'part_name', 'return_qty', 'operator', 'return_time'];
-  const rows = allItems.map(d => headers.map(h => d[h] ?? ''));
+  const rows = allItems.map(d => [
+    d.return_no ?? '', d.wo_number ?? '', d.part_number ?? '',
+    partName(d.part_number), d.return_qty ?? '', d.operator ?? '', d.return_time ?? ''
+  ]);
   exportCSV(headers, rows, 'return_selected');
 }
 </script>
