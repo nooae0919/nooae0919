@@ -297,3 +297,36 @@ td button:hover { background: #f3f4f6; }
   font-weight: 600;
   color: #222;
 }
+
+/* 搜索栏里的输入框和按钮样式 */
+.search-bar input {
+  flex: 1;
+  max-width: 320px;
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+}
+.search-bar input:focus { outline: none; border-color: #2563eb; }
+
+/* ⭐ 补充搜索按钮的样式 */
+.search-bar button {
+  padding: 8px 16px;
+  border: 1px solid #d1d5db;
+  background: #2563eb; /* 让查询按钮显眼一点，用蓝色 */
+  color: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+.search-bar button:hover { background: #1d4ed8; }
+
+/* 重置按钮单独做个浅灰色 */
+.search-bar button[style*="background:#f3f4f6"] {
+  background: #fff !important;
+  color: #333;
+}
+.search-bar button[style*="background:#f3f4f6"]:hover {
+  background: #f3f4f6 !important;
+}
