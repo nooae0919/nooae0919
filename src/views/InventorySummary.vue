@@ -2,7 +2,9 @@
   <MainLayout>
     <div class="page-header">
       <div class="search-bar">
-        <input v-model="keyword" type="text" placeholder="按物料料号或名称搜索...">
+        <input v-model="searchInput" type="text" placeholder="按物料料号搜索..." @keyup.enter="handleSearch">
+        <button @click="handleSearch">查询</button>
+        <button v-if="keyword" @click="clearSearch" style="background:#f3f4f6;">重置</button>
       </div>
       <ActionMenu :items="menuItems" />
     </div>
@@ -25,7 +27,7 @@
               {{ r.part_number }}
             </a>
           </td>
-          <td>{{ r.part_name || '' }}</td>
+          <td>{{ partName(r.part_number) }}</td>
           <td><span class="qty-badge">{{ r.total }}</span></td>
           <td>{{ r.locationCount }}</td>
         </tr>
@@ -48,10 +50,11 @@ import { PAGE_SIZE, usePagination } from '../composables/usePagination.js';
 import { CONFIG } from '../config.js';
 import { listDocs } from '../api/db.js';
 import { exportCSV } from '../api/csv.js';
-import { partName, getPartMap } from '../api/partMap.js';
+import { partName, loadPartNamesForPage } from '../api/partMap.js';
 import { Query } from 'appwrite';
 
 const router = useRouter();
+const searchInput = ref('');
 const keyword = ref('');
 
 const menuItems = computed(() => [
@@ -69,9 +72,10 @@ const { currentPage, paginatedItems: paginatedRows, total, loading, reload } =
         Query.limit(pageSize),
         Query.offset((page - 1) * pageSize),
       ];
-      const kw = keyword.value.trim();
-      if (kw) queries.unshift(Query.search('part_number', kw));
+      if (keyword.value) queries.unshift(Query.search('part_number', keyword.value));
+      
       const res = await listDocs(CONFIG.TABLES.inventory, queries);
+      await loadPartNamesForPage(res.documents);
 
       const map = {};
       res.documents.forEach(d => {
@@ -81,24 +85,20 @@ const { currentPage, paginatedItems: paginatedRows, total, loading, reload } =
         if (d.location) map[key].locations.add(d.location);
       });
       const items = Object.entries(map).map(([part_number, v]) => ({
-        part_number,
-        part_name: partName(part_number),
-        total: v.total,
-        locationCount: v.locations.size
+        part_number, total: v.total, locationCount: v.locations.size
       }));
       return { items, total: res.total };
     },
   });
 
-watch(keyword, () => {
+function handleSearch() {
+  keyword.value = searchInput.value.trim();
   if (currentPage.value !== 1) currentPage.value = 1;
   else reload();
-});
+}
+function clearSearch() { searchInput.value = ''; handleSearch(); }
 
-onMounted(async () => {
-  await getPartMap();
-  await reload();
-});
+onMounted(reload);
 
 function goToInventory(part) {
   router.push({ name: 'inventory', query: { part } });
@@ -106,17 +106,16 @@ function goToInventory(part) {
 
 async function handleExport() {
   const all = [];
-  const chunk = 500;
   let offset = 0;
+  const chunk = 500;
   while (true) {
-    const res = await listDocs(CONFIG.TABLES.inventory, [
-      Query.limit(chunk), Query.offset(offset)
-    ]);
+    const res = await listDocs(CONFIG.TABLES.inventory, [Query.limit(chunk), Query.offset(offset)]);
     all.push(...res.documents);
     if (res.documents.length < chunk) break;
     offset += chunk;
   }
   if (!all.length) { alert('暂无数据'); return; }
+  await loadPartNamesForPage(all);
   const map = {};
   all.forEach(d => {
     const key = d.part_number || ''; if (!key) return;
@@ -125,9 +124,7 @@ async function handleExport() {
     if (d.location) map[key].locations.add(d.location);
   });
   const headers = ['part_number', 'part_name', 'total_quantity', 'location_count'];
-  const rows = Object.entries(map).map(([pn, v]) =>
-    [pn, partName(pn), v.total, v.locations.size]
-  );
+  const rows = Object.entries(map).map(([pn, v]) => [pn, partName(pn), v.total, v.locations.size]);
   exportCSV(headers, rows, 'inventory_summary');
 }
 </script>
