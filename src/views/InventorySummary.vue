@@ -48,6 +48,7 @@ import { PAGE_SIZE, usePagination } from '../composables/usePagination.js';
 import { CONFIG } from '../config.js';
 import { listDocs } from '../api/db.js';
 import { exportCSV } from '../api/csv.js';
+import { partName, getPartMap } from '../api/partMap.js';
 import { Query } from 'appwrite';
 
 const router = useRouter();
@@ -63,30 +64,25 @@ const { currentPage, paginatedItems: paginatedRows, total, loading, reload } =
     mode: 'server',
     pageSize: PAGE_SIZE,
     fetcher: async ({ page, pageSize }) => {
-      // 汇总需要按料号聚合，Appwrite 无 group by，这里分页拉库存明细后前端聚合当前页
-      // 若数据量大，建议后端建 summary 表
       const queries = [
         Query.orderAsc('part_number'),
         Query.limit(pageSize),
         Query.offset((page - 1) * pageSize),
       ];
       const kw = keyword.value.trim();
-      if (kw) {
-        queries.unshift(Query.search('part_number', kw));
-      }
+      if (kw) queries.unshift(Query.search('part_number', kw));
       const res = await listDocs(CONFIG.TABLES.inventory, queries);
 
-      // 对当前页按料号聚合
       const map = {};
       res.documents.forEach(d => {
         const key = d.part_number || ''; if (!key) return;
-        if (!map[key]) map[key] = { part_name: d.part_name || '', total: 0, locations: new Set() };
+        if (!map[key]) map[key] = { total: 0, locations: new Set() };
         map[key].total += Number(d.quantity) || 0;
         if (d.location) map[key].locations.add(d.location);
       });
       const items = Object.entries(map).map(([part_number, v]) => ({
         part_number,
-        part_name: v.part_name,
+        part_name: partName(part_number),
         total: v.total,
         locationCount: v.locations.size
       }));
@@ -99,14 +95,16 @@ watch(keyword, () => {
   else reload();
 });
 
-onMounted(reload);
+onMounted(async () => {
+  await getPartMap();
+  await reload();
+});
 
 function goToInventory(part) {
   router.push({ name: 'inventory', query: { part } });
 }
 
 async function handleExport() {
-  // 导出全量：分页拉取
   const all = [];
   const chunk = 500;
   let offset = 0;
@@ -122,13 +120,13 @@ async function handleExport() {
   const map = {};
   all.forEach(d => {
     const key = d.part_number || ''; if (!key) return;
-    if (!map[key]) map[key] = { part_name: d.part_name || '', total: 0, locations: new Set() };
+    if (!map[key]) map[key] = { total: 0, locations: new Set() };
     map[key].total += Number(d.quantity) || 0;
     if (d.location) map[key].locations.add(d.location);
   });
   const headers = ['part_number', 'part_name', 'total_quantity', 'location_count'];
   const rows = Object.entries(map).map(([pn, v]) =>
-    [pn, v.part_name, v.total, v.locations.size]
+    [pn, partName(pn), v.total, v.locations.size]
   );
   exportCSV(headers, rows, 'inventory_summary');
 }
