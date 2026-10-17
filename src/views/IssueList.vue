@@ -1,13 +1,8 @@
 <template>
   <MainLayout>
-    <div v-if="filterPart" class="notice">
-      当前仅显示物料料号 <b>{{ filterPart }}</b> 的库存明细。
-      <a href="#" @click.prevent="clearFilter">清除过滤</a>
-    </div>
-
     <div class="page-header">
       <div class="search-bar">
-        <input v-model="keyword" type="text" placeholder="按库位搜索...">
+        <input v-model="keyword" type="text" placeholder="按领料单号 / 工单号 / 领料人搜索...">
       </div>
       <ActionMenu :items="menuItems" />
     </div>
@@ -16,38 +11,34 @@
       <thead>
         <tr>
           <th style="width:44px;">
-            <input type="checkbox"
-                   :checked="allSelected"
-                   :indeterminate="someSelected"
-                   @change="toggleSelectAll">
+            <input type="checkbox" :checked="allSelected" :indeterminate="someSelected" @change="toggleSelectAll">
           </th>
           <th style="width:60px;">序号</th>
-          <th>物料料号</th>
-          <th>物料名称</th>
-          <th>物料数量</th>
-          <th>库位</th>
-          <th>来源</th>
+          <th>领料单号</th>
+          <th>工单号</th>
+          <th>成品料号</th>
+          <th>成品名称</th>
+          <th>物料种类</th>
+          <th>领料总数</th>
+          <th>领料人</th>
+          <th>领料时间</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(d, idx) in paginatedDocs" :key="d.$id">
-          <td>
-            <input type="checkbox" :value="d.$id" v-model="selectedIds">
-          </td>
+        <tr v-for="(b, idx) in paginatedBatches" :key="b.key">
+          <td><input type="checkbox" :value="b.key" v-model="selectedKeys"></td>
           <td>{{ (currentPage - 1) * PAGE_SIZE + idx + 1 }}</td>
-          <td>{{ d.part_number || '' }}</td>
-          <td>{{ partName(d.part_number) }}</td>
-          <td><span class="qty-badge">{{ d.quantity ?? 0 }}</span></td>
-          <td>{{ d.location || '' }}</td>
-          <td>
-            <span v-if="d.source_wo" style="color:#2563eb;font-size:13px;">
-              {{ woProductNameMap[d.source_wo] || d.source_wo }}
-            </span>
-            <span v-else style="color:#999;font-size:13px;">正常</span>
-          </td>
+          <td>{{ b.issue_no || '(无单号)' }}</td>
+          <td>{{ b.wo_number || '' }}</td>
+          <td>{{ b.product_number || '' }}</td>
+          <td>{{ b.product_name || '' }}</td>
+          <td>{{ b.itemCount }} 种</td>
+          <td><b>{{ b.totalQty }}</b></td>
+          <td>{{ b.operator || '' }}</td>
+          <td>{{ b.issue_time || '' }}</td>
         </tr>
-        <tr v-if="!loading && !paginatedDocs.length">
-          <td colspan="7" style="text-align:center;color:#999;">暂无库存数据</td>
+        <tr v-if="!loading && !paginatedBatches.length">
+          <td colspan="10" style="text-align:center;color:#999;">暂无领料单</td>
         </tr>
       </tbody>
     </table>
@@ -55,28 +46,51 @@
 
     <input type="file" accept=".csv" hidden ref="fileInput" @change="handleImport">
 
-    <div v-if="showModal" class="modal-mask">
-      <div class="modal-box">
-        <h3>{{ form.id ? '编辑库存' : '新增库存' }}</h3>
-        <label>物料料号
-          <input v-model="form.part_number" type="text" placeholder="如 M-2001"
-                 :disabled="!!form.id || form.isAuto">
+    <div v-if="showAdd" class="modal-mask">
+      <div class="modal-box" style="width:760px;max-width:94vw;">
+        <h3>新增领料单</h3>
+        <label>工单
+          <select v-model="addForm.wo_number">
+            <option value="">— 请选择工单 —</option>
+            <option v-for="w in woList" :key="w.$id" :value="w.wo_number">
+              {{ w.wo_number }} / {{ w.product_number }} / {{ w.product_name }}
+            </option>
+          </select>
         </label>
-        <label>物料名称
-          <input v-model="form.part_name" type="text" placeholder="如 电阻0603">
+        <label>领料人
+          <input v-model="addForm.operator" type="text" placeholder="默认当前登录用户">
         </label>
-        <label>物料数量
-          <input v-model.number="form.quantity" type="number" placeholder="如 1000"
-                 :disabled="form.isAuto">
-        </label>
-        <label>库位
-          <input v-model="form.location" type="text" placeholder="如 A-1-01"
-                 :disabled="form.isAuto">
-        </label>
-        <p class="error">{{ formError }}</p>
+        <div style="margin:8px 0;font-size:13px;color:#555;display:flex;justify-content:space-between;align-items:center;">
+          <span>物料明细</span>
+          <button class="btn-cancel" style="padding:4px 10px;" @click="addRow">+ 加一行</button>
+        </div>
+        <table style="margin-bottom:12px;">
+          <thead>
+            <tr>
+              <th style="width:50px;">#</th>
+              <th>物料料号</th>
+              <th>物料名称</th>
+              <th style="width:120px;">数量</th>
+              <th style="width:70px;">操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(r, i) in addForm.items" :key="i">
+              <td>{{ i + 1 }}</td>
+              <td><input v-model="r.part_number" type="text" style="margin:0;"></td>
+              <td><input v-model="r.part_name" type="text" style="margin:0;"></td>
+              <td><input v-model.number="r.issue_qty" type="number" style="margin:0;"></td>
+              <td>
+                <button class="btn-cancel" style="padding:4px 8px;"
+                        @click="removeRow(i)" :disabled="addForm.items.length <= 1">删</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="error">{{ addError }}</p>
         <div class="modal-actions">
-          <button class="btn-cancel" @click="showModal = false">取消</button>
-          <button class="btn-save" @click="saveForm">保存</button>
+          <button class="btn-cancel" @click="showAdd = false">取消</button>
+          <button class="btn-save" @click="saveAdd">保存</button>
         </div>
       </div>
     </div>
@@ -85,186 +99,224 @@
 
 <script setup>
 import { ref, onMounted, computed, reactive, watch } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { useRouter } from 'vue-router';
 import MainLayout from '../layouts/MainLayout.vue';
 import ActionMenu from '../components/ActionMenu.vue';
 import Pagination from '../components/Pagination.vue';
 import { PAGE_SIZE, usePagination } from '../composables/usePagination.js';
 import { CONFIG } from '../config.js';
-import { listDocs, getDoc, createDoc, updateDoc, deleteDoc } from '../api/db.js';
+import { listDocs, createDoc, deleteDoc } from '../api/db.js';
 import { exportCSV, readCSV } from '../api/csv.js';
+import { syncExcessToInventory } from '../api/kitting.js';
 import { partName, getPartMap, ensurePart } from '../api/partMap.js';
+import { authStore } from '../stores/auth.js';
 import { Query } from 'appwrite';
 
-const route = useRoute();
 const router = useRouter();
 
+const allIssueNos = ref([]);
+const woList = ref([]);
 const keyword = ref('');
-const filterPart = ref(route.query.part || null);
 const fileInput = ref(null);
-const showModal = ref(false);
-const formError = ref('');
-const woProductNameMap = ref({});
-const selectedIds = ref([]);
+const selectedKeys = ref([]);
+const showAdd = ref(false);
+const addError = ref('');
 
-const form = reactive({
-  id: '', part_number: '', part_name: '', quantity: '', location: '', isAuto: false
+const addForm = reactive({
+  wo_number: '',
+  operator: '',
+  items: [{ part_number: '', part_name: '', issue_qty: '' }]
 });
 
 const menuItems = computed(() => [
-  { label: '新增库存', onClick: openAdd },
-  { label: '编辑', onClick: editSelected, disabled: selectedIds.value.length !== 1 },
-  { label: '删除', onClick: deleteSelected, disabled: selectedIds.value.length === 0 },
+  { label: '新增领料单', onClick: openAdd },
+  { label: '详情', onClick: viewSelected, disabled: selectedKeys.value.length !== 1 },
+  { label: '删除', onClick: deleteSelected, disabled: selectedKeys.value.length === 0 },
   { label: '导入CSV', onClick: triggerImport },
-  { label: '导出CSV', onClick: handleExport }
+  { label: '导出CSV', onClick: handleExport, disabled: selectedKeys.value.length === 0 }
 ]);
 
-const { currentPage, paginatedItems: paginatedDocs, total, loading, reload } =
+function genIssueNo() {
+  const d = new Date();
+  const pad = n => String(n).padStart(2, '0');
+  const date = `${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}`;
+  const time = `${pad(d.getHours())}${pad(d.getMinutes())}${pad(d.getSeconds())}`;
+  const rand = String(Math.floor(Math.random() * 1000)).padStart(3, '0');
+  return `IS${date}${time}${rand}`;
+}
+function nowStr() {
+  const d = new Date();
+  const pad = n => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+}
+
+const woMap = computed(() => {
+  const m = {};
+  woList.value.forEach(w => { m[w.wo_number] = w; });
+  return m;
+});
+
+const { currentPage, paginatedItems: paginatedBatches, total, loading, reload } =
   usePagination([], {
     mode: 'server',
     pageSize: PAGE_SIZE,
     fetcher: async ({ page, pageSize }) => {
-      const queries = [
-        Query.orderAsc('part_number'),
-        Query.limit(pageSize),
-        Query.offset((page - 1) * pageSize),
-      ];
-      if (filterPart.value) queries.push(Query.equal('part_number', filterPart.value));
-      const kw = keyword.value.trim();
-      if (kw) queries.push(Query.startsWith('location', kw));
-      const res = await listDocs(CONFIG.TABLES.inventory, queries);
-      return { items: res.documents, total: res.total };
+      const all = [];
+      let offset = 0;
+      const chunk = 500;
+      while (true) {
+        const res = await listDocs(CONFIG.TABLES.issue, [
+          Query.limit(chunk), Query.offset(offset)
+        ]);
+        all.push(...res.documents);
+        if (res.documents.length < chunk) break;
+        offset += chunk;
+      }
+      allIssueNos.value = all;
+
+      const batchMap = {};
+      all.forEach(d => {
+        const key = d.issue_no
+          ? `NO:${d.issue_no}`
+          : `FB:${d.wo_number}|${d.operator || ''}|${d.issue_time || ''}`;
+        if (!batchMap[key]) {
+          batchMap[key] = {
+            key,
+            issue_no: d.issue_no || '',
+            wo_number: d.wo_number,
+            operator: d.operator,
+            issue_time: d.issue_time,
+            itemCount: 0,
+            totalQty: 0,
+            _ids: [],
+          };
+        }
+        batchMap[key].itemCount++;
+        batchMap[key].totalQty += Number(d.issue_qty) || 0;
+        batchMap[key]._ids.push(d.$id);
+      });
+
+      const kw = keyword.value.trim().toLowerCase();
+      let batches = Object.values(batchMap);
+      if (kw) {
+        batches = batches.filter(b =>
+          (b.issue_no || '').toLowerCase().includes(kw) ||
+          (b.wo_number || '').toLowerCase().includes(kw) ||
+          (b.operator || '').toLowerCase().includes(kw)
+        );
+      }
+      batches.sort((a, b) =>
+        (b.issue_time || '').localeCompare(a.issue_time || '')
+      );
+
+      const totalCount = batches.length;
+      const start = (page - 1) * pageSize;
+      const pageBatches = batches.slice(start, start + pageSize);
+
+      pageBatches.forEach(b => {
+        const w = woMap.value[b.wo_number];
+        b.product_number = w?.product_number || '';
+        b.product_name = w?.product_name || '';
+        b.items = { length: b.itemCount };
+      });
+
+      return { items: pageBatches, total: totalCount };
     },
   });
 
 watch(keyword, () => { if (currentPage.value !== 1) currentPage.value = 1; else reload(); });
-watch(filterPart, () => { if (currentPage.value !== 1) currentPage.value = 1; else reload(); });
 
-const allSelected = computed(() =>
-  paginatedDocs.value.length > 0 &&
-  paginatedDocs.value.every(d => selectedIds.value.includes(d.$id))
-);
-const someSelected = computed(() =>
-  !allSelected.value &&
-  paginatedDocs.value.some(d => selectedIds.value.includes(d.$id))
-);
-function toggleSelectAll(e) {
-  if (e.target.checked) {
-    const set = new Set(selectedIds.value);
-    paginatedDocs.value.forEach(d => set.add(d.$id));
-    selectedIds.value = Array.from(set);
-  } else {
-    const ids = new Set(paginatedDocs.value.map(d => d.$id));
-    selectedIds.value = selectedIds.value.filter(id => !ids.has(id));
-  }
-}
-
-async function loadWoMap() {
+async function loadWos() {
   const res = await listDocs(CONFIG.TABLES.wo, [Query.limit(5000)]);
-  const map = {};
-  res.documents.forEach(w => {
-    if (w.wo_number) map[w.wo_number] = w.product_name || '';
-  });
-  woProductNameMap.value = map;
+  woList.value = res.documents;
 }
 
 onMounted(async () => {
   await getPartMap();
-  await Promise.all([reload(), loadWoMap()]);
+  await loadWos();
+  await reload();
 });
 
-function clearFilter() {
-  filterPart.value = null;
-  router.replace({ name: 'inventory' });
+const allSelected = computed(() =>
+  paginatedBatches.value.length > 0 &&
+  paginatedBatches.value.every(b => selectedKeys.value.includes(b.key))
+);
+const someSelected = computed(() =>
+  !allSelected.value &&
+  paginatedBatches.value.some(b => selectedKeys.value.includes(b.key))
+);
+function toggleSelectAll(e) {
+  if (e.target.checked) {
+    const set = new Set(selectedKeys.value);
+    paginatedBatches.value.forEach(b => set.add(b.key));
+    selectedKeys.value = Array.from(set);
+  } else {
+    const keys = new Set(paginatedBatches.value.map(b => b.key));
+    selectedKeys.value = selectedKeys.value.filter(k => !keys.has(k));
+  }
+}
+
+function viewSelected() {
+  if (selectedKeys.value.length !== 1) return;
+  const b = paginatedBatches.value.find(x => x.key === selectedKeys.value[0]);
+  if (!b) return;
+  if (!b.issue_no) { alert('该领料单没有单号（老数据），无法进入详情。'); return; }
+  router.push({ name: 'issue-detail', params: { issueNo: b.issue_no } });
 }
 
 function openAdd() {
-  Object.assign(form, {
-    id: '', part_number: '', part_name: '', quantity: '', location: '', isAuto: false
-  });
-  formError.value = '';
-  showModal.value = true;
+  addForm.wo_number = '';
+  addForm.operator = authStore.user?.name || authStore.user?.email || '';
+  addForm.items = [{ part_number: '', part_name: '', issue_qty: '' }];
+  addError.value = '';
+  showAdd.value = true;
+}
+function addRow() { addForm.items.push({ part_number: '', part_name: '', issue_qty: '' }); }
+function removeRow(i) {
+  if (addForm.items.length <= 1) return;
+  addForm.items.splice(i, 1);
 }
 
-async function editSelected() {
-  if (selectedIds.value.length !== 1) { alert('请只勾选一行再点编辑'); return; }
-  const docId = selectedIds.value[0];
-  try {
-    const doc = await getDoc(CONFIG.TABLES.inventory, docId);
-    const isAuto = !!doc.source_wo;
-    Object.assign(form, {
-      id: doc.$id,
-      part_number: doc.part_number || '',
-      part_name: partName(doc.part_number) || doc.part_name || '',
-      quantity: doc.quantity ?? '',
-      location: doc.location || '',
-      isAuto
-    });
-    formError.value = isAuto
-      ? `该记录由 ${woProductNameMap.value[doc.source_wo] || doc.source_wo} 超发自动生成，数量/库位/料号不可改。`
-      : '';
-    showModal.value = true;
-  } catch (e) {
-    alert('读取失败：' + e.message);
-  }
-}
+async function saveAdd() {
+  if (!addForm.wo_number) { addError.value = '请选择工单'; return; }
+  const valid = addForm.items.filter(r =>
+    r.part_number && r.issue_qty && Number(r.issue_qty) > 0
+  );
+  if (!valid.length) { addError.value = '至少填写一条有效物料'; return; }
 
-async function saveForm() {
-  const part_number = (form.part_number || '').trim();
-  const part_name = (form.part_name || '').trim();
-  const location = (form.location || '').trim();
-  const quantity = Number(form.quantity);
+  const issueNo = genIssueNo();
+  const timeStr = nowStr();
+  const operator = addForm.operator.trim();
 
-  if (!part_number || !part_name || !location) {
-    formError.value = '物料料号、物料名称、库位必填'; return;
-  }
-  if (isNaN(quantity) || quantity < 0) {
-    formError.value = '物料数量必须是非负整数'; return;
+  let ok = 0, fail = 0;
+  for (const r of valid) {
+    try {
+      const pn = String(r.part_number).trim();
+      await ensurePart(pn, String(r.part_name || '').trim());
+      await createDoc(CONFIG.TABLES.issue, {
+        issue_no: issueNo,
+        wo_number: addForm.wo_number,
+        part_number: pn,
+        issue_qty: Number(r.issue_qty),
+        operator,
+        issue_time: timeStr
+      });
+      ok++;
+    } catch (e) { console.error(e); fail++; }
   }
 
-  try {
-    await ensurePart(part_number, part_name);
-    if (form.id) {
-      if (form.isAuto) {
-        // 自动记录不改数量/库位/料号，名称走主数据即可，不写库
-        await updateDoc(CONFIG.TABLES.inventory, form.id, {});
-      } else {
-        await updateDoc(CONFIG.TABLES.inventory, form.id, { quantity, location });
-      }
-    } else {
-      const dup = await listDocs(CONFIG.TABLES.inventory, [
-        Query.equal('location', location), Query.limit(1)
-      ]);
-      if (dup.documents.length && dup.documents[0].part_number !== part_number) {
-        formError.value = `库位 ${location} 已被物料 ${dup.documents[0].part_number} 占用`;
-        return;
-      }
-      await createDoc(CONFIG.TABLES.inventory, { part_number, quantity, location });
-    }
-    showModal.value = false;
-    selectedIds.value = [];
+  if (fail === 0) {
+    const partNumbers = [...new Set(valid.map(r => String(r.part_number).trim()))];
+    try { await syncExcessToInventory(addForm.wo_number, partNumbers); }
+    catch (e) { console.error(e); }
+  }
+  if (fail > 0) {
+    addError.value = `部分失败：成功 ${ok} 条，失败 ${fail} 条`;
     await reload();
-  } catch (e) {
-    formError.value = '保存失败：' + (e.message || e);
+    return;
   }
-}
-
-async function deleteSelected() {
-  if (!selectedIds.value.length) return;
-  const msg = `确认删除已勾选的 ${selectedIds.value.length} 条库存？`;
-  const ok = window.$confirm
-    ? await window.$confirm({ title: '删除确认', message: msg })
-    : confirm(msg);
-  if (!ok) return;
-
-  let ok2 = 0, fail = 0;
-  for (const id of selectedIds.value) {
-    try { await deleteDoc(CONFIG.TABLES.inventory, id); ok2++; }
-    catch (e) { console.error('删除失败', id, e); fail++; }
-  }
-  selectedIds.value = [];
+  showAdd.value = false;
   await reload();
-  if (fail > 0) alert(`删除完成：成功 ${ok2} 条，失败 ${fail} 条`);
 }
 
 function triggerImport() { fileInput.value.click(); }
@@ -273,47 +325,85 @@ async function handleImport(e) {
   const f = e.target.files[0]; if (!f) return;
   const { headers, rows } = await readCSV(f);
 
-  const required = ['part_number', 'part_name', 'quantity', 'location'];
+  const required = ['wo_number', 'part_number', 'part_name', 'issue_qty'];
   const missing = required.filter(h => !headers.includes(h));
   if (missing.length) {
-    alert('CSV 缺少必需列：' + missing.join(', '));
+    alert('CSV 缺少必需列：' + missing.join(', ') + '\n正确模板：wo_number,part_number,part_name,issue_qty');
     e.target.value = '';
     return;
   }
 
-  let ok = 0, fail = 0;
+  const operator = authStore.user?.name || authStore.user?.email || '';
+  const timeStr = nowStr();
+
+  const parsed = [];
+  const woNoMap = {};
   const errors = [];
+
   for (let i = 0; i < rows.length; i++) {
     const row = rows[i];
     const data = {};
     headers.forEach((h, idx) => {
       const v = row[idx];
       if (v === undefined || v === null || v === '') return;
-      if (h === 'quantity') {
+      if (h === 'issue_qty') {
         const n = Number(v); if (isNaN(n)) return;
         data[h] = n;
       } else data[h] = String(v).trim();
     });
-    if (!data.part_number || !data.location) continue;
+
+    if (!data.wo_number || !data.part_number) {
+      errors.push(`第 ${i+2} 行：工单号或物料料号为空`); continue;
+    }
+    if (!data.issue_qty || data.issue_qty <= 0) {
+      errors.push(`第 ${i+2} 行：物料数量不合法`); continue;
+    }
+    if (!woMap.value[data.wo_number]) {
+      errors.push(`第 ${i+2} 行：工单号 ${data.wo_number} 不存在`); continue;
+    }
+
+    if (!woNoMap[data.wo_number]) woNoMap[data.wo_number] = genIssueNo();
+    data.issue_no = woNoMap[data.wo_number];
+    parsed.push({ rowIndex: i + 2, data });
+  }
+
+  if (errors.length && !parsed.length) {
+    alert('导入失败，全部不合法：\n' + errors.slice(0, 15).join('\n'));
+    e.target.value = '';
+    return;
+  }
+
+  let ok = 0, fail = 0;
+  for (const p of parsed) {
     try {
-      // 先把名称写入主数据
-      await ensurePart(data.part_number, data.part_name || '');
-      const dup = await listDocs(CONFIG.TABLES.inventory, [
-        Query.equal('location', data.location), Query.limit(1)
-      ]);
-      if (dup.documents.length && dup.documents[0].part_number !== data.part_number) {
-        errors.push(`第 ${i+2} 行：库位 ${data.location} 已被 ${dup.documents[0].part_number} 占用`);
-        fail++; continue;
-      }
-      const { part_name, ...invData } = data; // 不再写 part_name 到库存表
-      await createDoc(CONFIG.TABLES.inventory, invData);
+      await ensurePart(p.data.part_number, p.data.part_name || '');
+      await createDoc(CONFIG.TABLES.issue, {
+        issue_no: p.data.issue_no,
+        wo_number: p.data.wo_number,
+        part_number: p.data.part_number,
+        issue_qty: p.data.issue_qty,
+        operator,
+        issue_time: timeStr
+      });
       ok++;
     } catch (err) {
-      errors.push(`第 ${i+2} 行：${err.message}`); fail++;
+      errors.push(`第 ${p.rowIndex} 行：${err.message}`); fail++;
     }
   }
 
-  let msg = `导入完成：成功 ${ok} 条，失败 ${fail} 条`;
+  const woParts = {};
+  parsed.forEach(p => {
+    const wo = p.data.wo_number, pn = p.data.part_number;
+    if (!wo || !pn) return;
+    if (!woParts[wo]) woParts[wo] = new Set();
+    woParts[wo].add(pn);
+  });
+  for (const [woNum, partSet] of Object.entries(woParts)) {
+    try { await syncExcessToInventory(woNum, Array.from(partSet)); }
+    catch (err) { console.error('同步库存失败', woNum, err); }
+  }
+
+  let msg = `导入完成：成功 ${ok} 条，失败 ${fail} 条。\n共生成 ${Object.keys(woNoMap).length} 张领料单。`;
   if (errors.length) {
     msg += '\n\n失败明细（前 10 条）：\n' + errors.slice(0, 10).join('\n');
     if (errors.length > 10) msg += `\n...还有 ${errors.length - 10} 条`;
@@ -324,26 +414,56 @@ async function handleImport(e) {
   e.target.value = '';
 }
 
-async function handleExport() {
-  const headers = ['part_number', 'part_name', 'quantity', 'location', 'source_wo'];
-  const all = [];
-  const chunk = 500;
-  let offset = 0;
-  while (true) {
-    const res = await listDocs(CONFIG.TABLES.inventory, [
-      Query.limit(chunk), Query.offset(offset)
-    ]);
-    all.push(...res.documents);
-    if (res.documents.length < chunk) break;
-    offset += chunk;
+async function deleteSelected() {
+  if (!selectedKeys.value.length) return;
+  const targets = paginatedBatches.value.filter(b => selectedKeys.value.includes(b.key));
+  if (!targets.length) return;
+
+  const ok = window.$confirm
+    ? await window.$confirm({
+        title: '删除确认',
+        message: `将删除已勾选的 ${targets.length} 张领料单，共 ${targets.reduce((s, b) => s + (b.itemCount || 0), 0)} 条明细。确认？`
+      })
+    : confirm(`将删除 ${targets.length} 张领料单，确认？`);
+  if (!ok) return;
+
+  let ok2 = 0, fail = 0;
+  for (const b of targets) {
+    try {
+      const res = await listDocs(CONFIG.TABLES.issue, [
+        Query.equal('issue_no', b.issue_no), Query.limit(5000)
+      ]);
+      const partNumbers = [...new Set(res.documents.map(i => i.part_number))];
+      for (const it of res.documents) await deleteDoc(CONFIG.TABLES.issue, it.$id);
+      if (b.wo_number && partNumbers.length) {
+        try { await syncExcessToInventory(b.wo_number, partNumbers); }
+        catch (e) { console.error(e); }
+      }
+      ok2++;
+    } catch (e) {
+      console.error('删除失败', b.issue_no, e); fail++;
+    }
   }
-  const rows = all.map(d => [
-    d.part_number ?? '',
-    partName(d.part_number),
-    d.quantity ?? '',
-    d.location ?? '',
-    d.source_wo ?? ''
+  selectedKeys.value = [];
+  await reload();
+  if (fail > 0) alert(`删除完成：成功 ${ok2} 张，失败 ${fail} 张`);
+}
+
+async function handleExport() {
+  if (!selectedKeys.value.length) { alert('请先勾选要导出的领料单'); return; }
+  const selectedBatches = paginatedBatches.value.filter(b => selectedKeys.value.includes(b.key));
+  const allItems = [];
+  for (const b of selectedBatches) {
+    const res = await listDocs(CONFIG.TABLES.issue, [
+      Query.equal('issue_no', b.issue_no), Query.limit(5000)
+    ]);
+    allItems.push(...res.documents);
+  }
+  const headers = ['issue_no', 'wo_number', 'part_number', 'part_name', 'issue_qty', 'operator', 'issue_time'];
+  const rows = allItems.map(d => [
+    d.issue_no ?? '', d.wo_number ?? '', d.part_number ?? '',
+    partName(d.part_number), d.issue_qty ?? '', d.operator ?? '', d.issue_time ?? ''
   ]);
-  exportCSV(headers, rows, 'inventory');
+  exportCSV(headers, rows, 'issue_selected');
 }
 </script>
