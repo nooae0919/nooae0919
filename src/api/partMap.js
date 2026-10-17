@@ -15,16 +15,25 @@ export async function refreshPartCache() {
   const all = [];
   let offset = 0;
   const chunk = 500;
+  
   while (true) {
-    const res = await listDocs(CONFIG.TABLES.part, [
-      Query.orderAsc('part_number'),
-      Query.limit(chunk),
-      Query.offset(offset),
-    ]);
-    all.push(...res.documents);
-    if (res.documents.length < chunk) break;
-    offset += chunk;
+    try {
+      const res = await listDocs(CONFIG.TABLES.part, [
+        Query.orderAsc('part_number'),
+        Query.limit(chunk),
+        Query.offset(offset),
+      ]);
+      all.push(...res.documents);
+      if (res.documents.length < chunk) break;
+      offset += chunk;
+    } catch (e) {
+      console.warn(`拉取主数据分页失败 (offset: ${offset})，正在重试...`, e);
+      // 失败后稍等一下重新尝试当前页
+      await new Promise(r => setTimeout(r, 1000));
+      continue; 
+    }
   }
+  
   const map = {};
   all.forEach(p => {
     if (p.part_number) map[p.part_number] = p;
