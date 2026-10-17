@@ -45,7 +45,7 @@
         <tr v-for="(r, idx) in paginatedRows" :key="r.part_number">
           <td>{{ (currentPage - 1) * PAGE_SIZE + idx + 1 }}</td>
           <td>{{ r.part_number }}</td>
-          <td>{{ r.part_name || '' }}</td>
+          <td>{{ partName(r.part_number) }}</td>
           <td>{{ r.qty_per_board }}</td>
           <td>{{ r.required }}</td>
           <td>{{ r.issued }}</td>
