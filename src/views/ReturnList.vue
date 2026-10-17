@@ -2,7 +2,9 @@
   <MainLayout>
     <div class="page-header">
       <div class="search-bar">
-        <input v-model="keyword" type="text" placeholder="按退料单号 / 工单号 / 退料人搜索...">
+        <input v-model="searchInput" type="text" placeholder="按退料单号 / 工单号 / 退料人搜索..." @keyup.enter="handleSearch">
+        <button @click="handleSearch">查询</button>
+        <button v-if="keyword" @click="clearSearch" style="background:#f3f4f6;">重置</button>
       </div>
       <ActionMenu :items="menuItems" />
     </div>
@@ -81,8 +83,7 @@
               <td><input v-model="r.part_name" type="text" style="margin:0;"></td>
               <td><input v-model.number="r.return_qty" type="number" style="margin:0;"></td>
               <td>
-                <button class="btn-cancel" style="padding:4px 8px;"
-                        @click="removeRow(i)" :disabled="addForm.items.length <= 1">删</button>
+                <button class="btn-cancel" style="padding:4px 8px;" @click="removeRow(i)" :disabled="addForm.items.length <= 1">删</button>
               </td>
             </tr>
           </tbody>
@@ -107,13 +108,14 @@ import { PAGE_SIZE, usePagination } from '../composables/usePagination.js';
 import { CONFIG } from '../config.js';
 import { listDocs, createDoc, deleteDoc } from '../api/db.js';
 import { exportCSV, readCSV } from '../api/csv.js';
-import { partName, getPartMap, ensurePart } from '../api/partMap.js';
+import { partName, loadPartNamesForPage, ensurePart } from '../api/partMap.js';
 import { authStore } from '../stores/auth.js';
 import { Query } from 'appwrite';
 
 const router = useRouter();
 
 const woList = ref([]);
+const searchInput = ref('');
 const keyword = ref('');
 const fileInput = ref(null);
 const selectedKeys = ref([]);
@@ -191,34 +193,34 @@ const { currentPage, paginatedItems: paginatedBatches, total, loading, reload } 
         batchMap[key].totalQty += Number(d.return_qty) || 0;
       });
 
-      const kw = keyword.value.trim().toLowerCase();
       let batches = Object.values(batchMap);
-      if (kw) {
+      if (keyword.value) {
+        const kw = keyword.value.toLowerCase();
         batches = batches.filter(b =>
           (b.return_no || '').toLowerCase().includes(kw) ||
           (b.wo_number || '').toLowerCase().includes(kw) ||
           (b.operator || '').toLowerCase().includes(kw)
         );
       }
-      batches.sort((a, b) =>
-        (b.return_time || '').localeCompare(a.return_time || '')
-      );
+      batches.sort((a, b) => (b.return_time || '').localeCompare(a.return_time || ''));
 
-      const totalCount = batches.length;
-      const start = (page - 1) * pageSize;
-      const pageBatches = batches.slice(start, start + pageSize);
-
+      const pageBatches = batches.slice((page - 1) * pageSize, (page - 1) * pageSize + pageSize);
       pageBatches.forEach(b => {
         const w = woMap.value[b.wo_number];
         b.product_number = w?.product_number || '';
         b.product_name = w?.product_name || '';
       });
 
-      return { items: pageBatches, total: totalCount };
+      return { items: pageBatches, total: batches.length };
     },
   });
 
-watch(keyword, () => { if (currentPage.value !== 1) currentPage.value = 1; else reload(); });
+function handleSearch() {
+  keyword.value = searchInput.value.trim();
+  if (currentPage.value !== 1) currentPage.value = 1;
+  else reload();
+}
+function clearSearch() { searchInput.value = ''; handleSearch(); }
 
 async function loadWos() {
   const res = await listDocs(CONFIG.TABLES.wo, [Query.limit(5000)]);
@@ -226,19 +228,13 @@ async function loadWos() {
 }
 
 onMounted(async () => {
-  await getPartMap();
   await loadWos();
   await reload();
 });
 
-const allSelected = computed(() =>
-  paginatedBatches.value.length > 0 &&
-  paginatedBatches.value.every(b => selectedKeys.value.includes(b.key))
-);
-const someSelected = computed(() =>
-  !allSelected.value &&
-  paginatedBatches.value.some(b => selectedKeys.value.includes(b.key))
-);
+const allSelected = computed(() => paginatedBatches.value.length > 0 && paginatedBatches.value.every(b => selectedKeys.value.includes(b.key)));
+const someSelected = computed(() => !allSelected.value && paginatedBatches.value.some(b => selectedKeys.value.includes(b.key)));
+
 function toggleSelectAll(e) {
   if (e.target.checked) {
     const set = new Set(selectedKeys.value);
@@ -273,9 +269,7 @@ function removeRow(i) {
 
 async function saveAdd() {
   if (!addForm.wo_number) { addError.value = '请选择工单'; return; }
-  const valid = addForm.items.filter(r =>
-    r.part_number && r.return_qty && Number(r.return_qty) > 0
-  );
+  const valid = addForm.items.filter(r => r.part_number && r.return_qty && Number(r.return_qty) > 0);
   if (!valid.length) { addError.value = '至少填写一条有效物料'; return; }
 
   const returnNo = genReturnNo();
@@ -394,20 +388,12 @@ async function handleImport(e) {
 async function deleteSelected() {
   if (!selectedKeys.value.length) return;
   const targets = paginatedBatches.value.filter(b => selectedKeys.value.includes(b.key));
-  const ok = window.$confirm
-    ? await window.$confirm({
-        title: '删除确认',
-        message: `将删除已勾选的 ${targets.length} 张退料单，共 ${targets.reduce((s, b) => s + (b.itemCount || 0), 0)} 条明细。确认？`
-      })
-    : confirm(`将删除 ${targets.length} 张退料单，确认？`);
-  if (!ok) return;
+  if (!confirm(`将删除已勾选的 ${targets.length} 张退料单，共 ${targets.reduce((s, b) => s + (b.itemCount || 0), 0)} 条明细。确认？`)) return;
 
   let ok2 = 0, fail = 0;
   for (const b of targets) {
     try {
-      const res = await listDocs(CONFIG.TABLES.return, [
-        Query.equal('return_no', b.return_no), Query.limit(5000)
-      ]);
+      const res = await listDocs(CONFIG.TABLES.return, [Query.equal('return_no', b.return_no), Query.limit(5000)]);
       for (const it of res.documents) await deleteDoc(CONFIG.TABLES.return, it.$id);
       ok2++;
     } catch (e) {
@@ -424,11 +410,10 @@ async function handleExport() {
   const selectedBatches = paginatedBatches.value.filter(b => selectedKeys.value.includes(b.key));
   const allItems = [];
   for (const b of selectedBatches) {
-    const res = await listDocs(CONFIG.TABLES.return, [
-      Query.equal('return_no', b.return_no), Query.limit(5000)
-    ]);
+    const res = await listDocs(CONFIG.TABLES.return, [Query.equal('return_no', b.return_no), Query.limit(5000)]);
     allItems.push(...res.documents);
   }
+  await loadPartNamesForPage(allItems);
   const headers = ['return_no', 'wo_number', 'part_number', 'part_name', 'return_qty', 'operator', 'return_time'];
   const rows = allItems.map(d => [
     d.return_no ?? '', d.wo_number ?? '', d.part_number ?? '',
