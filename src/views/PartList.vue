@@ -97,6 +97,19 @@ const form = reactive({
   id: '', part_number: '', part_name: '', spec: '', unit: '', category: '', remark: ''
 });
 
+const searchInput = ref('');
+
+function handleSearch() {
+  keyword.value = searchInput.value.trim();
+  if (currentPage.value !== 1) currentPage.value = 1;
+  else reload();
+}
+
+function clearSearch() {
+  searchInput.value = '';
+  handleSearch();
+}
+
 const menuItems = computed(() => [
   { label: '新增物料', onClick: openAdd },
   { label: '编辑', onClick: editSelected, disabled: selectedIds.value.length !== 1 },
