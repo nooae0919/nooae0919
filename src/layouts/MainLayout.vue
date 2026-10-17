@@ -17,8 +17,6 @@
       <RouterLink to="/issue">生产领料</RouterLink>
       <RouterLink to="/return">生产退料</RouterLink>
       <RouterLink to="/finish">成品入库</RouterLink>
-      
-      
     </nav>
 
     <main>
