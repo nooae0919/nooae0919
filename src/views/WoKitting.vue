@@ -70,8 +70,6 @@
 </template>
 
 <script setup>
-import { partName, getPartMap } from '../api/partMap.js';
-// onMounted 里 load() 之前先 await getPartMap();
 import { ref, computed, onMounted, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import MainLayout from '../layouts/MainLayout.vue';
@@ -82,6 +80,7 @@ import { CONFIG } from '../config.js';
 import { listDocs, getDoc } from '../api/db.js';
 import { exportCSV } from '../api/csv.js';
 import { syncExcessToInventory } from '../api/kitting.js';
+import { partName, getPartMap } from '../api/partMap.js';
 import { Query } from 'appwrite';
 
 const props = defineProps({ woId: String });
@@ -93,7 +92,7 @@ const wo = ref(null);
 const bomVersion = ref('');
 const excessCount = ref(0);
 const missingCount = ref(0);
-const allRows = ref([]);       // 全量（用于导出、超发统计、入库）
+const allRows = ref([]);
 const pushedMap = ref({});
 
 const menuItems = computed(() => [
@@ -112,10 +111,7 @@ const { currentPage, paginatedItems: paginatedRows, total, loading, reload } =
     mode: 'server',
     pageSize: PAGE_SIZE,
     fetcher: async ({ page, pageSize }) => {
-      // 齐套数据需要 join：wo_bom 快照 + issue 领料
-      // 服务端分页单位是 wo_bom 快照行
       if (!wo.value) {
-        // 第一次先加载头部与全量用于统计
         await loadAllRows();
       }
       const start = (page - 1) * pageSize;
@@ -139,7 +135,8 @@ async function loadAllRows() {
   wo.value = await getDoc(CONFIG.TABLES.wo, woId.value);
   if (!wo.value) { alert('未找到工单'); allRows.value = []; return; }
 
-  // 快照
+  await getPartMap();
+
   const snapRes = await listDocs(CONFIG.TABLES.woBom, [
     Query.equal('wo_number', wo.value.wo_number),
     Query.orderAsc('part_number'),
@@ -152,7 +149,6 @@ async function loadAllRows() {
   }
   bomVersion.value = snapRes.documents[0]?.bom_version || '';
 
-  // 领料
   const issueRes = await listDocs(CONFIG.TABLES.issue, [
     Query.equal('wo_number', wo.value.wo_number),
     Query.limit(20000)
@@ -173,7 +169,6 @@ async function loadAllRows() {
     const excess = issued - required;
     return {
       part_number: it.part_number,
-      part_name: it.part_name || '',
       qty_per_board: per,
       required,
       issued,
@@ -237,7 +232,7 @@ function handleExport() {
   if (!allRows.value.length) { alert('暂无数据'); return; }
   const headers = ['part_number', 'part_name', 'qty_per_board', 'required', 'issued', 'excess'];
   const data = allRows.value.map(r => [
-    r.part_number, r.part_name, r.qty_per_board, r.required, r.issued, r.excess
+    r.part_number, partName(r.part_number), r.qty_per_board, r.required, r.issued, r.excess
   ]);
   exportCSV(headers, data, `kitting_${wo.value?.wo_number || woId.value}`);
 }
