@@ -55,7 +55,7 @@ import Pagination from '../components/Pagination.vue';
 import { PAGE_SIZE, usePagination } from '../composables/usePagination.js';
 import { CONFIG } from '../config.js';
 import { listDocs } from '../api/db.js';
-import { partName, getPartMap } from '../api/partMap.js';
+import { partName, loadPartNamesForPage } from '../api/partMap.js';
 import { Query } from 'appwrite';
 
 const props = defineProps({ returnNo: String });
@@ -78,6 +78,8 @@ const { currentPage, paginatedItems, total, loading, reload } =
         Query.limit(pageSize),
         Query.offset((page - 1) * pageSize),
       ]);
+      
+      await loadPartNamesForPage(res.documents);
 
       if (!batch.value) {
         const firstRes = await listDocs(CONFIG.TABLES.return, [
@@ -125,9 +127,8 @@ const { currentPage, paginatedItems, total, loading, reload } =
 
 watch(returnNo, () => { batch.value = null; reload(); });
 
-onMounted(async () => {
+onMounted(() => {
   if (!returnNo.value) { alert('未指定退料单号'); return; }
-  await getPartMap();
   reload();
 });
 </script>
