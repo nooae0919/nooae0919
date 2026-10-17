@@ -17,6 +17,7 @@ const routes = [
   { path: '/bom', name: 'bom', component: () => import('../views/BomList.vue') },
   { path: '/bom/:id', name: 'bom-detail', component: () => import('../views/BomDetail.vue'), props: true },
   { path: '/wo/:woId/kitting', name: 'wo-kitting', component: () => import('../views/WoKitting.vue'), props: true },
+  { path: '/part', name: 'part', component: () => import('../views/PartList.vue') },
 ];
 
 const router = createRouter({
