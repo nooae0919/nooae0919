@@ -435,7 +435,6 @@ async function deleteSelected() {
       ]);
       for (const it of res.documents) await deleteDoc(CONFIG.TABLES.finish, it.$id);
 
-      // 退回工单状态
       const w = woMap.value[b.wo_number];
       if (w && w.status === 'completed') {
         const res2 = await listDocs(CONFIG.TABLES.finish, [
