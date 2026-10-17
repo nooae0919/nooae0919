@@ -7,7 +7,6 @@
 
     <div class="page-header">
       <div class="search-bar">
-        <!-- ⭐ 绑定临时输入，回车触发查询 -->
         <input v-model="searchInput" type="text" placeholder="按库位搜索..." @keyup.enter="handleSearch">
         <button @click="handleSearch">查询</button>
         <button v-if="keyword" @click="clearSearch" style="background:#f3f4f6;">重置</button>
@@ -53,9 +52,27 @@
 
     <input type="file" accept=".csv" hidden ref="fileInput" @change="handleImport">
 
-    <!-- 弹窗（保持原样） -->
     <div v-if="showModal" class="modal-mask">
-      <!-- ...原样保留... -->
+      <div class="modal-box">
+        <h3>{{ form.id ? '编辑库存' : '新增库存' }}</h3>
+        <label>物料料号
+          <input v-model="form.part_number" type="text" placeholder="如 M-2001" :disabled="!!form.id || form.isAuto">
+        </label>
+        <label>物料名称
+          <input v-model="form.part_name" type="text" placeholder="如 电阻0603">
+        </label>
+        <label>物料数量
+          <input v-model.number="form.quantity" type="number" placeholder="如 1000" :disabled="form.isAuto">
+        </label>
+        <label>库位
+          <input v-model="form.location" type="text" placeholder="如 A-1-01" :disabled="form.isAuto">
+        </label>
+        <p class="error">{{ formError }}</p>
+        <div class="modal-actions">
+          <button class="btn-cancel" @click="showModal = false">取消</button>
+          <button class="btn-save" @click="saveForm">保存</button>
+        </div>
+      </div>
     </div>
   </MainLayout>
 </template>
@@ -76,11 +93,9 @@ import { Query } from 'appwrite';
 const route = useRoute();
 const router = useRouter();
 
-// ⭐ 新增查询相关变量
-const searchInput = ref(route.query.kw || '');
-const keyword = ref(route.query.kw || '');
+const searchInput = ref('');
+const keyword = ref('');
 const filterPart = ref(route.query.part || null);
-
 const fileInput = ref(null);
 const showModal = ref(false);
 const formError = ref('');
@@ -110,20 +125,14 @@ const { currentPage, paginatedItems: paginatedDocs, total, loading, reload } =
         Query.offset((page - 1) * pageSize),
       ];
       if (filterPart.value) queries.push(Query.equal('part_number', filterPart.value));
-      
-      // ⭐ 只有点击查询，keyword 才有值
       if (keyword.value) queries.push(Query.startsWith('location', keyword.value));
       
       const res = await listDocs(CONFIG.TABLES.inventory, queries);
-      
-      // ⭐ 关键：只把当前页的物料名称拉下来，不拉全量
       await loadPartNamesForPage(res.documents);
-      
       return { items: res.documents, total: res.total };
     },
   });
 
-// ⭐ 查询与重置方法
 function handleSearch() {
   keyword.value = searchInput.value.trim();
   if (currentPage.value !== 1) currentPage.value = 1;
@@ -164,7 +173,7 @@ onMounted(async () => {
 
 function clearFilter() {
   filterPart.value = null;
-  router.replace({ name: 'inventory', query: { kw: keyword.value || undefined } });
+  router.replace({ name: 'inventory' });
 }
 
 function openAdd() {
@@ -187,9 +196,7 @@ async function editSelected() {
       location: doc.location || '',
       isAuto
     });
-    formError.value = isAuto
-      ? `该记录由 ${woProductNameMap.value[doc.source_wo] || doc.source_wo} 超发自动生成，数量/库位/料号不可改。`
-      : '';
+    formError.value = isAuto ? `该记录由 ${woProductNameMap.value[doc.source_wo] || doc.source_wo} 超发自动生成。` : '';
     showModal.value = true;
   } catch (e) { alert('读取失败：' + e.message); }
 }
@@ -206,11 +213,8 @@ async function saveForm() {
   try {
     await ensurePart(part_number, part_name);
     if (form.id) {
-      if (form.isAuto) {
-        await updateDoc(CONFIG.TABLES.inventory, form.id, {});
-      } else {
-        await updateDoc(CONFIG.TABLES.inventory, form.id, { quantity, location });
-      }
+      if (form.isAuto) await updateDoc(CONFIG.TABLES.inventory, form.id, {});
+      else await updateDoc(CONFIG.TABLES.inventory, form.id, { quantity, location });
     } else {
       const dup = await listDocs(CONFIG.TABLES.inventory, [Query.equal('location', location), Query.limit(1)]);
       if (dup.documents.length && dup.documents[0].part_number !== part_number) {
@@ -227,26 +231,72 @@ async function saveForm() {
 
 async function deleteSelected() {
   if (!selectedIds.value.length) return;
-  const ok = window.$confirm ? await window.$confirm({ title: '删除确认', message: `确认删除已勾选的 ${selectedIds.value.length} 条库存？` }) : confirm(`确认删除已勾选的 ${selectedIds.value.length} 条库存？`);
+  const ok = confirm(`确认删除已勾选的 ${selectedIds.value.length} 条库存？`);
   if (!ok) return;
-
   let ok2 = 0, fail = 0;
   for (const id of selectedIds.value) {
     try { await deleteDoc(CONFIG.TABLES.inventory, id); ok2++; }
-    catch (e) { console.error('删除失败', id, e); fail++; }
+    catch (e) { fail++; }
   }
   selectedIds.value = [];
   await reload();
-  if (fail > 0) alert(`删除完成：成功 ${ok2} 条，失败 ${fail} 条`);
+  if (fail > 0) alert(`删除完成：成功 ${ok2}，失败 ${fail}`);
 }
 
 function triggerImport() { fileInput.value.click(); }
 
 async function handleImport(e) {
-  // ... 导入逻辑保持不变 ...
+  const f = e.target.files[0]; if (!f) return;
+  const { headers, rows } = await readCSV(f);
+  const required = ['part_number', 'part_name', 'quantity', 'location'];
+  const missing = required.filter(h => !headers.includes(h));
+  if (missing.length) { alert('CSV 缺少必需列：' + missing.join(', ')); e.target.value = ''; return; }
+
+  let ok = 0, fail = 0;
+  const errors = [];
+  for (let i = 0; i < rows.length; i++) {
+    const row = rows[i];
+    const data = {};
+    headers.forEach((h, idx) => {
+      const v = row[idx];
+      if (v !== undefined && v !== null && v !== '') {
+        if (h === 'quantity') { const n = Number(v); if (!isNaN(n)) data[h] = n; }
+        else data[h] = String(v).trim();
+      }
+    });
+    if (!data.part_number || !data.location) continue;
+    try {
+      await ensurePart(data.part_number, data.part_name || '');
+      const dup = await listDocs(CONFIG.TABLES.inventory, [Query.equal('location', data.location), Query.limit(1)]);
+      if (dup.documents.length && dup.documents[0].part_number !== data.part_number) {
+        errors.push(`第 ${i+2} 行：库位 ${data.location} 已被 ${dup.documents[0].part_number} 占用`); fail++; continue;
+      }
+      const { part_name, ...invData } = data;
+      await createDoc(CONFIG.TABLES.inventory, invData);
+      ok++;
+    } catch (err) { errors.push(`第 ${i+2} 行：${err.message}`); fail++; }
+  }
+
+  let msg = `导入完成：成功 ${ok} 条，失败 ${fail} 条`;
+  if (errors.length) msg += '\n\n' + errors.slice(0, 10).join('\n');
+  alert(msg);
+  await reload();
+  e.target.value = '';
 }
 
 async function handleExport() {
-  // ... 导出逻辑保持不变 ...
+  const headers = ['part_number', 'part_name', 'quantity', 'location', 'source_wo'];
+  const all = [];
+  let offset = 0;
+  const chunk = 500;
+  while (true) {
+    const res = await listDocs(CONFIG.TABLES.inventory, [Query.limit(chunk), Query.offset(offset)]);
+    all.push(...res.documents);
+    if (res.documents.length < chunk) break;
+    offset += chunk;
+  }
+  await loadPartNamesForPage(all);
+  const rows = all.map(d => [d.part_number ?? '', partName(d.part_number), d.quantity ?? '', d.location ?? '', d.source_wo ?? '']);
+  exportCSV(headers, rows, 'inventory');
 }
 </script>
