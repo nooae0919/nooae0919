@@ -13,22 +13,22 @@ const routes = [
   { path: '/finish/:finishNo', name: 'finish-detail', component: () => import('../views/FinishDetail.vue'), props: true },
   { path: '/inventory', name: 'inventory', component: () => import('../views/InventoryList.vue') },
   { path: '/inventory-summary', name: 'inventory-summary', component: () => import('../views/InventorySummary.vue') },
-  { path: '/:pathMatch(.*)*', redirect: '/wo' },
   { path: '/bom', name: 'bom', component: () => import('../views/BomList.vue') },
   { path: '/bom/:id', name: 'bom-detail', component: () => import('../views/BomDetail.vue'), props: true },
-  { path: '/wo/:woId/kitting', name: 'wo-kitting', component: () => import('../views/WoKitting.vue'), props: true },
   { path: '/part', name: 'part', component: () => import('../views/PartList.vue') },
+  { path: '/wo/:woId/kitting', name: 'wo-kitting', component: () => import('../views/WoKitting.vue'), props: true },
+  { path: '/:pathMatch(.*)*', redirect: '/wo' },
 ];
 
 const router = createRouter({
-  history: createWebHashHistory(),  // ⭐ GitHub Pages 免配置
+  history: createWebHashHistory(),
   routes
 });
 
 router.beforeEach((to) => {
   if (to.meta.public) return true;
   if (authStore.user) return true;
-  if (!authStore.ready) return false;    // 等 initAuth 完成
+  if (!authStore.ready) return false;
   return { name: 'login', query: { redirect: to.fullPath } };
 });
 
