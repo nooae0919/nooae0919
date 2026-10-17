@@ -1,11 +1,29 @@
 <template>
   <MainLayout>
     <div class="page-header">
-      <div class="search-bar" style="display: flex; gap: 8px;">
-        <input v-model="searchInput" type="text" placeholder="按料号 / 名称 / 规格搜索..." @keyup.enter="handleSearch" style="flex: 1; max-width: 320px; padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 6px;">
-        <!-- ⭐ 补充了这两个按钮 -->
-        <button @click="handleSearch" style="padding: 8px 16px; border: 1px solid #2563eb; background: #2563eb; color: #fff; border-radius: 6px; cursor: pointer;">查询</button>
-        <button v-if="keyword" @click="clearSearch" style="padding: 8px 16px; border: 1px solid #d1d5db; background: #fff; border-radius: 6px; cursor: pointer;">重置</button>
+      <!-- 顶部搜索栏：强制 flex 布局，确保按钮和输入框在一行 -->
+      <div class="search-bar" style="display: flex; gap: 8px; align-items: center; flex: 1; max-width: 600px;">
+        <input 
+          v-model="searchInput" 
+          type="text" 
+          placeholder="按料号 / 名称 / 规格搜索..." 
+          @keyup.enter="handleSearch"
+          style="flex: 1; padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px; outline: none;"
+        >
+        <!-- ⭐ 内联样式写死按钮，绝对不会被覆盖 -->
+        <button 
+          @click="handleSearch" 
+          style="padding: 8px 16px; background: #2563eb; color: white; border: 1px solid #2563eb; border-radius: 6px; cursor: pointer; font-size: 14px; white-space: nowrap;"
+        >
+          查询
+        </button>
+        <button 
+          v-if="keyword" 
+          @click="clearSearch" 
+          style="padding: 8px 16px; background: #ffffff; color: #333; border: 1px solid #d1d5db; border-radius: 6px; cursor: pointer; font-size: 14px; white-space: nowrap;"
+        >
+          重置
+        </button>
       </div>
       <ActionMenu :items="menuItems" />
     </div>
@@ -88,27 +106,16 @@ import { exportCSV, readCSV } from '../api/csv.js';
 import { refreshPartCache } from '../api/partMap.js';
 import { Query } from 'appwrite';
 
-const keyword = ref('');
+const searchInput = ref(''); // 绑定的输入框
+const keyword = ref('');     // 实际触发的查询条件
 const fileInput = ref(null);
 const selectedIds = ref([]);
 const showModal = ref(false);
 const formError = ref('');
+
 const form = reactive({
   id: '', part_number: '', part_name: '', spec: '', unit: '', category: '', remark: ''
 });
-
-const searchInput = ref('');
-
-function handleSearch() {
-  keyword.value = searchInput.value.trim();
-  if (currentPage.value !== 1) currentPage.value = 1;
-  else reload();
-}
-
-function clearSearch() {
-  searchInput.value = '';
-  handleSearch();
-}
 
 const menuItems = computed(() => [
   { label: '新增物料', onClick: openAdd },
@@ -129,18 +136,33 @@ const { currentPage, paginatedItems: paginatedDocs, total, loading, reload } =
         Query.limit(pageSize),
         Query.offset((page - 1) * pageSize),
       ];
-      const kw = keyword.value.trim();
-      if (kw) queries.unshift(Query.search('part_number', kw));
+      // 只有在点击查询后 keyword 才有值，才会去后台过滤
+      if (keyword.value) {
+        queries.unshift(Query.search('part_number', keyword.value));
+      }
       const res = await listDocs(CONFIG.TABLES.part, queries);
       return { items: res.documents, total: res.total };
     },
   });
 
-watch(keyword, () => { if (currentPage.value !== 1) currentPage.value = 1; else reload(); });
+// 点击查询触发的方法
+function handleSearch() {
+  keyword.value = searchInput.value.trim();
+  if (currentPage.value !== 1) {
+    currentPage.value = 1;
+  } else {
+    reload();
+  }
+}
+
+// 重置按钮
+function clearSearch() {
+  searchInput.value = '';
+  handleSearch();
+}
 
 onMounted(async () => {
   await reload();
-  await refreshPartCache();
 });
 
 const allSelected = computed(() =>
@@ -150,6 +172,7 @@ const allSelected = computed(() =>
 const someSelected = computed(() =>
   !allSelected.value && paginatedDocs.value.some(d => selectedIds.value.includes(d.$id))
 );
+
 function toggleSelectAll(e) {
   if (e.target.checked) {
     const set = new Set(selectedIds.value);
@@ -205,7 +228,6 @@ async function saveForm() {
     showModal.value = false;
     selectedIds.value = [];
     await reload();
-    await refreshPartCache();
   } catch (e) {
     formError.value = '保存失败：' + (e.message || e);
   }
@@ -213,10 +235,7 @@ async function saveForm() {
 
 async function deleteSelected() {
   if (!selectedIds.value.length) return;
-  const ok = window.$confirm
-    ? await window.$confirm({ title: '删除确认', message: `将删除 ${selectedIds.value.length} 条物料主数据，确认？` })
-    : confirm(`将删除 ${selectedIds.value.length} 条物料主数据，确认？`);
-  if (!ok) return;
+  if (!confirm(`将删除 ${selectedIds.value.length} 条物料主数据，确认？`)) return;
   let ok2 = 0, fail = 0;
   for (const id of selectedIds.value) {
     try { await deleteDoc(CONFIG.TABLES.part, id); ok2++; }
@@ -224,7 +243,6 @@ async function deleteSelected() {
   }
   selectedIds.value = [];
   await reload();
-  await refreshPartCache();
   if (fail) alert(`删除完成：成功 ${ok2}，失败 ${fail}`);
 }
 
@@ -251,6 +269,8 @@ async function handleImport(e) {
       if (v !== undefined && v !== null && v !== '') data[h] = String(v).trim();
     });
     if (!data.part_number) { errors.push(`第 ${i+2} 行：料号为空`); fail++; continue; }
+    if (!data.part_name) data.part_name = ''; // 兜底防报错
+    
     try {
       const dup = await listDocs(CONFIG.TABLES.part, [
         Query.equal('part_number', data.part_number), Query.limit(1)
@@ -272,7 +292,6 @@ async function handleImport(e) {
   if (errors.length) msg += '\n\n' + errors.slice(0, 10).join('\n');
   alert(msg);
   await reload();
-  await refreshPartCache();
   e.target.value = '';
 }
 
