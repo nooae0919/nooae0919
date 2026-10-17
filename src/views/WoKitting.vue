@@ -70,6 +70,8 @@
 </template>
 
 <script setup>
+import { partName, getPartMap } from '../api/partMap.js';
+// onMounted 里 load() 之前先 await getPartMap();
 import { ref, computed, onMounted, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import MainLayout from '../layouts/MainLayout.vue';
