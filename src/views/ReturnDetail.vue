@@ -35,7 +35,7 @@
         <tr v-for="(it, idx) in paginatedItems" :key="it.$id">
           <td>{{ (currentPage - 1) * PAGE_SIZE + idx + 1 }}</td>
           <td>{{ it.part_number || '' }}</td>
-          <td>{{ it.part_name || '' }}</td>
+          <td>{{ partName(it.part_number) }}</td>
           <td><b>{{ it.return_qty ?? '' }}</b></td>
         </tr>
         <tr v-if="!loading && !paginatedItems.length">
@@ -55,6 +55,7 @@ import Pagination from '../components/Pagination.vue';
 import { PAGE_SIZE, usePagination } from '../composables/usePagination.js';
 import { CONFIG } from '../config.js';
 import { listDocs } from '../api/db.js';
+import { partName, getPartMap } from '../api/partMap.js';
 import { Query } from 'appwrite';
 
 const props = defineProps({ returnNo: String });
@@ -124,8 +125,9 @@ const { currentPage, paginatedItems, total, loading, reload } =
 
 watch(returnNo, () => { batch.value = null; reload(); });
 
-onMounted(() => {
+onMounted(async () => {
   if (!returnNo.value) { alert('未指定退料单号'); return; }
+  await getPartMap();
   reload();
 });
 </script>
