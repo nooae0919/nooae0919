@@ -54,6 +54,7 @@ import { PAGE_SIZE, usePagination } from '../composables/usePagination.js';
 import { CONFIG } from '../config.js';
 import { listDocs, createDoc, deleteDoc } from '../api/db.js';
 import { exportCSV, readCSV } from '../api/csv.js';
+import { partName, getPartMap, ensurePart } from '../api/partMap.js';
 import { Query } from 'appwrite';
 
 const sleep = ms => new Promise(r => setTimeout(r, ms));
@@ -85,7 +86,6 @@ const { currentPage, paginatedItems: paginatedDocs, total, loading, reload } =
       if (kw) queries.unshift(Query.search('product_number', kw));
       const res = await listDocs(CONFIG.TABLES.bom, queries);
 
-      // 只统计当前页 BOM 的条目数
       if (res.documents.length) {
         const ids = res.documents.map(d => d.$id);
         const itemRes = await listDocs(CONFIG.TABLES.bomItem, [
@@ -109,7 +109,10 @@ watch(keyword, () => {
   else reload();
 });
 
-onMounted(reload);
+onMounted(async () => {
+  await getPartMap();
+  await reload();
+});
 
 const allSelected = computed(() =>
   paginatedDocs.value.length > 0 &&
@@ -189,7 +192,6 @@ async function handleImport(e) {
   const idx = {};
   headers.forEach((h, i) => { idx[h] = i; });
 
-  // 预取已有 BOM 头（分页拉全量）
   const existingBoms = [];
   let offset = 0;
   const chunk = 500;
@@ -231,6 +233,9 @@ async function handleImport(e) {
     const bomKey = `${product_number}|${product_name}|${version}`;
 
     try {
+      // 写物料主数据
+      await ensurePart(part_number, part_name);
+
       let bomId = bomKeyToId[bomKey];
       if (!bomId) {
         const newBom = await createDoc(CONFIG.TABLES.bom, {
@@ -244,7 +249,7 @@ async function handleImport(e) {
       await createDoc(CONFIG.TABLES.bomItem, {
         bom_id: bomId,
         product_number, product_name, version,
-        part_number, part_name,
+        part_number,
         qty_per_board: qty
       });
       okItem++;
@@ -302,7 +307,7 @@ async function handleExport() {
         it.product_name || b.product_name || '',
         it.version || b.version || '',
         it.part_number || '',
-        it.part_name || '',
+        partName(it.part_number),
         it.qty_per_board ?? ''
       ]);
     }
