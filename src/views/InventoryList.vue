@@ -6,10 +6,27 @@
     </div>
 
     <div class="page-header">
-      <div class="search-bar">
-        <input v-model="searchInput" type="text" placeholder="按库位搜索..." @keyup.enter="handleSearch">
-        <button @click="handleSearch">查询</button>
-        <button v-if="keyword" @click="clearSearch" style="background:#f3f4f6;">重置</button>
+      <div class="search-bar" style="display: flex; gap: 8px; align-items: center; flex: 1; max-width: 600px;">
+        <input 
+          v-model="searchInput" 
+          type="text" 
+          placeholder="按库位搜索..." 
+          @keyup.enter="handleSearch"
+          style="flex: 1; padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px; outline: none;"
+        >
+        <button 
+          @click="handleSearch" 
+          style="padding: 8px 16px; background: #2563eb; color: white; border: 1px solid #2563eb; border-radius: 6px; cursor: pointer; font-size: 14px; white-space: nowrap;"
+        >
+          查询
+        </button>
+        <button 
+          v-if="keyword" 
+          @click="clearSearch" 
+          style="padding: 8px 16px; background: #ffffff; color: #333; border: 1px solid #d1d5db; border-radius: 6px; cursor: pointer; font-size: 14px; white-space: nowrap;"
+        >
+          重置
+        </button>
       </div>
       <ActionMenu :items="menuItems" />
     </div>
@@ -231,8 +248,7 @@ async function saveForm() {
 
 async function deleteSelected() {
   if (!selectedIds.value.length) return;
-  const ok = confirm(`确认删除已勾选的 ${selectedIds.value.length} 条库存？`);
-  if (!ok) return;
+  if (!confirm(`确认删除已勾选的 ${selectedIds.value.length} 条库存？`)) return;
   let ok2 = 0, fail = 0;
   for (const id of selectedIds.value) {
     try { await deleteDoc(CONFIG.TABLES.inventory, id); ok2++; }
