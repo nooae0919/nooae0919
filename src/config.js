@@ -10,6 +10,7 @@ export const CONFIG = {
     inventory: '6acafa1c002842294f67',
     bom: '6acb5b010038c2f875ef',
     bomItem: '6acb5b5b000f35cd0447',
-    woBom:'6acdbfc80011ffd64b9c'
+    woBom:'6acdbfc80011ffd64b9c',
+    part: '6ad2d3f1000fd035c730'
   }
 };
