@@ -13,6 +13,7 @@
       <RouterLink to="/inventory">库存管理</RouterLink>
       <RouterLink to="/wo">工单管理</RouterLink>
       <RouterLink to="/bom">BOM管理</RouterLink>
+      <RouterLink to="/part">物料主数据</RouterLink>
       <RouterLink to="/issue">生产领料</RouterLink>
       <RouterLink to="/return">生产退料</RouterLink>
       <RouterLink to="/finish">成品入库</RouterLink>
