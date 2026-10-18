@@ -12,11 +12,9 @@ const routes = [
   { path: '/finish', name: 'finish', component: () => import('../views/FinishList.vue') },
   { path: '/finish/:finishNo', name: 'finish-detail', component: () => import('../views/FinishDetail.vue'), props: true },
   { path: '/inventory', name: 'inventory', component: () => import('../views/InventoryList.vue') },
-  { path: '/inventory-summary', name: 'inventory-summary', component: () => import('../views/InventorySummary.vue') },
   { path: '/bom', name: 'bom', component: () => import('../views/BomList.vue') },
   { path: '/bom/:id', name: 'bom-detail', component: () => import('../views/BomDetail.vue'), props: true },
   { path: '/part', name: 'part', component: () => import('../views/PartList.vue') },
-  { path: '/wo/:woId/kitting', name: 'wo-kitting', component: () => import('../views/WoKitting.vue'), props: true },
   { path: '/:pathMatch(.*)*', redirect: '/wo' },
 ];
 
