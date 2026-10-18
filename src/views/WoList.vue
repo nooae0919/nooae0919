@@ -56,8 +56,7 @@
           </td>
           <td>{{ statusText(d.status) }}</td>
           <td>
-            <button @click="goKitting(d)">齐套状态</button>
-            <button v-if="d.status !== 'completed'"
+                       <button v-if="d.status !== 'completed'"
                     @click="reloadBom(d)" style="margin-left:4px;">重载BOM</button>
             <span v-if="d.status === 'completed'"
                   style="color:#999;font-size:13px;margin-left:4px;">已完成</span>
@@ -173,7 +172,6 @@
 
 <script setup>
 import { ref, onMounted, computed, reactive, watch } from 'vue';
-import { useRouter } from 'vue-router';
 import MainLayout from '../layouts/MainLayout.vue';
 import ActionMenu from '../components/ActionMenu.vue';
 import Pagination from '../components/Pagination.vue';
@@ -185,7 +183,6 @@ import { syncExcessToInventory, snapshotBomToWo } from '../api/kitting.js';
 import { Query } from 'appwrite';
 
 const sleep = ms => new Promise(r => setTimeout(r, ms));
-const router = useRouter();
 
 const WO_HEADERS = ['wo_number', 'line', 'product_number', 'product_name', 'plan_qty', 'produce_date', 'status'];
 
@@ -347,11 +344,6 @@ async function saveEdit() {
     showEdit.value = false;
     await reload();
   } catch (e) { editError.value = '保存失败：' + (e.message || e); }
-}
-
-function goKitting(wo) {
-  if (!wo.bom_id) { alert('该工单未关联 BOM，无法做齐套分析。'); return; }
-  router.push({ name: 'wo-kitting', params: { woId: wo.$id } });
 }
 
 async function reloadBom(wo) {
