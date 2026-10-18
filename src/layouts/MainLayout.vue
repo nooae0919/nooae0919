@@ -9,7 +9,6 @@
     </header>
 
     <nav>
-      <RouterLink to="/inventory-summary">库存汇总</RouterLink>
       <RouterLink to="/inventory">库存管理</RouterLink>
       <RouterLink to="/wo">工单管理</RouterLink>
       <RouterLink to="/bom">BOM管理</RouterLink>
