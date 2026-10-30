@@ -1,0 +1,120 @@
+Title: 生成站位标签
+Date: 2025-9-22
+Category: Python
+Tags: qrcode
+Slug: 17fd7904
+
+<!-- 以下是正文，使用 Markdown 语法 -->
+```
+import os
+import shutil
+import qrcode
+from openpyxl import load_workbook
+from openpyxl.drawing.image import Image as XLImage
+
+# ===== 配置 =====
+SRC_FILE = "站位清单.xlsx"
+TEMPLATE_SHEET = "模板"
+DATA_SHEET = "清单"
+QRCODE_DIR = "qrcodes"
+
+def ensure_dir(path):
+    if not os.path.exists(path):
+        os.makedirs(path)
+
+def generate_qrcode(data, filepath):
+    qr = qrcode.QRCode(
+        version=None,
+        error_correction=qrcode.constants.ERROR_CORRECT_M,
+        box_size=10,
+        border=1,
+    )
+    qr.add_data(data)
+    qr.make(fit=True)
+    img = qr.make_image(fill_color="black", back_color="white")
+    img.save(filepath)
+
+def main():
+    ensure_dir(QRCODE_DIR)
+
+    wb = load_workbook(SRC_FILE)
+
+    if DATA_SHEET not in wb.sheetnames:
+        raise ValueError(f"找不到数据表：{DATA_SHEET}")
+    if TEMPLATE_SHEET not in wb.sheetnames:
+        raise ValueError(f"找不到模板表：{TEMPLATE_SHEET}")
+
+    ws_data = wb[DATA_SHEET]
+    ws_template = wb[TEMPLATE_SHEET]
+
+    # 用 A2 单元格的值来命名输出文件（若为空则回退到默认名）
+    a2_value = ws_data["A2"].value
+    if a2_value is None or str(a2_value).strip() == "":
+        OUT_FILE = "站位标签_生成结果.xlsx"
+    else:
+        OUT_FILE = f"{a2_value}站位标签.xlsx"
+
+    rows = []
+    for row in ws_data.iter_rows(min_row=2, values_only=True):
+        project, material_code, pcs, station, spacing, line = row[:6]
+        if project is None and material_code is None:
+            continue
+        rows.append({
+            "project": project,
+            "material_code": material_code,
+            "pcs": int(pcs) if pcs is not None else 1,
+            "station": station,
+            "line": line,
+            "spacing": spacing,
+        })
+
+    template_copy_name = "__TEMPLATE_COPY__"
+    if template_copy_name in wb.sheetnames:
+        del wb[template_copy_name]
+    ws_template_copy = wb.copy_worksheet(ws_template)
+    ws_template_copy.title = template_copy_name
+
+    generated_index = 0
+
+    for item in rows:
+        pcs = item["pcs"]
+        for i in range(pcs):
+            generated_index += 1
+
+            sheet_name = f"{item['project']}_{generated_index}"[:31]
+
+            ws_new = wb.copy_worksheet(ws_template_copy)
+            ws_new.title = sheet_name
+
+            ws_new["A1"] = item["project"]
+            ws_new["B2"] = item["material_code"]
+            ws_new["B3"] = item["station"]
+            ws_new["C1"] = item["spacing"]
+            ws_new["B5"] = item["line"]
+
+            safe_code = str(item["material_code"]).replace("/", "_").replace("\\", "_")
+            qr_filename = f"{QRCODE_DIR}/qr_{generated_index}_{safe_code}.png"
+            generate_qrcode(str(item["material_code"]), qr_filename)
+
+            img = XLImage(qr_filename)
+            img.width = 70
+            img.height = 70
+            ws_new.add_image(img, "C3")
+
+    if template_copy_name in wb.sheetnames:
+        del wb[template_copy_name]
+
+    wb.save(OUT_FILE)
+
+    # 删除 qrcodes 文件夹
+    if os.path.exists(QRCODE_DIR):
+        shutil.rmtree(QRCODE_DIR)
+
+    print(f"生成完成：{OUT_FILE}")
+
+if __name__ == "__main__":
+    main()
+
+```
+
+
